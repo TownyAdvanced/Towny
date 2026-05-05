@@ -203,7 +203,7 @@ public class TownyWorld extends TownyObject {
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
-			towns.remove(town.getName());
+			towns.remove(town.getUUID());
 			/*
 			 * try {
 			 * town.setWorld(null);

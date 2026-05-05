@@ -34,7 +34,7 @@ public class BooleanDataField extends CustomDataField<Boolean> {
 	@Override
 	public String displayFormattedValue() {
 		boolean val = getValue();
-		return (val ? Colors.LightGreen : Colors.Red) + val;
+		return (val ? Colors.GREEN : Colors.DARK_RED) + val;
 	}
 
 	@Override

@@ -1,13 +1,11 @@
 package com.palmergames.bukkit.towny.object;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,12 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
 public class RegistryListTests {
-	
-	@BeforeAll
-	static void mock() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
 	
 	@Test
 	void testListAdd() {

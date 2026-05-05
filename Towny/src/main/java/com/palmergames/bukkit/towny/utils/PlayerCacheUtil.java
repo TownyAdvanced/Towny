@@ -321,7 +321,7 @@ public class PlayerCacheUtil {
 			 */
 			if (TownySettings.getNationZonesEnabled() && status == TownBlockStatus.NATION_ZONE) {
 				// Admins that also have wilderness permission can bypass the nation zone.
-				if (res.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()))
+				if (!Towny.getPlugin().hasPlayerMode(player, "adminbypass") && res.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()))
 					return true;
 
 				// Wasn't able to build in the wilderness, regardless.

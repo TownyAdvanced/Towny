@@ -51,7 +51,7 @@ public class TownyBlockListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 
 		if (plugin.isError()) {
@@ -67,7 +67,7 @@ public class TownyBlockListener implements Listener {
 		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 
 		if (plugin.isError()) {
@@ -150,7 +150,7 @@ public class TownyBlockListener implements Listener {
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
 
 		if (plugin.isError()) {
@@ -178,7 +178,7 @@ public class TownyBlockListener implements Listener {
 		event.setCancelled(!TownyActionEventExecutor.canBurn(event.getBlock()));
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 
 		if (plugin.isError()) {
@@ -203,7 +203,7 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 
 		if (plugin.isError()) {
@@ -263,7 +263,7 @@ public class TownyBlockListener implements Listener {
 		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCreateExplosion(BlockExplodeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -329,7 +329,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	* Prevents water or lava from going into other people's plots.
 	*/
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFromToEvent(BlockFromToEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -350,7 +350,7 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockDispense(BlockDispenseEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -378,7 +378,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	 * Used to prevent bonemeal and moss growing into areas it shouldn't.
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFertilize(BlockFertilizeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -396,7 +396,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	 * Used to prevent Sculk Spread.
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onSculkSpread(BlockSpreadEvent event) {
 		String sourceName = event.getSource().getType().getKey().getKey();
 		if (!sourceName.startsWith("sculk"))
@@ -417,7 +417,7 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player))
 			return;

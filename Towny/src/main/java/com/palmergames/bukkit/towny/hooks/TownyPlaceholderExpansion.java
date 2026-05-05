@@ -452,6 +452,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				amount = String.valueOf(TownyAPI.getInstance().getOnlinePlayers(resident.getTownOrNull()).size());
 			}
 			return amount;
+		case "town_outposts_claimed": // %townyadvanced_town_outposts_claimed%
+			if (resident.hasTown()) {
+				amount = String.valueOf(resident.getTownOrNull().getMaxOutpostSpawn());
+			}
+			return amount;
 		case "town_townblocks_used": // %townyadvanced_town_townblocks_used%
 			if (resident.hasTown()) {
 				amount = String.valueOf(resident.getTownOrNull().getTownBlocks().size());

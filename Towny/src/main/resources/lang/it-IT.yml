@@ -1180,7 +1180,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Non sei au
 msg_already_ally: 'La tua nazione è già alleata con %s.'
 #Added in 0.76
 msg_you: 'Tu'
-#Added in 0.77
 msg_click_spawn: '&aClicca per spawnare in: &e%s'
 msg_spawn_cost: '&aCosto Spawn = &e%s'
 #Added in 0.78

@@ -32,12 +32,14 @@ import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -780,19 +782,29 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	@Override
 	public String getFormattedName() {
-		
-		String prefix = Colors.translateColorCodes(hasTitle() ? getTitle() + " " : 
-			(isKing() && !TownySettings.getKingPrefix(this).isEmpty()) ? TownySettings.getKingPrefix(this) : 
-				(isMayor() && !TownySettings.getMayorPrefix(this).isEmpty()) ? TownySettings.getMayorPrefix(this) : "");
-		
-		String postfix = Colors.translateColorCodes(hasSurname() ? " " + getSurname() : 
-			(isKing() && !TownySettings.getKingPostfix(this).isEmpty()) ? TownySettings.getKingPostfix(this) : 
-				(isMayor() && !TownySettings.getMayorPostfix(this).isEmpty()) ? TownySettings.getMayorPostfix(this) : "");
+		String prefix = Colors.translateColorCodes(hasTitle() ? getTitle() + " " : getNamePrefix());
+		String postfix = Colors.translateColorCodes(hasSurname() ? " " + getSurname() : getNamePostfix());
 
 		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
 		BukkitTools.fireEvent(event);
 
 		return event.getPrefix() + getName() + event.getPostfix();
+	}
+
+	@Override
+	public Component formattedName() {
+		Component prefix = hasTitle() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(getTitle()))
+			: TownyComponents.miniMessage(getNamePrefix());
+
+		Component postfix = hasSurname() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(getSurname()))
+			: TownyComponents.miniMessage(getNamePostfix());
+
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
+		event.callEvent();
+
+		return event.prefix().append(TownyComponents.plain(event.prefix()).isEmpty() ? Component.empty() : Component.space())
+			.append(Component.text(getName()))
+			.append((TownyComponents.plain(event.postfix()).isEmpty() ? Component.empty() : Component.space()).append(event.postfix()));
 	}
 
 	/**

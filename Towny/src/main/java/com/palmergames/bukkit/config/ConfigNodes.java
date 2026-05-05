@@ -659,6 +659,13 @@ public enum ConfigNodes {
 			"somecommandhere,othercommandhere",
 			"",
 			"# Commands an outlawed player cannot use while in the town they are outlawed in."),
+	GTOWN_SETTINGS_CONSIDER_ENEMIES_OUTLAWS(
+		"global_town_settings.consider_enemies_outlaws",
+		"false",
+		"",
+		"# If set to true, when a town is in a nation any player in another nation that",
+		"# the town's nation considers enemies will be considered an outlaw in that town."
+	),
 	GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS(
 			"global_town_settings.war_blacklisted_commands",
 			"somecommandhere,othercommandhere",
@@ -945,6 +952,11 @@ public enum ConfigNodes {
 			"",
 			"# When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.",
 			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
+	GTOWN_SETTINGS_MERGE_COOLDOWN_TIMER(
+		"global_town_settings.merge_request_cooldown_time",
+		"60",
+		"",
+		"# Number of seconds that must pass before a town can send a merge request to the same target."),
 
 
 	GNATION_SETTINGS(
@@ -1098,6 +1110,11 @@ public enum ConfigNodes {
 		"",
 		"# When disabled, nations will not be able to be created with or renamed to a name that contains numbers.",
 		"# Disabling this option does not affect already created nations."),
+	GNATION_SETTINGS_MERGE_COOLDOWN_TIMER(
+		"global_nation_settings.merge_request_cooldown_time",
+		"60",
+		"",
+		"# Number of seconds that must pass before a nation can send a merge request to the same target."),
 
 
 	CLAIMING(
@@ -1355,6 +1372,13 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	SPAWNING_REQUIRE_SPAWN_POINT_SAME_WORLD(
+		"spawning.require_spawn_destination_same_world",
+		"false",
+		"",
+		"# When true, using /res, /t, /n spawn or /t outpost will fail when those spawn points are not in the same world as the player.",
+		"# Use this feature to require players use special portals to travel between your server's worlds."
+	),
 	SPAWNING_SAFE_TELEPORT(
 		"spawning.safe_teleport",
 		"false",
@@ -1481,7 +1505,7 @@ public enum ConfigNodes {
 			"spawning.town_spawn.spawning_cooldowns.outpost_cooldown_time",
 			"30",
 			"",
-			"# Number of seconds that must pass before a player can use /t outpost."),
+			"# Number of seconds that must pass before a player can use /t outpost or /n townoutposts {townname} {outpost}."),
 	SPAWNING_TOWN_SPAWN_NATION_MEMBER_COOLDOWN_TIMER(
 			"spawning.town_spawn.spawning_cooldowns.nation_member_town_spawn_cooldown_time",
 			"30",
@@ -1509,6 +1533,14 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Allow the use of /nation spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_NATION_OUTPOST_TRAVEL(
+			"spawning.nation_spawn.allow_nation_outpost_travel",
+			"true",
+			"",
+			"# Allow regular residents to use /nation outpost [town] [outpost] (TP to other towns' outposts if they are public).",
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the nation,",
 			"# when there is a war or peace."),
@@ -1947,13 +1979,14 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHESTS,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE",
+			"CHESTS_WITHOUT_ENDERCHEST,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
 			"# Switches are blocks, that are in the world, which get right-clicked.",
 			"# Towny will tell you the proper name to use in this list if you hit the block while holding a clay brick item in your hand.",
-			"# Group names you can use in this list: BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,NON_WOODEN_PRESSURE_PLATES,FENCE_GATES,TRAPDOORS,SHULKER_BOXES,BUTTONS.",
+			"# Group names you can use in this list: BOATS,MINECARTS,WOOD_DOORS,PRESSURE_PLATES,NON_WOODEN_PRESSURE_PLATES,FENCE_GATES,",
+			"# CHESTS,CHESTS_WITHOUT_ENDERCHEST,TRAPDOORS,SHULKER_BOXES,BUTTONS,SHELVES.",
 			"# Note: Vehicles like MINECARTS and BOATS can be added here. If you want to treat other rideable mobs like switches add SADDLE",
 			"#       to protect HORSES, DONKEYS, MULES, PIGS, STRIDERS (This is not recommended, unless you want players to not be able to",
 			"#       re-mount their animals in towns they cannot switch in.)",
@@ -2509,6 +2542,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true players will be removed from their town and become a nomad instead of being fully deleted."),
+	RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_CLAIM_COUNT_ONLY(
+			"resident_settings.delete_old_residents.only_remove_claim_count",
+			"false",
+			"",
+			"# When true (and only_remove_town is true) residents are kept and only stop counting toward town claim limits after deleted_after_time."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
@@ -2827,6 +2865,16 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Minimum amount of money players are allowed to withdraw from town bank at a time."),
+	ECO_MAX_DEPOSIT_TOWN(
+			"economy.banks.town_max_deposit",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to deposit in town bank at a time."),
+	ECO_MAX_WITHDRAW_TOWN(
+			"economy.banks.town_max_withdraw",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to withdraw from town bank at a time."),
 	ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
@@ -2848,6 +2896,16 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Minimum amount of money players are allowed to withdraw from nation bank at a time."),
+	ECO_MAX_DEPOSIT_NATION(
+			"economy.banks.nation_max_deposit",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to deposit in nation bank at a time."),
+	ECO_MAX_WITHDRAW_NATION(
+			"economy.banks.nation_max_withdraw",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to withdraw from nation bank at a time."),
 	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
 			"economy.banks.disallow_bank_actions_outside_town",
 			"false",
@@ -3068,7 +3126,7 @@ public enum ConfigNodes {
 			"economy.bankruptcy.debt_cap.maximum",
 			"0.0",
 			"",
-			"# When set to greater than 0.0, this will be used to determine every town''s maximum debt,",
+			"# When set to greater than 0.0, this will be used to determine every town's maximum debt,",
 			"# overriding the above calculation if the calculation would be larger than the set maximum."),
 	ECO_BANKRUPTCY_DEBT_CAP_OVERRIDE(
 			"economy.bankruptcy.debt_cap.override",

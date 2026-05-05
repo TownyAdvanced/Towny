@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
+import net.kyori.adventure.text.Component;
 
 /**
  * Useful function for use with the Minecraft Server chatbox.
@@ -87,6 +89,21 @@ public class ChatTools {
 		return Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
 	}
 
+	public static Component formatTitle(Component title) {
+		title = Translatable.literal(".[ ").append(Translatable.of("status_title_secondary_colour").append(title)).append(Translatable.of("status_title_primary_colour")).append(" ].").component();
+
+		final float width = FontUtil.measureWidth(title);
+
+		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
+		float remainder = DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - width - 2;
+		if (remainder < 1)
+			return Translatable.of("status_title_primary_colour").append(title).component();
+		if (remainder < 14)
+			return Translatable.of("status_title_primary_colour").append(WIDGET).append(title).append(WIDGET).component();
+
+		int times = (int) Math.floor(remainder / (UNDERSCORE_WIDTH * 2));
+		return Translatable.of("status_title_primary_colour").append(WIDGET).append(repeatChar(times, "_")).append(title).append(repeatChar(times, "_")).append(WIDGET).component();
+	}
 
 	private static String legacyFormatTitle(String title) {
 		String line = ".oOo.__________________________________________________.oOo.";
@@ -126,10 +143,7 @@ public class ChatTools {
 	}
 	
 	private static String repeatChar(int num, String character) {
-		String output = "";
-		for (int i = 0; i < num; i++)
-			output += character;
-		return output;
+		return character.repeat(num);
 	}
 	
 	public static String formatCommand(String command, String subCommand, String help) {

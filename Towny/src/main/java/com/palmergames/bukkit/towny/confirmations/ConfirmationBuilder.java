@@ -20,6 +20,7 @@ public class ConfirmationBuilder {
 	ConfirmationTransaction transaction;
 	boolean runAsync;
 	CancellableTownyEvent event;
+	boolean serious = false;
 
 	/**
 	 * The code to run on cancellation.
@@ -114,6 +115,15 @@ public class ConfirmationBuilder {
 	 */
 	public ConfirmationBuilder setPluginCommandPrefix(String prefix) {
 		this.pluginPrefix = prefix;
+		return this;
+	}
+
+	/**
+	 * Sets this confirmation as serious, which makes the title be sent in red
+	 * @return ConfirmationBuilder with serious marked as true
+	 */
+	public ConfirmationBuilder serious() {
+		this.serious = true;
 		return this;
 	}
 	

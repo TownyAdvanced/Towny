@@ -62,6 +62,7 @@ town_help_32: "Use /t set ? para obter ajuda."
 town_help_33: "Use /t buy ? para obter ajuda."
 town_help_34: "Use /t toggle ? para obter ajuda."
 town_help_35: "Use /t rank ? para obter ajuda."
+town_help_36: 'Lista cidades próximas classificadas por distância.'
 town_list_help_0: "Visualiza a página especificada."
 town_list_help_1: "Lista cidades por número de residentes, com a página especificada."
 town_list_help_2: "Lista as cidades que estão abertas, a partir da página especificada."
@@ -1180,7 +1181,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Não tens 
 msg_already_ally: 'A tua nação já é aliada com %s.'
 #Added in 0.76
 msg_you: 'Tu'
-#Added in 0.77
 msg_click_spawn: '&aClique para te teletransportares para: &e%s'
 msg_spawn_cost: '&aPreço de Teletransporte = &e%s'
 #Added in 0.78
@@ -1367,7 +1367,7 @@ msg_town_merge_request_denied: '&cPedido de mesclagem negado.'
 msg_town_merge_other_offline: '&cO prefeito de %s, %s, está atualmente offline. Falhar ao mesclar.'
 msg_town_merge_err_too_many_residents: '&cFalha ao mesclar: O novo número de residentes excede o limite (%d)'
 msg_town_merge_err_too_many_townblocks: '&cFalha ao mesclar: O tamanho da cidade excede o limite (%d)'
-msg_town_merge_err_too_many_outposts: '&cFalha ao mesclar: O novo número de residentes excede o limite (%d)'
+msg_town_merge_err_too_many_outposts: '&cFalha na mesclagem: A nova quantidade de postos avançados excede o limite (%d)'
 msg_town_merge_err_not_enough_money: '&cFalha ao mesclar: Dinheiro insuficiente. (%s/%s)'
 msg_town_merge_err_too_many_purchased_townblocks: '&cMerge falhou: Muitas terras comprados (%d)'
 msg_town_merge_warning: '&cAviso: Se aceito, mesclar com %s custará %s.'

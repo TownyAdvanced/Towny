@@ -1177,7 +1177,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Nije ti do
 msg_already_ally: 'Tvoja nacija je već u savezništvu sa %s.'
 #Added in 0.76
 msg_you: 'Ti'
-#Added in 0.77
 msg_click_spawn: '&aKlikni da se stvoriš do: &e%s'
 msg_spawn_cost: '&aCena Stvaranja = &e%s'
 #Added in 0.78

@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
-import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownIsTownOverClaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
@@ -62,7 +61,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -841,6 +839,7 @@ public class Town extends Government implements TownBlockOwner {
 				continue;
 
 			TownMayorChosenBySuccessionEvent tmcbse = new TownMayorChosenBySuccessionEvent(mayor, newMayor, potentialResidents);
+			tmcbse.callEvent();
 			setMayor(tmcbse.getNewMayor());
 			return true;
 		}
@@ -1256,11 +1255,26 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasOutlaw (String name) {
+		if (TownySettings.areEnemiesOutlaws() && nation != null) {
+			for (Nation enemyNation : nation.getEnemies()) {
+				if (enemyNation.getResidents().stream().anyMatch(enemy -> enemy.getName().equalsIgnoreCase(name))) {
+					return true;
+				}
+			}
+		}
+		
 		return outlaws.stream().anyMatch(outlaw -> outlaw.getName().equalsIgnoreCase(name));
 	}
 	
 	public boolean hasOutlaw(Resident outlaw) {
-
+		if (TownySettings.areEnemiesOutlaws() && nation != null) {
+			for (Nation enemyNation : nation.getEnemies()) {
+				if (enemyNation.getResidents().contains(outlaw)) {
+					return true;
+				}
+			}
+		}
+		
 		return outlaws.contains(outlaw);
 	}
 	
@@ -1930,14 +1944,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return Current TownLevel number.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isTownLevelDeterminedByTownBlockCount() ? getNumTownBlocks() : getNumResidents();
-		int townLevelNumber = getManualTownLevel() > -1
-				? Math.min(getManualTownLevel(), TownySettings.getTownLevelMax())
-				: TownySettings.getTownLevelWhichIsNotManuallySet(modifier, this);
-
-		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
-		BukkitTools.fireEvent(tctle);
-		return tctle.getTownLevelNumber();
+		return TownySettings.getTownLevelNumber(this);
 	}
 
 	/**

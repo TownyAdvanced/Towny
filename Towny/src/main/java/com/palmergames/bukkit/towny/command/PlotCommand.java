@@ -290,7 +290,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
 						case "toggle":
 							if (args.length == 3)
-								return NameUtil.filterByStart(plotToggleTabCompletes, args[2]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_GROUP_TOGGLE, plotToggleTabCompletes), args[2]);
 						default:
 							return Collections.emptyList();
 					}
@@ -344,7 +344,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (townBlock == null && !plotCommandAllowedInWilderness(split[0]))
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
 
-		if (townBlock != null && townBlock.getTownOrNull().isRuined())
+		if (townBlock != null && townBlock.getTownOrNull().isRuined() && townBlock.getTownOrNull().hasResident(player))
 			throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 
 		switch(split[0].toLowerCase(Locale.ROOT)) {
@@ -755,7 +755,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		Coord key = Coord.parseCoord(player.getLocation());
 
 		// Throws a TownyException with message if outpost should not be set.
-		OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true);
+		OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin());
 
 		if (TownySettings.getOutpostCost() > 0) {
 			// Create a confirmation for setting outpost.
@@ -2005,6 +2005,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_GROUP_TOGGLE.send(player);
 			return;
 		}
+
+		if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_GROUP_TOGGLE, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_GROUP_TOGGLE, split[0]).execute(player, split);
+			return;
+		}
+		
 		// We need to keep an ending string to show the message only after the transaction is over,
 		// to prevent chat log spam.
 		Translatable endingMessage = null;

@@ -1161,7 +1161,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'No tienes 
 msg_already_ally: 'Tu nación ya está aliada con %s.'
 #Added in 0.76
 msg_you: 'Tu'
-#Added in 0.77
 msg_click_spawn: '&aPresiona para viajar a &e%s'
 msg_spawn_cost: '&aPrecio del transporte = &e%s'
 #Added in 0.78

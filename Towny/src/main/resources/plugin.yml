@@ -117,6 +117,7 @@ permissions:
         description: User is permitted to use /town spawn to towns in the nation.
         default: false
         children:
+            towny.town.spawn.nation.outpost: true
             towny.town.spawn.nation.bypass_public: false
 
     towny.town.spawn.nation.bypass_public:
@@ -220,6 +221,8 @@ permissions:
             towny.command.nation.new: true
             towny.command.nation.online: true
             towny.command.nation.othernation: true
+            towny.command.nation.outpost.listall: true
+            towny.command.nation.outpost.list: true
             towny.command.nation.withdraw: true
             towny.command.nation.rank.*: true
             towny.command.nation.sanctiontown: true
@@ -240,6 +243,8 @@ permissions:
         children:
             towny.command.nation.ally: true
             towny.command.nation.invite: true
+            towny.command.nation.outpost.listall: true
+            towny.command.nation.outpost.list: true
             towny.command.nation.rank: true
             towny.command.nation.set: true
             towny.command.nation.toggle: true
@@ -734,6 +739,7 @@ permissions:
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.resident.friend: true
             towny.command.townyadmin.resident.unjail: true
+            towny.command.townyadmin.resident.set: true
 
     towny.command.townyadmin.eco.*:
         description: User can access the admin eco commands.
@@ -780,6 +786,7 @@ permissions:
             towny.command.townyadmin.town.giveboughtblocks: true
             towny.command.townyadmin.town.invite: true
             towny.command.townyadmin.town.kick: true
+            towny.command.townyadmin.town.leavenation: true
             towny.command.townyadmin.town.merge: true
             towny.command.townyadmin.town.meta: true
             towny.command.townyadmin.town.new: true
@@ -827,6 +834,7 @@ permissions:
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.transfer: true
             towny.command.townyadmin.nation.withdraw: true
+            towny.command.townyadmin.nation.setnationlevel: true
 
     towny.command.townyadmin.nation.set.*:
         description: User can access the admin nation set commands.

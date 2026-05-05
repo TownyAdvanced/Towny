@@ -1,27 +1,21 @@
 package com.palmergames.bukkit.towny.object;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 import com.google.common.collect.Iterables;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.test.BukkitMockExtension;
 import com.palmergames.util.Pair;
-import org.junit.jupiter.api.BeforeAll;
+import org.bukkit.World;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collection;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class WorldCoordTests {
-	static ServerMock server;
-	
-	@BeforeAll
-	static void init() {
-		server = MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
-	
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(BukkitMockExtension.class)
+public class WorldCoordTests {	
 	@Test
 	void testChunkPositions() {
 		final int length = 10;
@@ -58,12 +52,17 @@ public class WorldCoordTests {
 		int chunkX = -10;
 		int chunkZ = -10;
 		
-		server.addSimpleWorld("world");
-		WorldCoord coord = new WorldCoord("world", chunkX, chunkZ);
-		assertEquals(chunkX, coord.getUpperMostCornerLocation().getChunk().getX());
-		assertEquals(chunkZ, coord.getUpperMostCornerLocation().getChunk().getZ());
+		final World mockWorld = mock(World.class);
+		when(mockWorld.getMaxHeight()).thenReturn(320);
+		when(mockWorld.getMinHeight()).thenReturn(-64);
 
-		assertEquals(chunkX, coord.getLowerMostCornerLocation().getChunk().getX());
-		assertEquals(chunkZ, coord.getLowerMostCornerLocation().getChunk().getZ());
+		final WorldCoord coord = spy(new WorldCoord("world", chunkX, chunkZ));
+		when(coord.getBukkitWorld()).thenReturn(mockWorld);
+
+		assertEquals(chunkX, coord.getUpperMostCornerLocation().getBlockX() >> 4);
+		assertEquals(chunkZ, coord.getUpperMostCornerLocation().getBlockZ() >> 4);
+
+		assertEquals(chunkX, coord.getLowerMostCornerLocation().getBlockX() >> 4);
+		assertEquals(chunkZ, coord.getLowerMostCornerLocation().getBlockZ() >> 4);
 	}
 }

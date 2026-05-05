@@ -183,6 +183,7 @@ nation_help_15: "Deposits money into the nation bank."
 nation_help_16: "Used to delete your nation."
 nation_help_17: "Used to add or remove ranks from residents."
 nation_help_18: "See /n rank ? for help."
+nation_help_19: "Used to teleport to the outposts owned by your nation's towns."
 
 nation_list_help_0: "View the specified page."
 nation_list_help_1: "List nations by resident-count, with the specified page."
@@ -229,6 +230,7 @@ res_1: 'Your status'
 res_2: '[resident]'
 res_3: 'Target player''s status'
 res_4: 'List all active players'
+res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -389,6 +391,7 @@ ta_resident_help_1: "Add or remove a friend."
 ta_resident_help_2: "List or clear the friend list."
 ta_resident_help_3: "Delete a resident from the database."
 ta_resident_help_4: "Removes a players about line."
+ta_resident_help_5: "Set a resident's last online or registered timestamp."
 
 ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
 ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
@@ -804,6 +807,7 @@ msg_you_have_given_rank: 'You have granted the %s rank of %s to %s.'
 msg_resident_not_your_town: 'That resident isn''t a member of a town!'
 msg_resident_already_has_rank: '%s already holds this %s rank.'
 msg_town_or_nation_level_not_high_enough_for_this_rank: "Your %s level is not high enough to assign the %s rank. Your %s's Level: %s/%s required."
+msg_rank_can_only_be_assigned_x_times: "You cannot assign the rank of %s to %s because it can only be assigned %s times, your %s has used it %s times."
 msg_you_have_had_rank_taken: 'You have been demoted from the %s rank of %s.'
 msg_you_have_taken_rank_from: 'You have removed the %s rank of %s from %s.'
 msg_resident_doesnt_have_rank: '%s doesn''t hold this %s rank.'
@@ -965,6 +969,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 nation_zone_conquered_status_denies_use: "Your town's conquered status prevents you from using this nation zone."
 nation_zone_conquered_status_denies_use_2: "Your are unable to use this conquered town's nation zone."
 nation_spawn_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from spawning to your nation's spawn point."
+nation_outpost_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from teleporting to your nation's outposts."
 
 # Added in 0.42
 you_have_been_invited_to_join2: 'You have been invited to join %s'
@@ -1382,7 +1387,10 @@ msg_already_ally: 'Your nation is already allied with %s.'
 msg_you: 'You'
 
 # Added in 0.77
+msg_click_town_info: '<green>Click to view the town status screen.'
+msg_click_nation_info: '<green>Click to view the nation status screen.'
 msg_click_spawn: '&aClick to spawn to: &e%s'
+msg_click_spawn_brief: '<green>[Spawn]'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
 
 # Added in 0.78
@@ -1830,6 +1838,7 @@ msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belo
 #Added in 0.115
 msg_comptype_founded: 'Founded Date'
 msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
+msg_err_must_be_less_than_or_equal_to: 'Amount must be less than or equal to %s'
 err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
 
 #Added in 0.116
@@ -2424,6 +2433,9 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 # Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
 
+# Message shown when denying a cross world teleport
+msg_err_world_not_same_cant_teleport: "<red>You cannot teleport to a different world using this command."
+
 # Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
 msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
@@ -2450,6 +2462,8 @@ townyadmin_town_set_help_0: "Sets the founding date of a town."
 townyadmin_nation_set_help_0: "Sets the founding date of a nation."
 msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
 msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
+msg_resident_registered_set: "Registered date of resident: '%s' set to: '%s'."
+msg_resident_lastonline_set: "Last online date of resident: '%s' set to: '%s'."
 msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
 
 # The format used for the /t say and /n say commands.
@@ -2686,3 +2700,10 @@ msg_err_must_specify_days_to_be_conquered: "You must specify a number of days to
 msg_conquered_status_granted: "You have set %s to have the conquered status for %s days."
 msg_conquered_status_granted_unlimited: "You have set %s to have the conquered status for an indefinite amount of days."
 msg_err_must_specify_on_or_off: "You must specify on or off."
+    
+msg_nation_level_overridden_with: 'The nation %s has had their nationlevel set to %s.'
+msg_nation_level_unset: 'The nation %s has had their manually-set nationlevel unset. Current nationlevel is %s.'
+
+msg_err_cannot_merge_x_seconds_remaining: 'You must wait %s seconds before asking %s to merge again.'
+
+msg_towny_prices_percentage_capped_at: ", up to %s"

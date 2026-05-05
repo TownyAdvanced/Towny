@@ -11,6 +11,7 @@ help_0: 'Panduan umum towny'
 help_1: 'Ikuti beberapa perintah untuk mengetahui lebih lanjut tentang towny.'
 help_2: 'Chat Antar Kota'
 help_3: 'Chat Antar Negara'
+help_4: 'Resident command help.'
 town_help_1: 'Status kota mu'
 town_help_2: '[walikota]'
 town_help_3: 'Status kota yang dipilih'
@@ -21,6 +22,7 @@ town_help_7: 'Kota baru dengan pemain yang ditunjuk sebagai walikota.'
 town_help_8: 'Daftar perintah untuk walikota.'
 town_help_9: 'Todays the day!'
 town_help_10: 'Daftar penduduk yang sedang aktif'
+town_help_19: "Tetapkan kotamu untuk dijual, dapat dibeli oleh pemain lain."
 mayor_help_3: 'Wilayah yang ingin di ambil tidak berdekatan dengan kota'
 mayor_help_4: 'Ambil wilayah di sekitar mu sampai radius X'
 mayor_help_5: 'Ambil wilayah sampai radius maksimal'
@@ -808,7 +810,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Kamu tidak
 msg_already_ally: 'Negara mu sudah bersekutu dengan negara %s.'
 #Added in 0.76
 msg_you: 'Kamu'
-#Added in 0.77
 msg_click_spawn: '&aKlik untuk teleport: &e%s'
 msg_spawn_cost: '&aBiaya teleport = &e%s'
 #Added in 0.78

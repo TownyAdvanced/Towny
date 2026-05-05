@@ -18,7 +18,7 @@ import com.palmergames.util.TimeTools;
 
 import io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent;
 
-import org.bukkit.Bukkit;
+import io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -33,7 +33,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityEvent;
@@ -47,11 +46,10 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.invoke.MethodHandle;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-public class TownyPaperEvents implements Listener {
+public class TownyPaperEvents implements SoftwareDependentListener {
 	private final Towny plugin;
 	
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
@@ -68,11 +66,13 @@ public class TownyPaperEvents implements Listener {
 	public static final String ADD_TO_WORLD_EVENT = "com.destroystokyo.paper.event.entity.EntityAddToWorldEvent";
 
 	public static final String COPPER_GOLEM_MOVES_ITEM_EVENT = "io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent";
+	public static final String PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT = "io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent";
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
 	}
-	
+
+	@Override
 	public void register() {
 		registerEvent(TNTPrimeEvent.class, tntPrimeEvent(), EventPriority.LOW, true);
 		registerEvent(EntityChangeBlockEvent.class, fallingBlockListener(), EventPriority.LOW, true);
@@ -94,19 +94,8 @@ public class TownyPaperEvents implements Listener {
 		}
 		
 		registerEvent(COPPER_GOLEM_MOVES_ITEM_EVENT, this::onGolemMoveItem, EventPriority.NORMAL, true);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private <T extends Event> void registerEvent(String className, Supplier<Consumer<T>> executor, EventPriority eventPriority, boolean ignoreCancelled) {
-		try {
-			Class<T> eventClass = (Class<T>) Class.forName(className).asSubclass(Event.class);
-			registerEvent(eventClass, executor.get(), eventPriority, ignoreCancelled);
-		} catch (ClassNotFoundException ignored) {}
-	}
-	
-	@SuppressWarnings("unchecked")
-	private <T extends Event> void registerEvent(Class<T> eventClass, Consumer<T> consumer, EventPriority eventPriority, boolean ignoreCancelled) {
-		Bukkit.getPluginManager().registerEvent(eventClass, this, eventPriority, (listener, event) -> consumer.accept((T) event), plugin, ignoreCancelled);
+
+		registerEvent(PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT, this::playerToggleEntityAgeLockListener, EventPriority.LOW, true);
 	}
 	
 	// https://jd.papermc.io/paper/1.15/index.html?com/destroystokyo/paper/event/player/PlayerElytraBoostEvent.html
@@ -247,6 +236,19 @@ public class TownyPaperEvents implements Listener {
 				return;
 
 			event.setAllowed(false);
+		};
+	}
+
+	public Consumer<PlayerEvent> playerToggleEntityAgeLockListener() {
+		return e -> {
+			if (TownyPlayerListener.ignoreEvent(e)) {
+				return;
+			}
+
+			final PlayerToggleEntityAgeLockEvent event = (PlayerToggleEntityAgeLockEvent) e;
+			if (!TownyActionEventExecutor.canDestroy(event.getPlayer(), event.getEntity().getLocation(), event.getItem().getType())) {
+				event.setCancelled(true);
+			}
 		};
 	}
 

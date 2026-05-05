@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Material;
@@ -57,7 +58,7 @@ public class EntityTypeUtil {
 		register(map, "mooshroom", "mooshroom_spawn_egg");
 		register(map, "ender_pearl", "ender_pearl");
 		register(map, "wind_charge", "wind_charge");
-		
+		register(map, "interaction", "grass_block"); // No such thing as a interaction block as far as I know.
 		TownyMessaging.sendDebugMsg("[EntityTypeUtil] Attempted: " + attempted + " | Registered: " + map.size());
 
 		return map;
@@ -165,7 +166,7 @@ public class EntityTypeUtil {
 	
 	private static void register(Map<EntityType, Material> map, String name, String mat) {
 		attempted++;
-		EntityType type = Registry.ENTITY_TYPE.get(NamespacedKey.minecraft(name));
+		EntityType type = BukkitTools.entityTypeRegistry().get(NamespacedKey.minecraft(name));
 		Material material = Registry.MATERIAL.get(NamespacedKey.minecraft(mat));
 
 		if (type == null || material == null) {

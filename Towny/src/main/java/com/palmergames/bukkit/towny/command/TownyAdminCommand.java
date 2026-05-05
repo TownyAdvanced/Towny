@@ -193,7 +193,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"merge",
 		"transfer",
 		"forcemerge",
-		"recheck"
+		"recheck",
+		"setnationlevel"
 	);
 	private static final List<String> adminNationSetTabCompletes = Stream.concat(NationCommand.nationSetTabCompletes.stream(),
 		Stream.of("foundingdate")).collect(Collectors.toList());
@@ -228,11 +229,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> adminResidentTabCompletes = Arrays.asList(
+		"about",
 		"rename",
 		"friend",
 		"meta",
 		"unjail",
-		"delete"
+		"delete",
+		"set"
+	);
+
+	private static final List<String> adminResidentSetTabCompletes = Arrays.asList(
+		"lastonline",
+		"registered"
 	);
 	
 	private static final List<String> adminResidentFriendTabCompletes = Arrays.asList(
@@ -429,6 +437,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					case 4:
 						if (args[2].equalsIgnoreCase("about"))
 							return Collections.singletonList("clear");
+						if (args[2].equalsIgnoreCase("set"))
+							return NameUtil.filterByStart(adminResidentSetTabCompletes, args[3]);
 						if (args[2].equalsIgnoreCase("friend"))
 							return NameUtil.filterByStart(adminResidentFriendTabCompletes, args[3]);
 						if (args[2].equalsIgnoreCase("meta"))
@@ -586,6 +596,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 										.filter(t -> !nation.hasTown(t))
 										.map(Town::getName)
 										.collect(Collectors.toList()), args[4]);
+							break;
+						case "setnationlevel":
+							if (args.length == 4)
+								return NameUtil.filterByStart(StringMgmt.addToList(numbers, "unset"), args[3]);
 							break;
 						case "enemy":
 						case "ally":
@@ -1038,7 +1052,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminPlotCommand(Player player, String[] split) throws TownyException {
-		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT.getNode());
 
 		if (split.length < 1 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_PLOT.send(player);
@@ -1216,7 +1229,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode());
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_RESIDENT.send(sender);
 			return;
@@ -1235,8 +1247,43 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "unjail" -> residentUnjail(sender, resident);
 		case "delete" -> residentDelete(sender, resident);
 		case "about" -> residentAbout(sender, split, resident); 
+		case "set" -> residentSet(sender, split, resident);
 		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
 		}
+	}
+
+	private void residentSet(CommandSender sender, String[] split, Resident resident) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_SET.getNode());
+		if (split.length != 4)
+			throw new TownyException("Eg: /townyadmin resident [resident] set [lastonline/registered] [timestamp]");
+
+		long timestamp = parseVerifiedResidentTimestamp(split[3]);
+		switch (split[2].toLowerCase(Locale.ROOT)) {
+		case "lastonline" -> {
+			resident.setLastOnline(timestamp);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_lastonline_set", resident.getName(), TownyFormatter.registeredFormat.format(resident.getLastOnline())));
+		}
+		case "registered" -> {
+			resident.setRegistered(timestamp);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_registered_set", resident.getName(), TownyFormatter.registeredFormat.format(resident.getRegistered())));
+		}
+		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[2]));
+		}
+		resident.save();
+	}
+
+	private static long parseVerifiedResidentTimestamp(String input) throws TownyException {
+		long timestamp;
+		try {
+			timestamp = Long.parseLong(input);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+		if (timestamp <= 0)
+			throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
+		if (timestamp > System.currentTimeMillis())
+			throw new TownyException(Translatable.of("msg_err_time_cannot_be_in_the_future"));
+		return timestamp;
 	}
 
 	private void residentAbout(CommandSender sender, String[] split, Resident resident) throws TownyException {
@@ -1297,7 +1344,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminTownCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -1373,11 +1419,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "spawn":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN.getNode());
-			SpawnUtil.sendToTownySpawn(catchConsole(sender), StringMgmt.remArgs(split, 2), town, "", false, false, SpawnType.TOWN);
+			SpawnUtil.sendToTownySpawn(catchConsole(sender), StringMgmt.remArgs(split, 2), town, "", false, SpawnType.TOWN);
 			break;
 		case "outpost":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_OUTPOST.getNode());
-			SpawnUtil.sendToTownySpawn(catchConsole(sender), StringMgmt.remArgs(split, 2), town, "", true, false, SpawnType.TOWN);
+			SpawnUtil.sendToTownySpawn(catchConsole(sender), StringMgmt.remArgs(split, 2), town, "", false, SpawnType.OUTPOST);
 			break;
 		case "rank":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_RANK.getNode());
@@ -1456,6 +1502,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);
 			break;
 		case "leavenation":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_LEAVENATION.getNode());
 			if (!town.hasNation())
 				throw new TownyException(Translatable.of("That town does not belong to a nation."));
 
@@ -1703,8 +1750,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		// Handle applying a manual override.
 		int level = MathUtil.getPositiveIntOrThrow(split[0]);
-		if (level > TownySettings.getTownLevelMax() - 1)
-			level = TownySettings.getTownLevelMax() - 1;
+		level = Math.min(level, TownySettings.getTownLevelMax());
 		town.setManualTownLevel(level);
 		town.save();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, level));
@@ -1771,7 +1817,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminNationCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -1917,6 +1962,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY.getNode());
 			parseAdminNationEnemyCommand(sender, StringMgmt.remArgs(split, 2), nation);
 			break;
+		case "setnationlevel":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SETNATIONLEVEL.getNode());
+			setNationLevel(sender, nation, StringMgmt.remArgs(split, 2));
+			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, split[1])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_NATION, split[1]).execute(sender, split, nation);
@@ -1924,6 +1973,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			HelpMenu.TA_NATION.send(sender);
 		}
+	}
+
+	private void setNationLevel(CommandSender sender, Nation nation, String[] split) throws TownyException {
+		// The number is missing.
+		if (split.length == 0)
+			throw new TownyException("Eg: /townyadmin nation [nationname] setnationlevel 2");
+
+		// Handle un-setting the manual override.
+		if (split[0].equalsIgnoreCase("unset")) {
+			nation.setManualNationLevel(-1);
+			nation.save();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_level_unset", nation, nation.getLevelNumber()));
+			return;
+		}
+
+		// Handle applying a manual override.
+		int level = MathUtil.getPositiveIntOrThrow(split[0]);
+		if (level > TownySettings.getNationLevelMax() - 1)
+			level = TownySettings.getNationLevelMax() - 1;
+		nation.setManualNationLevel(level);
+		nation.save();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_level_overridden_with", nation, level));
 	}
 
 	private void parseAdminNewNationCommand(CommandSender sender, String[] split) throws TownyException {
@@ -1952,7 +2023,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownOrThrow(townName[0]);
 		if (town.hasNation()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_already_nation"));
-			TownyMessaging.sendMessage(sender, "Suggestion: /townyadmin town " + town + "leavenation, or /ta nation " + nation + " transfer " + town);
+			TownyMessaging.sendErrorMsg(sender, "Suggestion: /townyadmin town " + town + " leavenation, or /ta nation " + nation + " transfer " + town);
 			return;
 		}
 		town.setNation(nation);
@@ -1977,7 +2048,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	private void parseAdminNationSet(CommandSender sender, Nation nation, String[] split) throws TownyException {
 		if (split.length == 0 || split[0].equals("?")) {
-			// Empty Case: /townyadmin town [town] set
+			// Empty Case: /townyadmin nation [nation] set
 			HelpMenu.TA_NATION_SET.send(sender);
 		} else if (split[0].equalsIgnoreCase("foundingdate")) {
 			parseAdminNationSetFoundingDate(sender, nation, split);
@@ -2171,10 +2242,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			adminSetAbout(sender, split);
 			break;
 		case "surname":
-			adminSetSurname(sender, split);
+			adminSetSurname(sender, StringMgmt.remFirstArg(split));
 			break;
 		case "title":
-			adminSetTitle(sender, split);
+			adminSetTitle(sender, StringMgmt.remFirstArg(split));
 			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
@@ -2338,50 +2409,42 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void adminSetSurname(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME.getNode());
-		
-		Resident resident = null;
-		// Give the resident a surname
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set surname bilbo Jester");
-			return;
-		} else
-			resident = getResidentOrThrow(split[1]);
 
-		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
-		resident.setSurname(surname + " ");
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /townyadmin set surname bilbo the hobbit");
+
+		Resident resident = getResidentOrThrow(split[0]);
+
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
+		resident.setSurname(surname);
 		resident.save();
 
-		if (resident.hasSurname()) {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-		} else {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-		}
+		Translatable message = resident.hasSurname()
+				? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
+				: Translatable.of("msg_clear_title_surname", "surname", resident.getName());
+
+		TownyMessaging.sendMsg(sender, message);
+		TownyMessaging.sendMsg(resident, message);
 	}
 
 	private void adminSetTitle(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode());
-		
-		Resident resident = null;
-		// Give the resident a title
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set title bilbo Jester");
-			return;
-		} else
-			resident = getResidentOrThrow(split[1]);
 
-		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
-		resident.setTitle(title + " ");
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /townyadmin set title bilbo Jester");
+
+		Resident resident = getResidentOrThrow(split[0]);
+
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
+		resident.setTitle(title);
 		resident.save();
 
-		if (resident.hasTitle()) {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-		} else {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-		}
+		Translatable message = resident.hasTitle()
+				? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
+				: Translatable.of("msg_clear_title_surname", "title", resident.getName());
+
+		TownyMessaging.sendMsg(sender, message);
+		TownyMessaging.sendMsg(resident, message);
 	}
 
 	public void reloadLangs(CommandSender sender) {
@@ -2493,7 +2556,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseToggleCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode());
 
 		Optional<Boolean> choice = Optional.empty();
 		if (split.length == 2) {

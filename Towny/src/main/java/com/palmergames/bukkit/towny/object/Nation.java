@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.NationLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
-import com.palmergames.bukkit.towny.event.nation.NationCalculateNationLevelNumberEvent;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -49,6 +48,7 @@ public class Nation extends Government {
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
+	private int manualNationLevel = -1;
 
 	@ApiStatus.Internal
 	public Nation(String name, UUID uuid) {
@@ -648,11 +648,7 @@ public class Nation extends Government {
 	 * @return Nation Level (int) for current population or amount of towns.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? getNumTowns() : getNumResidents();
-		int nationLevelNumber = TownySettings.getNationLevelFromGivenInt(modifier);
-		NationCalculateNationLevelNumberEvent ncnle = new NationCalculateNationLevelNumberEvent(this, nationLevelNumber);
-		BukkitTools.fireEvent(ncnle);
-		return ncnle.getNationLevelNumber();
+		return TownySettings.getNationLevelNumber(this);
 	}
 
 	@Override
@@ -713,4 +709,11 @@ public class Nation extends Government {
 	}
 
 
+	public int getManualNationLevel() {
+		return manualNationLevel;
+	}
+
+	public void setManualNationLevel(int manualNationLevel) {
+		this.manualNationLevel = manualNationLevel;
+	}
 }

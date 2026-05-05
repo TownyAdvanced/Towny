@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.102.0.6</version>
+    <version>0.102.0.14</version>
 
     <licenses>
         <license>
@@ -32,7 +32,7 @@
     <properties>
         <project.bukkitAPIVersion>1.19</project.bukkitAPIVersion>
         <skipTests>true</skipTests>
-        <junit.version>6.0.2</junit.version>
+        <junit.version>6.0.3</junit.version>
     </properties>
 
     <scm>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.10-R0.1-SNAPSHOT</version>
+            <version>[26.1.2.build,)</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -116,13 +116,13 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.25.3</version>
+            <version>2.25.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.6</version>
+            <version>2.12.2</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -135,7 +135,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.26.2</version>
+            <version>1.28.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -145,7 +145,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -213,14 +213,25 @@
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>coreprotect</artifactId>
-            <version>22.4</version>
+            <version>23.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockbukkit.mockbukkit</groupId>
-            <artifactId>mockbukkit-v1.21</artifactId>
-            <version>4.98.0</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.23.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.17</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastboard</artifactId>
+            <version>2.1.5</version>
         </dependency>
     </dependencies>
 
@@ -241,7 +252,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.1</version>
+                    <version>3.15.0</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
@@ -265,11 +276,18 @@
                                 <goal>jar</goal>
                             </goals>
                         </execution>
+                        <execution>
+                            <id>generate-docs</id>
+                            <goals>
+                                <goal>javadoc</goal>
+                            </goals>
+                        </execution>
                     </executions>
                     <configuration>
                         <source>${java.version}</source>
                         <doclint>all,-missing</doclint>
                         <doctitle>Towny - ${project.version}</doctitle>
+                        <notimestamp>true</notimestamp>
                         <groups>
                             <group>
                                 <title>Events</title>
@@ -322,7 +340,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.6.2</version>
                     <configuration>
                         <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                         <artifactSet>
@@ -349,6 +367,10 @@
                             <relocation>
                                 <pattern>solar.squares.pixelwidth</pattern>
                                 <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>fr.mrmicky.fastboard</pattern>
+                                <shadedPattern>com.palmergames.fastboard</shadedPattern>
                             </relocation>
                         </relocations>
                         <filters>
@@ -393,10 +415,22 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>properties</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.4</version>
+                    <version>3.5.5</version>
                     <configuration>
                         <skipTests>${skipTests}</skipTests>
+                        <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -414,7 +448,7 @@
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
-                    <version>9.0.2</version>
+                    <version>10.0.0</version>
                     <executions>
                         <execution>
                             <id>get-the-git-infos</id>

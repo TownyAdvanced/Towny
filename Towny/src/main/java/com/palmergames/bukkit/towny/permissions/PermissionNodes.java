@@ -92,6 +92,8 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_BALTOP("towny.command.nation.baltop"),
 	TOWNY_COMMAND_NATION_KICK("towny.command.nation.kick"),
 	TOWNY_COMMAND_NATION_SANCTIONTOWN("towny.command.nation.sanctiontown"),
+	TOWNY_COMMAND_NATION_OUTPOST_LISTALL("towny.command.nation.outpost.listall"),
+	TOWNY_COMMAND_NATION_OUTPOST_LIST("towny.command.nation.outpost.list"),
 	
 	/*
 	 * Town command permissions
@@ -327,6 +329,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_META("towny.command.townyadmin.resident.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE("towny.command.townyadmin.resident.delete"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_SET("towny.command.townyadmin.resident.set"),
 		
 	TOWNY_COMMAND_TOWNYADMIN_TOWN("towny.command.townyadmin.town.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_INVITE("towny.command.townyadmin.town.invite"),
@@ -351,6 +354,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_OUTLAW("towny.command.townyadmin.town.outlaw"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_OUTPOST("towny.command.townyadmin.town.outpost"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_RANK("towny.command.townyadmin.town.rank"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_LEAVENATION("towny.command.townyadmin.town.leavenation"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_BANKHISTORY("towny.command.townyadmin.town.bankhistory"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUST("towny.command.townyadmin.town.trust"),
@@ -380,6 +384,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_BANKHISTORY("towny.command.townyadmin.nation.bankhistory"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY("towny.command.townyadmin.nation.enemy"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ALLY("towny.command.townyadmin.nation.ally"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_SETNATIONLEVEL("towny.command.townyadmin.nation.setnationlevel"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_TOGGLE("towny.command.townyadmin.toggle.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE("towny.command.townyadmin.toggle.devmode"),
@@ -463,8 +468,9 @@ public enum PermissionNodes {
 
 	TOWNY_SPAWN_ALL("towny.town.spawn.*"),
 		TOWNY_SPAWN_TOWN("towny.town.spawn.town"),
-		TOWNY_SPAWN_OUTPOST("towny.town.spawn.outpost"),
+			TOWNY_SPAWN_OUTPOST("towny.town.spawn.outpost"),
 		TOWNY_SPAWN_NATION("towny.town.spawn.nation"),
+			TOWNY_SPAWN_NATION_OUTPOST("towny.town.spawn.nation.outpost"),
 			TOWNY_SPAWN_NATION_BYPASS_PUBLIC("towny.town.spawn.nation.bypass_public"),
 		TOWNY_SPAWN_ALLY("towny.town.spawn.ally"),
 			TOWNY_SPAWN_ALLY_BYPASS_PUBLIC("towny.town.spawn.ally.bypass_public"),
