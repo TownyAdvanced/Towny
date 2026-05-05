@@ -820,7 +820,8 @@ public class TownyWorld extends TownyObject {
 					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
 					if (homeTown.getUUID().equals(town.getUUID())
 						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
-						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
+						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town))
+						|| (TownySettings.isMinDistanceIgnoringRuinedTowns() && town.isRuined()))
 						continue;
 				}
 				if (!town.getHomeblockWorld().equals(this)) continue;
@@ -862,7 +863,8 @@ public class TownyWorld extends TownyObject {
 				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
 				if (homeTown.getUUID().equals(town.getUUID())
 					|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
-					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
+					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town))
+					|| (TownySettings.isMinDistanceIgnoringRuinedTowns() && town.isRuined()))
 					continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;

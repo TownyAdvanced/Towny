@@ -1218,6 +1218,12 @@ public enum ConfigNodes {
 			"",
 			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
 			"# will be ignored for towns that are mutually allied. Setting to false will keep all towns separated the same."),
+	CLAIMING_MIN_DISTANCE_IGNORED_FOR_RUINED_TOWN(
+			"claiming.distance_rules.min_distances_ignored_for_ruined_towns",
+			"false",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are ruined. Setting to false will keep all towns separated the same."),
 	CLAIMING_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
 			"claiming.distance_rules.min_plot_distance_from_town_plot",
 			"5",
