@@ -122,6 +122,7 @@ nation_help_15: "Deposita soldi nella banca della nazione."
 nation_help_16: "Utilizzato per eliminare la tua nazione."
 nation_help_17: "Utilizzato per aggiungere o rimuovere i rank dai residenti."
 nation_help_18: "Consulta /n rank ? per aiuto."
+nation_help_19: "Utilizzato per teletrasportarsi negli avamposti di proprietà delle città della tua nazione."
 nation_list_help_0: "Visualizza la pagina specificata."
 nation_list_help_1: "Elenca le nazioni per numero di residenti, con la pagina specificata."
 nation_list_help_2: "Elenca le nazioni per numero di città, con la pagina specificata."
@@ -162,6 +163,7 @@ res_1: 'Il tuo stato'
 res_2: '[residente]'
 res_3: 'Stato del giocatore specificato'
 res_4: 'Elenca tutti i giocatori attivi'
+res_8: 'Solo un umile contadino'
 res_9: "Quante tasse pagherai al giorno."
 res_10: "Consulta /res jail ? per aiuto."
 res_11: "Consulta /res toggle ? per aiuto."
@@ -303,6 +305,7 @@ ta_resident_help_1: "Aggiungi o rimuovi un amico."
 ta_resident_help_2: "Elenca o cancella la lista degli amici."
 ta_resident_help_3: "Elimina un residente dal database."
 ta_resident_help_4: "Rimuove una linea d'informazione riguardo al giocatore."
+ta_resident_help_5: "Imposta l'ultimo lasso di tempo online o registrato del residente."
 ta_toggle_help_0: "Attiva/disattiva la possibilità di utilizzare la wilderness in tutti i mondi."
 ta_toggle_help_1: "Attiva/disattiva le funzioni di rigenerazione in tutti i mondi."
 ta_toggle_help_2: "Attiva/disattiva la modalità sviluppatore, mostra messaggi di log aggiuntivi al giocatore specificato nella configurazione."
@@ -673,6 +676,7 @@ msg_you_have_given_rank: 'Hai concesso il rango %s di %s a %s.'
 msg_resident_not_your_town: 'Quel residente non è membro di una città!'
 msg_resident_already_has_rank: '%s già detiene questo %s rango.'
 msg_town_or_nation_level_not_high_enough_for_this_rank: "Il tuo livello di %s non è abbastanza alto da poter assegnare il rango %s. Il tuo livello di %s: %s/%s richiesto."
+msg_rank_can_only_be_assigned_x_times: "Non puoi assegnare il rango di %s a %s perché può essere assegnato solo %s volte, il tuo %s lo ha usato %s volte."
 msg_you_have_had_rank_taken: 'Sei stato retrocesso dal rango %s di %s.'
 msg_you_have_taken_rank_from: 'Hai rimosso il rango %s di %s da %s.'
 msg_resident_doesnt_have_rank: '%s non detiene il rango %s.'
@@ -817,6 +821,7 @@ nation_zone_this_area_under_protection_of: 'Questa parte di %s è sotto la prote
 nation_zone_conquered_status_denies_use: "Lo status di conquistato della tua città ti impedisce di utilizzare questa zona nazionale."
 nation_zone_conquered_status_denies_use_2: "Non sei in grado di utilizzare la zona nazionale di questa città conquistata."
 nation_spawn_not_allowed_for_conquered_towns: "Lo status di conquistato della tua città ti impedisce di spawnare al punto di spawn della tua nazione."
+nation_outpost_not_allowed_for_conquered_towns: "Lo status di \"conquistato\" della tua città ti impedisce di spawnare al punto di spawn della tua nazione."
 #Added in 0.42
 you_have_been_invited_to_join2: 'Sei stato invitato ad entrare in %s'
 you_have_been_requested_to_ally2: 'Hai ricevuto una richiesta di alleanza da %s'
@@ -1180,7 +1185,11 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Non sei au
 msg_already_ally: 'La tua nazione è già alleata con %s.'
 #Added in 0.76
 msg_you: 'Tu'
+#Added in 0.77
+msg_click_town_info: '<green>Clicca per visualizzare la schermata di stato della città.'
+msg_click_nation_info: '<green>Clicca per visualizzare la schermata di stato della nazione.'
 msg_click_spawn: '&aClicca per spawnare in: &e%s'
+msg_click_spawn_brief: '<green>[Spawn]'
 msg_spawn_cost: '&aCosto Spawn = &e%s'
 #Added in 0.78
 msg_reload_error: 'Si è verificato un errore durante il caricamento del file.'
@@ -1532,6 +1541,7 @@ msg_err_that_resident_doesnt_belong_to_that_nation: 'Quel residente non appartie
 #Added in 0.115
 msg_comptype_founded: 'Data Di Fondamento'
 msg_err_must_be_greater_than_or_equal_to: 'L''importo deve essere maggiore o uguale a %s'
+msg_err_must_be_less_than_or_equal_to: 'L''importo deve essere inferiore o uguale a %s'
 err_invalid_yaml: 'Errore di caricamento: Impossibile caricare il file %s (passa un parser yaml?).'
 #Added in 0.116
 msg_town_map_color_changed: '&bIl colore della mappa città è stato cambiato in %s.'
@@ -1998,6 +2008,8 @@ msg_err_your_town_is_not_old_enough_to_overclaim: "La tua città non è abbastan
 msg_err_your_cannot_overclaim_for_another: "Non puoi overclaimare di nuovo per %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>Il mondo non è caricato."
+#Message shown when denying a cross world teleport
+msg_err_world_not_same_cant_teleport: "<red>Non puoi teletrasportarti in un mondo diverso utilizzando questo comando."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cA questo plot è stato impostato lo status di tassato a %s.'
 msg_changed_plotgroup_taxed: '&cA questo gruppo di plot è stato impostato lo status di tassato a %s.'
@@ -2020,6 +2032,8 @@ townyadmin_town_set_help_0: "Imposta la data di fondazione di una città."
 townyadmin_nation_set_help_0: "Imposta la data di fondazione di una nazione."
 msg_town_registered_set: "Data di fondazione della città: '%s' impostata a: '%s'."
 msg_nation_registered_set: "Data di fondazione della nazione: '%s' impostata a: '%s'."
+msg_resident_registered_set: "Data di registrazione del residente: '%s' impostata su: '%s'."
+msg_resident_lastonline_set: "Data dell'ultimo accesso del residente: '%s' impostata su: '%s'."
 msg_err_time_cannot_be_in_the_future: "Il tempo specificato non può essere nel futuro."
 #The format used for the /t say and /n say commands.
 town_say_format: "%s dice: %s"
@@ -2151,3 +2165,11 @@ msg_nearby_towns: 'Città vicine'
 msg_no_towns_nearby: 'Nessuna città trovata nelle vicinanze.'
 msg_nearby_town_format: '<green>%s <white>(%s blocchi)'
 msg_nearby_town_nation: ' <aqua>[%s]'
+msg_err_must_specify_days_to_be_conquered: "È necessario specificare un numero di giorni per i quali essere conquistati: 1 o più, o -1 o illimitato per una conquista indefinita."
+msg_conquered_status_granted: "Hai impostato %s per avere lo status di \"conquistato\" per %s giorni."
+msg_conquered_status_granted_unlimited: "Hai impostato %s per avere lo status di \"conquistato\" per un periodo indeterminato di giorni."
+msg_err_must_specify_on_or_off: "È necessario specificare se attivo o disattivo."
+msg_nation_level_overridden_with: 'Il livello della nazione %s è stato impostato su %s.'
+msg_nation_level_unset: "È stato rimosso il livello nazionale, dapprima impostato manualmente, della nazione %s. Il suo livello attuale \nè %s."
+msg_err_cannot_merge_x_seconds_remaining: 'È necessario attendere %s secondi prima di chiedere a %s di unirsi di nuovo.'
+msg_towny_prices_percentage_capped_at: ", fino a %s"
