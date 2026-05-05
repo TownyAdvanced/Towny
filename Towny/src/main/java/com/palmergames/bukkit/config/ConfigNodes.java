@@ -2078,6 +2078,12 @@ public enum ConfigNodes {
 			"",
 			"# Setting this to false will allow non-player entities to harm the above protected mobs.",
 			"# This would include withers damaging protected mobs, and can be quite harmful."),
+	PROT_MOB_TYPES_MOB_VS_BLOCK_PROJECTILE_SOURCE_BYPASS(
+			"protection.are_mob_types_protected_against_block_projectile_sources",
+			"true",
+			"",
+			"# Setting this to false will allow block projectile sources, namely dispensers, to harm the above protected mobs (using potions, arrows, etc.), if they're in the same townblock and PvP is enabled."
+	),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
 			"BLINDNESS,NAUSEA,INSTANT_DAMAGE,HUNGER,POISON,SLOWNESS,MINING_FATIGUE,WEAKNESS,WITHER,WIND_CHARGED,WEAVING,INFESTED,OOZING",
