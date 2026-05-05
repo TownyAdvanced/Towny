@@ -10842,3 +10842,4 @@ v0.92.0.11:
   - Add hover to town and nation status screen title bars for admins.
     - Displays name, uuid and town/nation level information.
   - Fix consider_enemies_outlaws config setting not applying to towns who are enemies with each other.
+  - Fix Nation's newCapitalFinder being able to pick a conquered town.

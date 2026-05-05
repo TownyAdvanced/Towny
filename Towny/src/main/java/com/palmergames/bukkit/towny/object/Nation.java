@@ -235,6 +235,10 @@ public class Nation extends Government {
 		int numResidents = 0;
 		Town tempCapital = null;
 		for (Town newCapital : getTowns()) {
+			// Makes sense that a conquered town should not be able to become the next
+			// capital, if no capital is found, they will go free when the nation disbands.
+			if (newCapital.isConquered())
+				continue;
 			if (newCapital.getNumResidents() > numResidents) {
 				tempCapital = newCapital;
 				numResidents = newCapital.getNumResidents();
@@ -356,6 +360,9 @@ public class Nation extends Government {
 		remove(town);
 
 		if (getNumTowns() == 0) {
+			throw new EmptyNationException(this);
+		} else if (isCapital && towns.stream().filter(Town::isConquered).count() == towns.size()) {
+			// All remaining towns are conquered, they cannot become the Capital.
 			throw new EmptyNationException(this);
 		} else if (isCapital) {
 			findNewCapital();
