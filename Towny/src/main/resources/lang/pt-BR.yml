@@ -1317,7 +1317,6 @@ towny_prices_outposts_upkeept: '&7Outposts têm um custo de manutenção diário
 towny_prices_upkeep_based_on: '&7A manutenção da cidade é baseada no &a%s'
 towny_prices_upkeep_num_plots: 'número de terrenos.'
 towny_prices_upkeep_town_level: 'nível da cidade (Número de residentes)'
-towny_prices_overclaimed_based_on: '&8Sobrescrita é baseada em &a %s %s'
 towny_prices_overclaimed_num_plots: 'o número de parcelas sobrecargadas *'
 towny_prices_overclaimed_flat_cost: 'um custo fixo de'
 towny_prices_townname: '&cCidade: &b%s'
