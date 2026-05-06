@@ -1315,7 +1315,6 @@ towny_prices_outposts_upkeept: '&7Posterunki mają dodatkowy dzienny koszt utrzy
 towny_prices_upkeep_based_on: '&7Czynsz miasta zależny jest od czynnika &a%s'
 towny_prices_upkeep_num_plots: 'liczba działek.'
 towny_prices_upkeep_town_level: 'poziom miasta (liczba mieszkańców)'
-towny_prices_overclaimed_based_on: '&8Czynsz przy Nadmiarowych Blokach Miasta zależny jest od &a %s %s'
 towny_prices_overclaimed_num_plots: 'liczba nadmiarowych działek *'
 towny_prices_overclaimed_flat_cost: 'stały koszt'
 towny_prices_townname: '&cMiasto: &b%s'
