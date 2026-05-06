@@ -1349,7 +1349,6 @@ towny_prices_outposts_upkeept: '&7Аванпосты требуют дополн
 towny_prices_upkeep_based_on: '&7Стоимость содержания города основана на &a%s'
 towny_prices_upkeep_num_plots: 'количество участков.'
 towny_prices_upkeep_town_level: 'уровень города (кол-во жителей)'
-towny_prices_overclaimed_based_on: '&8Налог на переприваченные (превышающие нынешний лимит) участки основан на &a %s %s'
 towny_prices_overclaimed_num_plots: 'количество переприваченных (превышающих нынешний лимит) участков'
 towny_prices_overclaimed_flat_cost: 'фиксированная цена в'
 towny_prices_townname: '&cГород: &b%s'
