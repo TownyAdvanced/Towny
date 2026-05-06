@@ -1312,7 +1312,6 @@ towny_prices_outposts_upkeept: '&7Ispostave imaju dodatnu cenu održanja na dan 
 towny_prices_upkeep_based_on: '&7Održanje grada je bazirano na &athe %s'
 towny_prices_upkeep_num_plots: 'broj plotova.'
 towny_prices_upkeep_town_level: 'nivo grada (br. stanovnici.)'
-towny_prices_overclaimed_based_on: '&8Pre-claim-ovani porez na održavanje je baziran na &a %s %s'
 towny_prices_overclaimed_num_plots: 'broj pre-claim-ovanih plotova *'
 towny_prices_overclaimed_flat_cost: 'cena parcele od'
 towny_prices_townname: '&cGrad: &b%s'
