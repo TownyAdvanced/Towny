@@ -140,22 +140,17 @@ public class TownyEntityMonitorListener implements Listener {
 			)
 			return;
 
-		double total = 0.0;
-
-		double before = total;
+		double playerLoss = 0.0;
 		if (TownySettings.getDeathPrice() > 0)
-			total = takeMoneyFromPlayer(defenderPlayer, attackerResident, defenderResident, total);
-		double playerLoss = total - before;
+			playerLoss = takeMoneyFromPlayer(defenderPlayer, attackerResident, defenderResident);
 
-		before = total;
+		double townLoss = 0.0;
 		if (TownySettings.getDeathPriceTown() > 0 && defenderResident.hasTown())
-			total = takeMoneyFromPlayersTown(defenderPlayer, attackerResident, defenderResident, total);
-		double townLoss = total - before;
+			townLoss = takeMoneyFromPlayersTown(defenderPlayer, attackerResident, defenderResident);
 
-		before = total;
+		double nationLoss = 0.0;
 		if (TownySettings.getDeathPriceNation() > 0 && defenderResident.hasNation())
-			total = takeMoneyFromPlayersNation(defenderPlayer, attackerResident, defenderResident, total);
-		double nationLoss = total - before;
+			nationLoss = takeMoneyFromPlayersNation(defenderPlayer, attackerResident, defenderResident);
 
 		double totalLoss = playerLoss + townLoss + nationLoss;
 
@@ -184,10 +179,10 @@ public class TownyEntityMonitorListener implements Listener {
 		}
 
 		if (attackerResident != null && TownySettings.isDeathPricePaidToKiller())
-			TownyMessaging.sendMsg(attackerResident, Translatable.of("msg_you_gained_money_for_killing", TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
+			TownyMessaging.sendMsg(attackerResident, Translatable.of("msg_you_gained_money_for_killing", TownyEconomyHandler.getFormattedBalance(totalLoss), defenderPlayer.getName()));
 	}
 
-	private double takeMoneyFromPlayer(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+	private double takeMoneyFromPlayer(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		double price = TownySettings.getDeathPrice();
 
 		if (TownySettings.isDeathPricePercentBased()) {
@@ -208,19 +203,19 @@ public class TownyEntityMonitorListener implements Listener {
 			else
 				defenderResident.getAccount().withdraw(price, "Death Payment");
 
-			total += price;
+			return price;
 		}
-		return total;
+		return 0.0;
 	}
 
-	private double takeMoneyFromPlayersTown(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+	private double takeMoneyFromPlayersTown(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		Town town = defenderResident.getTownOrNull();
 		double price = TownySettings.getDeathPriceTown();
 
 		if (TownySettings.isDeathPricePercentBased())
 			price = town.getAccount().getHoldingBalance() * price;
 
-		price = Math.min(price, defenderResident.getAccount().getHoldingBalance());
+		price = Math.min(price, town.getAccount().getHoldingBalance());
 
 		Player killer = attackerResident != null ? attackerResident.getPlayer() : null;
 		TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(town.getAccount(), price, defenderResident, killer, town);
@@ -232,19 +227,19 @@ public class TownyEntityMonitorListener implements Listener {
 			else
 				town.getAccount().withdraw(price, "Death Payment Town");
 
-			total += price;
+			return price;
 		}
-		return total;
+		return 0.0;
 	}
 
-	private double takeMoneyFromPlayersNation(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+	private double takeMoneyFromPlayersNation(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		Nation nation = defenderResident.getNationOrNull();
 		double price = TownySettings.getDeathPriceNation();
 
 		if (TownySettings.isDeathPricePercentBased())
 			price = nation.getAccount().getHoldingBalance() * price;
 
-		price = Math.min(price, defenderResident.getAccount().getHoldingBalance());
+		price = Math.min(price, nation.getAccount().getHoldingBalance());
 
 		Player killer = attackerResident != null ? attackerResident.getPlayer() : null;
 		NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(nation.getAccount(), price, defenderResident, killer, nation);
@@ -256,9 +251,9 @@ public class TownyEntityMonitorListener implements Listener {
 			else
 				nation.getAccount().withdraw(price, "Death Payment Nation");
 
-			total += price;
+			return price;
 		}
-		return total;
+		return 0.0;
 	}
 
 	private boolean hasBypassNode(Resident defenderResident) {
