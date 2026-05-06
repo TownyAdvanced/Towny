@@ -1320,7 +1320,6 @@ towny_prices_outposts_upkeept: '&7Аванпости мають додатков
 towny_prices_upkeep_based_on: '&7Утримання міста базується на &a%s'
 towny_prices_upkeep_num_plots: 'кількість ділянок.'
 towny_prices_upkeep_town_level: 'рівень міста (кількість жителів)'
-towny_prices_overclaimed_based_on: '&8Податок на переприватизовані території базується на &a %s %s'
 towny_prices_overclaimed_num_plots: 'кількість переприватизованих ділянок *'
 towny_prices_overclaimed_flat_cost: 'фіксована ціна в'
 towny_prices_townname: '&cМісто: &b%s'
