@@ -1310,7 +1310,6 @@ towny_prices_outposts_upkeept: '&7Các tiền đồn có thêm chi phí bảo tr
 towny_prices_upkeep_based_on: '&7Việc duy trì thị trấn dựa trên &a%s'
 towny_prices_upkeep_num_plots: 'số lượng lô đất.'
 towny_prices_upkeep_town_level: 'cấp thị trấn (số cư dân)'
-towny_prices_overclaimed_based_on: '&8Bảo trì quá mức được yêu cầu dựa trên&a %s %s'
 towny_prices_overclaimed_num_plots: 'số lượng lô đất được yêu cầu bồi thường *'
 towny_prices_overclaimed_flat_cost: 'một chi phí cố định'
 towny_prices_townname: '&cThị trấn: &b%s'
