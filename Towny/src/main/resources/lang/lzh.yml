@@ -1341,7 +1341,6 @@ towny_prices_outposts_upkeept: '&每一哨所都有維護成本：&a%s 元 / 日
 towny_prices_upkeep_based_on: '&7市鎮維護是基於&a%s'
 towny_prices_upkeep_num_plots: '地段數量 '
 towny_prices_upkeep_town_level: '市鎮等級（人口數 ）'
-towny_prices_overclaimed_based_on: '&8超額維護是基於&a%s%s'
 towny_prices_overclaimed_num_plots: '超額地段數量 *'
 towny_prices_overclaimed_flat_cost: '固定成本'
 towny_prices_townname: '&c市鎮：&b%s'
