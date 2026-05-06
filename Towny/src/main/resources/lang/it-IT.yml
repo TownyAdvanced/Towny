@@ -1324,7 +1324,6 @@ towny_prices_outposts_upkeept: '&7Gli avamposti hanno un ulteriore costo di mant
 towny_prices_upkeep_based_on: '&7La manutenzione della città si basa su &athe %s'
 towny_prices_upkeep_num_plots: 'numero di Plot.'
 towny_prices_upkeep_town_level: 'livello della città (num residents.)'
-towny_prices_overclaimed_based_on: '&8Il mantenimento sovra-reclamato è basato su &a %s %s'
 towny_prices_overclaimed_num_plots: 'il numero di lotti in eccesso *'
 towny_prices_overclaimed_flat_cost: 'un costo fisso di'
 towny_prices_townname: '&cCittà: &b%s'
