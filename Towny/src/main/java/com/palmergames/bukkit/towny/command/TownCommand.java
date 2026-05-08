@@ -329,8 +329,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "enemylist":
 		case "baltop":
 		case "ranklist":
-			if (args.length == 2)
-				return getTownyStartingWith(args[1], "t");
+			if (args.length == 2) {
+				List<String> list = getTownyStartingWith(args[1], "t");
+				list.add("lastonline");
+				return NameUtil.filterByStart(list, args[1]);
+			}
+			if (args.length == 3 && args[0].equalsIgnoreCase("reslist")) {
+				return NameUtil.filterByStart(Collections.singletonList("lastonline"), args[2]);
+			}
 			break;
 		case "deposit":
 			if (args.length == 3)
@@ -4154,8 +4160,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (args.length == 1 && player != null) {
 			catchRuinedTown(player);
 			town = getTownFromPlayerOrThrow(player);
-		} else if (args.length == 2){
+		} else if (args.length >= 2) {
+			if (args[1].equalsIgnoreCase("lastonline") && player != null) {
+				parseTownResListLastOnline(sender, getTownFromPlayerOrThrow(player), Arrays.copyOfRange(args, 2, args.length));
+				return;
+			}
 			town = getTownOrThrow(args[1]);
+			if (args.length >= 3 && args[2].equalsIgnoreCase("lastonline")) {
+				parseTownResListLastOnline(sender, town, Arrays.copyOfRange(args, 3, args.length));
+				return;
+			}
 		}
 
 		if (town == null)
@@ -4163,6 +4177,49 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
 		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
+	}
+
+	private void parseTownResListLastOnline(CommandSender sender, Town town, String[] args) throws TownyException {
+		int page = 1;
+		if (args.length > 0) {
+			try {
+				page = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				throw new TownyException(Translatable.of("msg_error_must_be_int"));
+			}
+		}
+
+		List<Resident> residents = new ArrayList<>(town.getResidents());
+		residents.sort(Comparator.comparingLong(Resident::getLastOnline));
+
+		int total = (residents.size() + 9) / 10;
+		if (page > total) page = total;
+		if (page < 1) page = 1;
+
+		Translator translator = Translator.locale(sender);
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("town_help_inactive_residents").forLocale(sender)));
+		
+		String header = Colors.GOLD + "Days" + Colors.DARK_GRAY + " - " + Colors.AQUA + "Name" + Colors.DARK_GRAY + " - " + Colors.GREEN + "Plots";
+		TownyMessaging.sendMessage(sender, header);
+
+		int iMax = Math.min(page * 10, residents.size());
+		long now = System.currentTimeMillis();
+
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Resident res = residents.get(i);
+			long days = (now - res.getLastOnline()) / 86400000L;
+			
+			String line = Colors.GOLD + days + "d"
+				+ Colors.DARK_GRAY + " - " 
+				+ (res.isOnline() ? Colors.GREEN : Colors.AQUA) + res.getName()
+				+ Colors.DARK_GRAY + " - " 
+				+ Colors.GREEN + res.getTownBlocks().size();
+			
+			TownyMessaging.sendMessage(sender, line);
+		}
+
+		String footerCommand = "towny:t reslist " + town.getName() + " lastonline";
+		TownyMessaging.sendMessage(sender, TownyMessaging.getPageNavigationFooter(footerCommand, page, "", total, translator));
 	}
 	
 	private void townPlotGroupList(CommandSender sender, String[] args) throws TownyException {
