@@ -318,7 +318,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		switch (args[0].toLowerCase(Locale.ROOT)) {
 		case "online":
-		case "reslist":
 		case "outlawlist":
 		case "plots":
 		case "delete":
@@ -329,12 +328,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "enemylist":
 		case "baltop":
 		case "ranklist":
+			if (args.length == 2)
+				return getTownyStartingWith(args[1], "t");
+			break;
+		case "reslist":
 			if (args.length == 2) {
 				List<String> list = getTownyStartingWith(args[1], "t");
 				list.add("lastonline");
 				return NameUtil.filterByStart(list, args[1]);
 			}
-			if (args.length == 3 && args[0].equalsIgnoreCase("reslist")) {
+			if (args.length == 3 && !args[1].equalsIgnoreCase("lastonline")) {
 				return NameUtil.filterByStart(Collections.singletonList("lastonline"), args[2]);
 			}
 			break;
