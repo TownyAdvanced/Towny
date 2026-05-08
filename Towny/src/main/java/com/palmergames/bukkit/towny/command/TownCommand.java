@@ -4219,7 +4219,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		String footerCommand = "towny:t reslist " + town.getName() + " lastonline";
-		TownyMessaging.sendMessage(sender, TownyMessaging.getPageNavigationFooter(footerCommand, page, "", total, translator));
+		sender.sendMessage(TownyMessaging.getPageNavigationFooter(footerCommand, page, "", total, translator));
 	}
 	
 	private void townPlotGroupList(CommandSender sender, String[] args) throws TownyException {
