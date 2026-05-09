@@ -11,12 +11,14 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.plot.district.DistrictDeletedEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreReclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -119,6 +121,7 @@ public class TownRuinUtil {
 			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
 			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
+			townBlock.removeDistrict();                   // Removes district if it were present.
 			townBlock.setPermissionOverrides(null);       // Removes all permission overrides from the plot.
 			townBlock.setTrustedResidents(null);          // Removes all trusted residents.
 			townBlock.save();
@@ -129,6 +132,14 @@ public class TownRuinUtil {
 			for (PlotGroup group : new ArrayList<>(town.getPlotGroups())) {
 				new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED).callEvent();
 				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+			}
+		}
+
+		// Unregister the now empty districts.
+		if (town.getDistricts() != null) {
+			for (District district : new ArrayList<>(town.getDistricts())) {
+				new DistrictDeletedEvent(district, null, DistrictDeletedEvent.Cause.TOWN_DELETED).callEvent();
+				TownyUniverse.getInstance().getDataSource().removeDistrict(district);
 			}
 		}
 		
