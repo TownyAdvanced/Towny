@@ -277,7 +277,7 @@ public class CombatUtil {
 				 * Allows projectiles fired by a BlockProjectileSource (e.g. dispenser) harming protected entities, only if allowed in the config, and the entity is in the same townblock
 				 * A check to ensure PvP is enabled already happened for a BlockProjectSource
 				 */
-				if (allowDispenserDamagingProtectedEntity(projectileAttacker, defenderTB, attackerTB)) {
+				if (projectileAttacker != null && allowDispenserDamagingProtectedEntity(projectileAttacker.getShooter(), defenderTB, attackerTB)) {
 					return false;
 				}
 
@@ -738,11 +738,15 @@ public class CombatUtil {
 		return TownySettings.isPVPAlwaysAllowedForAdmins() && TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(attackingPlayer);
 	}
 
-	private static boolean allowDispenserDamagingProtectedEntity(Projectile projectileAttacker, @NotNull TownBlock defenderTB, TownBlock attackerTB) {
+	private static boolean allowDispenserDamagingProtectedEntity(ProjectileSource shooter, @NotNull TownBlock defenderTB, TownBlock attackerTB) {
 		if (TownySettings.areProtectedEntitiesProtectedAgainstBlockProjectileSource()) {
 			return false;
 		}
 
-		return projectileAttacker instanceof BlockProjectileSource && defenderTB.equals(attackerTB);
+		boolean isDispenser = shooter instanceof BlockProjectileSource;
+		boolean sameTBOrGroup = defenderTB.equals(attackerTB) || (defenderTB.hasPlotObjectGroup() && defenderTB.getPlotObjectGroup().hasTownBlock(attackerTB));
+		boolean pvp = isPvP(defenderTB) && isPvP(attackerTB);
+
+		return isDispenser && sameTBOrGroup && pvp;
 	}
 }
