@@ -824,6 +824,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			}
 			case "player_location_plotgroup_name": // %townyadvanced_player_location_plotgroup_name%
 				return townblock != null ? (townblock.hasPlotObjectGroup() ? townblock.getPlotObjectGroup().getName() : "") : "";
+			case "player_location_district_name": // %townyadvanced_player_location_district_name%
+				return townblock != null ? (townblock.hasDistrict() ? townblock.getDistrict().getName() : "") : "";
 			case "player_location_plot_owner_name": // %townyadvanced_player_location_plot_owner_name%
 				return (townblock != null && townblock.hasResident()) ? townblock.getResidentOrNull().getName() : ""; 
 			case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
@@ -836,12 +838,20 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? Integer.toString(townblock.getTownOrNull().getResidents().size()) : "";
 			case "player_location_town_mayor_name": // %townyadvanced_player_location_town_mayor_name%
 				return townblock != null ? townblock.getTownOrNull().getMayor().getName() : "";
+			case "player_location_town_map_color_hex": // %townyadvanced_player_location_town_map_color_hex%
+				return townblock != null && !townblock.getTownOrNull().getMapColorHexCode().isEmpty() ? "#" + townblock.getTownOrNull().getMapColorHexCode() : "";
+			case "player_location_town_map_color_minimessage_hex": // %townyadvanced_player_location_town_map_color_minimessage_hex%
+				return townblock != null && !townblock.getTownOrNull().getMapColorHexCode().isEmpty() ? "<#" + townblock.getTownOrNull().getMapColorHexCode() + ">" : "";
 			case "player_location_town_nation_name": // %townyadvanced_player_location_town_nation_name%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getFormattedName() : "") : "";
 			case "player_location_town_board": // %townyadvanced_player_location_town_board%
 				return townblock != null ? townblock.getTownOrNull().getBoard() : "";
 			case "player_location_nation_board": // %townyadvanced_player_location_nation_board%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getBoard() : "") : "";
+			case "player_location_nation_map_color_hex": // %townyadvanced_player_location_nation_map_color_hex%
+				return townblock != null && townblock.getTownOrNull().hasNation() && !townblock.getTownOrNull().getNationOrNull().getMapColorHexCode().isEmpty() ? "#" + townblock.getTownOrNull().getNationOrNull().getMapColorHexCode() : "";
+			case "player_location_nation_map_color_minimessage_hex": // %townyadvanced_player_location_nation_map_color_minimessage_hex%
+				return townblock != null && townblock.getTownOrNull().hasNation() && !townblock.getTownOrNull().getNationOrNull().getMapColorHexCode().isEmpty() ? "<#" + townblock.getTownOrNull().getNationOrNull().getMapColorHexCode() + ">" : "";
 			case "player_location_in_homeblock": // %townyadvanced_player_location_in_homeblock%
 				return townblock != null && townblock.isHomeBlock() ? "TRUE" : "FALSE";
 			case "player_location_in_homeblock_owntown": // %townyadvanced_player_location_in_homeblock_owntown%
