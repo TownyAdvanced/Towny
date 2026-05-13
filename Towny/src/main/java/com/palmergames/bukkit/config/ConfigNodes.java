@@ -2800,7 +2800,7 @@ public enum ConfigNodes {
 			"", 
 			"# Either fixed or percentage.",
 			"# For percentage 1.0 would be 100%. 0.01 would be 1%."),
-	ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap",
+	ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap", 
 			"0.0",
 			"", 
 			"# A maximum amount paid out by a resident from their personal holdings for percentage deaths.",
