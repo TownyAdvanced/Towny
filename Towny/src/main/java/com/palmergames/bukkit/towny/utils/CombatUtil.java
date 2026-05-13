@@ -739,14 +739,13 @@ public class CombatUtil {
 	}
 
 	private static boolean allowDispenserDamagingProtectedEntity(ProjectileSource shooter, @NotNull TownBlock defenderTB, TownBlock attackerTB) {
-		if (TownySettings.areProtectedEntitiesProtectedAgainstBlockProjectileSource()) {
+		if (TownySettings.areProtectedEntitiesProtectedAgainstBlockProjectileSource() || !(shooter instanceof BlockProjectileSource)) {
 			return false;
 		}
 
-		boolean isDispenser = shooter instanceof BlockProjectileSource;
 		boolean sameTBOrGroup = defenderTB.equals(attackerTB) || (defenderTB.hasPlotObjectGroup() && defenderTB.getPlotObjectGroup().hasTownBlock(attackerTB));
 		boolean pvp = isPvP(defenderTB) && isPvP(attackerTB);
 
-		return isDispenser && sameTBOrGroup && pvp;
+		return sameTBOrGroup && pvp;
 	}
 }
