@@ -4185,17 +4185,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private void parseTownResListLastOnline(CommandSender sender, Town town, String[] args) throws TownyException {
 		int page = 1;
 		if (args.length > 0) {
-			try {
-				page = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				throw new TownyException(Translatable.of("msg_error_must_be_int"));
-			}
+			page = MathUtil.getIntOrThrow(args[0]);
 		}
 
 		List<Resident> residents = new ArrayList<>(town.getResidents());
 		residents.sort(Comparator.comparingLong(Resident::getLastOnline));
 
-		int total = (residents.size() + 9) / 10;
+		int total = (int) Math.ceil(residents.size() / 10.0);
+		if (total == 0) total = 1;
+		
 		if (page > total) page = total;
 		if (page < 1) page = 1;
 
@@ -4210,7 +4208,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Resident res = residents.get(i);
-			long days = (now - res.getLastOnline()) / 86400000L;
+			long days = (now - res.getLastOnline()) / TimeMgmt.ONE_DAY_IN_MILLIS;
 			
 			String line = Colors.GOLD + days + "d"
 				+ Colors.DARK_GRAY + " - " 
