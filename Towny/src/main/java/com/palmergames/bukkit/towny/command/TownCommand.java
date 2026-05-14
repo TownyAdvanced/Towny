@@ -4208,7 +4208,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Resident res = residents.get(i);
-			long days = (now - res.getLastOnline()) / TimeMgmt.ONE_DAY_IN_MILLIS;
+			long days = (long) ((now - res.getLastOnline()) / (double) TimeMgmt.ONE_DAY_IN_MILLIS);
 			
 			String line = Colors.GOLD + days + "d"
 				+ Colors.DARK_GRAY + " - " 
