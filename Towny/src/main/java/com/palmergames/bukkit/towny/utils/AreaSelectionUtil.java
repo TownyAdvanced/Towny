@@ -525,7 +525,11 @@ public class AreaSelectionUtil {
 	}
 
 	private static boolean townBlockIsForSale(TownBlock townBlock) {
-		return townBlock.isForSale() || (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1);
+		// Plot groups should take precedence over any underlying townblocks' forsale setting.
+		if (townBlock.hasPlotObjectGroup())
+			return townBlock.getPlotObjectGroup().getPrice() != -1;
+
+		return townBlock.isForSale();
 	}
 
 	/**
