@@ -1795,9 +1795,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						Town town = null;
 						if (townUUID != null && universe.hasTown(townUUID)) {
 							town = universe.getTown(townUUID);
-						} else if (universe.hasTown(line))
+						} else if (universe.hasTown(line)) {
 							town = universe.getTown(line);
-						else if (universe.getReplacementNameMap().containsKey(line)) {
+							toSave.add(townBlock);
+						} else if (universe.getReplacementNameMap().containsKey(line)) {
 							town = universe.getTown(universe.getReplacementNameMap().get(line));
 							toSave.add(townBlock);
 						}
