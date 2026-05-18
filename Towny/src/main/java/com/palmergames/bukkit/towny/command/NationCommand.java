@@ -273,7 +273,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3 && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove")))
 						return NameUtil.filterByStart(TownyUniverse.getInstance().getTowns()
 							.stream()
-							.filter(t -> !nation.hasTown(t))
+							// Town is invalid tab complete if it is in the nation and not applicable to be sanctioned
+							.filter(t -> !(nation.hasTown(t) && !(TownySettings.canConqueredTownsBeSanctionedFromNationBonus() && t.isConquered())))
 							.map(Town::getName)
 							.collect(Collectors.toList()), args[2]);
 					if (args.length == 3 && args[1].equalsIgnoreCase("list"))
@@ -1447,7 +1448,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSanctionTownAdd(CommandSender sender, Nation nation, Town town) throws TownyException {
-		if (nation.hasTown(town))
+		// You cannot sanction a town in your nation unless the config setting is true and the town is conquered by you.
+		if (nation.hasTown(town) && !(TownySettings.canConqueredTownsBeSanctionedFromNationBonus() && town.isConquered()))
 			throw new TownyException(Translatable.of("msg_err_nation_cannot_sanction_own_town"));
 
 		if (nation.hasSanctionedTown(town))
@@ -1457,7 +1459,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		nation.addSanctionedTown(town);
 		nation.save();
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_err_nation_town_sanctioned", town.getName()));
+		if (nation.hasTown(town)) {
+			// At this point, if nation has the town, it therefore must be a conquered town, so send the conquered town variant of the sanction message
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_err_nation_conquered_town_sanctioned", town.getName()));
+		} else {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_err_nation_town_sanctioned", town.getName()));
+		}
 	}
 
 	private static void nationSactionTownRemove(CommandSender sender, Nation nation, Town town) throws TownyException {
