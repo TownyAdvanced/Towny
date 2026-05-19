@@ -1890,12 +1890,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "forcemerge":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_FORCEMERGE.getNode());
-			Nation remainingNation = getNationOrThrow(split[2]);
-			if (remainingNation.equals(nation))
+			Nation mergingNation = getNationOrThrow(split[2]);
+			if (mergingNation.equals(nation))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
 			Confirmation.runOnAccept(() -> {
-				townyUniverse.getDataSource().mergeNation(nation, remainingNation);
-				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
+				townyUniverse.getDataSource().mergeNation(mergingNation, nation);
+				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", mergingNation, nation));
 			}).sendTo(sender);
 			break;
 		case "set":
