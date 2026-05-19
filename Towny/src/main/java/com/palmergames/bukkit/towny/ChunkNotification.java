@@ -91,7 +91,7 @@ public class ChunkNotification {
 			fromForSale = fromTownBlock.getPlotPrice() != -1;
 			if (fromTownBlock.hasPlotObjectGroup()) {
 				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
-				fromForSale = fromPlotGroup.getPrice() != -1;
+				fromForSale = fromPlotGroup.isForSale();
 			}
 			if (fromTownBlock.hasDistrict()) {
 				fromDistrict = fromTownBlock.getDistrict();
@@ -115,7 +115,7 @@ public class ChunkNotification {
 			toPlotGroupBlock = toTownBlock.hasPlotObjectGroup();
 			if (toPlotGroupBlock) {
 				toPlotGroup = toTownBlock.getPlotObjectGroup();
-				toForSale = toPlotGroup.getPrice() != -1;
+				toForSale = toPlotGroup.isForSale();
 			}
 			toDistrictBlock = toTownBlock.hasDistrict();
 			if (toDistrictBlock) {

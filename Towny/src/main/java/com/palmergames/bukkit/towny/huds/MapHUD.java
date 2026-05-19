@@ -194,7 +194,7 @@ public class MapHUD implements HUDImplementer {
 	}
 
 	private static boolean isForSale(final TownBlock townBlock) {
-		return townBlock.getPlotPrice() != -1 || townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1;
+		return townBlock.isForSale() || townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().isForSale();
 	}
 
 

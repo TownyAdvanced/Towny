@@ -145,12 +145,12 @@ public class PermHUD implements HUDImplementer {
 	private static Component getPlotPrice(Translator translator, TownBlock townBlock, boolean plotGroup) {
 		String forSale = translator.of("msg_perm_hud_no");
 		if (TownyEconomyHandler.isActive()) {
-			forSale = plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1
+			forSale = plotGroup && townBlock.getPlotObjectGroup().isForSale()
 				? prettyMoney(townBlock.getPlotObjectGroup().getPrice())
 				: townBlock.isForSale() ? prettyMoney(townBlock.getPlotPrice()) : forSale;
 		} else {
 			// No economy is active but plots can be put up for sale (they're just free.)
-			forSale = (plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1) || (!plotGroup && townBlock.isForSale())
+			forSale = (plotGroup && townBlock.getPlotObjectGroup().isForSale()) || (!plotGroup && townBlock.isForSale())
 					? translator.of("msg_perm_hud_yes") : forSale;
 		}
 		return miniMessage(WHITE + forSale);

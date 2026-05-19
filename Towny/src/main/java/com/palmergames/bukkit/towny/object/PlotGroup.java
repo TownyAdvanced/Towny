@@ -89,6 +89,10 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 		return "Group{" + this.toString() + "}";
 	}
 
+	public boolean isForSale() {
+		return price > -1;
+	}
+
 	public double getPrice() {
 		return price;
 	}
