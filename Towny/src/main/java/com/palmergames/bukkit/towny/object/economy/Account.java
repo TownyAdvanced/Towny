@@ -75,33 +75,6 @@ public abstract class Account implements Nameable, Identifiable {
 		}
 	}
 
-	/**
-	 * @deprecated since 0.101.0.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
-	 * @param owner economyHandler that owns this account.
-	 * @param name name of the account owner.
-	 * @param uuid UUID of the account owner.
-	 * @param worldSupplier world in which the account would exist.
-	 */
-	@Deprecated
-	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
-		Preconditions.checkArgument(name != null && uuid != null, "name and uuid may not be null for an account, got name = %s and uuid = %s", name, uuid);
-		Preconditions.checkArgument(owner != null, "account owner may not be null");
-
-		this.economyHandler = owner;
-		this.worldSupplier = worldSupplier;
-		this.playerAccount = false;
-		
-		// ALL account transactions will route auditing data through this
-		// central auditor.
-		observers.add(GLOBAL_OBSERVER);
-		
-		try {
-			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
-		} catch (Exception e) {
-			Towny.getPlugin().getLogger().log(Level.WARNING, String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name), e);
-		}
-	}
-
 	// Template methods
 	protected abstract boolean addMoney(double amount);
 	protected abstract boolean subtractMoney(double amount);

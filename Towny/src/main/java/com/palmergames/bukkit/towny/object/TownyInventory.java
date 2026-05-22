@@ -31,11 +31,6 @@ public class TownyInventory implements InventoryHolder {
 		res.getPlayer().openInventory(this.inv);
 	}
 
-	@Deprecated(since = "0.101.2.6")
-	public TownyInventory(Resident res, Inventory inv, String name) {
-		this(res, inv, TownyComponents.miniMessage(name));
-	}
-
 	@Override
 	public @NotNull Inventory getInventory() {
 		return inv;

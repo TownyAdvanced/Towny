@@ -64,11 +64,6 @@ public class PermissionGUIUtil {
 			this.woolColour = woolColour;
 		}
 
-		@Deprecated(since = "0.101.2.5")
-		public String getColor() {
-			return Colors.getLegacyFromNamedTextColor(this.color);
-		}
-
 		public TextColor color() {
 			return this.color;
 		}
