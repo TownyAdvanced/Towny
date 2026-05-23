@@ -837,7 +837,11 @@ msg_player_couldnt_pay_player_town_bank_paying_instead: '%s''s wallet couldn''t 
 
 msg_err_could_not_take_deathfunds: 'Could not take death funds.'
 msg_you_lost_money_dying: 'You lost %s.'
+msg_you_lost_money_dying_with_town_loss: 'You lost %s and your town lost %s.'
+msg_you_lost_money_dying_with_nation_loss: 'You lost %s and your nation lost %s.'
+msg_you_lost_money_dying_with_town_and_nation_loss: 'You lost %s, your town lost %s and your nation lost %s.'
 msg_your_town_lost_money_dying: 'Your town lost %s.'
+msg_your_town_lost_money_dying_and_nation_loss: 'Your town lost %s and your nation lost %s.'
 msg_your_nation_lost_money_dying: 'Your nation lost %s.'
 msg_err_couldnt_take_deathfunds: 'Could not take death funds.'
 msg_err_couldnt_take_town_deathfunds: 'Could not take town death funds.'

@@ -140,22 +140,49 @@ public class TownyEntityMonitorListener implements Listener {
 			)
 			return;
 
-		double total = 0.0;
-
+		double playerLoss = 0.0;
 		if (TownySettings.getDeathPrice() > 0)
-			total = takeMoneyFromPlayer(defenderPlayer, attackerResident, defenderResident, total);
+			playerLoss = takeMoneyFromPlayer(defenderPlayer, attackerResident, defenderResident);
 
+		double townLoss = 0.0;
 		if (TownySettings.getDeathPriceTown() > 0 && defenderResident.hasTown())
-			total = takeMoneyFromPlayersTown(defenderPlayer, attackerResident, defenderResident, total);
+			townLoss = takeMoneyFromPlayersTown(defenderPlayer, attackerResident, defenderResident);
 
+		double nationLoss = 0.0;
 		if (TownySettings.getDeathPriceNation() > 0 && defenderResident.hasNation())
-			total = takeMoneyFromPlayersNation(defenderPlayer, attackerResident, defenderResident, total);
+			nationLoss = takeMoneyFromPlayersNation(defenderPlayer, attackerResident, defenderResident);
 
-		if (attackerResident != null)
-			TownyMessaging.sendMsg(attackerResident, Translatable.of("msg_you_gained_money_for_killing", TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
+		double totalLoss = playerLoss + townLoss + nationLoss;
+
+		if (totalLoss > 0) {
+			String formattedPlayer = TownyEconomyHandler.getFormattedBalance(playerLoss);
+			String formattedTown = TownyEconomyHandler.getFormattedBalance(townLoss);
+			String formattedNation = TownyEconomyHandler.getFormattedBalance(nationLoss);
+
+			Translatable msg;
+			if (playerLoss > 0 && townLoss > 0 && nationLoss > 0)
+				msg = Translatable.of("msg_you_lost_money_dying_with_town_and_nation_loss", formattedPlayer, formattedTown, formattedNation);
+			else if (playerLoss > 0 && townLoss > 0)
+				msg = Translatable.of("msg_you_lost_money_dying_with_town_loss", formattedPlayer, formattedTown);
+			else if (playerLoss > 0 && nationLoss > 0)
+				msg = Translatable.of("msg_you_lost_money_dying_with_nation_loss", formattedPlayer, formattedNation);
+			else if (townLoss > 0 && nationLoss > 0)
+				msg = Translatable.of("msg_your_town_lost_money_dying_and_nation_loss", formattedTown, formattedNation);
+			else if (playerLoss > 0)
+				msg = Translatable.of("msg_you_lost_money_dying", formattedPlayer);
+			else if (townLoss > 0)
+				msg = Translatable.of("msg_your_town_lost_money_dying", formattedTown);
+			else
+				msg = Translatable.of("msg_your_nation_lost_money_dying", formattedNation);
+
+			TownyMessaging.sendMsg(defenderPlayer, msg);
+		}
+
+		if (attackerResident != null && TownySettings.isDeathPricePaidToKiller())
+			TownyMessaging.sendMsg(attackerResident, Translatable.of("msg_you_gained_money_for_killing", TownyEconomyHandler.getFormattedBalance(totalLoss), defenderPlayer.getName()));
 	}
 
-	private double takeMoneyFromPlayer(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+	private double takeMoneyFromPlayer(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		double price = TownySettings.getDeathPrice();
 
 		if (TownySettings.isDeathPricePercentBased()) {
@@ -164,72 +191,69 @@ public class TownyEntityMonitorListener implements Listener {
 				price = Math.min(price, TownySettings.getDeathPricePercentageCap());
 		}
 
-		price = Math.min(price,  defenderResident.getAccount().getHoldingBalance());
+		price = Math.min(price, defenderResident.getAccount().getHoldingBalance());
 
-		PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, defenderPlayer);
+		Player killer = attackerResident != null ? attackerResident.getPlayer() : null;
+		PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, killer);
 		if (!BukkitTools.isEventCancelled(ppdpe)) {
 			price = ppdpe.getAmount();
 
-			if (attackerResident == null)
-				defenderResident.getAccount().withdraw(price, "Death Payment");
-			else 
+			if (attackerResident != null && TownySettings.isDeathPricePaidToKiller())
 				defenderResident.getAccount().payTo(price, attackerResident, "Death Payment");
+			else
+				defenderResident.getAccount().withdraw(price, "Death Payment");
 
-			total += price;
-
-			TownyMessaging.sendMsg(defenderPlayer, Translatable.of("msg_you_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
+			return price;
 		}
-		return total;
+		return 0.0;
 	}
 
-	private double takeMoneyFromPlayersTown(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+	private double takeMoneyFromPlayersTown(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		Town town = defenderResident.getTownOrNull();
 		double price = TownySettings.getDeathPriceTown();
 
 		if (TownySettings.isDeathPricePercentBased())
 			price = town.getAccount().getHoldingBalance() * price;
 
-		price = Math.min(price,  defenderResident.getAccount().getHoldingBalance());
+		price = Math.min(price, town.getAccount().getHoldingBalance());
 
-		TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(town.getAccount(), price, defenderResident, defenderPlayer, town);
+		Player killer = attackerResident != null ? attackerResident.getPlayer() : null;
+		TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(town.getAccount(), price, defenderResident, killer, town);
 		if (!BukkitTools.isEventCancelled(tpdpe)) {
 			price = tpdpe.getAmount();
 
-			if (attackerResident == null)
-				town.getAccount().withdraw(price, "Death Payment Town");
-			else 
+			if (attackerResident != null && TownySettings.isDeathPricePaidToKiller())
 				town.getAccount().payTo(price, attackerResident, "Death Payment Town");
+			else
+				town.getAccount().withdraw(price, "Death Payment Town");
 
-			total += price;
-
-			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_your_town_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
+			return price;
 		}
-		return total;
+		return 0.0;
 	}
 
-	private double takeMoneyFromPlayersNation(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+	private double takeMoneyFromPlayersNation(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 		Nation nation = defenderResident.getNationOrNull();
 		double price = TownySettings.getDeathPriceNation();
 
 		if (TownySettings.isDeathPricePercentBased())
 			price = nation.getAccount().getHoldingBalance() * price;
 
-		price = Math.min(price,  defenderResident.getAccount().getHoldingBalance());
+		price = Math.min(price, nation.getAccount().getHoldingBalance());
 
-		NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(nation.getAccount(), price, defenderResident, defenderPlayer, nation);
+		Player killer = attackerResident != null ? attackerResident.getPlayer() : null;
+		NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(nation.getAccount(), price, defenderResident, killer, nation);
 		if (!BukkitTools.isEventCancelled(npdpe)) {
 			price = npdpe.getAmount();
 
-			if (attackerResident == null)
-				nation.getAccount().withdraw(price, "Death Payment Nation");
-			else 
+			if (attackerResident != null && TownySettings.isDeathPricePaidToKiller())
 				nation.getAccount().payTo(price, attackerResident, "Death Payment Nation");
+			else
+				nation.getAccount().withdraw(price, "Death Payment Nation");
 
-			total += price;
-
-			TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_your_nation_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
+			return price;
 		}
-		return total;
+		return 0.0;
 	}
 
 	private boolean hasBypassNode(Resident defenderResident) {
