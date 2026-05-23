@@ -828,7 +828,7 @@ public class TownyMessaging {
 			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD);
 			line = line.append(dash).append(name).append(dash).append(size);
 			
-			if (TownyEconomyHandler.isActive() && group.getPrice() != -1)
+			if (TownyEconomyHandler.isActive() && group.isForSale())
 				line = line.append(dash).append(Component.text("(", NamedTextColor.BLUE).append(translator.component("towny_map_forsale")).append(Component.text(": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")", NamedTextColor.BLUE)));
 
 			groupsFormatted[i % 10] = line;

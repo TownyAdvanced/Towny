@@ -146,7 +146,7 @@ public class PlotClaim implements Runnable {
 	private void residentGroupClaim(PlotGroup group) {
 		Town town = group.getTown();
 		@Nullable Resident owner = group.getResident();
-		if (owner != null && group.getPrice() > 0)
+		if (owner != null && group.isForSale())
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_buy_resident_plot_group", resident.getName(), owner.getName(), group.getPrice()));
 
 		for (TownBlock townBlock : group.getTownBlocks())

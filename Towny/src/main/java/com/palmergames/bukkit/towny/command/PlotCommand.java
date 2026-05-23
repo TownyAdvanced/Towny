@@ -1600,8 +1600,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.setPlotObjectGroup(newGroup);
 
 		// Check if a plot price is available.
-		if (townBlock.getPlotPrice() > 0)
+		if (townBlock.getPlotPrice() > 0) {
 			newGroup.addPlotPrice(townBlock.getPlotPrice());
+			// Remove the townBlock's plot price.
+			townBlock.setPlotPrice(-1);
+		}
 
 		// Add the plot group to the town set.
 		town.addPlotGroup(newGroup);
