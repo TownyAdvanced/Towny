@@ -2950,6 +2950,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists."),
+	ECO_BANK_HIDE_TOWN_BALANCE(
+			"economy.banks.hide_town_balance_on_status_screen",
+			"false",
+			"",
+			"# When true a town's bank balance will be hidden from players who are not residents of the town when using `/town <townName>`",
+			"# This can stop people from being able to check which towns are currently near bankruptcy, and snipe them",
+			"# the second they go bankrupt (when the Town Ruining feature is enabled.)"),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(
@@ -3519,6 +3526,12 @@ public enum ConfigNodes {
 			"# If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between",
 			"# plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.",
 			"# This system is meant to give players across many time zones the chance to loot a town when it falls into ruin."),
+	TOWN_RUINING_HIDE_TOWN_RUINED_STATUS(
+			"town_ruining.town_ruins.hide_town_ruined_status",
+			"false",
+			"",
+			"# Hide the fact that a town is ruined from other players.",
+			"# Towns will no longer show as ruined when a player tries to look up the town with `/town <townName>`"),
 	
 	TOWN_RUINING_EMPTY_TOWNS_BECOME_RUINS(
 			"town_ruining.empty_towns_become_ruins",

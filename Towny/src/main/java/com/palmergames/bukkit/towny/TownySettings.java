@@ -2256,6 +2256,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_BANK_HIDE_ZERO_OR_LESS_BANK_ACCOUNTS_ON_LISTS);
 	}
 
+	public static boolean isHideTownBalanceEnabled() {
+		return getBoolean(ConfigNodes.ECO_BANK_HIDE_TOWN_BALANCE);
+	}
+
 	public static boolean isEcoClosedEconomyEnabled() {
 		
 		return getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED);
@@ -3927,6 +3931,10 @@ public class TownySettings {
 
 	public static boolean doRuinsPlotPermissionsProgressivelyAllowAll() {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY);
+	}
+
+	public static boolean isHideTownRuinedStatusEnabled() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_HIDE_TOWN_RUINED_STATUS);
 	}
 
 	public static void saveConfig() {

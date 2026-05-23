@@ -281,13 +281,14 @@ public class TownyFormatter {
 	 * @return StatusScreen containing the results.
 	 */
 	public static StatusScreen getStatus(Town town, CommandSender sender) {
-
+		boolean isSenderAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender);
+		
 		final Translator translator = Translator.locale(sender);
 		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
 
 		// ___[ Raccoon City ]___ (With hover for admins.)
-		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender)) {
+		if (isSenderAdmin) {
 			Component adminComp = Component.text("Name: " + town.getName()).appendNewline()
 									.append(Component.text("UUID: " + town.getUUID())).appendNewline()
 									.append(Component.text("TownLevel: " + town.getLevelNumber()
@@ -345,13 +346,13 @@ public class TownyFormatter {
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (town.isFire() || world.isForceFire()) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (town.hasMobs() || town.isAdminEnabledMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));
 
-		if (TownySettings.getTownRuinsEnabled() && town.isRuined()) {
+		if (TownySettings.getTownRuinsEnabled() && town.isRuined() && (!TownySettings.isHideTownRuinedStatusEnabled() || isSenderAdmin)) {
 			TownRuinUtil.addRuinedComponents(town, screen, translator);
 
 		// Only display the remaining fields if town is not ruined
 		} else {
 			// | Bank: 534 coins
-			if (TownyEconomyHandler.isActive())
+			if (TownyEconomyHandler.isActive() && (!TownySettings.isHideTownBalanceEnabled() || isSenderAdmin))
 				MoneyUtil.addTownMoneyComponents(town, translator, screen);
 
 			// Mayor: MrSand
