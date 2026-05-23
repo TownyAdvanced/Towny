@@ -10874,3 +10874,30 @@ v0.92.0.11:
 0.103.0.1:
   - Fix /ta nation NAME forcemerge NAME merging the wrong nation.
     - Closes #8199.
+  - Remove deprecations from before 0.102.0.0.
+  - Add optional killer payout for PvP deaths and improve notifications, courtesy of muhdfdeen with PR #8168. (First-Time Contributor!)
+  - New Config Option: economy.death.price_paid_to_killer_on_pvp
+    - Default: true
+    - If true, the death price will be paid to the killer when a player is killed by another player.
+    - Otherwise, the death price will simply be withdrawn from the victim's account.
+  - Ensure districts are removed from ruined towns, courtesy of SulkyWhale with PR #8186.
+  - Fix dispensers allowing harmful potions logic, courtesy of Veyronity with PR  #8187.
+  - Fix unhandled legacy colors being added during resident name formatting, courtesy of Warrior with PR #8188.
+  - Add more location based placeholders, courtesy of SulkyWhale with PR #8189.
+  - New PAPIPlaceholders:
+    - %townyadvanced_player_location_district_name% - Shows the district name if the player location has a district.
+    - %townyadvanced_player_location_town_map_color_hex% - If there is a town where the player stands, it will return the map color set by that town, if one has been set.
+    - %townyadvanced_player_location_town_map_color_minimessage_hex% - If there is a town where the player stands, it will return the map color set by that town formatted for MiniMessage, if one has been set.
+    - %townyadvanced_player_location_nation_map_color_hex% - If there is a town where the player stands, it will return the map color set by the nation of that town, if one has been set.
+    - %townyadvanced_player_location_nation_map_color_minimessage_hex% - If there is a town where the player stands, it will return the map color set by the nation of that town formatted for MiniMessage, if one has been set.
+  - Add config option for hiding town balance and hiding town ruined status from other players, courtesy of seksea with PR #8193.
+  - New Config Option: economy.banks.hide_town_balance
+    - Default: false
+    - When true a towns balance will be hidden from players not a resident of the town when using `/town <townName>`
+    - This will stop people from being able to check which towns are currently near bankruptcy, and snipe them the second they go bankrupt.
+  - New Config Option: town_ruining.town_ruins.hide_town_ruined_status
+     - Default: false
+     - Hide the fact that a town is ruined from other players.
+     - Towns will no longer show as ruined when a player tries to look up the town with `/town <townName>`
+  - Fix /plot claim allowing plot groups to be claimed when the plot group is not for sale.
+  - Fix townblocks not saving after the UUID db conversion.
