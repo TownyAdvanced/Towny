@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object.economy;
 
-import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;

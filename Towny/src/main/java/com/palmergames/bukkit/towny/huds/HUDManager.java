@@ -167,7 +167,7 @@ public class HUDManager implements Listener {
 	 * @deprecated since 0.102.0.8
 	 * @return the list of perm hud users
 	 */
-	@Deprecated 
+	@Deprecated(since = "0.102.0.8", forRemoval = true)
 	public static List<Player> getPermHUDUsers() {
 		return new ArrayList<>(huds.get("permHUD").getPlayers());
 	}
@@ -176,7 +176,7 @@ public class HUDManager implements Listener {
 	 * @deprecated since 0.102.0.8
 	 * @return the list of map hud users
 	 */
-	@Deprecated 
+	@Deprecated(since = "0.102.0.8", forRemoval = true)
 	public static List<Player> getMapHUDUsers() {
 		return new ArrayList<>(huds.get("mapHUD").getPlayers());
 	}
@@ -184,7 +184,7 @@ public class HUDManager implements Listener {
 	/**
 	 * @deprecated since 0.102.0.8
 	 */
-	@Deprecated 
+	@Deprecated(since = "0.102.0.8", forRemoval = true)
 	public static void removePermHUDUser(Player player) {
 		huds.get("permHUD").toggleOff(player);
 	}
@@ -192,7 +192,7 @@ public class HUDManager implements Listener {
 	/**
 	 * @deprecated since 0.102.0.8
 	 */
-	@Deprecated	
+	@Deprecated(since = "0.102.0.8", forRemoval = true)
 	public static void removeMapHUDUser(Player player) {
 		huds.get("mapHUD").toggleOff(player);
 	}
@@ -200,6 +200,7 @@ public class HUDManager implements Listener {
 	/**
 	 * @deprecated since 0.102.0.8
 	 */
+	@Deprecated(since = "0.102.0.8", forRemoval = true)
 	public static boolean isPermHUDActive(Player player) {
 		return huds.get("permHUD").isActive(player);
 	}
@@ -207,6 +208,7 @@ public class HUDManager implements Listener {
 	/**
 	 * @deprecated since 0.102.0.8
 	 */
+	@Deprecated(since = "0.102.0.8", forRemoval = true)
 	public static boolean isMapHudActive(Player player) {
 		return huds.get("mapHUD").isActive(player);
 	}

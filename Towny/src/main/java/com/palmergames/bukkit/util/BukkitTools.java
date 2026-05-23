@@ -362,7 +362,7 @@ public class BukkitTools {
 		return potentialLocation.getWorld().getChunkAtAsync(potentialLocation).thenApply(chunk -> player.getRespawnLocation(true));
 	}
 
-	@SuppressWarnings("deprecation") // remove me when 1.21.4 or below is no longer supported
+	@SuppressWarnings("deprecation") // TODO: remove me when 1.21.4 or below is no longer supported
 	private static CompletableFuture<Location> getRespawnLocationOld(final Player player) {
 		final Location potentialLocation = player.getPotentialBedLocation();
 		if (potentialLocation == null) {
