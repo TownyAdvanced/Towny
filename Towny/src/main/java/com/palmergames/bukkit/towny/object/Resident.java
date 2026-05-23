@@ -761,8 +761,17 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	@Override
 	public String getFormattedName() {
-		String prefix = Colors.translateColorCodes(hasTitle() ? getTitle() + " " : getNamePrefix());
-		String postfix = Colors.translateColorCodes(hasSurname() ? " " + getSurname() : getNamePostfix());
+		String prefix = Colors.translateLegacyHex(Colors.translateLegacyCharacters(hasTitle() ? getTitle() : getNamePrefix()));
+		String postfix = Colors.translateLegacyHex(Colors.translateLegacyCharacters(hasSurname() ? getSurname() : getNamePostfix()));
+		
+		// Only add a trailing/leading space if the prefix/postfix has text contents, 
+		if (hasTitle() && !TownyComponents.plain(TownyComponents.miniMessage(prefix)).isEmpty()) {
+			prefix += " ";
+		}
+		
+		if (hasSurname() && !TownyComponents.plain(TownyComponents.miniMessage(postfix)).isEmpty()) {
+			postfix = " " + postfix;
+		}
 
 		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
 		BukkitTools.fireEvent(event);
@@ -772,7 +781,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	@Override
 	public Component formattedName() {
-		return TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(getFormattedName()));
+		return TownyComponents.USER_SAFE.deserialize(getFormattedName());
 	}
 
 	/**
