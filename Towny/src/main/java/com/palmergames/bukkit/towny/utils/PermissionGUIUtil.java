@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -62,11 +61,6 @@ public class PermissionGUIUtil {
 		SetPermissionType(NamedTextColor color, Material woolColour) {
 			this.color = color;
 			this.woolColour = woolColour;
-		}
-
-		@Deprecated(since = "0.101.2.5")
-		public String getColor() {
-			return Colors.getLegacyFromNamedTextColor(this.color);
 		}
 
 		public TextColor color() {

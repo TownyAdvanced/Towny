@@ -24,26 +24,6 @@ public class Colors {
 	private static final Pattern LEGACY_PATTERN = Pattern.compile("[§&][0-9a-fk-or]");
 
 	/*
-	 * Legacy colors
-	 */
-	public static final @Deprecated(since = "0.101.2.6") String Black = "§0";       // black
-	public static final @Deprecated(since = "0.101.2.6") String Navy = "§1";        // dark_blue
-	public static final @Deprecated(since = "0.101.2.6") String Green = "§2";       // dark_green
-	public static final @Deprecated(since = "0.101.2.6") String Blue = "§3";        // dark_aqua
-	public static final @Deprecated(since = "0.101.2.6") String Red = "§4";         // dark_red
-	public static final @Deprecated(since = "0.101.2.6") String Purple = "§5";      // dark_purple
-	public static final @Deprecated(since = "0.101.2.6") String Gold = "§6";        // gold
-	public static final @Deprecated(since = "0.101.2.6") String LightGray = "§7";   // gray
-	public static final @Deprecated(since = "0.101.2.6") String Gray = "§8";        // dark_gray
-	public static final @Deprecated(since = "0.101.2.6") String DarkPurple = "§9";  // blue
-	public static final @Deprecated(since = "0.101.2.6") String LightGreen = "§a";  // green
-	public static final @Deprecated(since = "0.101.2.6") String LightBlue = "§b";   // aqua
-	public static final @Deprecated(since = "0.101.2.6") String Rose = "§c";        // red
-	public static final @Deprecated(since = "0.101.2.6") String LightPurple = "§d"; // light_purple
-	public static final @Deprecated(since = "0.101.2.6") String Yellow = "§e";      // yellow
-	public static final @Deprecated(since = "0.101.2.6") String White = "§f";       // white
-
-	/*
 	 * Minimessage colors 
 	 */
 	public static final String DARK_RED = "<dark_red>";
@@ -200,6 +180,27 @@ public class Colors {
 		case YELLOW -> "§e";
 		case WHITE -> "§f";
 		default -> null;
-	};
+		};
 	}
+
+	/*
+	 * Legacy Colors Table
+	 * ChatColor Name - Symbol - Minimessage Name
+	 * Black       - §0 - black
+	 * Navy        - §1 - dark_blue
+	 * Green       - §2 - dark_green
+	 * Blue        - §3 - dark_aqua
+	 * Red         - §4 - dark_red
+	 * Purple      - §5 - dark_purple
+	 * Gold        - §6 - gold
+	 * LightGray   - §7 - gray
+	 * Gray        - §8 - dark_gray
+	 * DarkPurple  - §9 - blue
+	 * LightGreen  - §a - green
+	 * LightBlue   - §b - aqua
+	 * Rose        - §c - red
+	 * LightPurple - §d - light_purple
+	 * Yellow      - §e - yellow
+	 * White       - §f - white
+	 */
 }

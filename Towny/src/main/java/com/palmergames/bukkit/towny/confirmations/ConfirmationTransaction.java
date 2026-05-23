@@ -66,38 +66,4 @@ public class ConfirmationTransaction {
 	public Translatable getInsufficientFundsMessage() {
 		return insufficientFundsMessage != null ? insufficientFundsMessage : Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(getCost()));
 	}
-
-	/**
-	 * A transaction which must succeed for a Confirmation to complete.
-	 *
-	 * @deprecated since 0.100.0.10 use {@link #ConfirmationTransaction(Supplier, EconomyHandler, String, Translatable)} instead.
-	 * @param costSupplier cost of the transaction. 
-	 * @param payee Account which will have to pay.
-	 * @param loggedMessage The message logged in the money.csv file.
-	 * @param insufficientFundsMessage Transatable which will display the cannot pay message.
-	 */
-	@Deprecated
-	public ConfirmationTransaction(Supplier<Double> costSupplier, Account payee, String loggedMessage, Translatable insufficientFundsMessage) {
-		this.costSupplier = costSupplier;
-		this.payee = payee;
-		this.loggedMessage = loggedMessage;
-		this.insufficientFundsMessage = insufficientFundsMessage;
-	}
-
-	/**
-	 * A transaction which must succeed for a Confirmation to complete.
-	 * Uses the default no money error message.
-	 *
-	 * @deprecated since 0.100.0.10 use {@link #ConfirmationTransaction(Supplier, EconomyHandler, String)} instead.
-	 * @param costSupplier cost of the transaction. 
-	 * @param payee Account which will have to pay.
-	 * @param loggedMessage The message logged in the money.csv file.
-	 */
-	@Deprecated
-	public ConfirmationTransaction(Supplier<Double> costSupplier, Account payee, String loggedMessage) {
-		this.costSupplier = costSupplier;
-		this.payee = payee;
-		this.loggedMessage = loggedMessage;
-		this.insufficientFundsMessage = null;
-	}
 }

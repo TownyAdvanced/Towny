@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
@@ -67,7 +66,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
@@ -687,65 +685,6 @@ public class Towny extends JavaPlugin {
 		getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player));
 	}
 
-	/**
-	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#toggleModes(Player, String[], boolean)} instead.
-	 * @param player Player to act upon.
-	 * @param modes String[] of mode names to toggle.
-	 * @param notify whether to notify the player of their modes afterwards.
-	 */
-	@Deprecated
-	public void setPlayerMode(Player player, String[] modes, boolean notify) {
-
-		if (player == null)
-			return;
-
-		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
-		if (resident == null)
-			return;
-
-		ResidentModeHandler.toggleModes(resident, modes, notify, false);
-	}
-
-	/**
-	 * Remove ALL current modes (and set the defaults)
-	 * 
-	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#clearModes(Player)} instead.
-	 * @param player Player, whose modes are to be reset (all removed).
-	 */
-	@Deprecated
-	public void removePlayerMode(Player player) {
-
-		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
-		if (resident != null)
-			ResidentModeHandler.clearModes(resident, false);
-	}
-
-	/**
-	 * Remove ALL current modes.
-	 * 
-	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#clearModes(Player)} instead.
-	 * @param player - player, whose modes are to be reset (all removed).
-	 */
-	@Deprecated
-	public void removePlayerModes(Player player) {
-
-		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
-		ResidentModeHandler.clearModes(resident, false);
-	}
-	
-	/**
-	 * Fetch a list of all the players current modes.
-	 * 
-	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#getModes(Player)} instead.
-	 * @param player - player, whose modes are to be listed, taken.
-	 * @return list of modes
-	 */
-	@Deprecated
-	public List<String> getPlayerMode(Player player) {
-
-		return getPlayerMode(player.getName());
-	}
-
 	public List<String> getPlayerMode(String name) {
 
 		Resident resident = TownyUniverse.getInstance().getResident(name);
@@ -878,21 +817,5 @@ public class Towny extends JavaPlugin {
 	@NotNull
 	public TaskScheduler getScheduler() {
 		return this.scheduler;
-	}
-
-	/**
-	 * @deprecated since 0.100.2.13, unused by Towny for many years. Use {@link BukkitTools#getWorld(String)} instead.
-	 * @param name Name of the World.
-	 * @return a World
-	 * @throws NotRegisteredException if the world doesn't exist.
-	 */
-	@Deprecated
-	public World getServerWorld(String name) throws NotRegisteredException {
-		World world = BukkitTools.getWorld(name);
-		
-		if (world == null)
-			throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
-		
-		return world;
 	}
 }

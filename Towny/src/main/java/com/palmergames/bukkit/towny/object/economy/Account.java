@@ -1,12 +1,9 @@
 package com.palmergames.bukkit.towny.object.economy;
 
-import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Identifiable;
@@ -18,7 +15,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -78,64 +74,6 @@ public abstract class Account implements Nameable, Identifiable {
 		}
 	}
 
-	/**
-	 * @deprecated since 0.101.0.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
-	 * @param owner economyHandler that owns this account.
-	 * @param name name of the account owner.
-	 * @param uuid UUID of the account owner.
-	 * @param worldSupplier world in which the account would exist.
-	 */
-	@Deprecated
-	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
-		Preconditions.checkArgument(name != null && uuid != null, "name and uuid may not be null for an account, got name = %s and uuid = %s", name, uuid);
-		Preconditions.checkArgument(owner != null, "account owner may not be null");
-
-		this.economyHandler = owner;
-		this.worldSupplier = worldSupplier;
-		this.playerAccount = false;
-		
-		// ALL account transactions will route auditing data through this
-		// central auditor.
-		observers.add(GLOBAL_OBSERVER);
-		
-		try {
-			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
-		} catch (Exception e) {
-			Towny.getPlugin().getLogger().log(Level.WARNING, String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name), e);
-		}
-	}
-	
-	/**
-	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
-	 * @param economyHandler economyHandler that owns this account.
-	 * @param name name of the account owner.
-	 * @param world world in which the account would exist.
-	 */
-	@Deprecated
-	public Account(EconomyHandler economyHandler, String name, World world) {
-		this.name = name;
-		this.uuid = economyHandler instanceof Identifiable identifiable ? identifiable.getUUID() : null;
-		this.economyHandler = economyHandler;
-		this.playerAccount = false;
-		
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
-		this.worldSupplier = () -> townyWorld;
-	}
-
-	/**
-	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
-	 * @param economyHandler economyHandler that owns this account.
-	 * @param name name of the account owner.
-	 */
-	@Deprecated
-	public Account(EconomyHandler economyHandler, String name) {
-		this.name = name;
-		this.uuid = economyHandler instanceof Identifiable identifiable ? identifiable.getUUID() : null;
-		this.economyHandler = economyHandler;
-		this.worldSupplier = () -> TownyUniverse.getInstance().getTownyWorlds().get(0);
-		this.playerAccount = false;
-	}
-	
 	// Template methods
 	protected abstract boolean addMoney(double amount);
 	protected abstract boolean subtractMoney(double amount);
@@ -230,18 +168,6 @@ public abstract class Account implements Nameable, Identifiable {
 		return success;
 	}
 
-	/**
-	 * Fetch the current world for this object
-	 *
-	 * @deprecated since 0.100.4.6 use {@link #getWorld()} instead.
-	 * @return Bukkit world for the object
-	 */
-	@Deprecated
-	@Nullable
-	public World getBukkitWorld() {
-		return getWorld().getBukkitWorld();
-	}
-	
 	@NotNull
 	public TownyWorld getWorld() {
 		return this.worldSupplier.get();
