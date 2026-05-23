@@ -1384,7 +1384,8 @@ public class TownySettings {
 			amount += numResidents * ratio;
 
 		final Nation nation = town.getNationOrNull();
-		if (nation != null) {
+		// Do not add nation bonus blocks if nation is null or if config setting and sanctioned and conquered are all true
+		if (nation != null && !(TownySettings.canConqueredTownsBeSanctionedFromNationBonus() && town.getNationOrNull().hasSanctionedTown(town) && town.isConquered())) {
 			amount += getNationBonusBlocks(nation, nationLevelModifier);
 		}
 
@@ -1455,7 +1456,9 @@ public class TownySettings {
 	public static int getNationBonusBlocks(Town town) {
 
 		if (town.hasNation())
-			return getNationBonusBlocks(town.getNationOrNull());
+			// Do not add nation bonus blocks if config setting and sanctioned and conquered are all true
+			if (!(TownySettings.canConqueredTownsBeSanctionedFromNationBonus() && town.getNationOrNull().hasSanctionedTown(town) && town.isConquered()))
+				return getNationBonusBlocks(town.getNationOrNull());
 		return 0;
 	}
 
@@ -3893,6 +3896,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_GIVEN_NATION_PLOT_PERMS);
 	}
 	
+	public static boolean canConqueredTownsBeSanctionedFromNationBonus() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAN_CONQUERED_TOWNS_BE_SANCTIONED_FROM_NATION_BONUS);
+	}
+
 	public static String getBankHistoryBookFormat() {
 		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}

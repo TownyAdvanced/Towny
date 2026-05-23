@@ -2496,6 +2496,8 @@ msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town
 
 msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will not be allowed to join your nation."
 
+msg_err_nation_conquered_town_sanctioned: "Your nation has now sanctioned %s, they will not receive nation bonus from your nation."
+
 msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
 
 msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
