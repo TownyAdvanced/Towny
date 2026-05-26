@@ -10890,7 +10890,7 @@ v0.92.0.11:
     - %townyadvanced_player_location_town_map_color_minimessage_hex% - If there is a town where the player stands, it will return the map color set by that town formatted for MiniMessage, if one has been set.
     - %townyadvanced_player_location_nation_map_color_hex% - If there is a town where the player stands, it will return the map color set by the nation of that town, if one has been set.
     - %townyadvanced_player_location_nation_map_color_minimessage_hex% - If there is a town where the player stands, it will return the map color set by the nation of that town formatted for MiniMessage, if one has been set.
-  - Add config option for hiding town balance and hiding town ruined status from other players, courtesy of seksea with PR #8193.
+  - Add config option for hiding town balance and hiding town ruined status from other players, courtesy of seksea with PR #8193. (First-Time Contributor!)
   - New Config Option: economy.banks.hide_town_balance
     - Default: false
     - When true a towns balance will be hidden from players not a resident of the town when using `/town <townName>`
