@@ -15,9 +15,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +25,7 @@ public class HUDManager implements Listener {
 
 	private static final String MAP_HUD_OBJECTIVE_NAME = "MAP_HUD_OBJ";
 	private static final String PERM_HUD_OBJECTIVE_NAME = "PLOT_PERM_OBJ";
-	static Map<String, ServerHUD> huds = new HashMap<>();
+	static Map<String, ServerHUD> huds = new ConcurrentHashMap<>();
 	/** Scoreboards cannot show more than 15 lines. **/
 	static final int MAX_SCOREBOARD_HEIGHT = 15;
 
@@ -88,25 +88,17 @@ public class HUDManager implements Listener {
 		toggleHUD(player, "mapHUD");
 	}
 
-	public static void toggleAllOff (Player p) {
-		for (ServerHUD hud : new ArrayList<>(huds.values())) {
-			if (hud.hasPlayer(p)) {
-				hud.removePlayer(p);
-				if (hud.isActive(p))
-					hud.toggleOff(p);
-			}
+	public static void toggleAllOff(Player p) {
+		for (ServerHUD hud : huds.values()) {
+			hud.removePlayer(p);
+			hud.toggleOff(p);
 		}
 	}
 
 	//**EVENTS**//
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player p = event.getPlayer();
-		for (ServerHUD huds : new ArrayList<>(huds.values())) {
-			if (huds.hasPlayer(p)) {
-				huds.removePlayer(p);
-			}
-		}
+		toggleAllOff(event.getPlayer());
 	}
 
 	@EventHandler

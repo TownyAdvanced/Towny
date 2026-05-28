@@ -48,7 +48,10 @@ public class PaperHUD implements ServerHUD {
 
 	@Override
 	public boolean toggleOff(Player player) {
-		Optional.ofNullable(Bukkit.getScoreboardManager()).ifPresent(manager -> player.setScoreboard(manager.getMainScoreboard()));
+		if (boardMap.remove(player.getUniqueId()) != null) {
+			player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+		}
+
 		removePlayer(player);
 		return true; 
 	}
