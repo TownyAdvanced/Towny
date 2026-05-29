@@ -548,6 +548,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationSpawn(player, StringMgmt.remFirstArg(split), ignoreWarning);
 			break;
 		case "townoutposts":
+		case "outpost":	
 			nationTownOutposts(player, StringMgmt.remFirstArg(split));
 			break;
 		case "deposit":
