@@ -700,7 +700,7 @@ public class TownyPlayerListener implements Listener {
 		ActionType actionType = ActionType.DESTROY;
 		EntityType entityType = event.getRightClicked().getType();
 
-		Material item = player.getInventory().getItemInMainHand().getType();
+		Material item = player.getInventory().getItem(event.getHand()).getType();
 
 		/*
 		 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
