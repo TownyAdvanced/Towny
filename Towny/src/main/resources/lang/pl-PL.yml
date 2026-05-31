@@ -60,7 +60,7 @@ town_help_32: "Użyj \"/t set ?\", by uzyskać pomoc."
 town_help_33: "Użyj \"/t buy ?\", by uzyskać pomoc."
 town_help_34: "Użyj \"/t toggle ?\", by uzyskać pomoc."
 town_help_35: "Użyj \"/t rank ?\", by uzyskać pomoc."
-town_help_36: 'Wypisz pobliskie miejscowości posortowane według odległości.'
+town_help_36: 'List nearby towns sorted by distance.'
 town_list_help_0: "Wyświetla podaną stronę."
 town_list_help_1: "Lista miast sortowana według liczby mieszkańców, otwarta na podanej stronie."
 town_list_help_2: "Lista otwartych miast, otwarta na podanej stronie."

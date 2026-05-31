@@ -164,6 +164,7 @@ res_1: 'Seu estado'
 res_2: '[habitante]'
 res_3: 'Estado do jogador selecionado'
 res_4: 'Lista de todos os jogadores ativos'
+res_8: 'Apenas um fazendeiro humilde'
 res_9: "Quanto de imposto você pagará por dia."
 res_10: "Dê o comando /res jail ? para obter ajuda."
 res_11: "Dê o comando /res toggle ? para obter ajuda."
@@ -305,6 +306,7 @@ ta_resident_help_1: "Adicionar ou remover amigos."
 ta_resident_help_2: "Liste ou limpe a lista de amigos."
 ta_resident_help_3: "Excluir um residente do banco de dados."
 ta_resident_help_4: "Remove um jogador sobre linha."
+ta_resident_help_5: "Definir a última linha ou a última data registrada de um residente."
 ta_toggle_help_0: "Liga/desliga a habilidade de usar Floresta em todos os mundos."
 ta_toggle_help_1: "Liga/desliga os recursos de regeneração em todos os mundos."
 ta_toggle_help_2: "Ligar/desligar o modo desenvolvedor, mostra mensagens extras de login para o jogador especificado na configuração."
@@ -675,6 +677,7 @@ msg_you_have_given_rank: 'Lhe foi concedido o cargo de %s de %s para %s.'
 msg_resident_not_your_town: 'Esse habitante não é um membro de sua cidade!'
 msg_resident_already_has_rank: '%s já tem o cargo de %s.'
 msg_town_or_nation_level_not_high_enough_for_this_rank: "Seu nível %s não é alto o suficiente para atribuir o rank %s. O seu é %s Nível: %s/%s requerido."
+msg_rank_can_only_be_assigned_x_times: "Você não pode atribuir o rank de %s para %s porque só pode ser atribuído %s vezes, sua %s usou %s vezes."
 msg_you_have_had_rank_taken: 'Você foi rebaixado ao cargo de %s de %s.'
 msg_you_have_taken_rank_from: 'Foi lhe removido o cargo de %s de %s de %s.'
 msg_resident_doesnt_have_rank: '%s não tem o cargo de %s.'
@@ -699,7 +702,11 @@ msg_you_lost_money: 'Você perdeu %s por morrer.'
 msg_player_couldnt_pay_player_town_bank_paying_instead: 'A carteira de %s não satisfazia %s. %s tirado do banco da cidade.'
 msg_err_could_not_take_deathfunds: 'Não foi possível tirar os fundos dos mortos da guerra.'
 msg_you_lost_money_dying: 'Você perdeu %s.'
+msg_you_lost_money_dying_with_town_loss: 'Você perdeu %s e sua cidade perdeu %s.'
+msg_you_lost_money_dying_with_nation_loss: 'Você perdeu %s e sua nação perdeu %s.'
+msg_you_lost_money_dying_with_town_and_nation_loss: 'Você perdeu %s, sua cidade perdeu %s e sua nação perdeu %s.'
 msg_your_town_lost_money_dying: 'A sua cidade perdeu %s.'
+msg_your_town_lost_money_dying_and_nation_loss: 'Sua cidade perdeu %s e sua nação perdeu %s.'
 msg_your_nation_lost_money_dying: 'A sua nação perdeu %s.'
 msg_err_couldnt_take_deathfunds: 'Não foi possível tirar o fundos dos mortos.'
 msg_err_couldnt_take_town_deathfunds: 'Não foi possível tirar os fundos dos mortos da cidade.'
@@ -819,6 +826,7 @@ nation_zone_this_area_under_protection_of: 'Esta parte do %s está sobre proteç
 nation_zone_conquered_status_denies_use: "O status conquistado pela sua cidade impede que você use esta zona de nação."
 nation_zone_conquered_status_denies_use_2: "Você é incapaz de utilizar esta zona nacional da cidade conquistada."
 nation_spawn_not_allowed_for_conquered_towns: "O status conquistado pela sua cidade impede que você nasça no ponto de renascimento da sua nação."
+nation_outpost_not_allowed_for_conquered_towns: "O status conquistado pela sua cidade impede que você nasça no ponto de renascimento da sua nação."
 #Added in 0.42
 you_have_been_invited_to_join2: 'Você foi convidado para entrar em %s'
 you_have_been_requested_to_ally2: 'Você recebeu um pedido de aliança de %s'
@@ -1182,6 +1190,8 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Não tens 
 msg_already_ally: 'A tua nação já é aliada com %s.'
 #Added in 0.76
 msg_you: 'Tu'
+#Added in 0.77
+msg_click_town_info: '.test'
 msg_click_spawn: '&aClique para te teletransportares para: &e%s'
 msg_spawn_cost: '&aPreço de Teletransporte = &e%s'
 #Added in 0.78
@@ -1317,6 +1327,7 @@ towny_prices_outposts_upkeept: '&7Outposts têm um custo de manutenção diário
 towny_prices_upkeep_based_on: '&7A manutenção da cidade é baseada no &a%s'
 towny_prices_upkeep_num_plots: 'número de terrenos.'
 towny_prices_upkeep_town_level: 'nível da cidade (Número de residentes)'
+towny_prices_overclaimed_based_on: '&7O upkeep sobrescrito é baseado em &a %s %s'
 towny_prices_overclaimed_num_plots: 'o número de parcelas sobrecargadas *'
 towny_prices_overclaimed_flat_cost: 'um custo fixo de'
 towny_prices_townname: '&cCidade: &b%s'
@@ -1533,6 +1544,7 @@ msg_err_that_resident_doesnt_belong_to_that_nation: 'Esse habitante não pertenc
 #Added in 0.115
 msg_comptype_founded: 'Data da Fundação'
 msg_err_must_be_greater_than_or_equal_to: 'Quantidade deve ser maior ou igual a %s'
+msg_err_must_be_less_than_or_equal_to: 'O valor deve ser menor ou igual a %s'
 err_invalid_yaml: 'Erro ao carregar: Falha ao carregar o arquivo %s (passa um analisador yaml?).'
 #Added in 0.116
 msg_town_map_color_changed: '&bA cor do mapa da cidade foi alterada para %s.'
@@ -1858,6 +1870,7 @@ msg_spawn_cost_free: 'Grátis'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Este terreno já é de tipo %s.'
 msg_town_board_reset: '&bLayout da cidade resetado.'
+msg_nation_board_reset: '&bNation board redefinido.'
 msg_town_has_no_jailslots: 'A prisão da cidade está cheia.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s foi enviado para %s para o número de célula %s por %s horas com uma fiança de %s por %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s foi enviado para %s dentro da cela de número %s por %s horas por %s.'
@@ -1973,6 +1986,8 @@ msg_perm_gui_folia: "Este botão atualmente não funciona no Folia devido à API
 msg_folia_scoreboard: "Mudança de scoreboard no momento não é suportada em Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Você não pode desreivindicar esta cidade porque a cidade de %s,%s não teria reclamações adjacentes suficientes (%s são necessárias.)"
+#Message shown when a player tries to unclaim an outpost with attached townblocks, while the min_adjacent_blocks setting is in use.
+msg_err_cannot_unclaim_outpost_with_adjacent_claims: "Você não pode desreivindicar um posto avançado que tenha nenhum bloco de cidade anexado."
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>Sua nação coletou %s com imposto a partir de sua cidade."
 #Message shown when a nation pays taxes to its towns.
@@ -1994,6 +2009,8 @@ msg_err_your_town_is_not_old_enough_to_overclaim: "Sua cidade não tem idade suf
 msg_err_your_cannot_overclaim_for_another: "Você não pode reivindicar novamente para outra %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>Mundo não está carregado."
+#Message shown when denying a cross world teleport
+msg_err_world_not_same_cant_teleport: "<red>Você não pode se teletransportar para um mundo diferente usando esse comando."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cEste lote teve seu status de imposto definido para %s.'
 msg_changed_plotgroup_taxed: '&cEste grupo de lote teve seu status de imposto definido para %s.'
@@ -2016,6 +2033,8 @@ townyadmin_town_set_help_0: "Define a data de fundação de uma cidade."
 townyadmin_nation_set_help_0: "Define a data de fundação de uma cidade."
 msg_town_registered_set: "Data de fundação da cidade: '%s' definido para: '%s'."
 msg_nation_registered_set: "Data de fundação da nação: '%s' definido para: '%s'."
+msg_resident_registered_set: "Data de residência registrada: '%s' definido como '%s'."
+msg_resident_lastonline_set: "Última data de residência on-line: '%s' definido com: '%s'."
 msg_err_time_cannot_be_in_the_future: "O tempo especificado não pode ser no futuro."
 #The format used for the /t say and /n say commands.
 town_say_format: "%s diz: %s"
@@ -2141,3 +2160,17 @@ time-a-year-ago: "há 1 ano"
 time-x-years-ago: "há %d anos atrás"
 #Shown instead of status_lastonline if the player is currently online
 status_onlinesince: "Online desde:"
+msg_a_player_spawned_to_your_town_earning_you_x: "O jogador %s apareceu na sua cidade, ganhando você %s."
+msg_you_have_been_refunded_your_town_cost: "Você foi reembolsado com %s porque a sua cidade tinha menos de %s hora(s) antiga(s) e não reivindicou mais de %s cidades."
+msg_nearby_towns: 'Cidade Proximas'
+msg_no_towns_nearby: 'Nenhuma cidade encontrada perto.'
+msg_nearby_town_format: '<green>%s <white>(Blocos%s)'
+msg_nearby_town_nation: ' <aqua>[%s]'
+msg_err_must_specify_days_to_be_conquered: "Você precisa especificar um número de dias para ser conquistado, por exemplo: 1 ou mais, ou -1 ou ilimitado para uma conquista indefinida."
+msg_conquered_status_granted: "Você definiu %s para ter o estado conquistado por %s dias."
+msg_conquered_status_granted_unlimited: "Você definiu %s para ter o estado conquistado com uma quantidade indefinida de dias."
+msg_err_must_specify_on_or_off: "Você deve especificar \"ligado\" ou \"desativado\"."
+msg_nation_level_overridden_with: 'A nação %s teve seu nível de nação definido como %s.'
+msg_nation_level_unset: 'A nação %s teve seu nível nacional definido manualmente indefinido. Nação atual é %s.'
+msg_err_cannot_merge_x_seconds_remaining: 'Você deve esperar %s segundos antes de pedir a %s para juntar novamente.'
+msg_towny_prices_percentage_capped_at: ", até %s"
