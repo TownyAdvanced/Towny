@@ -10901,3 +10901,10 @@ v0.92.0.11:
      - Towns will no longer show as ruined when a player tries to look up the town with `/town <townName>`
   - Fix /plot claim allowing plot groups to be claimed when the plot group is not for sale.
   - Fix townblocks not saving after the UUID db conversion.
+0.103.0.2:
+  - Fix memory leak in the hud manager, courtesy of Warrior with PR #8202.
+  - Fix /n outpost not being handled as an alias, courtesy of Warrior with PR #8203.
+  - Get item from correct hand in player interact entity event, courtesy of Warrior with PR #8205.
+  - Bump junit.version from 6.0.3 to 6.1.0.
+  - Bump org.slf4j:slf4j-simple from 2.0.17 to 2.0.18.
+  - Bump org.apache.logging.log4j:log4j-core from 2.25.4 to 2.26.0.
