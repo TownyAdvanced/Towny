@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,12 +77,16 @@ public class PlayerCache {
 	 * @throws NullPointerException if passed an invalid or NULL ActionType
 	 */
 	public boolean getCachePermission(Material material, ActionType action) throws NullPointerException {
+		return getCachedPermission(material, action);
+	}
 
+	@ApiStatus.Internal
+	public Boolean getCachedPermission(final Material material, final ActionType action) {
 		return switch (action) {
-		case BUILD -> getBlockPermission(buildMatPermission, material);
-		case DESTROY -> getBlockPermission(destroyMatPermission, material);
-		case SWITCH -> getBlockPermission(switchMatPermission, material);
-		case ITEM_USE -> getBlockPermission(itemUseMatPermission, material);
+			case BUILD -> buildMatPermission.get(material);
+			case DESTROY -> destroyMatPermission.get(material);
+			case SWITCH -> switchMatPermission.get(material);
+			case ITEM_USE -> itemUseMatPermission.get(material);
 		};
 
 	}
@@ -130,7 +135,7 @@ public class PlayerCache {
 	private void reset(WorldCoord wc) {
 
 		lastWorldCoord = wc;
-		townBlockStatus = null;
+		townBlockStatus = TownBlockStatus.UNKNOWN;
 		blockErrMsg = null;
 		
 		// Clear all maps
@@ -160,19 +165,16 @@ public class PlayerCache {
 		PLOT_TRUSTED,
 	}
 
-	private TownBlockStatus townBlockStatus = TownBlockStatus.UNKNOWN;
+	private @NotNull TownBlockStatus townBlockStatus = TownBlockStatus.UNKNOWN;
 
-	public void setStatus(TownBlockStatus townBlockStatus) {
+	public void setStatus(@NotNull TownBlockStatus townBlockStatus) {
 
 		this.townBlockStatus = townBlockStatus;
 	}
 
-	public TownBlockStatus getStatus() throws NullPointerException {
+	public TownBlockStatus getStatus() {
 
-		if (townBlockStatus == null)
-			throw new NullPointerException();
-		else
-			return townBlockStatus;
+		return townBlockStatus;
 	}
 
 	public void setBlockErrMsg(String blockErrMsg) {

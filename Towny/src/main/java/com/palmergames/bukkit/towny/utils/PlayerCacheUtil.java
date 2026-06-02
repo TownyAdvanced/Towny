@@ -56,56 +56,56 @@ public class PlayerCacheUtil {
 	/**
 	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
 	 * at this location for the specified item id.
-	 * 
+	 * <p>
 	 * Generates the cache if it doesn't exist.
 	 * 
-	 * @param player - Player to check
-	 * @param location - Location 
-	 * @param material - Material
-	 * @param action - ActionType
+	 * @param player The player to check permissions for.
+	 * @param location The location to check the permissions at.
+	 * @param material The material type involved in this action.
+	 * @param action The action being tested for.
 	 * @return true if the player has permission.
 	 */
 	public static boolean getCachePermission(Player player, Location location, Material material, ActionType action) {
 
-		final WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+		final PlayerCache cache = plugin.getCache(player);
+		final WorldCoord lastWorldCoord = cache.getLastTownBlock();
 
-		try {
-			PlayerCache cache = plugin.getCache(player);
-			cache.updateCoord(worldCoord);
-
-			boolean result = cache.getCachePermission(material, action); // Throws NullPointerException if the cache is empty
-			TownyMessaging.sendDebugMsg("Cache permissions for " + player.getName() + " using " + material.getKey() + ":" + action + " = " + result);
-			return result;
-
-		} catch (NullPointerException e) {
-			// New or old cache permission was null, update it
-			TownBlockStatus status = cacheStatus(player, worldCoord, fetchTownBlockStatus(player, worldCoord));
-			triggerCacheCreate(player, location, worldCoord, status, material, action);
-
-			PlayerCache cache = plugin.getCache(player);
-			cache.updateCoord(worldCoord);
-
-			boolean result = cache.getCachePermission(material, action);
-			TownyMessaging.sendDebugMsg("New Cache created for " + player.getName() + " using " + material.getKey() + ":" + action + ":" + status.name() + " = " + result);
-			return result;
+		// Check if we can re-use the lastWorldCoord instance
+		final WorldCoord worldCoord;
+		if (lastWorldCoord.containsLocation(location)) {
+			worldCoord = lastWorldCoord;
+		} else {
+			worldCoord = WorldCoord.parseWorldCoord(location);
+			cache.resetAndUpdate(worldCoord);
 		}
+
+		final Boolean cachedValue = cache.getCachedPermission(material, action);
+		final boolean result;
+		if (cachedValue == null) {
+			// New or old cache permission was null, update it
+			// Only fetch status if it hasn't been cached previously
+			final TownBlockStatus status = cache.getStatus() == TownBlockStatus.UNKNOWN ? cacheStatus(player, cache, worldCoord, fetchTownBlockStatus(player, worldCoord)) : cache.getStatus();
+			result = triggerCacheCreate(player, cache, worldCoord, status, material, action);
+		} else {
+			result = cachedValue;
+		}
+
+		TownyMessaging.sendDebugMsg(() -> (cachedValue == null ? "New Cache created" : "Cache permissions") + " for " + player.getName() + " using " + material.getKey().asMinimalString() + ":" + action + ":" + cache.getStatus() + " = " + result);
+		return result;
 	}
 
 	/**
 	 * Generate a new cache for this player/action.
 	 * 
 	 * @param player - Player
-	 * @param location - Location
+	 * @param cache The player's cache.
 	 * @param worldCoord - WorldCoord
 	 * @param status - TownBlockStatus
 	 * @param material - Material
 	 * @param action - ActionType
 	 */
-	private static void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, Material material, ActionType action) {
-		final boolean permission = getPermission(player, status, worldCoord, material, action);
-
-		PlayerCache cache = plugin.getCache(player);
-		cache.updateCoord(worldCoord);
+	private static boolean triggerCacheCreate(Player player, PlayerCache cache, WorldCoord worldCoord, TownBlockStatus status, Material material, ActionType action) {
+		final boolean permission = getPermission(player, cache, status, worldCoord, material, action);
 
 		switch (action) {
 			case BUILD -> cache.setBuildPermission(material, permission);
@@ -114,7 +114,14 @@ public class PlayerCacheUtil {
 			case ITEM_USE -> cache.setItemUsePermission(material, permission);
 		}
 
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord + ") Cached " + action.getCommonName() + ": " + permission);
+		TownyMessaging.sendDebugMsg(() -> player.getName() + " (" + worldCoord + ") Cached " + action.getCommonName() + ": " + permission);
+		return permission;
+	}
+
+	public static TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
+		final PlayerCache cache = plugin.getCache(player);
+		cache.updateCoord(worldCoord);
+		return cacheStatus(player, cache, worldCoord, townBlockStatus);
 	}
 	
 	/**
@@ -122,17 +129,16 @@ public class PlayerCacheUtil {
 	 * worldCoord.
 	 * 
 	 * @param player - Player
+	 * @param cache The player's cache   
 	 * @param worldCoord - WorldCoord
 	 * @param townBlockStatus - TownBlockStatus
 	 * @return TownBlockStatus type.
 	 */
-	public static TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
+	public static TownBlockStatus cacheStatus(Player player, final PlayerCache cache, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
 
-		PlayerCache cache = plugin.getCache(player);
-		cache.updateCoord(worldCoord);
 		cache.setStatus(townBlockStatus);
 
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord + ") Cached Status: " + townBlockStatus);
+		TownyMessaging.sendDebugMsg(() -> player.getName() + " (" + worldCoord + ") Cached Status: " + townBlockStatus);
 		return townBlockStatus;
 	}
 
@@ -263,7 +269,7 @@ public class PlayerCacheUtil {
 	 * @param action {@link ActionType}
 	 * @return true if allowed.
 	 */
-	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
+	private static boolean getPermission(Player player, PlayerCache cache, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
 		// Allow admins to have ALL permissions
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
@@ -277,7 +283,7 @@ public class PlayerCacheUtil {
 			&& action == ActionType.BUILD
 			&& targetTown.isBankrupt() 
 			&& !targetTown.isRuined()) {
-				cacheBlockErrMsg(player, Translatable.of("msg_err_bankrupt_town_cannot_build").forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_err_bankrupt_town_cannot_build").forLocale(player));
 				return false;
 		}
 
@@ -286,12 +292,12 @@ public class PlayerCacheUtil {
 		
 		Resident res = townyUniverse.getResident(player.getUniqueId());
 		if (res == null) {
-			cacheBlockErrMsg(player, Translatable.of("msg_err_not_registered").forLocale(player));
+			cache.setBlockErrMsg(Translatable.of("msg_err_not_registered").forLocale(player));
 			return false;
 		}
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error").forLocale(player));
+			cache.setBlockErrMsg(Translatable.of("msg_cache_block_error").forLocale(player));
 			return false;
 		}
 
@@ -310,7 +316,7 @@ public class PlayerCacheUtil {
 					return true;
 
 				// Don't have permission to build/destroy/switch/item_use here
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
 				return false;
 			}
 			
@@ -326,7 +332,7 @@ public class PlayerCacheUtil {
 
 				// Wasn't able to build in the wilderness, regardless.
 				if (!hasWildOverride) {
-					cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
+					cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
 					return false;
 				}
 
@@ -339,13 +345,13 @@ public class PlayerCacheUtil {
 
 					// Prevent conquered towns using their nation's Nation Zone, unless that nation zone is surrounding the conquered town.
 					if (TownySettings.getNationZonesSkipConqueredTowns() && res.getTownOrNull().isConquered() && !nearestTown.hasResident(res)) {
-						cacheBlockErrMsg(player, Translatable.of("nation_zone_conquered_status_denies_use").forLocale(res));
+						cache.setBlockErrMsg(Translatable.of("nation_zone_conquered_status_denies_use").forLocale(res));
 						return false;
 					}
 
 					// Prevent conquering nations using the nation zones surrounding a conquered town.
 					if (TownySettings.getNationZonesProtectsConqueredTowns() && nearestTown.isConquered() && !nearestTown.hasResident(res)) {
-						cacheBlockErrMsg(player, Translatable.of("nation_zone_conquered_status_denies_use").forLocale(res));
+						cache.setBlockErrMsg(Translatable.of("nation_zone_conquered_status_denies_use").forLocale(res));
 						return false;
 					}
 
@@ -354,7 +360,7 @@ public class PlayerCacheUtil {
 				}
 
 				// The player is not a nation member of this NationZone.
-				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
 				return false;
 			}
 		}
@@ -389,7 +395,7 @@ public class PlayerCacheUtil {
 		if (override != null && override.getPermissionTypes()[action.getIndex()] != SetPermissionType.UNSET) {
 			SetPermissionType type = override.getPermissionTypes()[action.getIndex()];
 			if (type == SetPermissionType.NEGATED)
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_err", Translatable.of(action.toString())).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_cache_block_err", Translatable.of(action.toString())).forLocale(player));
 			
 			return type.equals(SetPermissionType.SET);				
 		}
@@ -409,7 +415,7 @@ public class PlayerCacheUtil {
 			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_friends"), Translatable.of(action.toString())).forLocale(player));
+			cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_friends"), Translatable.of(action.toString())).forLocale(player));
 			return false;
 		} 
 		
@@ -419,7 +425,7 @@ public class PlayerCacheUtil {
 			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 			
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_town_members"), Translatable.of(action.toString())).forLocale(player));
+			cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_town_members"), Translatable.of(action.toString())).forLocale(player));
 			return false;
 		}
 
@@ -432,7 +438,7 @@ public class PlayerCacheUtil {
 			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_resident", Translatable.of(action.toString())).forLocale(player));
+			cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_town_resident", Translatable.of(action.toString())).forLocale(player));
 			return false;
 		} 
 		
@@ -442,7 +448,7 @@ public class PlayerCacheUtil {
 			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_nation", Translatable.of(action.toString())).forLocale(player));
+			cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_town_nation", Translatable.of(action.toString())).forLocale(player));
 			return false;
 		}
 		
@@ -457,9 +463,9 @@ public class PlayerCacheUtil {
 
 			// Choose which error message will be shown.
 			if (status == TownBlockStatus.PLOT_ALLY) 
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_allies"), Translatable.of(action.toString())).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_allies"), Translatable.of(action.toString())).forLocale(player));
 			else 
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_allies", Translatable.of(action.toString())).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_town_allies", Translatable.of(action.toString())).forLocale(player));
 			return false;
 		}
 		
@@ -474,9 +480,9 @@ public class PlayerCacheUtil {
 
 			// Choose which error message will be shown.
 			if (townBlock.hasResident())
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_outsiders"), Translatable.of(action.toString())).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_outsiders"), Translatable.of(action.toString())).forLocale(player));
 			else 
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_outsider", Translatable.of(action.toString())).forLocale(player));
+				cache.setBlockErrMsg(Translatable.of("msg_cache_block_error_town_outsider", Translatable.of(action.toString())).forLocale(player));
 			return false;
 		}
 		
@@ -486,7 +492,7 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.WARZONE)
 			return true;
 
-		TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
+		TownyMessaging.sendErrorMsg(player, "Error updating " + action + " permission.");
 		return false;
 	}
 
@@ -513,12 +519,8 @@ public class PlayerCacheUtil {
 	 */
 	public static boolean isOwnerCache(@NotNull PlayerCache cache) {
 		Preconditions.checkNotNull(cache, "Cache cannot be null.");
-		TownBlockStatus status;
-		try {
-			status = cache.getStatus();
-		} catch (NullPointerException e) {
-			return false;
-		}
+		TownBlockStatus status = cache.getStatus();
+
 		return status.equals(TownBlockStatus.ADMIN) || status.equals(TownBlockStatus.PLOT_OWNER) || status.equals(TownBlockStatus.TOWN_OWNER);
 	}
 }

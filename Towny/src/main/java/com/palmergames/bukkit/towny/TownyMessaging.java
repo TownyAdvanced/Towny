@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Towny message handling class
@@ -167,6 +168,19 @@ public class TownyMessaging {
 	 *
 	 * @param msg the message to be sent
 	 */
+	public static void sendDevMsg(final Supplier<String> msg) {
+		final Player townyDev;
+		if (TownySettings.isDevMode() && (townyDev = BukkitTools.getPlayerExact(TownySettings.getDevName())) != null) {
+			sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.DARK_RED + msg.get());
+		}
+	}
+
+	/**
+	 * Sends a message (red) to the named Dev (if DevMode is enabled)
+	 * Uses default_towny_prefix
+	 *
+	 * @param msg the message to be sent
+	 */
 	public static void sendDevMsg(String[] msg) {
 		for (String line : msg) {
 			sendDevMsg(line);
@@ -181,6 +195,18 @@ public class TownyMessaging {
 	public static void sendDebugMsg(String msg) {
 		if (TownySettings.getDebug()) {
 			LOGGER.debug(Colors.strip(msg));
+		}
+		sendDevMsg(msg);
+	}
+
+	/**
+	 * Sends a message to the debug logger (and hence the console and debug.log)
+	 *
+	 * @param msg the message to be sent
+	 */
+	public static void sendDebugMsg(final Supplier<String> msg) {
+		if (TownySettings.getDebug()) {
+			LOGGER.debug(Colors.strip(msg.get()));
 		}
 		sendDevMsg(msg);
 	}
