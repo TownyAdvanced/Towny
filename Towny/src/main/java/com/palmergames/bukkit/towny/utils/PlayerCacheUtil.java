@@ -147,7 +147,9 @@ public class PlayerCacheUtil {
 	 * 
 	 * @param player - Player
 	 * @param msg - String
+	 * @deprecated Unused by Towny now, use {@link PlayerCache#setBlockErrMsg(String)} instead.   
 	 */
+	@Deprecated(since = "0.103.0.2", forRemoval = true)
 	public static void cacheBlockErrMsg(Player player, String msg) {
 
 		PlayerCache cache = plugin.getCache(player);
