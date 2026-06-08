@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.context.ContextCalculator;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -58,6 +60,13 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.hasResident(resident)))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
+		registerContext("towny:plot_type_at_player", resident -> {
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
+			if (cache == null)
+				return Collections.emptyList();
+
+			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.getTypeName().toLowerCase(Locale.ROOT)))).orElse(Collections.emptySet());
+		}, () -> TownBlockTypeHandler.getTypes().keySet());
 		registerContext("towny:townrank", Resident::getTownRanks, TownyPerms::getTownRanks);
 		registerContext("towny:nationrank", Resident::getNationRanks, TownyPerms::getNationRanks);
 		registerContext("towny:istownconquered", resident -> Collections.singleton(String.valueOf(resident.hasTown() && resident.getTownOrNull().isConquered())), () -> Arrays.asList("true", "false"));

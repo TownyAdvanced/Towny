@@ -1670,7 +1670,7 @@ public enum ConfigNodes {
 			"",
 			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
 			"# Available contexts: towny:resident, towny:nation_resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
-			"# towny:nationrank, towny:town, towny:nation, towny:istownconquered"
+			"# towny:nationrank, towny:town, towny:nation, towny:istownconquered, towny:plot_type_at_player"
 	),
 	
 	PLUGIN_COREPROTECT_SUPPORT(
