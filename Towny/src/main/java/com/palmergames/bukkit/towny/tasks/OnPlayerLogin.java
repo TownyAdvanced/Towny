@@ -116,6 +116,9 @@ public class OnPlayerLogin implements Runnable {
 			player.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_legacy_economy_detected")).locale(player).component().clickEvent(clickEvent));
 			player.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_convert_to_modern_economy")).locale(player).component().clickEvent(clickEvent));
 		}
+
+		// Cause the plugin to add the player into the cache.
+		plugin.getCache(player);
 	}
 
 	private Resident getResidentReadyToLogIn() {
