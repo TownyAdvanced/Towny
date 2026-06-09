@@ -659,7 +659,7 @@ public class TownBlock extends TownyObject {
 			setName(townBlockAsMap.getOrDefault("name", ""));
 			// Legacy Flatfile DBs used "type" instead of "typeName".
 			String typeKey = townBlockAsMap.containsKey("type") ? "type" : "typeName";
-			setType(TownBlockTypeHandler.getTypeInternal(townBlockAsMap.getOrDefault(typeKey, "default")));
+			setType(TownBlockTypeHandler.getTypeInternal(townBlockAsMap.getOrDefault(typeKey, "default").trim()));
 			setOutpost(getOrDefault(townBlockAsMap, "outpost", false));
 
 			line = townBlockAsMap.get("price");
@@ -673,7 +673,7 @@ public class TownBlock extends TownyObject {
 				setPermissions(line.trim());
 			line = townBlockAsMap.get("changed");
 			if (hasData(line))
-				setChanged(getOrDefault(townBlockAsMap, line, false));
+				setChanged(getOrDefault(townBlockAsMap, "changed", false));
 			line = townBlockAsMap.get("claimedAt");
 			if (hasData(line))
 				setClaimedAt(getOrDefault(townBlockAsMap, "claimedAt", 0l));
