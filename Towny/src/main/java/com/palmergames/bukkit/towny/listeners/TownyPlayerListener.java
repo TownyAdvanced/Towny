@@ -1030,8 +1030,10 @@ public class TownyPlayerListener implements Listener {
 		passengers.remove(0);
 
 		for (Entity entity : passengers) {
-			if (entity instanceof Player rider)
+			if (entity instanceof Player rider) {
+				plugin.resetCache(rider);
 				BukkitTools.fireEvent(new PlayerChangePlotEvent(rider, from, to));
+			}
 		}
 	}
 

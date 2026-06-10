@@ -328,6 +328,16 @@ public class WorldCoord extends Coord {
 			   !Objects.equals(from.getWorld(), to.getWorld());
 	}
 
+	/**
+	 * Checks if the given location is located inside of this WorldCoord.
+	 * 
+	 * @param location The location to check.
+	 * @return Whether the location is contained inside of this WorldCoord.
+	 */
+	public boolean containsLocation(final Location location) {
+		return this.getX() == toCell(location.getBlockX()) && this.getZ() == toCell(location.getBlockZ()) && this.getWorldName().equals(location.getWorld().getName());
+	}
+
 	public List<WorldCoord> getCardinallyAdjacentWorldCoords(boolean... includeOrdinalFlag) {
 		boolean includeOrdinal = (includeOrdinalFlag.length >= 1) ? includeOrdinalFlag[0] : false;
 		List<WorldCoord> list =new ArrayList<>(includeOrdinal ? 8 : 4);

@@ -83,14 +83,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
@@ -106,7 +105,7 @@ public class Towny extends JavaPlugin {
 	private final boolean isFolia = JavaUtil.classExists("io.papermc.paper.threadedregions.RegionizedServer");
 	private final TaskScheduler scheduler;
 
-	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final Map<UUID, PlayerCache> playerCache = new ConcurrentHashMap<>();
 	private final Set<TownyInitException.TownyError> errors = new HashSet<>();
 	
 	public Towny() {
@@ -626,9 +625,9 @@ public class Towny extends JavaPlugin {
 	 */
 	public void resetCache() {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null)
-				getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player)); // Automatically resets permissions.
+		for (final PlayerCache cache : playerCache.values()) {
+			cache.resetAndUpdate(cache.getLastTownBlock());
+		}
 	}
 
 	/**
@@ -638,10 +637,13 @@ public class Towny extends JavaPlugin {
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null)
-				if (WorldCoord.parseWorldCoord(player).equals(worldCoord))
-					getCache(player).resetAndUpdate(worldCoord); // Automatically resets permissions.
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			final PlayerCache cache = getCacheOrNull(player.getUniqueId());
+
+			if (cache != null && cache.getLastTownBlock().equals(worldCoord)) {
+				cache.resetAndUpdate(worldCoord);
+			}
+		}
 	}
 
 	/**
