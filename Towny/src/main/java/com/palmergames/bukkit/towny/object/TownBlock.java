@@ -658,8 +658,8 @@ public class TownBlock extends TownyObject {
 
 			setName(townBlockAsMap.getOrDefault("name", ""));
 			// Legacy Flatfile DBs used "type" instead of "typeName".
-			String typeKey = townBlockAsMap.containsKey("type") ? "type" : "typeName";
-			setType(TownBlockTypeHandler.getTypeInternal(townBlockAsMap.getOrDefault(typeKey, "default").trim()));
+			String typeKey = !townBlockAsMap.containsKey("typeName") ? "type" : "typeName";
+			setType(TownBlockTypeHandler.getTypeInternal(townBlockAsMap.getOrDefault(typeKey, "default")));
 			setOutpost(getOrDefault(townBlockAsMap, "outpost", false));
 
 			line = townBlockAsMap.get("price");
