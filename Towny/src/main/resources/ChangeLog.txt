@@ -10908,3 +10908,7 @@ v0.92.0.11:
   - Bump junit.version from 6.0.3 to 6.1.0.
   - Bump org.slf4j:slf4j-simple from 2.0.17 to 2.0.18.
   - Bump org.apache.logging.log4j:log4j-core from 2.25.4 to 2.26.0.
+0.103.0.3:
+  - Improve on player cache efficiency, courtesy of Warrior with PR #8207.
+  - Add towny:plot_type_at_player LP context, which allows for plot types to provide permission nodes.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.5 to 3.5.6.
