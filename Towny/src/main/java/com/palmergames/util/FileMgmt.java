@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -143,6 +145,27 @@ public final class FileMgmt {
 					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
 			} else {
 				Files.copy(sourceLocation.toPath(), targetLocation.toPath());
+			}
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	/**
+	 * Write a map to a file, terminating each line with a system specific new line.
+	 * 
+	 * @param source Map to write
+	 * @param targetLocation Target location on the filesystem
+	 * @throws IOException if an IO exception occurs while writing to the file   
+	 */
+	public static void mapToFile(Map<String, Object> source, Path targetLocation) throws IOException {
+		try {
+			writeLock.lock();
+			try (BufferedWriter writer = Files.newBufferedWriter(targetLocation)) {
+				for (Map.Entry<String, Object> entry : source.entrySet()) {
+					writer.write(entry.getKey() + "=" + entry.getValue());
+					writer.newLine();
+				}
 			}
 		} finally {
 			writeLock.unlock();

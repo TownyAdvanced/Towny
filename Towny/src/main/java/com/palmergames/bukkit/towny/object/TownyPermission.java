@@ -197,7 +197,8 @@ public class TownyPermission {
 	public void load(String s) {
 
 		setAll(false);
-		String[] tokens = s.split(",");
+		// Legacy mysql databases used #.
+		String[] tokens = s.split(s.contains(",") ? "," : "#");
 		for (String token : tokens)
 			set(token, true);
 	}
