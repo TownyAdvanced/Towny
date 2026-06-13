@@ -10912,3 +10912,6 @@ v0.92.0.11:
   - Improve on player cache efficiency, courtesy of Warrior with PR #8207.
   - Add towny:plot_type_at_player LP context, which allows for plot types to provide permission nodes.
   - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.5 to 3.5.6.
+0.103.0.4:
+  - Fix outpost tab completer suggesting names with spaces.
+    - Closes #8213.

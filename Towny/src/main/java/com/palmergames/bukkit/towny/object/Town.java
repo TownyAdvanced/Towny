@@ -1083,7 +1083,7 @@ public class Town extends Government implements TownBlockOwner {
 
 			String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
 			if (!name.isEmpty())
-				outpostNames.add(name);
+				outpostNames.add(name.replace(" ", "_"));
 			else
 				outpostNames.add(String.valueOf(i));
 		}
