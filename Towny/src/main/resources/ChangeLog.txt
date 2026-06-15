@@ -10915,3 +10915,11 @@ v0.92.0.11:
 0.103.0.4:
   - Fix outpost tab completer suggesting names with spaces.
     - Closes #8213.
+  - Fix compile issue on 26.2 due to legacy method being removed, courtesy of Warrior with PR #8216.
+  - Add sulfur cube protections, courtesy of Warrior with PR #8217.
+  - New Automatic Config Edits: ,SULFUR_CUBE will be added to the following:
+    - new_world_settings.plot_management.wild_revert_on_mob_explosion.entities
+    - protection.mob_types
+    - all of your towny\data\worlds\ files' explosion revert entities.
+  - Skip intermediate Location step of parsing a WC from entities, courtesy of Warrior with PR #8218.
+  - Fix driver of minecarts not throwing playerchangeplotevent.
