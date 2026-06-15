@@ -1,13 +1,17 @@
 package com.palmergames.bukkit.util;
 
+import java.lang.invoke.MethodHandle;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.RegionAccessor;
+import org.bukkit.UnsafeValues;
 import org.bukkit.World;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -56,17 +60,24 @@ public class BiomeUtil {
 		int badBiomeBlocks = 0;
 		for (int z = 0; z < plotSize; z++)
 			for (int x = 0; x < plotSize; x++)
-				if (biomePredicate.test(getBiomeKey(world, worldX, world.getHighestBlockYAt(worldX + x, worldZ + z), worldZ)))
+				if (biomePredicate.test(getBiomeKey(world, worldX + x, world.getHighestBlockYAt(worldX + x, worldZ + z), worldZ + z)))
 					badBiomeBlocks++;
 
 		return (double) badBiomeBlocks / total;
 	}
 	
-	@SuppressWarnings({"deprecation", "removal"})
+	@SuppressWarnings("deprecation")
+	private static final MethodHandle LEGACY_GET_BIOME_KEY = JavaUtil.getMethodHandle(UnsafeValues.class, "getBiomeKey", RegionAccessor.class, int.class, int.class, int.class);
+
+	@SuppressWarnings("deprecation")
 	public static NamespacedKey getBiomeKey(final World world, final int x, final int y, final int z) {
-		if (Biome.class.isEnum()) {
+		if (Biome.class.isEnum() && LEGACY_GET_BIOME_KEY != null) {
 			// pre 1.21
-			return Bukkit.getUnsafe().getBiomeKey(world, x, y, z);
+			try {
+				return (NamespacedKey) LEGACY_GET_BIOME_KEY.invokeExact(Bukkit.getUnsafe(), (RegionAccessor) world, x, y, z);
+			} catch (Throwable throwable) {
+				return NamespacedKey.minecraft("forest");
+			}
 		}
 
 		return world.getBiome(x, y, z).getKey();
