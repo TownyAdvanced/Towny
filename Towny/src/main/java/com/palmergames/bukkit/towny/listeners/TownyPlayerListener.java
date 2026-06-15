@@ -1000,41 +1000,7 @@ public class TownyPlayerListener implements Listener {
 		if (cache != null)
 			cache.resetAndUpdate(to);
 
-		// Paper doesn't currently throw PlayerMoveEvents for passengers in vehicles who aren't the driver.
-		// This workaround ensures that any passengers that are players will cause PlayerChangePlotEvents.
-		if (player.isInsideVehicle())
-			handleAnimalVehiclesWorkaround(player.getVehicle(), from, to);
-
 		BukkitTools.fireEvent(new PlayerChangePlotEvent(player, from, to));
-	}
-	
-	/**
-	 * Paper doesn't throw PlayerMoveEvents for players riding in animals like
-	 * HappyGhasts or Camels. Those animals don't throw VehicleMoveEvents and when
-	 * ridden they stop throwing EntityMoveEvents. The driver is the only one who
-	 * will have a PlayerMoveEvent thrown which is why we're doing this here.
-	 * 
-	 * @param vehicle   Vehicle being driven.
-	 * @param from      WorldCoord the players are leaving.
-	 * @param to        WorldCoord the players are entering.
-	 */
-	private void handleAnimalVehiclesWorkaround(@Nullable Entity vehicle, WorldCoord from, WorldCoord to) {
-		if (vehicle == null || !EntityLists.MULTISEAT_ANIMAL_MOUNTS.contains(vehicle))
-			return;
-
-		if (vehicle.getPassengers().size() < 2)
-			return;
-
-		List<Entity> passengers = new ArrayList<>(vehicle.getPassengers());
-		// Remove the driver, they throw their own PlayerMoveEvents.
-		passengers.remove(0);
-
-		for (Entity entity : passengers) {
-			if (entity instanceof Player rider) {
-				plugin.resetCache(rider);
-				BukkitTools.fireEvent(new PlayerChangePlotEvent(rider, from, to));
-			}
-		}
 	}
 
 	/*

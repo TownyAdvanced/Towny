@@ -186,11 +186,12 @@ public class TownyVehicleListener implements Listener {
 	}
 
 	/**
-	 * Handles vehicles with passengers not throwing PlayerMoveEvents for the
-	 * passenger(s), resulting in PlayerChangePlotEvents not being thrown.
+	 * Handles vehicles with passengers not throwing PlayerMoveEvents for the driver
+	 * and any passengers, resulting in PlayerChangePlotEvents not being thrown.
 	 * <p>
 	 * For now Paper does not throw this event for camels and ghasts but we'll
-	 * future-proof ourselves in case they do add support later on.</p>
+	 * future-proof ourselves in case they do add support later on.
+	 * </p>
 	 * 
 	 * @param event VehicleMoveEvent.
 	 */
@@ -199,12 +200,9 @@ public class TownyVehicleListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
 			return;
 
-		if (!EntityLists.MULTISEAT_MOUNTABLES.contains(event.getVehicle().getType()))
-			return;
-
 		List<Entity> passengers = new ArrayList<>(event.getVehicle().getPassengers());
 		// Vehicles can be empty and a driver exiting the vehicle makes a passenger into the driver.
-		if (passengers.size() < 2)
+		if (passengers.size() < 1)
 			return;
 
 		Location from = event.getFrom();
@@ -214,10 +212,6 @@ public class TownyVehicleListener implements Listener {
 		if (toCoord.equals(fromCoord))
 			return;
 
-		// Driver always throws a PlayerMoveEvent.
-		passengers.remove(0);
-
-		// HappyGhasts can have more than one passenger & a driver will have a PlayerMoveEvent.
 		for (Entity rider : passengers) {
 			if (rider instanceof Player player)
 				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord));
