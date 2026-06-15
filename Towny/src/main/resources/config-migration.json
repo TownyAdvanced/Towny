@@ -933,5 +933,21 @@
         "value": "towny.command.town.nearby"
       }
     ]
+  },
+  {
+    "version": "0.103.0.4",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.mob_types",
+        "value": ",SulfurCube"
+      },
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "value": ",SULFUR_CUBE",
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
+      }
+    ]
   }
 ]

@@ -386,7 +386,7 @@ public enum ConfigNodes {
 			"end_crystal",
 			"",
 			"# These entities will be deleted upon a plot being unclaimed.",
-			"# Valid EntityTypes can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"),
+			"# Valid EntityTypes can be found here: https://jd.papermc.io/paper/org/bukkit/entity/EntityType.html"),
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
 			"new_world_settings.plot_management.mayor_plotblock_delete",
 			"",
@@ -456,7 +456,7 @@ public enum ConfigNodes {
 			"# You can adjust this setting for an existing world using /townyworld toggle revertentityexpl"),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",			
-			"CREEPER,END_CRYSTAL,ENDER_DRAGON,FIREBALL,SMALL_FIREBALL,TNT,TNT_MINECART,WITHER,WITHER_SKULL",
+			"CREEPER,END_CRYSTAL,ENDER_DRAGON,FIREBALL,SMALL_FIREBALL,TNT,TNT_MINECART,WITHER,WITHER_SKULL,SULFUR_CUBE",
 			"",
 			"# The list of entities whose explosions should be reverted."),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
@@ -1952,7 +1952,7 @@ public enum ConfigNodes {
 			"# | interactions.                                                       | #",
 			"# | In the item_use and switch ids sections you are able to use the     | #",
 			"# | Bukkit Material names which are listed at this webpage:             | #",
-			"# | https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html   | #",
+			"# | https://jd.papermc.io/paper/org/bukkit/Material.html                | #",
 			"# |                                                                     | #",
 			"# | You are also able to use groups that are made in Towny. Group names | #",
 			"# | include:                                                            | #",
@@ -1979,7 +1979,7 @@ public enum ConfigNodes {
 			"# These items will be the ones restricted by a town/resident/plot's item_use setting.",
 			"# A list of items, that are held in the hand, which can be protected against.",
 			"# Group names you can use in this list: BOATS, MINECARTS",
-			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
+			"# A full list of proper names can be found here https://jd.papermc.io/paper/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
 			"CHESTS_WITHOUT_ENDERCHEST,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE",
@@ -1993,7 +1993,7 @@ public enum ConfigNodes {
 			"# Note: Vehicles like MINECARTS and BOATS can be added here. If you want to treat other rideable mobs like switches add SADDLE",
 			"#       to protect HORSES, DONKEYS, MULES, PIGS, STRIDERS (This is not recommended, unless you want players to not be able to",
 			"#       re-mount their animals in towns they cannot switch in.)",
-			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
+			"# A full list of proper names can be found here https://jd.papermc.io/paper/org/bukkit/Material.html "),
 	PROT_FIRE_SPREAD_BYPASS(
 			"protection.fire_spread_bypass_materials",
 			"NETHERRACK,SOUL_SAND,SOUL_SOIL",
@@ -2004,7 +2004,7 @@ public enum ConfigNodes {
 			"protection.town_mob_removal_entities",
 			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
-			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.html",
+			"# permitted entities https://jd.papermc.io/paper/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie, Shulker",
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear, Axolotl, Goat, GlowSquid",
@@ -2065,9 +2065,9 @@ public enum ConfigNodes {
 			"# NEVER set below 1."),
 	PROT_MOB_TYPES(
 			"protection.mob_types",
-			"Animals,WaterMob,NPC,Snowman,ArmorStand,Villager,Hanging",
+			"Animals,WaterMob,NPC,Snowman,ArmorStand,Villager,Hanging,SulfurCube",
 			"",
-			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/package-summary.html",
+			"# permitted entities https://jd.papermc.io/paper/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
