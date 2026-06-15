@@ -71,7 +71,7 @@ public class BiomeUtil {
 
 	@SuppressWarnings("deprecation")
 	public static NamespacedKey getBiomeKey(final World world, final int x, final int y, final int z) {
-		if (Biome.class.isEnum() && LEGACY_GET_BIOME_KEY != null) {
+		if (LEGACY_GET_BIOME_KEY != null) {
 			// pre 1.21
 			try {
 				return (NamespacedKey) LEGACY_GET_BIOME_KEY.invokeExact(Bukkit.getUnsafe(), (RegionAccessor) world, x, y, z);
