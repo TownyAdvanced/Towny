@@ -338,11 +338,11 @@ public class WorldCoord extends Coord {
 		return this.getX() == toCell(location.getBlockX()) && this.getZ() == toCell(location.getBlockZ()) && this.getWorldName().equals(location.getWorld().getName());
 	}
 
-	public boolean containsCoordinates(final double x, final double z) {
-		return containsCoordinates(Location.locToBlock(x), Location.locToBlock(z));
+	public boolean containsCoordinate(final double x, final double z) {
+		return containsCoordinate(Location.locToBlock(x), Location.locToBlock(z));
 	}
 
-	public boolean containsCoordinates(final int x, final int z) {
+	public boolean containsCoordinate(final int x, final int z) {
 		return this.getX() == toCell(x) && this.getZ() == toCell(z);
 	}
 

@@ -102,7 +102,7 @@ public class CellSurface {
 	}
 
 	private int getX(int playerX, int playerZ) {
-		if (worldCoord.containsCoordinates(playerX, playerZ))
+		if (worldCoord.containsCoordinate(playerX, playerZ))
 			return playerX;
 
 		// Player is outside of the WorldCoord, try to match up their X with an X in the WorldCoord or hit the correct corner.
@@ -110,7 +110,7 @@ public class CellSurface {
 	}
 
 	private int getZ(int playerX, int playerZ) {
-		if (worldCoord.containsCoordinates(playerX, playerZ))
+		if (worldCoord.containsCoordinate(playerX, playerZ))
 			return playerZ;
 
 		// Player is outside of the WorldCoord, try to match up their Z with an Z in the WorldCoord or hit the correct corner.
