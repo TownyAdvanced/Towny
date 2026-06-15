@@ -74,7 +74,7 @@ public class WorldCoord extends Coord {
 	}
 
 	public static WorldCoord parseWorldCoord(Entity entity) {
-		return parseWorldCoord(entity.getLocation());
+		return new WorldCoord(entity.getWorld(), toCell(Location.locToBlock(entity.getX())), toCell(Location.locToBlock(entity.getZ())));
 	}
 
 	public static WorldCoord parseWorldCoord(String worldName, int blockX, int blockZ) {
@@ -125,7 +125,7 @@ public class WorldCoord extends Coord {
 
 	@Override
 	public String toString() {
-		return getWorldName() + "," + super.toString();
+		return getWorldName() + ", " + super.toString();
 	}
 
 	/**
@@ -336,6 +336,14 @@ public class WorldCoord extends Coord {
 	 */
 	public boolean containsLocation(final Location location) {
 		return this.getX() == toCell(location.getBlockX()) && this.getZ() == toCell(location.getBlockZ()) && this.getWorldName().equals(location.getWorld().getName());
+	}
+
+	public boolean containsCoordinate(final double x, final double z) {
+		return containsCoordinate(Location.locToBlock(x), Location.locToBlock(z));
+	}
+
+	public boolean containsCoordinate(final int x, final int z) {
+		return this.getX() == toCell(x) && this.getZ() == toCell(z);
 	}
 
 	public List<WorldCoord> getCardinallyAdjacentWorldCoords(boolean... includeOrdinalFlag) {
