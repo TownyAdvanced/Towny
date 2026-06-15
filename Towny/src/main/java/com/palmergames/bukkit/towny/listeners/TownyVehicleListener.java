@@ -22,6 +22,7 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -198,6 +199,21 @@ public class TownyVehicleListener implements Listener {
 	public void onVehicleMovementWithPassenger(VehicleMoveEvent event) {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
 			return;
+
+		// Minecarts also do not throw PlayerMoveEvents and requires us to use the VehicleMoveEvent.
+		if (event.getVehicle().getType().equals(EntityType.MINECART)) {
+			if (event.getVehicle().getPassengers().size() > 0 && event.getVehicle().getPassengers().get(0) instanceof Player player) {
+				Location from = event.getFrom();
+				Location to = event.getTo();
+				WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
+				WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
+				if (toCoord.equals(fromCoord))
+					return;
+
+				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord));
+			}
+			return;
+		}
 
 		if (!EntityLists.MULTISEAT_MOUNTABLES.contains(event.getVehicle().getType()))
 			return;

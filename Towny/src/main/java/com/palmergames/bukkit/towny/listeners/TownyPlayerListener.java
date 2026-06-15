@@ -1000,8 +1000,9 @@ public class TownyPlayerListener implements Listener {
 		if (cache != null)
 			cache.resetAndUpdate(to);
 
-		// Paper doesn't currently throw PlayerMoveEvents for passengers in vehicles who aren't the driver.
-		// This workaround ensures that any passengers that are players will cause PlayerChangePlotEvents.
+		// Paper doesn't currently throw PlayerMoveEvents for passengers in vehicles who
+		// aren't the driver (including minecarts.) This workaround ensures that any
+		// passengers that are players will cause PlayerChangePlotEvents.
 		if (player.isInsideVehicle())
 			handleAnimalVehiclesWorkaround(player.getVehicle(), from, to);
 
