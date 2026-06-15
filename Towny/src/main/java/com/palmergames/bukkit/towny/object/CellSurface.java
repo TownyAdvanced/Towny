@@ -34,13 +34,15 @@ public class CellSurface {
 
 	public void runClaimingParticleOverSurfaceAtPlayer(Player player) {
 		final World world = worldCoord.getBukkitWorld();
-		if (world == null)
+		if (world == null || !world.equals(player.getWorld()))
 			return;
 
 		// Create a Map of rings of BlockPos' which will expand outwards from the Player
 		// location if they are stood in the WorldCoord (or from the correct edge block
 		// of the WorldCoord if they are stood outside of it.)
-		Map<Integer, Set<BlockPos>> toRender = mapRingsOfClaimParticles(getX(player.getLocation()), getZ(player.getLocation()));
+		final int x = Location.locToBlock(player.getX());
+		final int z = Location.locToBlock(player.getZ());
+		Map<Integer, Set<BlockPos>> toRender = mapRingsOfClaimParticles(getX(x, z), getZ(x, z));
 
 		// Parse over the Map to generate particles on each successive ring with an
 		// added tick of delay (using the Map's Integer key to determine delay.)
@@ -99,20 +101,20 @@ public class CellSurface {
 		return new Location(world, x, world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES), z).add(0.5, 0.95, 0.5); // centre and raise slightly.
 	}
 
-	private int getX(Location playerLoc) {
-		if (WorldCoord.parseWorldCoord(playerLoc).equals(worldCoord))
-			return playerLoc.getBlockX();
+	private int getX(int playerX, int playerZ) {
+		if (worldCoord.containsCoordinates(playerX, playerZ))
+			return playerX;
 
 		// Player is outside of the WorldCoord, try to match up their X with an X in the WorldCoord or hit the correct corner.
-		return findSuitableXorZ(playerLoc.getBlockX(), worldCoord.getBoundingBox().getMaxX(), worldCoord.getBoundingBox().getMinX());
+		return findSuitableXorZ(playerX, worldCoord.getBoundingBox().getMaxX(), worldCoord.getBoundingBox().getMinX());
 	}
 
-	private int getZ(Location playerLoc) {
-		if (WorldCoord.parseWorldCoord(playerLoc).equals(worldCoord))
-			return playerLoc.getBlockZ();
+	private int getZ(int playerX, int playerZ) {
+		if (worldCoord.containsCoordinates(playerX, playerZ))
+			return playerZ;
 
 		// Player is outside of the WorldCoord, try to match up their Z with an Z in the WorldCoord or hit the correct corner.
-		return findSuitableXorZ(playerLoc.getBlockZ(), worldCoord.getBoundingBox().getMaxZ(), worldCoord.getBoundingBox().getMinZ());
+		return findSuitableXorZ(playerZ, worldCoord.getBoundingBox().getMaxZ(), worldCoord.getBoundingBox().getMinZ());
 	}
 
 	private int findSuitableXorZ(int player, double max, double min) {

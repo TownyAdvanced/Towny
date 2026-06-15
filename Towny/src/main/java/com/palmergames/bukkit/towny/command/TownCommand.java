@@ -2621,16 +2621,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!world.isClaimable())
 			throw new TownyException(Translatable.of("msg_not_claimable"));
 
-		Location spawnLocation = player.getLocation();
-		Coord key = Coord.parseCoord(player);
+		WorldCoord key = WorldCoord.parseWorldCoord(player);
 
-		if (!TownyAPI.getInstance().isWilderness(spawnLocation))
+		if (!TownyAPI.getInstance().isWilderness(key))
 			throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
 		if (!adminCreated) {
 			// Check that a town isn't being formed inside of a biome that isn't allowed to be claimed.
 			if (TownySettings.isUnwantedBiomeClaimingEnabled() || TownySettings.isOceanClaimingBlocked()) {
-				List<WorldCoord> selection = Arrays.asList(WorldCoord.parseWorldCoord(spawnLocation));
+				List<WorldCoord> selection = Arrays.asList(key);
 				selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
 				selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
 				if (selection.isEmpty())
@@ -2639,6 +2638,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	
 			ProximityUtil.allowTownHomeBlockOrThrow(world, key, null, true);
 		}
+
+		Location spawnLocation = player.getLocation();
 
 		// If the town doesn't cost money to create, just make the Town.
 		if (noCharge || !TownyEconomyHandler.isActive()) {

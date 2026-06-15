@@ -116,7 +116,7 @@ public class TownyAsciiMap {
 			return;
 		}
 		
-		WorldCoord pos = WorldCoord.parseWorldCoord(player.getLocation());
+		WorldCoord pos = WorldCoord.parseWorldCoord(player);
 		final Translator translator = Translator.locale(player);
 
 		// Generate Map 

@@ -655,7 +655,7 @@ public class TownyAPI {
      */
     @Nullable
     public TownBlock getTownBlock(@NotNull Player player) {
-		return WorldCoord.parseWorldCoord(player.getLocation()).getTownBlockOrNull();
+		return WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
     }
     
     /** 

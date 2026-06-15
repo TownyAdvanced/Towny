@@ -834,7 +834,7 @@ public class SpawnUtil {
 				player.getVehicle().eject();
 
 			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
-			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player));
 
 			final Location prior = player.getLocation();
 			player.teleportAsync(spawnLoc, TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
