@@ -15,7 +15,6 @@ import org.bukkit.UnsafeValues;
 import org.bukkit.World;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import org.bukkit.block.Biome;
 
 public class BiomeUtil {
 
