@@ -767,6 +767,26 @@ public class TownyMessaging {
 		player.sendMessage(pageFooter);
 	}
 
+	public static void sendTownPlotTrustList(CommandSender sender, Resident res, Town town, List<TownBlock> trustedPlots, int page, int total) {
+		Translator translator = Translator.locale(sender);
+		int plotCount = trustedPlots.size();
+		int iMax = Math.min(page * 10, plotCount);
+		Component[] plotFormatted = new Component[(page * 10) > plotCount ? plotCount % 10 : 10];
+
+		for (int i = (page - 1) * 10; i < iMax; i++)
+			plotFormatted[i % 10] = 
+				Component.text(" - ", NamedTextColor.DARK_GRAY)
+						.append(Component.text(trustedPlots.get(i).getWorldCoord().toString(), NamedTextColor.AQUA));
+
+		sendMessage(sender, ChatTools.formatTitle(translator.of("msg_town_plots_trustlist_title", town.getName(), res.getName())));
+		for (Component plotCoordLine : plotFormatted)
+			sender.sendMessage(plotCoordLine);
+
+		// Page navigation
+		Component pageFooter = getPageNavigationFooter("towny:town plots " + town.getName() + " trustlist", page, res.getName(), total, translator);
+		sender.sendMessage(pageFooter);
+	}
+
 	@SuppressWarnings("unused")
 	private static void sendJailList$$bridge$$public(Player player, Town town, int page, int total) {
 		sendJailList(player, town, page, total);

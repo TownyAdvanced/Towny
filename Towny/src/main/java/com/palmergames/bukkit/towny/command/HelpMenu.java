@@ -569,6 +569,7 @@ public enum HelpMenu {
 				.add("outlawlist (town)", Translatable.of("town_help_15"))
 				.add("plotgrouplist (town) (page)", Translatable.of("town_help_16"))
 				.add("plots (town)", Translatable.of("town_help_17"))
+				.add("plots (town) trustlist (player)", Translatable.of("town_help_37"))
 				.add("outlaw add/remove [name]", Translatable.of("town_help_25"))
 				.add("say", "[message]", Translatable.of("town_help_18"))
 				.add("spawn", Translatable.of("town_help_5"))
