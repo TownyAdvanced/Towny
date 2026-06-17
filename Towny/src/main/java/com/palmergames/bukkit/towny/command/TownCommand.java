@@ -320,7 +320,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "online":
 		case "reslist":
 		case "outlawlist":
-		case "plots":
 		case "delete":
 		case "join":
 		case "merge":
@@ -331,6 +330,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "ranklist":
 			if (args.length == 2)
 				return getTownyStartingWith(args[1], "t");
+			break;
+		case "plots":
+			if (args.length == 2)
+				return getTownyStartingWith(args[1], "t");
+			if (args.length == 3)
+				return Arrays.asList("trustlist");
+			if (args.length == 4)
+				return getTownyStartingWith(args[3], "r");
 			break;
 		case "deposit":
 			if (args.length == 3)
