@@ -13,6 +13,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -91,6 +92,10 @@ public class WorldCoord extends Coord {
 
 	public static WorldCoord parseWorldCoord(Block block) {
 		return new WorldCoord(block.getWorld(), toCell(block.getX()), toCell(block.getZ()));
+	}
+
+	public static WorldCoord parseWorldCoord(final BlockState blockState) {
+		return new WorldCoord(blockState.getWorld(), toCell(blockState.getX()), toCell(blockState.getZ()));
 	}
 
 	public WorldCoord add(int xOffset, int zOffset) {
