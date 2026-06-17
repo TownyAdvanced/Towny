@@ -1119,17 +1119,38 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void townPlotsTrustList(CommandSender sender, Town town, String residentName, Translator translator, String[] pageArg) throws TownyException {
-		List<TownBlock> trustedPlots = new ArrayList<>();
-		Resident res = getResidentOrThrow(residentName);
-		for (TownBlock tb : town.getTownBlocks())
-			if (tb.hasTrustedResident(res))
-				trustedPlots.add(tb);
 
-		if (trustedPlots.isEmpty())
+		// Uses a Map to keep track of PlotGroup names to avoid duplicates.
+		Map<String,Component> plotLines = new HashMap<>();
+		Resident res = getResidentOrThrow(residentName);
+		for (TownBlock tb : town.getTownBlocks()) {
+			// Has a PlotGroup
+			if (tb.hasPlotObjectGroup()) {
+				if (!tb.getPlotObjectGroup().hasTrustedResident(res))
+					continue;
+
+				String plotGroupName = tb.getPlotObjectGroup().getName();
+				if (plotLines.containsKey(plotGroupName))
+					continue;
+
+				plotLines.put(plotGroupName, Component.text(StringMgmt.remUnderscore(plotGroupName), NamedTextColor.AQUA)
+						.append(Component.text(translator.of("msg_list_plotgroups_trustlist_component", tb.getPlotObjectGroup().getTownBlocks().size()), NamedTextColor.WHITE)));
+				continue;
+			}
+			// Not a PlotGroup
+			if (!tb.hasTrustedResident(res))
+				continue;
+
+			String worldCoord = tb.getWorldCoord().toString();
+			String plotName = !tb.getName().isEmpty() ? StringMgmt.remUnderscore(tb.getName()) + " " + worldCoord : worldCoord;
+			plotLines.put(worldCoord, Component.text(plotName, NamedTextColor.AQUA));
+		}
+
+		if (plotLines.isEmpty())
 			throw new TownyException(translator.of("msg_err_resident_has_no_trusted_plots", res.getName(), town.getName()));
 
 		int page = 1;
-		int total = (int) Math.ceil(((double) trustedPlots.size()) / ((double) 10));
+		int total = (int) Math.ceil(((double) plotLines.size()) / ((double) 10));
 		if (pageArg.length == 1) {
 			page = MathUtil.getPositiveIntOrThrow(pageArg[0]);
 			if (page == 0)
@@ -1139,7 +1160,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (page > total)
 			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
-		TownyMessaging.sendTownPlotTrustList(sender, res, town, trustedPlots, page, total);
+		List<Component> displayedLines = plotLines.values().stream().collect(Collectors.toList());
+		TownyMessaging.sendTownPlotTrustList(sender, res, town, displayedLines, page, total);
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {

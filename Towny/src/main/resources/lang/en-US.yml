@@ -2719,3 +2719,4 @@ msg_towny_prices_percentage_capped_at: ", up to %s"
 msg_err_resident_has_no_trusted_plots: "%s is not trusted in any plots in the town %s."
 
 msg_town_plots_trustlist_title: "%s Trusted Plot List (%s)"
+msg_list_plotgroups_trustlist_component: " (Group of %s plots)"
