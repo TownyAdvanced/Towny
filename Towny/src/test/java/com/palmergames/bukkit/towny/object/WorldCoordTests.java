@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.google.common.collect.Iterables;
-import com.palmergames.bukkit.towny.test.BukkitMockExtension;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import com.palmergames.util.Pair;
 import org.bukkit.World;
 import org.junit.jupiter.api.RepeatedTest;
@@ -14,7 +14,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(BukkitMockExtension.class)
+@ExtendWith(TownyConfigExtension.class)
 public class WorldCoordTests {	
 	@Test
 	void testChunkPositions() {
