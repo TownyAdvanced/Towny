@@ -803,6 +803,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		String oldName = resident.getName();
 		
+		// A resident with this name already exists in the database, probably someone
+		// who has changed their name but hasn't logged in yet.
+		Resident existingResident = universe.getResident(oldName);
+		if (existingResident != null) {
+			// Give the previous resident to hold this name a temporary name while leaving
+			// their UUID intact, allowing Towny to properly rename them if they do log back
+			// in some day.
+			renamePlayer(existingResident, generateReplacementResidentName());
+		}
+
 		try {
 			double balance = 0.0D;
 
@@ -1217,30 +1227,54 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Random r = new Random();
 		String replacementName = "replacementname" + r.nextInt(99) + 1;
 		try {
-			replacementName = getNextName(town);
+			replacementName = getNextName(town ? 1 : 2);
 		} catch (TownyException ignored) {
 			// fallback to replacement name
 		}
 		return replacementName;
 	}
 	
-	
-	private String getNextName(boolean town) throws TownyException  {
-		String name = town ? "Town" : "Nation";
-		
+
+	/**
+	 * A crude by effective renaming method
+	 * @param objectType where 1 = Town, 2 = Nation, 3 = Resident
+	 * @return a replacement name for a towny object
+	 * @throws TownyException thrown in the unlikely scenario we hit a race condition.
+	 */
+	private String getNextName(int objectType) throws TownyException  {
+		String name = switch(objectType) {
+		case 1 -> "Town";
+		case 2 -> "Nation";
+		case 3 -> "Resident";
+		default -> throw new IllegalArgumentException("Unexpected value: " + objectType);
+		};
 		int i = 0;
 		do {
 			String newName = name + ++i;
-			if (town) {
+			if (objectType == 1) {
 				if (!universe.hasTown(newName))
 					return newName;
-		    } else { 
+			} else if (objectType == 2) {
 				if (!universe.hasNation(newName))
 					return newName;
-		    }
+			} else if (objectType == 3) {
+				if (!universe.hasResident(newName))
+					return newName;
+			}
 			if (i > 100000)
 				throw new TownyException("Too many replacement names.");
 		} while (true);
+	}
+
+	private String generateReplacementResidentName() {
+		Random r = new Random();
+		String replacementName = "replacementname" + r.nextInt(99) + 1;
+		try {
+			replacementName = getNextName(3);
+		} catch (TownyException ignored) {
+			// fallback to replacement name
+		}
+		return replacementName;
 	}
 
 	/**
