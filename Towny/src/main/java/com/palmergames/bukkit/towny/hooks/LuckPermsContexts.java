@@ -40,28 +40,28 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		registerContext("towny:mayor", resident -> Collections.singleton(String.valueOf(resident.isMayor())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:king", resident -> Collections.singleton(String.valueOf(resident.isKing())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:insidetown", resident -> {
-			PlayerCache cache = plugin.getCache(resident.getPlayer());
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
 			if (cache == null)
 				return Collections.emptyList();
 			
-			return Optional.ofNullable(cache.getLastTownBlock()).map(wc -> Collections.singleton(String.valueOf(wc.hasTownBlock()))).orElse(Collections.emptySet());
+			return Collections.singleton(String.valueOf(cache.getLastTownBlock().hasTownBlock()));
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:insideowntown", resident -> {
-			PlayerCache cache = plugin.getCache(resident.getPlayer());
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
 			if (cache == null)
 				return Collections.emptyList();
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownOrNull()).map(town -> Collections.singleton(String.valueOf(town.hasResident(resident)))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:insideownplot", resident -> {
-			PlayerCache cache = plugin.getCache(resident.getPlayer());
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
 			if (cache == null)
 				return Collections.emptyList();
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.hasResident(resident)))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:plot_type_at_player", resident -> {
-			PlayerCache cache = plugin.getCache(resident.getPlayer());
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
 			if (cache == null)
 				return Collections.emptyList();
 
