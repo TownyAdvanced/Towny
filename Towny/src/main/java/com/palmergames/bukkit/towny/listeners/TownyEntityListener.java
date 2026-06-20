@@ -362,7 +362,7 @@ public class TownyEntityListener implements Listener {
 		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return false;
 
-		// ignore Citizens NPCs and named-mobs (if configured.) 
+		// ignore Citizens NPCs, named-mobs (if configured) and ignored spawn reasons.
 		if ((livingEntity != null && entityIsExempt(livingEntity)) || MobRemovalTimerTask.isSpawnReasonIgnored(reason)) {
 			return false;
 		}
@@ -372,7 +372,7 @@ public class TownyEntityListener implements Listener {
 			|| disallowedWildernessMob(townyWorld.hasWildernessMobs(), (townBlock = TownyAPI.getInstance().getTownBlock(location)) == null, entityType) // Wilderness mobs
 			|| disallowedTownMob(entityType, livingEntity, townBlock, townyWorld)) { // Town mobs
 			
-			return weAreAllowedToRemoveThis(livingEntity, entityType, location, reason);
+			return areWeAllowedToRemoveThis(livingEntity, entityType, location, reason);
 		}
 
 		return false;
@@ -422,7 +422,7 @@ public class TownyEntityListener implements Listener {
 	 * @param spawnReason The reason for the spawn.   
 	 * @return true if Towny is allowed to remove this entity.
 	 */
-	private boolean weAreAllowedToRemoveThis(final @Nullable Entity entity, final EntityType entityType, final Location location, final CreatureSpawnEvent.SpawnReason spawnReason) {
+	private boolean areWeAllowedToRemoveThis(final @Nullable Entity entity, final EntityType entityType, final Location location, final CreatureSpawnEvent.SpawnReason spawnReason) {
 		return MobSpawnRemovalEvent.getHandlerList().getRegisteredListeners().length == 0 || new MobSpawnRemovalEvent(entity, entityType, location, spawnReason).callEvent();
 	}
 
