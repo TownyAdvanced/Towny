@@ -806,7 +806,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// A resident with this name already exists in the database, probably someone
 		// who has changed their name but hasn't logged in yet.
 		Resident existingResident = universe.getResident(oldName);
-		if (existingResident != null) {
+		if (existingResident != null && !existingResident.getUUID().equals(resident.getUUID())) {
+			// The UUIDs do not match, so this is a case of the existingResident changing their
+			// Minecraft name and not logging into the server.
 			// Give the previous resident to hold this name a temporary name while leaving
 			// their UUID intact, allowing Towny to properly rename them if they do log back
 			// in some day.
@@ -840,7 +842,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Save resident with new name.
 			saveResident(resident);
 		} finally {
-			lock.unlock();			
+			lock.unlock();
 		}
 		
 		BukkitTools.fireEvent(new RenameResidentEvent(oldName, resident));
