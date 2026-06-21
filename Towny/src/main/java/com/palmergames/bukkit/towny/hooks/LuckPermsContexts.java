@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,44 +27,51 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class LuckPermsContexts implements ContextCalculator<Player> {
+	private final Towny plugin;
 	private LuckPerms luckPerms;
 	private final Set<Calculator> calculators = new HashSet<>();
 
 	public LuckPermsContexts(@NotNull Towny plugin) {
+		this.plugin = plugin;
 		registerContext("towny:resident", resident -> Collections.singleton(String.valueOf(resident.hasTown())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:nation_resident", resident -> Collections.singleton(String.valueOf(resident.hasNation())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:mayor", resident -> Collections.singleton(String.valueOf(resident.isMayor())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:king", resident -> Collections.singleton(String.valueOf(resident.isKing())), () -> Arrays.asList("true", "false"));
-		registerContext("towny:insidetown", resident -> {
-			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null)
-				return Collections.emptyList();
+		registerContext("towny:insidetown", (player, resident) -> {
+			PlayerCache cache = getPlayerCache(player);
+			if (cache == null) {
+				return Set.of();
+			}
 			
 			return Collections.singleton(String.valueOf(cache.getLastTownBlock().hasTownBlock()));
 		}, () -> Arrays.asList("true", "false"));
-		registerContext("towny:insideowntown", resident -> {
-			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null)
-				return Collections.emptyList();
+		registerContext("towny:insideowntown", (player, resident) -> {
+			PlayerCache cache = getPlayerCache(player);
+			if (cache == null) {
+				return Set.of();
+			}
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownOrNull()).map(town -> Collections.singleton(String.valueOf(town.hasResident(resident)))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
-		registerContext("towny:insideownplot", resident -> {
-			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null)
-				return Collections.emptyList();
+		registerContext("towny:insideownplot", (player, resident) -> {
+			PlayerCache cache = getPlayerCache(player);
+			if (cache == null) {
+				return Set.of();
+			}
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.hasResident(resident)))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
-		registerContext("towny:plot_type_at_player", resident -> {
-			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null)
-				return Collections.emptyList();
+		registerContext("towny:plot_type_at_player", (player, resident) -> {
+			PlayerCache cache = getPlayerCache(player);
+			if (cache == null) {
+				return Set.of();
+			}
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.getTypeName().toLowerCase(Locale.ROOT)))).orElse(Collections.emptySet());
 		}, () -> TownBlockTypeHandler.getTypes().keySet());
@@ -76,22 +84,40 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		this.calculators.removeIf(calculator -> !TownySettings.isContextEnabled(calculator.context));
 		plugin.getLogger().info("Enabled LuckPerms contexts: " + this.calculators.stream().map(Calculator::context).collect(Collectors.joining(", ")));
 	}
+
+	/**
+	 * {@return the cache for the player, or null if towny is not enabled in the world they are in}
+	 * @param player The player to get the cache for.
+	 */
+	private @Nullable PlayerCache getPlayerCache(final Player player) {
+		if (!TownyAPI.getInstance().isTownyWorld(player.getWorld())) {
+			return null;
+		}
+
+		return plugin.getCache(player);
+	}
 	
 	public void registerContexts() {
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
 			this.luckPerms = provider.getProvider();
 			luckPerms.getContextManager().registerCalculator(this);
-		} else
+		} else {
 			this.luckPerms = null;
+		}
 	}
 	
 	public void unregisterContexts() {
-		if (this.luckPerms != null)
+		if (this.luckPerms != null) {
 			this.luckPerms.getContextManager().unregisterCalculator(this);
+		}
 	}
 	
 	private void registerContext(String context, Function<Resident, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
+		registerContext(context, (player, resident) -> calculator.apply(resident), suggestions);
+	}
+
+	private void registerContext(String context, BiFunction<Player, Resident, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
 		calculators.add(new Calculator(context, calculator, suggestions));
 	}
 	
@@ -102,7 +128,7 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 			return;
 		
 		for (Calculator calculator : this.calculators)
-			calculator.function().apply(resident).forEach(value -> contextConsumer.accept(calculator.context, value));
+			calculator.function().apply(player, resident).forEach(value -> contextConsumer.accept(calculator.context, value));
 	}
 
 	@Override
@@ -115,5 +141,5 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		return builder.build();
 	}
 	
-	private record Calculator(String context, Function<Resident, Iterable<String>> function, Supplier<Iterable<String>> suggestions) {}
+	private record Calculator(String context, BiFunction<Player, Resident, Iterable<String>> function, Supplier<Iterable<String>> suggestions) {}
 }
