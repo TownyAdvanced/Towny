@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.db;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -68,6 +69,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -76,6 +78,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,6 +92,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
@@ -1257,7 +1265,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	private String attemptToFetchUpdatedResidentName(UUID uuid) {
-		String profileName = requestNameFromPlayerProfile(uuid);
+		String profileName = requestNameFromMojangAPI(uuid);
 		if (profileName != null)
 			return profileName;
 		else
@@ -1269,10 +1277,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Nullable
-	private static String requestNameFromPlayerProfile(UUID uuid) {
-		PlayerProfile profile = Bukkit.getServer().createProfile(uuid, "");
-		profile.complete(false);
-		return profile.getName();
+	private static String requestNameFromMojangAPI(UUID uuid) {
+		String url = "https://api.minecraftservices.com/minecraft/profile/lookup/" + uuid.toString();
+		String name = null;
+		// TODO: When we're on Java 21 use the Auto-closeable aspect of HttpClient.
+		ExecutorService executor = Executors.newCachedThreadPool();
+		HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
+		try {
+			final HttpClient client = HttpClient.newBuilder().executor(executor).build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			name = JsonParser.parseString(response.body()).getAsJsonObject().get("name").getAsString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			executor.shutdown();
+		}
+		return name;
 	}
 
 	/**
