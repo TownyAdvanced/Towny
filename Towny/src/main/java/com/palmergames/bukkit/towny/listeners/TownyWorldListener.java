@@ -7,15 +7,18 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.List;
+import java.util.UUID;
 
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -149,19 +152,51 @@ public class TownyWorldListener implements Listener {
 			event.getBlocks().removeAll(disallowed);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPortalCreate(PortalCreateEvent event) {
 		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR) ||
 			!TownyAPI.getInstance().isTownyWorld(event.getWorld()) ||
-			!(event.getEntity() instanceof Player player))
+			event.getEntity() == null)
 			return;
 		
-		for (BlockState block : event.getBlocks()) {
-			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canBuild(player, block.getLocation(), Material.NETHER_PORTAL)) {
-				TownyMessaging.sendErrorMsg(event.getEntity(), Translatable.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
-				event.setCancelled(true);
-				break;
+		Player player = null;
+		if (event.getEntity() instanceof Player p) {
+			player = p;
+		} else if (event.getEntity() instanceof Projectile projectile && projectile.getShooter() instanceof Player p) {
+			player = p;
+		} else if (event.getEntity() instanceof Item item) {
+			final UUID thrower = item.getThrower();
+			if (thrower != null) {
+				player = plugin.getServer().getPlayer(thrower);
+			}
+		}
+
+		if (player != null) {
+			for (BlockState block : event.getBlocks()) {
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				if (!TownyActionEventExecutor.canBuild(player, block.getLocation(), block.getType())) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
+					event.setCancelled(true);
+					break;
+				}
+			}
+		} else {
+			WorldCoord lastWorldCoord = null;
+
+			// No player is involved in the event as far as we can tell, prevent creating the portal based on whether there's a town on the other side.
+			for (final BlockState block : event.getBlocks()) {
+				WorldCoord worldCoord;
+				if (lastWorldCoord != null && lastWorldCoord.containsCoordinate(block.getX(), block.getZ())) {
+					continue;
+				} else {
+					worldCoord = WorldCoord.parseWorldCoord(block);
+					lastWorldCoord = worldCoord;
+				}
+
+				if (worldCoord.hasTownBlock()) {
+					event.setCancelled(true);
+					break;
+				}
 			}
 		}
 	}
