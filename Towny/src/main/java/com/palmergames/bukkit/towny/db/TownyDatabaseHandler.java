@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -812,7 +813,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Give the previous resident to hold this name a temporary name while leaving
 			// their UUID intact, allowing Towny to properly rename them if they do log back
 			// in some day.
-			renamePlayer(existingResident, generateReplacementResidentName());
+			renamePlayer(existingResident, attemptToFetchUpdatedResidentName(existingResident.getUUID()));
 		}
 
 		try {
@@ -1255,15 +1256,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} while (true);
 	}
 
-	private String generateReplacementResidentName() {
-		Random r = new Random();
-		String replacementName = "replacementname" + r.nextInt(99) + 1;
-		try {
-			replacementName = getNextName(3);
-		} catch (TownyException ignored) {
-			// fallback to replacement name
-		}
-		return replacementName;
+	private String attemptToFetchUpdatedResidentName(UUID uuid) {
+		String profileName = requestNameFromPlayerProfile(uuid);
+		if (profileName != null)
+			return profileName;
+		else
+			try {
+				return getNextName(3);
+			} catch (TownyException e) {
+				return uuid.toString().replace("-", "");
+			}
+	}
+
+	@Nullable
+	private static String requestNameFromPlayerProfile(UUID uuid) {
+		PlayerProfile profile = Bukkit.getServer().createProfile(uuid, "");
+		profile.complete(false);
+		return profile.getName();
 	}
 
 	/**
