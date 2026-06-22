@@ -629,6 +629,32 @@ public class TownyAPI {
 				townFilter.add(town);
 		return townFilter;
 	}
+
+	/**
+	 * Get a List of all the Towns that are private
+	 * 
+	 * @return a List of all the private Towns
+	 */
+	public List<Town> getPrivateTowns() {
+		List<Town> townFilter = new ArrayList<>();
+		for (Town town : getTowns())
+			if (!town.isPublic())
+				townFilter.add(town);
+		return townFilter;
+	}
+
+	/**
+	 * Get a List of all the Towns with an active War
+	 * 
+	 * @return a List of all the Towns with an active War
+	 */
+	public List<Town> getTownsWithActiveWar() {
+		List<Town> townFilter = new ArrayList<>();
+		for (Town town : getTowns())
+			if (town.hasActiveWar())
+				townFilter.add(town);
+		return townFilter;
+	}
     
     /**
      * Get the {@link TownBlock} at a specific {@link Location}.
