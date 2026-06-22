@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
 import com.palmergames.util.Pair;
 
+import it.unimi.dsi.fastutil.HashCommon;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -102,7 +103,7 @@ public class WorldCoord extends Coord {
 
 		int hash = 17;
 		hash = hash * 27 + this.worldName.hashCode();
-		hash = hash * 27 + getX();
+		hash = hash * 27 + HashCommon.mix(getX());
 		hash = hash * 27 + getZ();
 		return hash;
 	}
