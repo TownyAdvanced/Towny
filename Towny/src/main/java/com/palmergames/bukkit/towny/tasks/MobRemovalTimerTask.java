@@ -49,15 +49,27 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
-		return typesOfWorldMobsToRemove.contains(livingEntity.getType());
+		return isRemovingWorldEntity(livingEntity.getType());
+	}
+
+	public static boolean isRemovingWorldEntity(final EntityType entityType) {
+		return typesOfWorldMobsToRemove.contains(entityType);
 	}
 	
 	public static boolean isRemovingWildernessEntity(LivingEntity livingEntity) {
-		return typesOfWildernessMobsToRemove.contains(livingEntity.getType());
+		return isRemovingWildernessEntity(livingEntity.getType());
+	}
+
+	public static boolean isRemovingWildernessEntity(final EntityType entityType) {
+		return typesOfWildernessMobsToRemove.contains(entityType);
 	}
 
 	public static boolean isRemovingTownEntity(LivingEntity livingEntity) {
-		return typesOfTownMobsToRemove.contains(livingEntity.getType());
+		return isRemovingTownEntity(livingEntity.getType());
+	}
+
+	public static boolean isRemovingTownEntity(final EntityType entityType) {
+		return typesOfTownMobsToRemove.contains(entityType);
 	}
 	
 	public static boolean isSpawnReasonIgnored(@NotNull Entity entity) {
@@ -69,6 +81,10 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			return true;
 
 		return ignoredSpawnReasons.contains(entity.getEntitySpawnReason().name());
+	}
+
+	public static boolean isSpawnReasonIgnored(final @NotNull CreatureSpawnEvent.SpawnReason spawnReason) {
+		return ignoredSpawnReasons.contains(spawnReason.name());
 	}
 
 	@Override

@@ -7,6 +7,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when Towny is attempting to remove an entity already in the world. If canceled, the entity will not be removed.
+ */
 public class MobRemovalEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
