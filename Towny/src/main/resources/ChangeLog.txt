@@ -10923,3 +10923,10 @@ v0.92.0.11:
     - all of your towny\data\worlds\ files' explosion revert entities.
   - Skip intermediate Location step of parsing a WC from entities, courtesy of Warrior with PR #8218.
   - Fix driver of minecarts not throwing playerchangeplotevent.
+0.103.0.5:
+  - Pin paper api dependency version, courtesy of Warrior with PR #8226.
+  - Fix context calculator creating new player caches, courtesy of Warrior with PR #8223.
+  - Use the pre spawn event for additionally preventing spawns, courtesy of Warrior with PR #8222.
+  - Improve WorldCoord hashCode uniqueness, courtesy of Warrior with PR #8221.
+  - Handle portals being created by entities, courtesy of Warrior with PR #8220.
+  - Bump com.zaxxer:HikariCP from 7.0.2 to 7.1.0.
