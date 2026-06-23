@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -67,6 +69,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -75,6 +78,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,6 +92,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
@@ -803,14 +812,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		String oldName = resident.getName();
 		
-		try {
-			double balance = 0.0D;
+		// A resident with this name already exists in the database, probably someone
+		// who has changed their name but hasn't logged in yet.
+		Resident existingResident = universe.getResident(oldName);
+		if (existingResident != null && !existingResident.getUUID().equals(resident.getUUID())) {
+			// The UUIDs do not match, so this is a case of the existingResident changing their
+			// Minecraft name and not logging into the server.
+			// Give the previous resident to hold this name a temporary name while leaving
+			// their UUID intact, allowing Towny to properly rename them if they do log back
+			// in some day.
+			renamePlayer(existingResident, attemptToFetchUpdatedResidentName(existingResident.getUUID()));
+		}
 
-			// Get balance in case this a server using ico5.  
-			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
-				balance = resident.getAccount().getHoldingBalance();
-				resident.getAccount().removeAccount();
-			}
+		try {
 			// Change account name over.
 			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
 				resident.getAccount().setName(newName);
@@ -821,16 +835,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.setName(newName);
 			// Re-register the resident with the new name.
 			universe.registerResident(resident);
-			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
-			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
-				resident.getAccount().setName(resident.getName());
-				resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
-			}
-			
 			// Save resident with new name.
 			saveResident(resident);
 		} finally {
-			lock.unlock();			
+			lock.unlock();
 		}
 		
 		BukkitTools.fireEvent(new RenameResidentEvent(oldName, resident));
@@ -1217,30 +1225,75 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Random r = new Random();
 		String replacementName = "replacementname" + r.nextInt(99) + 1;
 		try {
-			replacementName = getNextName(town);
+			replacementName = getNextName(town ? 1 : 2);
 		} catch (TownyException ignored) {
 			// fallback to replacement name
 		}
 		return replacementName;
 	}
 	
-	
-	private String getNextName(boolean town) throws TownyException  {
-		String name = town ? "Town" : "Nation";
-		
+
+	/**
+	 * A crude by effective renaming method
+	 * @param objectType where 1 = Town, 2 = Nation, 3 = Resident
+	 * @return a replacement name for a towny object
+	 * @throws TownyException thrown in the unlikely scenario we hit a race condition.
+	 */
+	private String getNextName(int objectType) throws TownyException  {
+		String name = switch(objectType) {
+		case 1 -> "Town";
+		case 2 -> "Nation";
+		case 3 -> "Resident";
+		default -> throw new IllegalArgumentException("Unexpected value: " + objectType);
+		};
 		int i = 0;
 		do {
 			String newName = name + ++i;
-			if (town) {
+			if (objectType == 1) {
 				if (!universe.hasTown(newName))
 					return newName;
-		    } else { 
+			} else if (objectType == 2) {
 				if (!universe.hasNation(newName))
 					return newName;
-		    }
+			} else if (objectType == 3) {
+				if (!universe.hasResident(newName))
+					return newName;
+			}
 			if (i > 100000)
 				throw new TownyException("Too many replacement names.");
 		} while (true);
+	}
+
+	private String attemptToFetchUpdatedResidentName(UUID uuid) {
+		String profileName = requestNameFromMojangAPI(uuid);
+		if (profileName != null)
+			return profileName;
+		else
+			try {
+				return getNextName(3);
+			} catch (TownyException e) {
+				return uuid.toString().replace("-", "");
+			}
+	}
+
+	@Nullable
+	private static String requestNameFromMojangAPI(UUID uuid) {
+		String url = "https://api.minecraftservices.com/minecraft/profile/lookup/" + uuid.toString();
+		String name = null;
+		// TODO: When we're on Java 21 use the Auto-closeable aspect of HttpClient.
+		ExecutorService executor = Executors.newCachedThreadPool();
+		HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
+		try {
+			final HttpClient client = HttpClient.newBuilder().executor(executor).build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			name = JsonParser.parseString(response.body()).getAsJsonObject().get("name").getAsString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			executor.shutdown();
+		}
+		return name;
 	}
 
 	/**
