@@ -10930,3 +10930,6 @@ v0.92.0.11:
   - Improve WorldCoord hashCode uniqueness, courtesy of Warrior with PR #8221.
   - Handle portals being created by entities, courtesy of Warrior with PR #8220.
   - Bump com.zaxxer:HikariCP from 7.0.2 to 7.1.0.
+0.103.0.6:
+  - Fix for players unable to log in with a new username.
+    - Players who logged in with a username that was previoulsy used by another existing resident (with a different UUID,) will no longer cause issues.
