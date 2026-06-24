@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.object.comparators;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -42,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 public class ComparatorCaches {
 	
 	private static final LoadingCache<ComparatorType, List<Pair<UUID, Component>>> townCompCache = CacheBuilder.newBuilder()
-			.expireAfterWrite(10, TimeUnit.MINUTES)
+			.expireAfterWrite(Duration.ofMinutes(10))
 			.build(new CacheLoader<>() {
 				public @NotNull List<Pair<UUID, Component>> load(@NotNull ComparatorType compType) {
 					return gatherTownLines(compType);
@@ -50,7 +50,7 @@ public class ComparatorCaches {
 			});
 	
 	private static final LoadingCache<ComparatorType, List<Pair<UUID, Component>>> nationCompCache = CacheBuilder.newBuilder()
-			.expireAfterWrite(10, TimeUnit.MINUTES)
+			.expireAfterWrite(Duration.ofMinutes(10))
 			.build(new CacheLoader<>() {
 				public @NotNull List<Pair<UUID, Component>> load(@NotNull ComparatorType compType) {
 					return gatherNationLines(compType);
