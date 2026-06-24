@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
@@ -69,7 +68,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -1227,15 +1225,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			replacementName = getNextName(town ? 1 : 2);
 		} catch (TownyException ignored) {
-			// fallback to replacement name
+			// fallback to replacement name, this should almost never occur.
+			replacementName = cleanName(town, replacementName);
 		}
 		return replacementName;
 	}
-	
 
 	/**
 	 * A crude by effective renaming method
-	 * @param objectType where 1 = Town, 2 = Nation, 3 = Resident
+	 * @param objectType where 1 = Town, 2 = Nation
 	 * @return a replacement name for a towny object
 	 * @throws TownyException thrown in the unlikely scenario we hit a race condition.
 	 */
@@ -1243,20 +1241,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String name = switch(objectType) {
 		case 1 -> "Town";
 		case 2 -> "Nation";
-		case 3 -> "Resident";
 		default -> throw new IllegalArgumentException("Unexpected value: " + objectType);
 		};
 		int i = 0;
 		do {
 			String newName = name + ++i;
 			if (objectType == 1) {
+				newName = cleanName(true, newName);
 				if (!universe.hasTown(newName))
 					return newName;
 			} else if (objectType == 2) {
+				newName = cleanName(false, newName);
 				if (!universe.hasNation(newName))
-					return newName;
-			} else if (objectType == 3) {
-				if (!universe.hasResident(newName))
 					return newName;
 			}
 			if (i > 100000)
@@ -1264,16 +1260,61 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} while (true);
 	}
 
+	/**
+	 * Towns and Nations might not be able to specific characters, causing
+	 * replacement names to put Towny into safemode on the next startup. Replaces
+	 * numbers with their corresponding letter.
+	 * 
+	 * @param town            true when renaming a town, false when renaming a
+	 *                        nation.
+	 * @param replacementName The name selected by Towny's loop.
+	 * @return a clean name that won't cause safe mode.
+	 */
+	private String cleanName(boolean town, String replacementName) {
+		// Names can be limited to a short length.
+		if (TownySettings.getMaxNameLength() > replacementName.length()) {
+			String num = "";
+			for (int i = 1; i <= TownySettings.getMaxNameLength(); i++)
+				num += num + "9";
+
+			// Transform the name to one made up of random numbers, of the maximum length allowed.
+			// This number might be transformed into a series of random letters.
+			Random r = new Random();
+			replacementName = String.valueOf(r.nextInt(Integer.parseInt(num) + 1));
+		}
+
+		// Numbers might be entirely blocked.
+		if ((town && !TownySettings.areNumbersAllowedInTownNames()) || (!town && !TownySettings.areNumbersAllowedInNationNames())) {
+			replacementName = replacementName.replace("1", "A").replace("2", "B").replace("3", "C").replace("4", "D")
+					.replace("5", "E").replace("6", "F").replace("7", "G").replace("8", "H").replace("9", "I").replace("0", "J");
+		}
+
+		try {
+			NameValidation.testCapitalization(replacementName);
+		} catch (InvalidNameException ex) {
+			// If the name breaks the rules, remove all uppercase letters besides the first character.
+			int i = 1;
+			String newName = "";
+			for (char character : replacementName.toCharArray()) {
+				if (i == 1) {
+					newName += character;
+					continue;
+				}
+				i++;
+				if (Character.isLowerCase(character)) {
+					newName += character;
+					continue;
+				}
+				newName += Character.toString(character).toLowerCase(Locale.ROOT);
+			}
+			replacementName = newName;
+		}
+		return replacementName;
+	}
+
 	private String attemptToFetchUpdatedResidentName(UUID uuid) {
 		String profileName = requestNameFromMojangAPI(uuid);
-		if (profileName != null)
-			return profileName;
-		else
-			try {
-				return getNextName(3);
-			} catch (TownyException e) {
-				return uuid.toString().replace("-", "");
-			}
+		return profileName != null ? profileName : uuid.toString().replace("-", "");
 	}
 
 	@Nullable

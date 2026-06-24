@@ -308,7 +308,7 @@ public class NameValidation {
 	 * @param name String submitted for testing.
 	 * @throws InvalidNameException when the name uses too many capital letters.
 	 */
-	private static void testCapitalization(String name) throws InvalidNameException {
+	public static void testCapitalization(String name) throws InvalidNameException {
 		int maxCapitals = TownySettings.getMaxNameCapitalLetters();
 		if (maxCapitals == -1)
 			return;
