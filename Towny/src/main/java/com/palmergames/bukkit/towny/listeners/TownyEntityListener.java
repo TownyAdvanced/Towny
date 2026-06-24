@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -849,12 +850,12 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * When a Pig is zapped by lightning
+	 * When an entity is zapped by lightning
 	 * 
-	 * @param event - PigZapEvent
+	 * @param event - EntityZapEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPigHitByLightning(PigZapEvent event) {
+	public void onPigHitByLightning(EntityZapEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
