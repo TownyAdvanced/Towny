@@ -1070,6 +1070,13 @@ public enum ConfigNodes {
 			"# treated as normal nation members when plot perms are calculated.",
 			"# When set to false plot permission tests will treat conquered towns' residents as not members of their nations,",
 			"# preventing them from using their host nation's plots while the nation's towns have nation plot perms enabled."),
+	GNATION_SETTINGS_CAN_CONQUERED_TOWNS_BE_SANCTIONED_FROM_NATION_BONUS(
+			"global_nation_settings.can_conquered_towns_be_sanctioned_from_nation_bonus",
+			"true",
+			"",
+			"# While true, conquered towns can be sanctioned by the nation who conquered them,",
+			"# and, if sanctioned, will not receive nation bonus blocks from the nation who conquered and sanctioned them.",
+			"# When set to false, conquered towns will always receive nation bonus, and cannot be sanctioned by the conquerer nation"),
 	GNATION_SETTINGS_PROXIMITY_ROOT(
 			"global_nation_settings.proximity", "", ""),
 	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(
