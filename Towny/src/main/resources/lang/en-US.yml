@@ -80,6 +80,8 @@ towny_top_help_0: "List top residents based on subcommand."
 towny_top_help_1: "List top land-owners based on subcommand."
 towny_top_help_2: "List wealthiest based on subcommand."
 
+town_help_inactive_residents: 'Inactive Residents'
+town_help_reslist_lastonline: 'See a list of residents in the town sorted by last online.'
 town_help_1: 'Your town''s status'
 town_help_2: '[mayor]'
 town_help_3: 'Selected town''s status'
