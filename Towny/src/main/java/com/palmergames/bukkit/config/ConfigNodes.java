@@ -2056,6 +2056,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, mobs who've been named with a nametag will not be removed by the mob removal task."),
+	PROT_MOB_REMOVE_USE_PRE_SPAWN_EVENT(
+			"protection.mob_removal_uses_pre_spawn_event",
+			"false",
+			"",
+			"# If enabled, Towny will use an earlier event for preventing mobs spawning in areas where they shouldn't.",
+			"# This has the possibility of improving performance by allowing the server to perform less time validating spawns,",
+			"# but has the downside of decreasing spawn rates in areas surrounded by areas with mobs toggled off."),
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",

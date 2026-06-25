@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.listeners;
+package com.palmergames.bukkit.towny.listeners.version;
 
 import com.destroystokyo.paper.event.block.BeaconEffectEvent;
 import com.palmergames.bukkit.towny.Towny;
@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
+import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -49,7 +50,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-public class TownyPaperEvents implements SoftwareDependentListener {
+public class TownyPaperEvents implements VersionDependentListener {
 	private final Towny plugin;
 	
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
