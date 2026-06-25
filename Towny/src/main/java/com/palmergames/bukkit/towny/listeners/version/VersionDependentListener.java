@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.listeners;
+package com.palmergames.bukkit.towny.listeners.version;
 
 import com.palmergames.bukkit.towny.Towny;
 import org.bukkit.Bukkit;
@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public interface SoftwareDependentListener extends Listener {
+public interface VersionDependentListener extends Listener {
 
     void register();
 

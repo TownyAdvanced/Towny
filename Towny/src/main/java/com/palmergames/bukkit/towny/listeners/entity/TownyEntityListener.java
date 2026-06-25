@@ -1,6 +1,5 @@
-package com.palmergames.bukkit.towny.listeners;
+package com.palmergames.bukkit.towny.listeners.entity;
 
-import com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -342,20 +341,7 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPreCreatureSpawn(final PreCreatureSpawnEvent event) {
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		final Location location = event.getSpawnLocation();
-		if (preventEntitySpawn(event.getType(), event.getReason(), location, location.getWorld(), null)) {
-			event.setCancelled(true);
-		}
-	}
-
-	private boolean preventEntitySpawn(final EntityType entityType, final CreatureSpawnEvent.SpawnReason reason, final Location location, final World world, final @Nullable LivingEntity livingEntity) {
+	protected boolean preventEntitySpawn(final EntityType entityType, final CreatureSpawnEvent.SpawnReason reason, final Location location, final World world, final @Nullable LivingEntity livingEntity) {
 		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
 	
 		// ignore non-Towny worlds.
