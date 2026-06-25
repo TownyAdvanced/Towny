@@ -114,6 +114,7 @@ town_help_33: "Use /t buy ? for help."
 town_help_34: "Use /t toggle ? for help."
 town_help_35: "Use /t rank ? for help."
 town_help_36: 'List nearby towns sorted by distance.'
+town_help_37: 'List plots trusted by the given player.'
 
 town_list_help_0: "View the specified page."
 town_list_help_1: "List towns by resident-count, with the specified page."
@@ -2714,3 +2715,8 @@ msg_nation_level_unset: 'The nation %s has had their manually-set nationlevel un
 msg_err_cannot_merge_x_seconds_remaining: 'You must wait %s seconds before asking %s to merge again.'
 
 msg_towny_prices_percentage_capped_at: ", up to %s"
+
+msg_err_resident_has_no_trusted_plots: "%s is not trusted in any plots in the town %s."
+
+msg_town_plots_trustlist_title: "%s Trusted Plot List (%s)"
+msg_list_plotgroups_trustlist_component: " (Group of %s plots)"

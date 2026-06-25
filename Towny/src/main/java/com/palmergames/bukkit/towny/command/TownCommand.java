@@ -320,7 +320,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "online":
 		case "reslist":
 		case "outlawlist":
-		case "plots":
 		case "delete":
 		case "join":
 		case "merge":
@@ -331,6 +330,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "ranklist":
 			if (args.length == 2)
 				return getTownyStartingWith(args[1], "t");
+			break;
+		case "plots":
+			if (args.length == 2)
+				return getTownyStartingWith(args[1], "t");
+			if (args.length == 3)
+				return Arrays.asList("trustlist");
+			if (args.length == 4)
+				return getTownyStartingWith(args[3], "r");
 			break;
 		case "deposit":
 			if (args.length == 3)
@@ -1082,6 +1089,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		Translator translator = Translator.locale(sender);
 
+		if (args.length > 2 && args[2].equalsIgnoreCase("trustlist")) {
+			townPlotsTrustList(sender, town, args[3], translator, StringMgmt.remArgs(args, 4));
+			return;
+		}
+
 		List<String> out = new ArrayList<>();
 		out.add(ChatTools.formatTitle(town + translator.of("msg_town_plots_title")));
 		String townSize = translator.of("msg_town_plots_town_size", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString());
@@ -1111,6 +1123,52 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
 
+	}
+
+	private void townPlotsTrustList(CommandSender sender, Town town, String residentName, Translator translator, String[] pageArg) throws TownyException {
+
+		// Uses a Map to keep track of PlotGroup names to avoid duplicates.
+		Map<String,Component> plotLines = new HashMap<>();
+		Resident res = getResidentOrThrow(residentName);
+		for (TownBlock tb : town.getTownBlocks()) {
+			// Has a PlotGroup
+			if (tb.hasPlotObjectGroup()) {
+				if (!tb.getPlotObjectGroup().hasTrustedResident(res))
+					continue;
+
+				String plotGroupName = tb.getPlotObjectGroup().getName();
+				if (plotLines.containsKey(plotGroupName))
+					continue;
+
+				plotLines.put(plotGroupName, Component.text(StringMgmt.remUnderscore(plotGroupName), NamedTextColor.AQUA)
+						.append(Component.text(translator.of("msg_list_plotgroups_trustlist_component", tb.getPlotObjectGroup().getTownBlocks().size()), NamedTextColor.WHITE)));
+				continue;
+			}
+			// Not a PlotGroup
+			if (!tb.hasTrustedResident(res))
+				continue;
+
+			String worldCoord = tb.getWorldCoord().toString();
+			String plotName = !tb.getName().isEmpty() ? StringMgmt.remUnderscore(tb.getName()) + " " + worldCoord : worldCoord;
+			plotLines.put(worldCoord, Component.text(plotName, NamedTextColor.AQUA));
+		}
+
+		if (plotLines.isEmpty())
+			throw new TownyException(translator.of("msg_err_resident_has_no_trusted_plots", res.getName(), town.getName()));
+
+		int page = 1;
+		int total = (int) Math.ceil(((double) plotLines.size()) / ((double) 10));
+		if (pageArg.length == 1) {
+			page = MathUtil.getPositiveIntOrThrow(pageArg[0]);
+			if (page == 0)
+				throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+
+		if (page > total)
+			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+		List<Component> displayedLines = plotLines.values().stream().collect(Collectors.toList());
+		TownyMessaging.sendTownPlotTrustList(sender, res, town, displayedLines, page, total);
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {
