@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.town.DisplayedTownsListSortEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -82,7 +83,11 @@ public class ComparatorCaches {
 			.filter(Town::isVisibleOnTopLists)
 			.filter((Predicate<? super Town>) compType.getPredicate())
 			.sorted((Comparator<? super Town>) compType.getComparator())
-			.toList();
+			.collect(Collectors.toCollection(ArrayList::new));
+
+		DisplayedTownsListSortEvent townListSortEvent = new DisplayedTownsListSortEvent(towns, compType);
+		BukkitTools.fireEvent(townListSortEvent);
+		towns = townListSortEvent.getTowns();
 
 		boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
 				&& !TownySettings.isConfigAllowingTownSpawnNationTravel() && !TownySettings.isConfigAllowingTownSpawnNationAllyTravel();
