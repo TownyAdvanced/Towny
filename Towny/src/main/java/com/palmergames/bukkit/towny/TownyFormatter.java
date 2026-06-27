@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.town.TownDisplayReslistEvent;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nameable;
@@ -381,12 +382,14 @@ public class TownyFormatter {
 						ClickEvent.runCommand("/towny:town ranklist " + town.getName()));
 
 			// [Residents] with hover showing residents names.
-			List<String> residents = getFormattedNames(town.getResidents());
+			List<Resident> townResidents = new ArrayList<>(town.getResidents());
+			new TownDisplayReslistEvent(town, townResidents).callEvent();
+			List<String> residents = getFormattedNames(townResidents);
 			if (residents.size() > 34)
 				shortenOverLengthList(residents, 35, translator);
 			
 			screen.addComponentOf("residents", colourHoverKey(translator.of("res_list")),
-				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), residents, town.getResidents().size()))
+				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), residents, residents.size()))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
@@ -927,7 +930,7 @@ public class TownyFormatter {
 	 * @param objectlist List of TownyObjects to list.
 	 * @return Formatted, prefixed list of TownyObjects.
 	 */
-	public static String getFormattedTownyObjects(String prefix, List<TownyObject> objectlist) {
+	public static String getFormattedTownyObjects(String prefix, List<? extends TownyObject> objectlist) {
 		return String.format(listPrefixFormat, prefix, objectlist.size(), Translation.of("status_format_list_1"), Translation.of("status_format_list_2"), Translation.of("status_format_list_3")) + StringMgmt.join(getFormattedTownyNames(objectlist), ", "); 
 	}
 	
@@ -957,7 +960,7 @@ public class TownyFormatter {
 	 * @param objs List of TownyObjects of which to make a list of names.
 	 * @return List of Names coloured, and potentially formatted.
 	 */
-	public static List<String> getFormattedTownyNames(List<TownyObject> objs) {
+	public static List<String> getFormattedTownyNames(List<? extends TownyObject> objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
 			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.RESET);
