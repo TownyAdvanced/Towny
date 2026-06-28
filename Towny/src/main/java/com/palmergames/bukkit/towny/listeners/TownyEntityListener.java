@@ -70,7 +70,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -855,7 +854,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event - EntityZapEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPigHitByLightning(EntityZapEvent event) {
+	public void onEntityHitByLightning(EntityZapEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
