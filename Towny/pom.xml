@@ -32,7 +32,7 @@
     <properties>
         <project.bukkitAPIVersion>1.19</project.bukkitAPIVersion>
         <skipTests>true</skipTests>
-        <junit.version>6.1.0</junit.version>
+        <junit.version>6.1.1</junit.version>
     </properties>
 
     <scm>
