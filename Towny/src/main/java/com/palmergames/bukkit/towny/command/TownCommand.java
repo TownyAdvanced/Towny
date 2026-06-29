@@ -4164,7 +4164,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_specify_name"));
 		
 		List<Resident> residents = new ArrayList<>(town.getResidents());
-		new TownDisplayReslistEvent(town, residents).callEvent();
+		BukkitTools.fireEvent(new TownDisplayReslistEvent(town, residents));
 		
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
 		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), residents));
