@@ -383,7 +383,9 @@ public class TownyFormatter {
 
 			// [Residents] with hover showing residents names.
 			List<Resident> townResidents = new ArrayList<>(town.getResidents());
-			BukkitTools.fireEvent(new TownDisplayReslistEvent(town, townResidents));
+			TownDisplayReslistEvent event = new TownDisplayReslistEvent(town, townResidents);
+			BukkitTools.fireEvent(event);
+			townResidents = event.getResidents();
 			List<String> residents = getFormattedNames(townResidents);
 			if (residents.size() > 34)
 				shortenOverLengthList(residents, 35, translator);
