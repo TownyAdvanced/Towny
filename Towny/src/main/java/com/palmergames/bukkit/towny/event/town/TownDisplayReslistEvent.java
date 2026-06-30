@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,11 +16,11 @@ import java.util.List;
 public class TownDisplayReslistEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Town town;
-	private final List<Resident> residents;
+	private List<Resident> residents;
 	
 	public TownDisplayReslistEvent(Town town, List<Resident> residents) {
 		this.town = town;
-		this.residents = residents;
+		this.residents = new ArrayList<>(residents);
 	}
 
 	public Town getTown() {
@@ -28,6 +29,10 @@ public class TownDisplayReslistEvent extends Event {
 
 	public List<Resident> getResidents() {
 		return residents;
+	}
+
+	public void setResidents(List<Resident> residents) {
+		this.residents = residents;
 	}
 
 	public static HandlerList getHandlerList() {

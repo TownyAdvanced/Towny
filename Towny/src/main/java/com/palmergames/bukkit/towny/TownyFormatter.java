@@ -930,7 +930,7 @@ public class TownyFormatter {
 	 * @param objectlist List of TownyObjects to list.
 	 * @return Formatted, prefixed list of TownyObjects.
 	 */
-	public static String getFormattedTownyObjects(String prefix, List<? extends TownyObject> objectlist) {
+	public static String getFormattedTownyObjects(String prefix, List<TownyObject> objectlist) {
 		return String.format(listPrefixFormat, prefix, objectlist.size(), Translation.of("status_format_list_1"), Translation.of("status_format_list_2"), Translation.of("status_format_list_3")) + StringMgmt.join(getFormattedTownyNames(objectlist), ", "); 
 	}
 	
@@ -960,7 +960,7 @@ public class TownyFormatter {
 	 * @param objs List of TownyObjects of which to make a list of names.
 	 * @return List of Names coloured, and potentially formatted.
 	 */
-	public static List<String> getFormattedTownyNames(List<? extends TownyObject> objs) {
+	public static List<String> getFormattedTownyNames(List<TownyObject> objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
 			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.RESET);
