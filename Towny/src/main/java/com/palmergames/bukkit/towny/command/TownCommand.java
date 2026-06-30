@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownCedePlotEvent;
+import com.palmergames.bukkit.towny.event.town.TownDisplayReslistEvent;
 import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
@@ -4162,8 +4163,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town == null)
 			throw new TownyException(Translatable.of("msg_specify_name"));
 		
+		List<Resident> residents = new ArrayList<>(town.getResidents());
+		TownDisplayReslistEvent event = new TownDisplayReslistEvent(town, residents);
+		BukkitTools.fireEvent(event);
+		residents = event.getResidents();
+		
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
-		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
+		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(residents)));
 	}
 	
 	private void townPlotGroupList(CommandSender sender, String[] args) throws TownyException {

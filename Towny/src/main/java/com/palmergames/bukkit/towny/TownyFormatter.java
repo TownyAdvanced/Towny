@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.town.TownDisplayReslistEvent;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nameable;
@@ -381,12 +382,16 @@ public class TownyFormatter {
 						ClickEvent.runCommand("/towny:town ranklist " + town.getName()));
 
 			// [Residents] with hover showing residents names.
-			List<String> residents = getFormattedNames(town.getResidents());
+			List<Resident> townResidents = new ArrayList<>(town.getResidents());
+			TownDisplayReslistEvent event = new TownDisplayReslistEvent(town, townResidents);
+			BukkitTools.fireEvent(event);
+			townResidents = event.getResidents();
+			List<String> residents = getFormattedNames(townResidents);
 			if (residents.size() > 34)
 				shortenOverLengthList(residents, 35, translator);
 			
 			screen.addComponentOf("residents", colourHoverKey(translator.of("res_list")),
-				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), residents, town.getResidents().size()))
+				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), residents, residents.size()))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
