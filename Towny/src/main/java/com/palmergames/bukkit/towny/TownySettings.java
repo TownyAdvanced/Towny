@@ -3925,6 +3925,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_OPEN);
 	}
 
+	public static boolean canRuinsBeReclaimedByTownlessPlayers() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_CAN_BE_CLAIMED_BY_TOWNLESS_PLAYERS);
+	}
+
 	public static boolean areRuinedTownsBanksPaidToNation() {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION);
 	}
