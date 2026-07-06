@@ -1272,7 +1272,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	private String cleanName(boolean town, String replacementName) {
 		// Names can be limited to a short length.
-		if (TownySettings.getMaxNameLength() > replacementName.length()) {
+		if (replacementName.length() > TownySettings.getMaxNameLength()) {
 			String num = "";
 			for (int i = 1; i <= TownySettings.getMaxNameLength(); i++)
 				num += num + "9";
