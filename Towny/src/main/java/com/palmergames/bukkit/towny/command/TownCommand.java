@@ -1090,7 +1090,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Translator translator = Translator.locale(sender);
 
 		if (args.length > 2 && args[2].equalsIgnoreCase("trustlist")) {
-			townPlotsTrustList(sender, town, args[3], translator, StringMgmt.remArgs(args, 4));
+			// Either a page number or a resident name is being supplied.
+			if (args.length > 3) {
+				Resident res = TownyAPI.getInstance().getResident(args[3]);
+				if (res != null)
+					// We have an instance where a resident is involved.
+					townPlotsTrustListOfResident(sender, town, res, translator, StringMgmt.remArgs(args, 4));
+				else
+					// We have an instance where a page number is involved.
+					townPlotsTrustListOfTown(sender, town, translator, StringMgmt.remArgs(args, 4));
+			} else if (args.length == 3) {
+				// No page or resident is supplied, show the first page of the town's trustlist.
+				townPlotsTrustListOfTown(sender, town, translator, StringMgmt.remArgs(args, 3));
+			}
 			return;
 		}
 
@@ -1125,11 +1137,57 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void townPlotsTrustList(CommandSender sender, Town town, String residentName, Translator translator, String[] pageArg) throws TownyException {
+	private void townPlotsTrustListOfTown(CommandSender sender, Town town, Translator translator, String[] pageArg) throws TownyException {
 
 		// Uses a Map to keep track of PlotGroup names to avoid duplicates.
 		Map<String,Component> plotLines = new HashMap<>();
-		Resident res = getResidentOrThrow(residentName);
+		for (TownBlock tb : town.getTownBlocks()) {
+			// Has a PlotGroup
+			if (tb.hasPlotObjectGroup()) {
+				if (tb.getPlotObjectGroup().getTrustedResidents().isEmpty())
+					continue;
+
+				String plotGroupName = tb.getPlotObjectGroup().getName();
+				if (plotLines.containsKey(plotGroupName))
+					continue;
+
+				plotLines.put(plotGroupName, Component.text(StringMgmt.remUnderscore(plotGroupName), NamedTextColor.AQUA)
+						.hoverEvent(HoverEvent.showText(Translatable.of("msg_list_trusted_hover", StringMgmt.join(tb.getPlotObjectGroup().getTrustedResidents(), ", ")).component()))
+						.append(Component.text(translator.of("msg_list_plotgroups_trustlist_component", tb.getPlotObjectGroup().getTownBlocks().size()), NamedTextColor.WHITE)));
+				continue;
+			}
+			// Not a PlotGroup
+			if (tb.getTrustedResidents().isEmpty())
+				continue;
+
+			String worldCoord = tb.getWorldCoord().toString();
+			String plotName = !tb.getName().isEmpty() ? StringMgmt.remUnderscore(tb.getName()) + " " + worldCoord : worldCoord;
+			plotLines.put(worldCoord, Component.text(plotName, NamedTextColor.AQUA)
+					.hoverEvent(HoverEvent.showText(Translatable.of("msg_list_trusted_hover", StringMgmt.join(tb.getTrustedResidents(), ", ")).component())));
+		}
+
+		if (plotLines.isEmpty())
+			throw new TownyException(translator.of("msg_err_town_has_no_trusted_plots"));
+
+		int page = 1;
+		int total = (int) Math.ceil(((double) plotLines.size()) / ((double) 10));
+		if (pageArg.length == 1) {
+			page = MathUtil.getPositiveIntOrThrow(pageArg[0]);
+			if (page == 0)
+				throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+
+		if (page > total)
+			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+		List<Component> displayedLines = plotLines.values().stream().collect(Collectors.toList());
+		TownyMessaging.sendTownPlotTrustListOfTown(sender, town, displayedLines, page, total);
+	}
+
+	private void townPlotsTrustListOfResident(CommandSender sender, Town town, Resident res, Translator translator, String[] pageArg) throws TownyException {
+
+		// Uses a Map to keep track of PlotGroup names to avoid duplicates.
+		Map<String,Component> plotLines = new HashMap<>();
 		for (TownBlock tb : town.getTownBlocks()) {
 			// Has a PlotGroup
 			if (tb.hasPlotObjectGroup()) {
@@ -1168,7 +1226,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
 		List<Component> displayedLines = plotLines.values().stream().collect(Collectors.toList());
-		TownyMessaging.sendTownPlotTrustList(sender, res, town, displayedLines, page, total);
+		TownyMessaging.sendTownPlotTrustListOfResident(sender, res, town, displayedLines, page, total);
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {
