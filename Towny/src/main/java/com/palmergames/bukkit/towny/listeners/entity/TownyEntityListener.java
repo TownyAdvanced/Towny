@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners.entity;
 
+import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -68,7 +69,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -641,7 +641,7 @@ public class TownyEntityListener implements Listener {
 	
 	private boolean isWindCharge(EntityExplodeEvent event) {
 		return MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21)
-				&& event.getEntity() instanceof WindCharge charge;
+				&& event.getEntity() instanceof WindCharge;
 	}
 
 	@Nullable
@@ -835,12 +835,12 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * When a Pig is zapped by lightning
+	 * When an entity is zapped by lightning
 	 * 
-	 * @param event - PigZapEvent
+	 * @param event - EntityZapEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPigHitByLightning(PigZapEvent event) {
+	public void onEntityHitByLightning(EntityZapEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;

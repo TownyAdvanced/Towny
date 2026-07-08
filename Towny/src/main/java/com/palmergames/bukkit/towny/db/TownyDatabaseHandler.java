@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
@@ -69,7 +68,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;

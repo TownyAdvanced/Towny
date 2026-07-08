@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.town.DisplayedTownsListSortEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -34,6 +35,7 @@ import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -82,7 +84,11 @@ public class ComparatorCaches {
 			.filter(Town::isVisibleOnTopLists)
 			.filter((Predicate<? super Town>) compType.getPredicate())
 			.sorted((Comparator<? super Town>) compType.getComparator())
-			.toList();
+			.collect(Collectors.toCollection(ArrayList::new));
+
+		DisplayedTownsListSortEvent townListSortEvent = new DisplayedTownsListSortEvent(towns, compType);
+		BukkitTools.fireEvent(townListSortEvent);
+		towns = townListSortEvent.getTowns();
 
 		boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
 				&& !TownySettings.isConfigAllowingTownSpawnNationTravel() && !TownySettings.isConfigAllowingTownSpawnNationAllyTravel();
@@ -125,10 +131,16 @@ public class ComparatorCaches {
 				break;
 			}
 			
-			townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(Component.text(slug, NamedTextColor.AQUA));
+			TextComponent dashComponent = Component.text(" - ", NamedTextColor.DARK_GRAY);
+			townName = townName.append(dashComponent).append(Component.text(slug, NamedTextColor.AQUA));
 			
-			if (town.isOpen())
+			if (town.isOpen()) {
 				townName = townName.append(Component.space()).append(Translatable.of("status_title_open").component());
+				Component joinComponent = Translatable.of("msg_click_join_town").component();
+				joinComponent = joinComponent.clickEvent(ClickEvent.runCommand("/towny:town join " + town));
+				joinComponent = joinComponent.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_join_town_hover", town).component()));
+				townName = townName.append(dashComponent).append(joinComponent);
+			}
 
 			townName = townName.clickEvent(ClickEvent.runCommand("/towny:town " + town));
 			townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_town_info").component()));
@@ -142,7 +154,7 @@ public class ComparatorCaches {
 				spawnComponent = spawnComponent.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
 				spawnComponent = spawnComponent.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).component()));
 
-				townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(spawnComponent);
+				townName = townName.append(dashComponent).append(spawnComponent);
 			}
 			output.add(Pair.pair(town.getUUID(), townName));
 		}
