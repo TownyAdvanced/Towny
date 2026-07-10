@@ -44,6 +44,8 @@ com.palmergames.bukkit.towny.huds.providers
 com.palmergames.bukkit.towny.invites
 com.palmergames.bukkit.towny.invites.exceptions
 com.palmergames.bukkit.towny.listeners
+com.palmergames.bukkit.towny.listeners.entity
+com.palmergames.bukkit.towny.listeners.version
 com.palmergames.bukkit.towny.object
 com.palmergames.bukkit.towny.object.comparators
 com.palmergames.bukkit.towny.object.economy
