@@ -704,7 +704,7 @@ public class TownyMessaging {
 		}
 		
 		// Page navigation
-		Component pageFooter = getPageNavigationFooter(clickCommand + "list", page, "", total, translator);
+		Component pageFooter = getPageNavigationFooter(clickCommand.replaceFirst("^/", "") + "list", page, "", total, translator);
 		player.sendMessage(pageFooter);
 	}
 
