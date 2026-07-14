@@ -207,6 +207,13 @@ public class TownRuinUtil {
 			return;
 		}
 
+		if ((!TownySettings.canRuinsBeReclaimedByTownlessPlayers() && !town.hasResident(resident)) // Resident left the town before accepting the ruining confirmation.
+			|| (TownySettings.canRuinsBeReclaimedByTownlessPlayers() && resident.hasTown())) {     // Resident was townless, then joined another town before accepting the confirmation.
+			if (resident.isOnline())
+				TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_dont_belong_town"));
+			return;
+		}
+
 		town.setRuined(false);
 		town.setRuinedTime(0);
 
