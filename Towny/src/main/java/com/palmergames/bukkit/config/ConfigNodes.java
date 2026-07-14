@@ -744,8 +744,7 @@ public enum ConfigNodes {
 			"global_town_settings.outsiders_prevent_pvp_toggle",
 			"false",
 			"",
-			"# If set to true, Towny will prevent a town or plot from enabling PVP while an outsider is within the town's or plot's boundaries.",
-			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
+			"# If set to true, Towny will prevent a town or plot from enabling PVP while an outsider is within the town's or plot's boundaries."
 	),
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
