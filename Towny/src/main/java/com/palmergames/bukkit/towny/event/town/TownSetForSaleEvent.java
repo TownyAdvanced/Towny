@@ -11,10 +11,12 @@ public class TownSetForSaleEvent extends CancellableTownyEvent{
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Town town;
 	private final Player player;
+	private final double price;
 
-	public TownSetForSaleEvent(Town town, Player player) {
+	public TownSetForSaleEvent(Town town, Player player, double price) {
 		this.town = town;
 		this.player = player;
+		this.price = price;
 	}
 
 	/**
@@ -31,6 +33,14 @@ public class TownSetForSaleEvent extends CancellableTownyEvent{
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * Gets the price for which the player has set the town for sale.
+	 * @return the price of the town.
+	 */
+	public double getPrice() {
+		return price;
 	}
 
 	public static HandlerList getHandlerList() {

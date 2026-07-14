@@ -4524,7 +4524,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				setTownForSale(town, forSalePrice, false);
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
 			})
-			.setCancellableEvent(new TownSetForSaleEvent(town, player))
+			.setCancellableEvent(new TownSetForSaleEvent(town, player, forSalePrice))
 			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
 			.serious()
 			.sendTo(player);
