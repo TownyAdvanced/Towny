@@ -979,8 +979,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Nation nation = newNation(filteredName, capitalTown);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+				return true;
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+				return false;
 			}
 		})
 		.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown, "New Nation Cost",

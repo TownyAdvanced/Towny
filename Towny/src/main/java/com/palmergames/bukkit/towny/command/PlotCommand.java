@@ -702,16 +702,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// Handle payment via a confirmation to avoid suprise costs.
 		if (cost > 0 && TownyEconomyHandler.isActive()) {
 			Confirmation.runOnAccept(() -> {
-				TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", prettyMoney(cost), townBlockType));
-
 				try {
 					townBlock.setType(townBlockType, resident);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
-					return;
+					return false;
 				}
+
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", prettyMoney(cost), townBlockType));
+
 				BukkitTools.fireEvent(new PlayerChangePlotTypeEvent(townBlockType, oldType, townBlock, player));
 				TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
+				return true;
 			})
 				.setCost(new ConfirmationTransaction(() -> cost, resident, String.format("Plot set to %s", townBlockType),
 						Translatable.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, prettyMoney(cost))))

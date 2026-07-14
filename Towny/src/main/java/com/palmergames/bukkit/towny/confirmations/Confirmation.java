@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * An object which stores information about confirmations. While this 
@@ -12,7 +15,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
  */
 public class Confirmation {
 	
-	private final Runnable acceptHandler;
+	private final BooleanSupplier acceptHandler;
 	private final Runnable cancelHandler;
 	private final Translatable title;
 	private final int duration;
@@ -31,9 +34,10 @@ public class Confirmation {
 	 * @return A new confirmation builder with the given accept handler.
 	 */
 	public static ConfirmationBuilder runOnAccept(Runnable acceptHandler) {
-		ConfirmationBuilder builder = new ConfirmationBuilder();
-		builder.acceptHandler = acceptHandler;
-		return builder;
+		return runOnAccept(() -> {
+			acceptHandler.run();
+			return true;
+		});
 	}
 
 	/**
@@ -44,9 +48,20 @@ public class Confirmation {
 	 * @return A new builder with the given accept handler.
 	 */
 	public static ConfirmationBuilder runOnAcceptAsync(Runnable acceptHandler) {
-		ConfirmationBuilder builder = new ConfirmationBuilder();
+		return runOnAccept(acceptHandler).setAsync(true);
+	}
+
+	/**
+	 * Creates a new {@link ConfirmationBuilder} with the supplied accept handler.
+	 *	 
+	 * @param acceptHandler The boolean supplier to call upon the confirmation being accepted.
+	 *   The value returned by the supplier is whether the action was successfully performed, and is used for refunding what was paid if not.
+	 * @return A new confirmation builder with the given accept handler.
+	 * @see ConfirmationBuilder#setCost(ConfirmationTransaction) 
+	 */
+	public static ConfirmationBuilder runOnAccept(BooleanSupplier acceptHandler) {
+		final ConfirmationBuilder builder = new ConfirmationBuilder();
 		builder.acceptHandler = acceptHandler;
-		builder.runAsync = true;
 		return builder;
 	}
 
@@ -76,7 +91,12 @@ public class Confirmation {
 	 * @return The handler
 	 */
 	public Runnable getAcceptHandler() {
-		return acceptHandler;
+		return acceptHandler::getAsBoolean;
+	}
+
+	@ApiStatus.Internal
+	public BooleanSupplier acceptHandler() {
+		return this.acceptHandler;
 	}
 
 	/**
