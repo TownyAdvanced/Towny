@@ -202,16 +202,14 @@ public class TownRuinUtil {
 	public static void reclaimTown(@NotNull Resident resident, @NotNull Town town) {
 		// Re-test that the town is still ruined, because Confirmations can be accepted out-of-order.
 		if (!town.isRuined()) {
-			if (resident.isOnline())
-				TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
+			TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 			return;
 		}
 
 		// Resident left the town before accepting the ruining confirmation and isn't allowed to be townless or,
 		// Resident was townless, then joined another town before accepting the confirmation.
 		if (!town.hasResident(resident) && (!TownySettings.canRuinsBeReclaimedByTownlessPlayers() || resident.hasTown())) {
-			if (resident.isOnline())
-				TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_dont_belong_town"));
+			TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_dont_belong_town"));
 			return;
 		}
 
