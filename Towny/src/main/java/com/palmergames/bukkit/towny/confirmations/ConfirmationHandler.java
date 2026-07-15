@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BooleanSupplier;
 
 /**
  * A class that handles the processing confirmations sent in Towny.
@@ -115,7 +116,7 @@ public class ConfirmationHandler {
 		}
 
 		// Get handler
-		Runnable handler = context.confirmation.getAcceptHandler();
+		BooleanSupplier handlerSupplier = context.confirmation.acceptHandler();
 
 		// Cancel task.
 		context.task.cancel();
@@ -133,12 +134,13 @@ public class ConfirmationHandler {
 			}
 		}
 
+		final double paidCost;
 		// Check if there is a Transaction required for this confirmation.
 		if (TownyEconomyHandler.isActive() && context.confirmation.hasCost()) {
 			ConfirmationTransaction transaction = context.confirmation.getTransaction();
 			// Determine the cost, done in this phase in case the cost could be manipulated before confirming.
 			transaction.supplyCost();
-			double cost = transaction.getCost();
+			double cost = paidCost = transaction.getCost();
 			Account payee = transaction.getPayee();
 			// Can they pay the cost?
 			if (cost > 0 && payee != null) {
@@ -149,16 +151,31 @@ public class ConfirmationHandler {
 				}
 				payee.withdraw(cost, transaction.getLoggedMessage());
 			}
+		} else {
+			paidCost = 0;
 		}
+
+		final Runnable handler = () -> {
+			final boolean success = handlerSupplier.getAsBoolean();
+			
+			if (!success && paidCost > 0) {
+				final ConfirmationTransaction transaction = context.confirmation.getTransaction();
+				final Account payee = transaction.getPayee();
+				if (payee != null) {
+					TownyEconomyHandler.economyExecutor().execute(() -> payee.deposit(paidCost, transaction.getLoggedMessage() + " (Refund)"));
+				}
+			}
+		};
 
 		// Execute handler.
 		if (context.confirmation.isAsync()) {
 			plugin.getScheduler().runAsync(handler);
 		} else {
-			if (sender instanceof Player player)
+			if (sender instanceof Player player) {
 				plugin.getScheduler().run(player, handler);
-			else 
+			} else {
 				plugin.getScheduler().run(handler);
+			}
 		}
 	}
 	

@@ -6,11 +6,13 @@ import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * A class responsible for assembling confirmations.
  */
 public class ConfirmationBuilder {
-	Runnable acceptHandler;
+	BooleanSupplier acceptHandler;
 	Runnable cancelHandler;
 	Translatable title = Translatable.of("are_you_sure_you_want_to_continue");
 	String confirmCommand = TownySettings.getConfirmCommand();
