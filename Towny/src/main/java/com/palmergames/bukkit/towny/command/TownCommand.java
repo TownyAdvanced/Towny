@@ -426,15 +426,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return getTownyStartingWith(args[2], "t");
 			break;
 		case "claim":
-			switch (args.length) {
-			case 2:
-				return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
-			case 3:
-				if (!args[1].equalsIgnoreCase("outpost"))
-					return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
-			default:
+			if (args.length == 2)
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_CLAIM, townClaimTabCompletes), args[1]);
+			else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN_CLAIM, args[1]))
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_CLAIM, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length - 1]);
+			else if (args.length == 3 && !args[1].equalsIgnoreCase("outpost"))
+				return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
+			else
 				return Collections.emptyList();
-			}
 		case "unclaim":
 			if (args.length == 2)
 				return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
@@ -3583,6 +3582,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TOWN_CLAIM.send(player);
+			return;
+		}
+
+		if (split.length > 0 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN_CLAIM, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_CLAIM, split[0]).execute(player, "town", split);
 			return;
 		}
 
