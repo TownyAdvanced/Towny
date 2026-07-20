@@ -1,1 +1,178 @@
 ---
+unclaimed_plot_name: 'Omistamaton'
+unclaimed_zone_name: 'Erämaa'
+############################################################
+#+------------------------------------------------------+ #
+#|help messages                                         | #
+#+------------------------------------------------------+ #
+############################################################
+help_0: 'Yleinen Towny Apu'
+help_1: 'Kokeile seuraavia komentoja oppiaksesi lisää Townysta.'
+help_2: 'Kylä Chat'
+help_3: 'Valtio Chat'
+help_4: 'Apua asukkaan komentoihin.'
+help_5: 'Apua kylän komentoihin.'
+help_6: 'Apua valtion komentoihin.'
+help_7: 'Apua tonttien komentoihin.'
+help_8: 'Apua Townyn komentoihin.'
+help_9: 'Apua Townyadmin komentoihin.'
+towny_help_0: "Yleinen Towny apu"
+towny_help_1: "Näyttää kartan läheisistä townblockeista"
+towny_help_2: "Näyttää hinnat (Economy)"
+towny_help_3: "Näyttää pistetilaston"
+towny_help_4: "Näyttää ajan ennen seuraavaa päivää"
+towny_help_5: "Näyttää statistiikan"
+towny_help_6: "Näyttää Towny version"
+towny_top_help_0: "Näyttää asukkaat per alikomento."
+towny_top_help_1: "Näyttää maanomistajat per alikomento."
+towny_top_help_2: "Näyttää rikkaimman per alikomento."
+town_help_1: 'Kyläsi status'
+town_help_2: '[pormestari]'
+town_help_3: 'Valitun kylän status'
+town_help_4: 'Pikavalinta sijantisi kylän statukseen.'
+town_help_5: 'Siirry kylän spawnille.'
+town_help_6: 'Uusi kylä, jossa sinä olet pormestari.'
+town_help_7: 'Uusi kylä, jossa kohde on pormestari.'
+town_help_8: 'Listaa pormestarin komennot.'
+town_help_9: 'Tänään on se päivä!'
+town_help_10: 'Listaa paikalla olevat kylän asukkaat'
+town_help_13: "Listaa kylän asukkaat."
+town_help_14: "Listaa kylän arvoasteet."
+town_help_15: "Listaa kylän lainsuojattomat."
+town_help_16: "Listaa kylän tonttiryhmät."
+town_help_17: "Listaa kylän tonttityypit."
+town_help_18: "Lähetä viesti kylän jäsenille."
+town_help_19: "Aseta kyläsi myyntiin (muut pelaajat voivat ostaa)."
+town_help_20: "Ota kyläsi pois myynnistä."
+town_help_21: "Osta kyseinen kylä, jos se on myynnissä."
+town_help_22: "Talleta rahaa kyläsi pankkiin."
+town_help_23: "Käytetään asukkaan arvoasteen muokkaamiseksi."
+town_help_24: "Käytetään kyläsi poistamiseen."
+town_help_25: "Käytetään kylän lainsuojattomien muokkaamiseen."
+town_help_26: "Listaa kaikki kylät, käytä /t list ? saadaksesi apua."
+town_help_27: "Poistu kylästä, jossa olet asukkaana."
+town_help_28: "Nosta rahaa kyläsi pankista."
+town_help_29: "Käytä /t claim ? saadaksesi apua."
+town_help_30: "Käytetään kyläsi alueiden luovuttamiseksi."
+nation_help_1: 'Valtiosi status'
+nation_help_2: '[valtio]'
+nation_help_3: 'Kohdevaltion status'
+nation_help_4: 'Listaa kaikki valtiot'
+nation_help_5: 'Poistu valtiostasi'
+nation_help_6: 'Luo uusi valtio'
+nation_help_7: 'Listaa valtion johtajan komennot'
+nation_help_8: 'Luo uusi valtio'
+nation_help_9: 'Listaa kaikki paikallaolevat valtion asukkaat'
+nation_help_11: "Listaa valtioon kuuluvat kylät."
+nation_help_12: "Listaa valtion kumppanivaltiot."
+nation_help_13: "Listaa valtion vihollisvaltiot."
+nation_help_14: "Käytetään liittymiseksi avoimeen valtioon."
+nation_help_15: "Tallettaa rahaa valtion pankkiin."
+nation_help_16: "Käytetään valtiosi poistamiseen."
+nation_help_17: "Käytetään arvoasteiden lisäämiseen tai poistamiseen asukkailta."
+nation_help_18: "Katso /n rank ? saadaksesi apua."
+nation_help_19: "Käytetään siirtymiseksi valtion kylien etuvartioasemille."
+nation_list_help_0: "Näytä kyseinen sivu."
+nation_list_help_1: "Listaa valtiot asukasluvun mukaan, kyseisellä sivulla."
+nation_list_help_2: "Listaa valtiot kylämäärän mukaan, kyseisellä sivulla."
+nation_list_help_3: "Näytä avoimet valtiot, kyseisellä sivulla."
+nation_list_help_4: "Näytä valtiot, joilla pankki käytössä, kyseisellä sivulla."
+nation_list_help_5: "Listaa valtiot aakkosjärjestyksessä kyseisellä sivulla."
+nation_list_help_6: "Näytä valtiot vallatun maan mukaan järjestettynä kys. sivulla."
+nation_list_help_7: "Listaa valtiot paikalla olevien asukkaiden mukaan kys. sivulla."
+nation_set_help_0: "Vaihda valtion johtaja."
+nation_set_help_1: "Vaihda valtion pääkaupunki."
+nation_set_help_2: "Aseta veron määrä, jonka kylät maksavat."
+nation_set_help_5: "Aseta nimike tai sukunimi jollekin asukkaallesi."
+nation_set_help_6: "Aseta valtion tagi."
+nation_set_help_7: "Aseta valtion viesti."
+nation_set_help_8: "Aseta valtion spawn."
+nation_set_help_9: "Aseta hinta /n spawn käyttämiselle."
+nation_set_help_10: "Aseta karttaväri käytettäväksi kartta plugineissa."
+nation_toggle_help_0: "Valtion rauhaisan statuksen vaihto."
+nation_toggle_help_1: "Vaihtaa valtion avoimuuden, sallien muidenkin käyttää /n spawn."
+nation_toggle_help_2: "Vaihtaa valtion avoimuuden, sallien kylien liittyä ilman kutsua."
+nation_toggle_help_3: "Vaihtaa veroprosentin, laittaen kylät maksamaan prosentteja kiinteän veron sijaan."
+nation_sanction_help_1: "Lisää kylän sanktioitujen kylien listaan."
+nation_sanction_help_2: "Poistaa kylän sanktioitujen kylien listalta."
+nation_sanction_help_3: "Listaa valtiosi sanktioidut kylät."
+nation_sanction_help_4: "Listaa kyseisen valtion sanktioidut kylät."
+king_help_1: 'Valtion johtajan apu'
+king_help_2: 'Aseta kumppanuus.'
+king_help_3: 'Aseta viholliset.'
+king_help_4: "Nosta rahaa valtiosi pankista."
+admin_sing: 'Admin'
+town_sing: 'Kylä'
+nation_sing: 'Valtio'
+nation_plu: 'Valtiot'
+king_sing: 'Johtaja'
+town_plu: 'Kylät'
+world_plu: 'Maailmat'
+world_sing: 'Maailma'
+world_help_1: 'Tämänhetkisen maailman status'
+world_help_2: '[maailma]'
+world_help_3: 'Valitun maailman status'
+world_help_4: 'Listaa kaikki maailmat'
+world_help_5: 'Regeneroi tämä chunk'
+world_help_6: 'Katso /tw toggle ? saadaksesi apua'
+world_help_7: 'Katso /tw set ? saadaksesi apua'
+world_set_help_0: "Aseta maailman erämaan nimi."
+world_toggle_help_0: "Kylät voivat vallata maata tässä maailmassa päälle/pois."
+world_toggle_help_1: "Towny on käytössä tässä maailmassa päälle/pois."
+world_toggle_help_2: "Sotiminen päälle/pois tässä maailmassa."
+world_toggle_help_3: "Pvp tai forcepvp päälle/pois tässä maailmassa."
+world_toggle_help_4: "Ystävän vahinko päälle/pois tässä maailmassa."
+world_toggle_help_5: "Räjähdykset päälle/pois tässä maailmassa."
+world_toggle_help_6: "Tuli päällä tai pakotettu päällä/pois tässä maailmassa."
+world_toggle_help_7: "Hirviöiden syntyminen päällä/pois tässä maailmassa."
+world_toggle_help_8: "Revert-on-unclaim toiminto päällä/pois tässä maailmassa."
+world_toggle_help_9: "Explosions-are-reverted päällä/pois tässä maailmassa."
+world_toggle_help_10: "Plot-clear-deletes-blocks sääntö päällä/pois tässä maailmassa."
+world_toggle_help_11: "Plot-unclaiming-deletes-blocks päällä/pois tässä maailmassa."
+world_toggle_help_12: "Vankilat päällä/pois tässä maailmassa."
+townyadmin_help_1: 'Luovuta tämä tontti'
+townyadmin_help_2: 'Yritä luovuttaa ympäriltäsi.'
+admin_panel_1: "Lisätietoja /ta set ?"
+admin_panel_2: 'uudelleenlataa Towny'
+admin_panel_3: 'Aja uusi päivä -koodi'
+admin_panel_4: "Luovuta alue ympärilläsi"
+admin_panel_5: "Lisätietoja /ta plot ?"
+admin_panel_6: "Anna positiivinen tai negatiivinen määrä townblockeja pelaajalle tai kylälle"
+admin_panel_7: "Lisätietoja /ta toggle ?"
+admin_panel_8: "Komennot näiden objektien hallitsemiseksi"
+admin_panel_9: "Siirry tietylle tontille"
+admin_panel_10: "Tarkista, onko pelaajalla permission node"
+admin_panel_11: "Uudelleenlataa konfiguraatiosi"
+admin_panel_12: "Tee varmuuskopio Towny datasta"
+admin_panel_13: "Mysql db dumppaus flatfileksi"
+admin_panel_14: "Pakota tietokannan tallenus tai lataus"
+admin_panel_15: "Aja uusitunti -koodi"
+admin_panel_16: "Puhdista vanhat asukkaat"
+townyadmin_town_help_0: "Luo kylä annetulla nimellä ja pormestarilla."
+townyadmin_town_help_1: "Näytä kylän status -ruutu."
+townyadmin_town_help_2: "Lisää tai poista kylän asukkaita."
+ta_resident_help_1: "Lisää tai poista kaveri."
+ta_resident_help_2: "Listaa tai tyhjennä kaverilista."
+ta_resident_help_3: "Poista asukas tietokannasta."
+ta_resident_help_4: "Poistaa pelaajan about -rivin."
+ta_resident_help_5: "Aseta asukkaan viimeksi paikalla tai rekisteröitynyt -tieto."
+ta_toggle_help_0: "Erämaan käyttö päällä/pois kaikissa maailmoissa."
+ta_toggle_help_1: "Regeneraatiotoiminnot päällä/pois kaikissa maailmoissa."
+ta_toggle_help_2: "Devmode päällä/pois, näyttää extra lokituksen konfiguraatiossa asetetulle pelaajalle."
+ta_toggle_help_3: "Debug moodi päällä/pois, näyttää extra tietoja lokissa."
+ta_toggle_help_4: "Kylien tai valtioiden mahdollisuus poistaa rahaa pankistaan päällä/pois."
+ta_toggle_help_5: "Aseta tai poista pelaajalta NPC status."
+ta_set_help_0: "Tee määrätystä pelaajasta kylän pormestari."
+ta_set_help_1: "Aseta kylälle uusi NPC pormestari (ei maksa ylläpidosta)."
+ta_set_help_2: "Aseta valtion pääkaupunki."
+ta_set_help_3: "Aseta valtion nationzone koko."
+ta_set_help_4: "Aseta asukkaan titteli."
+ta_set_help_5: "Aseta asukkaan lisänimi/sukunimi."
+ta_set_help_6: "Aseta tontti toiseen kylään."
+ta_set_help_7: "Aseta kylän perustajan nimi."
+ta_set_help_8: "Käytä size 0 poistaaksesi nationzone pakotus."
+ta_purge_help_0: "Puhdistaa asukkaat, jotka eivät ole kirjautuneet asetettuun määrään päiviä, vaihtoehtoisesti asettaa kylättömäksi poistaaksesi kylättömät pelaajat, tai aseta kylän nimi puhdistaaksesi tietyn kylän asukkaat."
+ta_townmeta_help_1: "Näytä haluamasi kylän tallennettu metadata."
+ta_townmeta_help_2: "Aseta kylän metadata avain ja arvo."
+ta_townmeta_help_3: "Lisää tai poista kylästä metadata tieto käyttäen avainta."
+ta_residentmeta_help_1: "Näytä haluamasi asukkaan tallennettu metadata."
