@@ -428,7 +428,7 @@ msg_block_claim: '声明这个城镇区块'
 msg_block_claim_radius: '声明在你周围一定半径的区块。'
 msg_plot_nfs: '关闭这块土地的出售状态'
 msg_plot_nfs_radius: '停止出售你输入的半径的地皮。'
-msg_nfs_abr: '&efs 和 nfs 分别是 forsale(出售) 和 notforsale(不供出售)的缩写.'
+msg_nfs_abr: '&e“fs”和“nfs”分别是“forsale”（出售）和“notforsale”（不出售）的缩写。'
 msg_plot_fs: '出售这块土地.'
 msg_plot_fs_radius: '出售你输入的半径的地皮'
 ############################################################
