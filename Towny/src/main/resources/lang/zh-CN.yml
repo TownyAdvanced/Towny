@@ -57,7 +57,7 @@ towny_top_help_1: "依据子命令列出拥有土地数最多的居民。"
 towny_top_help_2: "基于子命令列出最富有的列表。"
 town_help_1: '你的城镇的状态'
 town_help_2: '[城主]'
-town_help_3: '调整你的城镇的状态'
+town_help_3: '所选城镇的状态'
 town_help_4: '你所在地的小镇状态的捷径.'
 town_help_5: '传送去城镇出生点'
 town_help_6: '新建一个城镇，城主是你。'
@@ -100,20 +100,20 @@ town_set_help_0: "设置你的城镇的公告栏。"
 town_set_help_1: "将城镇的Home区块设置到你所站立的地方。"
 town_set_help_2: "在城镇中心区块内设置传送点，或者在前哨区块内设置前哨的传送点。"
 town_set_help_3: "查看/town set perm ?以获得帮助。"
-town_set_help_4: "设置你城镇的税额。"
-town_set_help_5: "设置每个区块的特殊税收"
+town_set_help_4: "设置你的城镇的税额。"
+town_set_help_5: "设置各地皮的特殊税额。"
 town_set_help_6: "设置购买地皮的默认价格。"
 town_set_help_7: "设置使用/t spawn的费用。"
-town_set_help_8: "设置你城镇的名称。"
+town_set_help_8: "设置你的城镇的名称。"
 town_set_help_9: "设置你的城镇的简称。"
 town_set_help_10: "设置一个居民的头衔或后缀。"
-town_set_help_11: "设置可以税收的最高金额"
+town_set_help_11: "设置从每位居民征收的最高金额（按百分比）。"
 town_jail_help_0: "列出城镇的监狱。"
-town_jail_help_1: "将一个居民关在初级监狱。"
-town_jail_help_2: "将一个居民以指定的时间关在初级监狱。"
+town_jail_help_1: "在主监狱中将一名居民监禁。"
+town_jail_help_2: "在规定的时间内，在主监狱中将一名居民监禁。"
 town_jail_help_3: "将一个居民以指定的时间关在指定的初级监狱。"
 town_jail_help_4: "在规定的时间内，在指定的监狱和牢房中将一名居民监禁。"
-town_jail_help_5: "将一名居住在初级监狱的人判处特定时间并提供保释金"
+town_jail_help_5: "在规定的时间内，在主监狱中将一名居民监禁，并指定保释金。"
 town_jail_help_6: "将一位居民判处特定小时并将其关在特定的监狱，同时需提供一定的保释金额。"
 town_jail_help_7: "将一位居民判处特定小时并将其关在特定的监狱，同时需提供一定的保释金额和关押牢房。"
 town_jail_help_8: "释放这个居民。"
@@ -278,8 +278,8 @@ admin_panel_16: "清除老居民"
 townyadmin_town_help_0: "根据你给出的名称和设置的市长创建一个城镇"
 townyadmin_town_help_1: "显示一个城镇的状态"
 townyadmin_town_help_2: "添加或移除城镇居民"
-townyadmin_town_help_3: "重命名一个城镇"
-townyadmin_town_help_4: "删除一个城镇"
+townyadmin_town_help_3: "重命名一个城镇。"
+townyadmin_town_help_4: "删除一个城镇。"
 townyadmin_town_help_5: "传送至一个城镇。"
 townyadmin_town_help_6: "传送至一个城镇前哨。"
 townyadmin_town_help_7: "使用一个国家头衔指令"
@@ -306,8 +306,8 @@ townyadmin_nation_help_0: "根据你给出的名称和设置的首都创建一�
 townyadmin_nation_help_1: "显示一个国家的状态"
 townyadmin_nation_help_2: "添加一个城镇到国家"
 townyadmin_nation_help_3: "移除一个城镇到国家"
-townyadmin_nation_help_4: "重命名一个国家"
-townyadmin_nation_help_5: "重命名一个城镇"
+townyadmin_nation_help_4: "重命名一个国家。"
+townyadmin_nation_help_5: "重命名一个城镇。"
 townyadmin_nation_help_6: "重新检查要加入国家的城镇，他们需要和首都距离更近一些"
 townyadmin_nation_help_7: "合并第二的国家到第一的国家"
 townyadmin_nation_help_8: "无视规则，合并第二国家到第一国家"
@@ -344,7 +344,7 @@ ta_set_help_1: "设置一个NPC为市长，他们无需维护费"
 ta_set_help_2: "设置一个国家的首都"
 ta_set_help_3: "设置一个国家的国家区域大小"
 ta_set_help_4: "为居民设置一个头衔。"
-ta_set_help_5: "为居民设置一个后缀"
+ta_set_help_5: "为居民设置一个后缀。"
 ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
 ta_set_help_8: "将大小设置为0来移除已覆盖的国域。"
@@ -1157,7 +1157,7 @@ msg_set_war_allowed_off: '这个世界不受战争的侵扰.'
 #Added in 0.61
 #Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: '你在 %s 秒内无法无法切换PVP状态.'
-msg_err_cannot_spawn_x_seconds_remaining: '你在 %s 秒内无法再进行传送.'
+msg_err_cannot_spawn_x_seconds_remaining: '你还需要等待%s秒才能传送。'
 #Added in 0.63
 msg_plot_set_to_nfs: '该土地不再出售.'
 msg_err_x_spawn_disallowed_from_x: '&c%s 的传送点禁止 %s.'
@@ -2204,6 +2204,6 @@ msg_nation_level_unset: '国家 %s 取消了其手动设定的国家级别。当
 msg_err_cannot_merge_x_seconds_remaining: '你需要等待%s秒才能再次请求与 %s 合并。'
 msg_towny_prices_percentage_capped_at: "，最多%s"
 msg_click_join_town_hover: '<green>点击加入城镇 <aqua>%s'
-msg_err_resident_has_no_trusted_plots: "%s 未被城镇 %s 中的任何一个区块信任。"
+msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未被信任。"
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
