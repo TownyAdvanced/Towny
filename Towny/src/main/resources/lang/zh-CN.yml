@@ -2204,5 +2204,6 @@ msg_nation_level_unset: '国家 %s 取消了其手动设定的国家级别。当
 msg_err_cannot_merge_x_seconds_remaining: '你需要等待%s秒才能再次请求与 %s 合并。'
 msg_towny_prices_percentage_capped_at: "，最多%s"
 msg_click_join_town_hover: '<green>点击加入城镇 <aqua>%s'
+msg_err_resident_has_no_trusted_plots: "%s 未被城镇 %s 中的任何一个区块信任。"
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
