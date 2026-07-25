@@ -361,7 +361,7 @@ ta_nationmeta_help_3: "使用键添加或移除一个国家的元数据"
 ta_reload_help_0: "重载数据库。"
 ta_reload_help_1: "重载配置。"
 ta_reload_help_2: "重新加载语言文件"
-ta_reload_help_3: "重新加载城镇权限"
+ta_reload_help_3: "重新加载Towny权限。"
 ta_reload_help_4: "重新加载Towny的所有组件。"
 ta_eco_resetbanks_help: "将城镇和国家银行重置为指定金额或归零。"
 ta_eco_convert_modern_help: "将你的城镇账户转换为更新的存储种类，使之在玩家离线状态下可供支持Vault的插件查看。"
@@ -555,7 +555,7 @@ msg_world_fire: '&c这个世界强制开启火势蔓延.'
 msg_town_mobs: '&c这个世界强制生成怪物。'
 msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
-msg_reloaded: '&2城镇设置已重载.'
+msg_reloaded: '&2Towny配置已重载。'
 msg_undo_complete: '&2成功撤销操作.'
 msg_give_total: '&b给予 %s 奖励区块上限. (总共: %s)'
 mag_backup_success: '&2备份成功。'
@@ -691,20 +691,20 @@ msg_town_not_enough_residents_left_nation: '&b城镇%s被赶出了国家，因�
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
 msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了,因此你获得了 $%s。'
 msg_not_enough_residents_capital: '&b城镇 %s 没有足够的居民来作为首都.'
-list_page: '&b当前页数 %s ,总页数 %s'
-list_err_not_enough_pages: '&c只有 %s 页可用'
+list_page: '&b第%s页，共%s页'
+list_err_not_enough_pages: '&c仅%s页可用'
 #Added in 0.30
 #Added in 0.31
 msg_err_tax_minimum_not_met: '你设置的城镇税不能低于 %s.'
 msg_unknown_rank_available_ranks: '未知头衔 %s. 可用的头衔有 %s.'
 msg_no_permission_to_give_rank: '你没有足够的权限来授予这个头衔.'
-msg_you_have_been_given_rank: '你被授予了 %s 的头衔.'
+msg_you_have_been_given_rank: '你被授予了%s的头衔%s。'
 msg_you_have_given_rank: '你给 %3$s 授予了%1$s头衔 %2$s。'
 msg_resident_not_your_town: '那个居民不是你的城镇的人!'
 msg_resident_already_has_rank: '%s 已经拥有 %s 这个头衔了.'
 msg_town_or_nation_level_not_high_enough_for_this_rank: "您的 %s 级别不足以分配 %s 级别。您的 %s级别：需要 %s/%s"
 msg_rank_can_only_be_assigned_x_times: "您不能将 %s 的等级分配给 %s ，因为它只能分配给 %s 次。您的 %s 已经使用它了 %s 次。"
-msg_you_have_had_rank_taken: '你失去了 %s 头衔.'
+msg_you_have_had_rank_taken: '你被移除了%s的头衔%s。'
 msg_you_have_taken_rank_from: '你移除了 %s 头衔 %s 从 %s.'
 msg_resident_doesnt_have_rank: '%s 没有 %s 这个头衔.'
 msg_town_has_no_jails: '城镇没有设置任何监狱.'
@@ -717,14 +717,14 @@ msg_player_escaped_jail_by_leaving_town: '%s 越狱了.'
 msg_set_jail_spawn: '成功设置监狱传送点.'
 msg_killed_attempting_to_escape_jail: '&4%s 在尝试越狱时被杀.'
 msg_err_jailed_players_no_teleport: '&4监禁中的玩家无法传送!'
-msg_player_escaped_jail_into_wilderness: '&4%s 成功地越狱,到了 %s'
+msg_player_escaped_jail_into_wilderness: '&4%s 通过逃到%s而越狱'
 msg_err_invalid_string_board_not_set: '无效的字符串, 设置城镇公告板失败.'
 msg_plot_name_removed: '删除土地名.'
 msg_plot_name_set_to: '土地名设置为 [%s].'
 msg_plot_price_too_expensive: '土地价格太贵了.'
 msg_you_robbed_player: '你抢了 %s ,从 %s.'
 msg_player_robbed_you: '%s 抢了你 %s.'
-msg_you_lost_money: '你死亡掉落了 %s 元.'
+msg_you_lost_money: '你因死亡失去了%s。'
 msg_player_couldnt_pay_player_town_bank_paying_instead: '%s 的钱包无法满足 %s. %s 将从城镇银行内收取.'
 msg_err_could_not_take_deathfunds: '无法收取死亡费用.'
 msg_you_lost_money_dying: '你失去了 %s.'
@@ -877,7 +877,7 @@ tc_err_no_muted_players_in_channel_players: '解除禁言玩家 &f%s'
 tc_players_muted_in_channel: '[城镇聊天] &f%n &2玩家被禁言了 &f%s&2: &f%s'
 tc_err_no_online_players_with_name: '没有在线玩家名为&f%s'
 tc_err_you_dont_have_mute_perms: '您没有禁言权限'
-tc_err_you_cant_mute_admin: '你不能禁言一个城镇管理员.'
+tc_err_you_cant_mute_admin: '你不能禁言一个Towny管理员。'
 tc_err_you_cant_mute_chat_mod: '你不能禁言聊天管理者.'
 tc_player_already_muted_in_channel: '[城镇聊天] 玩家在 &f%s 频道内被禁言'
 tc_player_is_now_muted_in_channel: '[城镇聊天] &f%s &2禁言了 &f%s'
@@ -1386,8 +1386,8 @@ msg_ruin_town: '&b城镇%s沦为废墟！'
 gui_title_select_plot_type: '选择地皮类型'
 gui_title_no_restrictions: '此地皮类型没有限制。'
 gui_title_towny_allowedblocks: '%s 允许方块列表'
-gui_title_towny_wildsblocks: '城镇荒地区块列表'
-gui_title_towny_itemuse: '城镇物品使用权限列表'
+gui_title_towny_wildsblocks: 'Towny荒地区块列表'
+gui_title_towny_itemuse: 'Towny物品使用权限列表'
 gui_title_towny_switch: 'Towny交互权限列表'
 gui_title_towny_plotclear: 'Towny土地清除列表'
 flatfile_dbg_district_file_missing_town_delete: '选区文件缺失，删除%s'
@@ -1448,7 +1448,7 @@ msg_jailed_for_x_hours: ' %s个小时。'
 msg_err_this_jail_has_no_cells: '这座监狱没有牢房。'
 msg_err_no_cell_found_at_this_location: '此处没有找到牢房。'
 msg_jail_cell_set: '牢房已设定。'
-msg_jail_cell_removed: '已移除牢房。'
+msg_jail_cell_removed: '牢房已移除。'
 msg_err_resident_is_already_jailed: '%s已经被监禁了'
 msg_err_the_town_does_not_have_that_many_jails: '城镇没有足够的牢房。'
 msg_err_that_jail_plot_does_not_have_that_many_cells: '这片监狱土地没有那么多的牢房。'
@@ -1710,7 +1710,7 @@ msg_jailed_handbook_3: '你被监禁了%s小时，服刑后你将自由。'
 #Jail handbook messages
 msg_jailed_handbook_4_can: '你可使用“/town leave”离开城镇来逃离监狱。'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: '监禁期间你不能靠离开城镇来越狱。'
+msg_jailed_handbook_4_cant: '监禁期间你不能靠退出城镇越狱。'
 #Jail handbook messages
 msg_jailed_handbook_bail_1: '你可以使用“/res jail paybail”缴纳保释金来获释。'
 #Jail handbook messages
@@ -2074,7 +2074,7 @@ msg_err_floodfill_cannot_contain_towns: "洪水填充选区不能包含其他城
 msg_err_resident_is_npc: "你不能对一个NPC居民这么做"
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
 msg_err_resident_doesnt_own_any_land: "该居民没有拥有任何个人土地"
-msg_unnamed: "无名"
+msg_unnamed: "未命名"
 msg_err_nation_cannot_sanction_own_town: "你不能制裁一个属于你的国家的城镇"
 msg_err_nation_town_isnt_sanctioned: "你的国家没有对那个城镇进行制裁"
 msg_err_nation_town_already_sanctioned: "你的国家已经城镇进行了制裁"
