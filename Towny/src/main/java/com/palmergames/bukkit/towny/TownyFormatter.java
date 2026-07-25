@@ -282,7 +282,8 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(Town town, CommandSender sender) {
 		boolean isSenderAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender);
-		
+		boolean isSenderResidentOfTown = sender instanceof Player player && town.hasResident(player);
+        
 		final Translator translator = Translator.locale(sender);
 		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
@@ -352,7 +353,7 @@ public class TownyFormatter {
 		// Only display the remaining fields if town is not ruined
 		} else {
 			// | Bank: 534 coins
-			if (TownyEconomyHandler.isActive() && (!TownySettings.isHideTownBalanceEnabled() || isSenderAdmin))
+			if (TownyEconomyHandler.isActive() && (!TownySettings.isHideTownBalanceEnabled() || isSenderAdmin || isSenderResidentOfTown))
 				MoneyUtil.addTownMoneyComponents(town, translator, screen);
 
 			// Mayor: MrSand
@@ -389,8 +390,17 @@ public class TownyFormatter {
 				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), residents, town.getResidents().size()))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
-				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
-			
+				ClickEvent.runCommand("/towny:town reslist " + town.getName()));
+
+			// [Join Town] shown for open towns.
+			if (town.isOpen() && sender instanceof Player player) {
+				Resident res = TownyAPI.getInstance().getResident(player);
+				if (res != null && !res.hasTown())
+					screen.addComponentOf("join_town", colourHoverKey(translator.of("status_join_town")),
+						HoverEvent.showText(Translatable.of("msg_click_join_town_hover", town).component()),
+						ClickEvent.runCommand("/towny:town join " + town.getName()));
+			}
+
 			// [Plots] with hover. 
 			TextComponent text = Component.empty();
 			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);

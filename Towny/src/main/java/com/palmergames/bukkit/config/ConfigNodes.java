@@ -744,8 +744,7 @@ public enum ConfigNodes {
 			"global_town_settings.outsiders_prevent_pvp_toggle",
 			"false",
 			"",
-			"# If set to true, Towny will prevent a town or plot from enabling PVP while an outsider is within the town's or plot's boundaries.",
-			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
+			"# If set to true, Towny will prevent a town or plot from enabling PVP while an outsider is within the town's or plot's boundaries."
 	),
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
@@ -2056,6 +2055,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, mobs who've been named with a nametag will not be removed by the mob removal task."),
+	PROT_MOB_REMOVE_USE_PRE_SPAWN_EVENT(
+			"protection.mob_removal_uses_pre_spawn_event",
+			"false",
+			"",
+			"# If enabled, Towny will use an earlier event for preventing mobs spawning in areas where they shouldn't.",
+			"# This has the possibility of improving performance by allowing the server to perform less time validating spawns,",
+			"# but has the downside of decreasing spawn rates in areas surrounded by areas with mobs toggled off."),
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",
@@ -3510,6 +3516,11 @@ public enum ConfigNodes {
 			"# If this is true, when a town becomes a ruin they also become open to join,",
 			"# meaning any townless player could join the town and reclaim it.",
 			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it."),
+	TOWN_RUINING_TOWNS_CAN_BE_CLAIMED_BY_TOWNLESS_PLAYERS(
+			"town_ruining.town_ruins.ruins_can_be_reclaimed_by_townless_players",
+			"false",
+			"",
+			"# When this is true, players who have no town can also reclaim the ruin. While false, only residents of the Town can reclaim the ruin."),
 	TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION(
 			"town_ruining.town_ruins.town_bank_is_sent_to_nation",
 			"false",

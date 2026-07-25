@@ -287,11 +287,11 @@ public class TranslationLoader {
 			try (Stream<Path> overrideStream = Files.list(overrides)) {
 				for (final Path path : overrideStream.collect(Collectors.toList())) {
 					if (!FileMgmt.getExtension(path).equalsIgnoreCase("yml"))
-						return;
+						continue;
 					
 					final String fileName = FileMgmt.getFileName(path);
 					if (fileName.equals("global") || !TownySettings.isLanguageEnabled(fileName))
-						return;
+						continue;
 					
 					try (InputStream is = Files.newInputStream(path)) {
 						Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);

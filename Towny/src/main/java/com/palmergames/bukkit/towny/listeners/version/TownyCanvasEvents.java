@@ -1,6 +1,7 @@
-package com.palmergames.bukkit.towny.listeners;
+package com.palmergames.bukkit.towny.listeners.version;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import java.lang.invoke.MethodHandle;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-public class TownyCanvasEvents implements SoftwareDependentListener {
+public class TownyCanvasEvents implements VersionDependentListener {
 
     private static final String ASYNC_TELEPORT_EVENT = "io.canvasmc.canvas.event.EntityTeleportAsyncEvent";
 

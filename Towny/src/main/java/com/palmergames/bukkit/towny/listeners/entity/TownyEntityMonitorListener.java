@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.listeners;
+package com.palmergames.bukkit.towny.listeners.entity;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;

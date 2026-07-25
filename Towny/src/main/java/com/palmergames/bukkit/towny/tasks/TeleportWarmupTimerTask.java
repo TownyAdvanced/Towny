@@ -58,16 +58,18 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			final TeleportRequest request = next.getValue();
 			long teleportTime = request.teleportTime();
 
+			final Player player = resident.getPlayer();
+			if (player == null) {
+				// The player logged off
+				iterator.remove();
+				continue;
+			}
+
 			if (currentTime > teleportTime) {
 				iterator.remove();
-				
-				Player player = resident.getPlayer();
-				// Only teleport & add cooldown if player is valid
-				if (player == null)
-					continue;
 
 				// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
-				SpawnUtil.addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+				SpawnUtil.addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player));
 
 				final Location prior = player.getLocation();
 				player.teleportAsync(request.destinationLocation(), TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
@@ -84,15 +86,15 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			int seconds = (int) Math.max(1, millis/1000);
 			// Send a title message.
 			if (TownySettings.isTeleportWarmupUsingTitleMessage() && millis >= 1000) {
-				String title = TownySettings.isMovementCancellingSpawnWarmup() ? Translatable.of("teleport_warmup_title_dont_move").forLocale(resident) : "";
-				String subtitle = Translatable.of("teleport_warmup_subtitle_seconds_remaining", seconds).forLocale(resident);
-				TownyMessaging.sendTitle(resident.getPlayer(), title, subtitle, 0, 25, (seconds == 1 ? 15 : 0));
+				String title = TownySettings.isMovementCancellingSpawnWarmup() ? Translatable.of("teleport_warmup_title_dont_move").forLocale(player) : "";
+				String subtitle = Translatable.of("teleport_warmup_subtitle_seconds_remaining", seconds).forLocale(player);
+				TownyMessaging.sendTitle(player, title, subtitle, 0, 25, (seconds == 1 ? 15 : 0));
 			}
 			// Send a particle that drops from above the player to their feet over the course of the warmup.
 			if (TownySettings.isTeleportWarmupShowingParticleEffect()) {
 				double progress = (double) (teleportWarmupTime - seconds) / teleportWarmupTime;
 				double yOffset = 2.0 + (progress * -2.0);
-				TeleportWarmupParticle.drawParticles(resident.getPlayer(), yOffset);
+				TeleportWarmupParticle.drawParticles(player, yOffset);
 			}
 		}
 	}

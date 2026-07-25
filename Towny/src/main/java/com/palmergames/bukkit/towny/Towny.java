@@ -21,12 +21,13 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.listeners.TownyCanvasEvents;
-import com.palmergames.bukkit.towny.listeners.TownyPaperEvents;
+import com.palmergames.bukkit.towny.listeners.entity.PreSpawnEventListener;
+import com.palmergames.bukkit.towny.listeners.version.TownyCanvasEvents;
+import com.palmergames.bukkit.towny.listeners.version.TownyPaperEvents;
 import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
 import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
+import com.palmergames.bukkit.towny.listeners.entity.TownyEntityListener;
+import com.palmergames.bukkit.towny.listeners.entity.TownyEntityMonitorListener;
 import com.palmergames.bukkit.towny.listeners.TownyInventoryListener;
 import com.palmergames.bukkit.towny.listeners.TownyLoginListener;
 import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
@@ -495,8 +496,13 @@ public class Towny extends JavaPlugin {
 		TownyPlayerListener townyPlayerListener = new TownyPlayerListener(this);
 		pluginManager.registerEvents(townyPlayerListener, this);
 		pluginManager.registerEvents(new TownyBlockListener(this), this);
-		pluginManager.registerEvents(new TownyEntityListener(this), this);
+		final TownyEntityListener entityListener = new TownyEntityListener(this);
+		pluginManager.registerEvents(entityListener, this);
 		pluginManager.registerEvents(new TownyInventoryListener(this), this);
+
+		if (TownySettings.getBoolean(ConfigNodes.PROT_MOB_REMOVE_USE_PRE_SPAWN_EVENT)) {
+			pluginManager.registerEvents(new PreSpawnEventListener(this, entityListener), this);
+		}
 
 		new TownyPaperEvents(this).register();
 		new TownyCanvasEvents(this, townyPlayerListener).register();

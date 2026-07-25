@@ -965,7 +965,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (noCharge || !TownyEconomyHandler.isActive()) {
 			// It's free so make the nation.
 			Nation nation = newNation(filteredName, capitalTown);
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(nation.getName())));
 			return;
 		}
 
@@ -978,7 +978,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Confirmation.runOnAccept(() -> {
 			try {
 				Nation nation = newNation(filteredName, capitalTown);
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(nation.getName())));
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
@@ -2120,7 +2120,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident resident = getResidentOrThrow(split[0]);
 
 		if (!nation.hasResident(resident))
-			Translatable.of("msg_err_not_same_nation", resident.getName());
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", resident.getName()));
 
 		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 

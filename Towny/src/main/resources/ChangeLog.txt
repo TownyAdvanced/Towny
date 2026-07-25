@@ -10930,3 +10930,40 @@ v0.92.0.11:
   - Improve WorldCoord hashCode uniqueness, courtesy of Warrior with PR #8221.
   - Handle portals being created by entities, courtesy of Warrior with PR #8220.
   - Bump com.zaxxer:HikariCP from 7.0.2 to 7.1.0.
+0.103.0.6:
+  - Fix for players unable to log in with a new username.
+    - Players who logged in with a username that was previoulsy used by another existing resident (with a different UUID,) will no longer cause issues.
+  - Add clickable [Join Town] components to open towns' status screens and list entries.
+    - Closes #8237.
+  - Add ability to see a list of plots that have trust given to residents.
+    - Closes #8212.
+  - New Command: /town plots [townname] trustlist [resident] {page #}
+    - Shows a list of plots that the given resident has trust given in.
+  - New Command: /town plots [townname] trustlist {page #}
+    - Shows a list of plots that have had trusted given in, with lists of resident names in the list's hovers.
+  - Always show build info in /towny v, courtesy of Warrior with PR #8230.
+  - Replace deprecated PigZapEvent use, courtesy of Warrior with PR #8231.
+  - Fix nation membership check in /n set title, courtesy of Veyronity with PR #8234.
+  - Add DisplayedTownsListSortEvent, courtesy of Veyronity with PR #8235.
+  - Bump fr.mrmicky:fastboard from 2.1.5 to 2.2.0.
+  - Bump junit.version from 6.1.0 to 6.1.1.
+0.103.0.7:
+  - Make pre spawn event usage configurable, courtesy of Warrior with PR #8232.
+  - New Config Option: protection.mob_removal_uses_pre_spawn_event
+    - Default: false
+    - If enabled, Towny will use an earlier event for preventing mobs spawning in areas where they shouldn't.
+    - This has the possibility of improving performance by allowing the server to perform less time validating spawns,
+    - but has the downside of decreasing spawn rates in areas surrounded by areas with mobs toggled off.
+  - Fix automatic renaming system able to cause safe mode.
+  - Bump org.apache.logging.log4j:log4j-core from 2.26.0 to 2.26.1.
+  - Bump me.clip:placeholderapi from 2.12.2 to 2.12.3.
+0.103.0.8:
+  - Fix loading of override lang files.
+  - Fix errant /'s that break the nation and town outpost lists' clickable navigation.
+  - Fix rare teleport warmup player NPE, courtesy of Warrior with PR #8247.
+  - Remove nation prefix and postfix from new nation broadcast, courtesy of Warrior with PR #8248.
+  - Fix spectators/vanished players being able to prevent pvp toggling, courtesy of Warrior with PR #8252.
+  - Bump junit.version from 6.1.1 to 6.1.2.
+  - Bump net.coreprotect:coreprotect from 23.2 to 24.0.
+0.103.1.0:
+  - Bump version for Release.

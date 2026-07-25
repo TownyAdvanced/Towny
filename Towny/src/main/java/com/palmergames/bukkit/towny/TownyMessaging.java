@@ -645,15 +645,15 @@ public class TownyMessaging {
 	}
 
 	public static void sendTownOutpostList(Player player, Town town, int page, int total) {
-		sendOutpostList(player, town, page, total, "/towny:town outpost ");
+		sendOutpostList(player, town, page, total, "towny:town outpost ");
 	}
 
 	public static void sendNationOutpostList(Player player, Town town, int page, int total) {
-		sendOutpostList(player, town, page, total, "/towny:nation outpost " + town.getName() + " ");
+		sendOutpostList(player, town, page, total, "towny:nation outpost " + town.getName() + " ");
 	}
 
 	public static void sendNationAllTownsOutpostList(Player player, Nation nation, int page, int total) {
-		sendOutpostList(player, nation, page, total, "/towny:nation outpost ");
+		sendOutpostList(player, nation, page, total, "towny:nation outpost ");
 	}
 
 	public static void sendOutpostList(Player player, Town town, int page, int total, String clickCommand) {
@@ -765,6 +765,44 @@ public class TownyMessaging {
 		// Page navigation
 		Component pageFooter = getPageNavigationFooter("towny:nation outpost listall", page, "", total, translator);
 		player.sendMessage(pageFooter);
+	}
+
+	public static void sendTownPlotTrustListOfTown(CommandSender sender, Town town, List<Component> plotLines, int page, int total) {
+		Translator translator = Translator.locale(sender);
+		int plotCount = plotLines.size();
+		int iMax = Math.min(page * 10, plotCount);
+		Component[] plotFormatted = new Component[(page * 10) > plotCount ? plotCount % 10 : 10];
+
+		for (int i = (page - 1) * 10; i < iMax; i++)
+			plotFormatted[i % 10] = 
+				Component.text(" - ", NamedTextColor.DARK_GRAY).append(plotLines.get(i));
+
+		sendMessage(sender, ChatTools.formatTitle(translator.of("msg_town_plots_trustlist_town_title", town.getName())));
+		for (Component plotCoordLine : plotFormatted)
+			sender.sendMessage(plotCoordLine);
+
+		// Page navigation
+		Component pageFooter = getPageNavigationFooter("towny:town plots " + town.getName() + " trustlist", page, "", total, translator);
+		sender.sendMessage(pageFooter);
+	}
+
+	public static void sendTownPlotTrustListOfResident(CommandSender sender, Resident res, Town town, List<Component> plotLines, int page, int total) {
+		Translator translator = Translator.locale(sender);
+		int plotCount = plotLines.size();
+		int iMax = Math.min(page * 10, plotCount);
+		Component[] plotFormatted = new Component[(page * 10) > plotCount ? plotCount % 10 : 10];
+
+		for (int i = (page - 1) * 10; i < iMax; i++)
+			plotFormatted[i % 10] = 
+				Component.text(" - ", NamedTextColor.DARK_GRAY).append(plotLines.get(i));
+
+		sendMessage(sender, ChatTools.formatTitle(translator.of("msg_town_plots_trustlist_resident_title", town.getName(), res.getName())));
+		for (Component plotCoordLine : plotFormatted)
+			sender.sendMessage(plotCoordLine);
+
+		// Page navigation
+		Component pageFooter = getPageNavigationFooter("towny:town plots " + town.getName() + " trustlist", page, res.getName(), total, translator);
+		sender.sendMessage(pageFooter);
 	}
 
 	@SuppressWarnings("unused")

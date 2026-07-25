@@ -275,31 +275,31 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
 					} else {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_towny_version", plugin.getVersion()));
-						
-						try {
-							final BuildInfo buildInfo = BuildInfo.retrieveBuildInfo(plugin);
-							
-							String repositoryUrl = buildInfo.repositoryUrl();
-							if (repositoryUrl.endsWith(".git")) {
-								repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - ".git".length());
-							}
-
-							final String viewCommitUrl = repositoryUrl + "/commit/" + buildInfo.commit();
-
-							final Component buildInfoMessage = Translatable.of("default_towny_prefix").append(
-								Translatable.of("msg_version_build_info", buildInfo.commitShort(), buildInfo.branch()).component(Translation.getLocale(sender))
-									.clickEvent(viewCommitUrl.startsWith("http") ? ClickEvent.openUrl(viewCommitUrl) : null)
-									.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)))
-							).component(Translation.getLocale(sender));
-
-							sender.sendMessage(buildInfoMessage);
-						} catch (IOException e) {
-							plugin.getLogger().log(Level.WARNING, "Could not retrieve build information", e);
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_version_build_info_failed"));
-						}
 
 						if (TownyUpdateChecker.hasCheckedSuccessfully())
 							TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
+					}
+
+					try {
+						final BuildInfo buildInfo = BuildInfo.retrieveBuildInfo(plugin);
+
+						String repositoryUrl = buildInfo.repositoryUrl();
+						if (repositoryUrl.endsWith(".git")) {
+							repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - ".git".length());
+						}
+
+						final String viewCommitUrl = repositoryUrl + "/commit/" + buildInfo.commit();
+
+						final Component buildInfoMessage = Translatable.of("default_towny_prefix").append(
+							Translatable.of("msg_version_build_info", buildInfo.commitShort(), buildInfo.branch()).component(Translation.getLocale(sender))
+								.clickEvent(viewCommitUrl.startsWith("http") ? ClickEvent.openUrl(viewCommitUrl) : null)
+								.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)))
+						).component(Translation.getLocale(sender));
+
+						sender.sendMessage(buildInfoMessage);
+					} catch (IOException e) {
+						plugin.getLogger().log(Level.WARNING, "Could not retrieve build information", e);
+						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_version_build_info_failed"));
 					}
 					break;
 				}

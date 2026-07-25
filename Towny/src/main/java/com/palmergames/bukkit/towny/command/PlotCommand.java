@@ -686,8 +686,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (TownBlockType.ARENA.equals(townBlockType) && TownySettings.getOutsidersPreventPVPToggle()) {
 			for (Player target : Bukkit.getOnlinePlayers()) {
-				if (!townBlock.getTownOrNull().hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+				if (!townBlock.getTownOrNull().hasResident(target) && !player.equals(target) && townBlock.getWorldCoord().containsCoordinate(target.getX(), target.getZ()) && !target.getGameMode().isInvulnerable() && player.canSee(target)) {
 					throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+				}
 			}
 		}
 
@@ -1210,8 +1211,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!townBlock.getPermissions().pvp)) {
 			for (Player target : Bukkit.getOnlinePlayers()) {
-				if (!town.hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+				if (!town.hasResident(target) && !player.equals(target) && townBlock.getWorldCoord().containsCoordinate(target.getX(), target.getZ()) && !target.getGameMode().isInvulnerable() && player.canSee(target)) {
 					throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+				}
 			}
 		}
 
@@ -1927,8 +1929,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			if (TownBlockType.ARENA.equals(type) && TownySettings.getOutsidersPreventPVPToggle()) {
 				for (Player target : Bukkit.getOnlinePlayers()) {
-					if (!town.hasResident(target) && !player.getName().equals(target.getName()) && tb.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+					if (!town.hasResident(target) && !player.equals(target) && tb.getWorldCoord().containsCoordinate(target.getX(), target.getZ()) && !target.getGameMode().isInvulnerable() && player.canSee(target)) {
 						throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+					}
 				}
 			}
 
