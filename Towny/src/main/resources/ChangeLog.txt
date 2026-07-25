@@ -10967,3 +10967,14 @@ v0.92.0.11:
   - Bump net.coreprotect:coreprotect from 23.2 to 24.0.
 0.103.1.0:
   - Bump version for Release.
+0.103.1.1:
+  - Allow townless players to reclaim ruins.
+    - Closes #8099.
+  - New Config Option: town_ruining.town_ruins.ruins_can_be_reclaimed_by_townless_players
+    - Default: false
+    - When this is true, players who have no town can also reclaim the ruin. While false, only residents of the Town can reclaim the ruin.
+  - Add townforsale and townnotforsale events, thrown when a town is put up for sale or not for sale.
+    - Closes #7911.
+  - API: New Cancellable API Events: TownSetForSaleEvent and TownSetNotForSaleEvent.
+  - Add res check to isHideTownBalanceEnabled, courtesy of BladedNarwhal with PR #8256. (First-Time Contributor!)
+    - Residents who are a part of a town will not have the town's bank balance hidden while hide_town_balance_on_status_screen is true.
