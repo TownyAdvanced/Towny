@@ -35,6 +35,8 @@ import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetForSaleEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.town.TownSetOutpostSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustAddEvent;
@@ -4523,6 +4525,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				setTownForSale(town, forSalePrice, false);
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
 			})
+			.setCancellableEvent(new TownSetForSaleEvent(town, player, forSalePrice))
 			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
 			.serious()
 			.sendTo(player);
@@ -4534,7 +4537,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (!town.isForSale())
 			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
-		
+
+		TownSetNotForSaleEvent event = new TownSetNotForSaleEvent(town, player);
+		BukkitTools.ifCancelledThenThrow(event);
+
 		setTownNotForSale(town, false);
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
 	}
