@@ -2728,3 +2728,5 @@ msg_town_plots_trustlist_resident_title: "%s Trusted Plot List (%s)"
 msg_town_plots_trustlist_town_title: "%s Trusted Plot List"
 msg_list_plotgroups_trustlist_component: " (Group of %s plots)"
 msg_list_trusted_hover: "Trusts: %s"
+
+msg_err_no_ruined_town_here: "You must be standing in a ruined town to reclaim it when you're not a resident."

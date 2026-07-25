@@ -3516,6 +3516,11 @@ public enum ConfigNodes {
 			"# If this is true, when a town becomes a ruin they also become open to join,",
 			"# meaning any townless player could join the town and reclaim it.",
 			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it."),
+	TOWN_RUINING_TOWNS_CAN_BE_CLAIMED_BY_TOWNLESS_PLAYERS(
+			"town_ruining.town_ruins.ruins_can_be_reclaimed_by_townless_players",
+			"false",
+			"",
+			"# When this is true, players who have no town can also reclaim the ruin. While false, only residents of the Town can reclaim the ruin."),
 	TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION(
 			"town_ruining.town_ruins.town_bank_is_sent_to_nation",
 			"false",

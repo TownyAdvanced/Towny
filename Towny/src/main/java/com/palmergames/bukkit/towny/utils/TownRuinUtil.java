@@ -163,10 +163,18 @@ public class TownRuinUtil {
 	public static void processRuinedTownReclaimRequest(Player player) {
 		try {
 			final Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			final Town town = resident != null ? resident.getTownOrNull() : null;
+			Town town = resident != null ? resident.getTownOrNull() : null;
 
-			if (town == null)
+			if (resident == null || (town == null && !TownySettings.canRuinsBeReclaimedByTownlessPlayers()))
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
+
+			// We have a townless player buying the ruined town, get the ruin from the player location.
+			if (town == null)
+				town = TownyAPI.getInstance().getTown(player.getLocation());
+
+			// Player is not stood in a town at all.
+			if (town == null)
+				throw new TownyException(Translatable.of("msg_err_no_ruined_town_here"));
 
 			//Ensure town is ruined
 			if (!town.isRuined())
@@ -175,12 +183,13 @@ public class TownRuinUtil {
 			//Get cost of reclaiming.
 			double townReclaimCost = TownySettings.getEcoPriceReclaimTown();
 
-			//Validate if player can remove at this time
+			//Validate if player can reclaim at this time
 			if (TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_yet", TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
+			final Town finalTown = town;
 			//Ask them to confirm they want to reclaim the town.
-			Confirmation.runOnAccept(() -> reclaimTown(resident, town))
+			Confirmation.runOnAccept(() -> reclaimTown(resident, finalTown))
 			.setCost(new ConfirmationTransaction(() -> townReclaimCost, resident, "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
 			.setCancellableEvent(new TownPreReclaimEvent(town, resident, player))
@@ -193,13 +202,27 @@ public class TownRuinUtil {
 	public static void reclaimTown(@NotNull Resident resident, @NotNull Town town) {
 		// Re-test that the town is still ruined, because Confirmations can be accepted out-of-order.
 		if (!town.isRuined()) {
-			if (resident.isOnline())
-				TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
+			TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
+			return;
+		}
+
+		// Resident left the town before accepting the ruining confirmation and isn't allowed to be townless or,
+		// Resident was townless, then joined another town before accepting the confirmation.
+		if (!town.hasResident(resident) && (!TownySettings.canRuinsBeReclaimedByTownlessPlayers() || resident.hasTown())) {
+			TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_dont_belong_town"));
 			return;
 		}
 
 		town.setRuined(false);
 		town.setRuinedTime(0);
+
+		// Townless players can be allowed to reclaim ruins, if configured.
+		if (!town.hasResident(resident)) {
+			try {
+				resident.setTown(town);
+				resident.save();
+			} catch (AlreadyRegisteredException ignored) {}
+		}
 
 		// The admin unruin command would result in the NPC mayor being deleted without this check.
 		if (!resident.equals(town.getMayor()))
