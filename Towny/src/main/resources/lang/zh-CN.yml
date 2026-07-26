@@ -2102,7 +2102,7 @@ msg_err_name_validation_name_already_in_use: "%s 已经被使用了"
 msg_err_name_validation_title_too_long: "%s 不能用作前缀，因为字数太太太太长了"
 msg_err_name_validation_name_too_long: "%s 不能用作名称，因为字数太太太太长了"
 msg_err_name_validation_is_empty: "你不能提供一个空名称"
-msg_err_name_validation_is_not_permitted: "%s 是不被允许的"
+msg_err_name_validation_is_not_permitted: "不允许%s。"
 msg_err_name_validation_is_all_underscores: "%s 里头全是下划线!"
 msg_err_name_validation_too_many_capitals: "%s包含了%s个大写字母，而这是不允许的，请使用少于%s个。"
 msg_err_name_validation_contains_harmful_characters: "%s 包含可能有害的符号"
@@ -2203,6 +2203,8 @@ msg_nation_level_overridden_with: '国家 %s 已将其国家级别设置为 %s�
 msg_nation_level_unset: '国家 %s 取消了其手动设定的国家级别。当前国家级别为 %s。'
 msg_err_cannot_merge_x_seconds_remaining: '你需要等待%s秒才能再次请求与 %s 合并。'
 msg_towny_prices_percentage_capped_at: "，最多%s"
+msg_click_join_town: '<green>[加入城镇]'
+status_join_town: '加入城镇'
 msg_click_join_town_hover: '<green>点击加入城镇 <aqua>%s'
 msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未被信任。"
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
