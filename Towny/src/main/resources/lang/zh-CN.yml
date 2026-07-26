@@ -106,7 +106,7 @@ town_set_help_6: "设置购买地皮的默认价格。"
 town_set_help_7: "设置使用/t spawn的费用。"
 town_set_help_8: "设置你的城镇的名称。"
 town_set_help_9: "设置你的城镇的简称。"
-town_set_help_10: "设置一个居民的头衔或后缀。"
+town_set_help_10: "设置一位居民的头衔或后缀。"
 town_set_help_11: "设置从每位居民征收的最高金额（按百分比）。"
 town_jail_help_0: "列出城镇的监狱。"
 town_jail_help_1: "在主监狱中将一名居民监禁。"
@@ -115,7 +115,7 @@ town_jail_help_3: "将一个居民以指定的时间关在指定的初级监狱�
 town_jail_help_4: "在规定的时间内，在指定的监狱和牢房中将一名居民监禁。"
 town_jail_help_5: "在规定的时间内，在主监狱中将一名居民监禁，并指定保释金。"
 town_jail_help_6: "将一位居民判处特定小时并将其关在特定的监狱，同时需提供一定的保释金额。"
-town_jail_help_7: "将一位居民判处特定小时并将其关在特定的监狱，同时需提供一定的保释金额和关押牢房。"
+town_jail_help_7: "在规定的时间内，在主监狱的指定的监狱和牢房中将一名居民监禁，并指定保释金。"
 town_jail_help_8: "释放这个居民。"
 town_purge_help: "清理指定天数没有上线的居民"
 town_trust_help_0: "在这个城镇中，增加一个受信任的玩家。"
@@ -321,9 +321,9 @@ townyadmin_nation_help_15: "使用一个国家的头衔指令"
 townyadmin_nationrank_help_0: "使用国家的头衔指令"
 townyadmin_nationrank_help_1: "移除一个本国居民的头衔"
 townyadmin_database_help_0: "强制保存数据库。"
-townyadmin_database_help_1: "强制加载数据库"
-townyadmin_database_help_2: "移除所有居民的称号和前缀"
-ta_plot_help_0: "为玩家获得一个区块"
+townyadmin_database_help_1: "强制加载数据库。"
+townyadmin_database_help_2: "移除所有居民的头衔和后缀。"
+ta_plot_help_0: "为玩家声明一个区块。"
 ta_plot_help_1: "查看您所在的区块中存储的元数据"
 ta_plot_help_2: "设置区块元数据键和值"
 ta_plot_help_3: "使用键添加或移除一个元数据"
@@ -346,7 +346,7 @@ ta_set_help_3: "设置一个国家的国家区域大小"
 ta_set_help_4: "为居民设置一个头衔。"
 ta_set_help_5: "为居民设置一个后缀。"
 ta_set_help_6: "将区块设置到另一个城镇"
-ta_set_help_7: "设置城镇的创建者名称"
+ta_set_help_7: "设置城镇建立者的名称。"
 ta_set_help_8: "将大小设置为0来移除已覆盖的国域。"
 ta_purge_help_0: "清除超过指定天数未登录的居民，可以选择将无城镇设置为仅删除无城镇玩家，或者指定城镇名称以仅清除一个城镇的居民"
 ta_townmeta_help_1: "查看您指定的城镇中存储的元数据"
@@ -873,7 +873,7 @@ tc_channel_list_out: '退出'
 tc_err_you_dont_have_perm_mute_list: '您没有权限查看禁言列表'
 tc_err_you_dont_have_unmute_perm: '您没有解除禁言的权限'
 tc_err_no_channel_called_channel: '没有频道名为&f%s'
-tc_err_no_muted_players_in_channel_players: '解除禁言玩家 &f%s'
+tc_err_no_muted_players_in_channel_players: '&4在 &f%s &4中没有玩家被禁言'
 tc_players_muted_in_channel: '[城镇聊天] &f%n &2玩家被禁言了 &f%s&2: &f%s'
 tc_err_no_online_players_with_name: '没有在线玩家名为&f%s'
 tc_err_you_dont_have_mute_perms: '您没有禁言权限'
@@ -1322,7 +1322,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&c你的城镇已倒闭%d小�
 msg_time_remaining_before_full_removal: '距离完全删除：%d小时。'
 msg_time_until_reclaim_available: '距离可收复时间：%d小时。'
 msg_reclaim_available: '可收复。'
-msg_ruined_town_being_deleted: "%s 将在 %s 小时内被删除"
+msg_ruined_town_being_deleted: "%s已沦为废墟%s小时，正在被删除。"
 #Added in 0.93
 msg_changed_peaceful: '&c城镇中立/和平的状态现在是%s。'
 msg_err_town_unclaim_canceled: '&c放弃圈地已取消，你不能在这个时候放弃这片区域。'
@@ -1375,10 +1375,10 @@ msg_your_town_was_exempt_from_the_nation_tax: '&b你的城镇被免除了国税�
 #Added in 0.97
 #The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '&a%s=&7'
-msg_comptype_ruined: '倒闭状态'
+msg_comptype_ruined: '废墟状态'
 msg_comptype_forsale: '出售状态'
 msg_comptype_bankrupt: '破产状态'
-msg_ruined: '&c（已倒闭）'
+msg_ruined: '&c（废墟）'
 msg_bankrupt: '&c（已破产）'
 #Added in 0.98
 msg_del_town2: '&b城镇%s已删除！'
@@ -1752,11 +1752,11 @@ town1_has_merged_with_town2: '&6城镇%s同意与主城镇%s合并。'
 status_neutrality_cost: '中立成本：'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: '如果您为这些城镇区块支付了任何现实中的金钱，那么请了解：您正在玩的服务器违反了 Minecraft EULA 和 Towny 许可协议。'
+msg_ptw_warning_1: '若您为这些城镇区块支付了任何现实货币，请知悉：您所在的服务器违反了 Minecraft EULA 和 Towny 许可协议。'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: 'Towny团队从未打算用真钱购买城镇区块。'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: '如果您确实支付了真正的钱，您应该考虑在一个尊重Towny团队愿望的Towny服务器上玩游戏。'
+msg_ptw_warning_3: '如果您确实支付了现实货币，您应该考虑在一个尊重 Towny 团队意愿的 Towny 服务器上玩游戏。'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: '您已被邀请加入 %s&9 (国家: %s&9)'
 #Added in 0.139
@@ -2127,14 +2127,14 @@ msg_town_cede_plot_accepted: "%s已接受你所割让的区块。"
 msg_town_cede_plot_denied: "%s 拒绝了您的报价。"
 msg_town_cede_plot_unable_to_accept: "%s 无法接受您的报价。"
 msg_town_cede_plot_you_have_accepted: "你已经在 %s 获得了对地皮的控制。"
-msg_err_cannot_claim_plot_join_date_too_low: "你不能拥有这块地皮，直到你已经成为一个城镇居民了 %s 天。"
-msg_err_cannot_claim_plot_join_date_too_high: "你不能领取这块地皮，它是给城镇成员少于 %s 天的居民。"
-msg_townblock_min_join_days_removed: "此 TownBlock 已经删除了它的最小加入日要求。"
-msg_townblock_max_join_days_removed: "此 TownBlock 已经删除了其最大加入日要求。"
-msg_townblock_min_join_days_set_to: "此 TownBlock 已将其最小加入日要求设置为 %s。 只有加入的玩家超过了这个天数，才能使用 /绘图认领。"
-msg_townblock_max_join_days_set_to: "此 TownBlock 已将其最大加入日要求设置为 %s。 只有加入的玩家少于这个天数，才能使用 /绘图认领。"
+msg_err_cannot_claim_plot_join_date_too_low: "你在成为城镇居民至少%s天后，才能声明这块地皮。"
+msg_err_cannot_claim_plot_join_date_too_high: "你不能声明这块地皮，它仅限成为城镇居民少于%s天的居民。"
+msg_townblock_min_join_days_removed: "此城镇区块已经删除了最小加入天数要求。"
+msg_townblock_max_join_days_removed: "此城镇区块已经删除了最大加入天数要求。"
+msg_townblock_min_join_days_set_to: "此城镇区块的最小加入天数要求已设置为%s。只有加入时间超过这个天数的玩家才能使用/plot claim。"
+msg_townblock_max_join_days_set_to: "此城镇区块的最大加入天数要求已设置为%s。只有加入时间少于这个天数的玩家才能使用/plot claim。"
 msg_new_resident_spawn_to_town_prompt: "你想传送到你刚刚加入的城镇吗？"
-msg_recieved_refund_for_deleted_object: "您收到了您已删除的城镇或民族的银行余额，金额为 %s。"
+msg_recieved_refund_for_deleted_object: "您收到了已删除的城镇或国家的银行余额，共计%s。"
 msg_err_you_already_own_this_plot: "你已经拥有这个区块。"
 msg_err_you_cannot_delete_this_nation: "您已被阻止删除这个国家。"
 status_district_name_and_size: '城镇区块隶属于区域：%s。该区域共有%s个城镇区块。'
@@ -2195,7 +2195,7 @@ msg_nearby_towns: '附近的城镇'
 msg_no_towns_nearby: '未发现附近的城镇。'
 msg_nearby_town_format: '<green>%s <white>(%s格)'
 msg_nearby_town_nation: ' <aqua>[%s]'
-msg_err_must_specify_days_to_be_conquered: "您必须指定若干天数才能被征服，即：1天或以上，或-1天或无限无限无限期征服。"
+msg_err_must_specify_days_to_be_conquered: "你必须指定被征服天数，例如：1或更多，或-1（无限期）。"
 msg_conquered_status_granted: "您已设置 %s 的征服状态为 %s 天。"
 msg_conquered_status_granted_unlimited: "您已设置 %s 的征服状态为无限期。"
 msg_err_must_specify_on_or_off: "您必须指定开启或关闭。"
@@ -2207,3 +2207,4 @@ msg_click_join_town_hover: '<green>点击加入城镇 <aqua>%s'
 msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未被信任。"
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
+msg_err_no_ruined_town_here: "当你不是居民时，你必须站在城镇废墟里才能重新声明它。"
