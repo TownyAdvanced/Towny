@@ -65,11 +65,11 @@ town_help_7: '新建一个城镇，并且选定一个玩家作为城主。'
 town_help_8: '列出城主可以使用的命令'
 town_help_9: '就在今天！'
 town_help_10: '查看城镇内在线的玩家'
-town_help_13: "参见该镇居民名单。"
-town_help_14: "参见该镇的头衔清单。"
+town_help_13: "查看城镇居民名单。"
+town_help_14: "查看城镇头衔清单。"
 town_help_15: "参见该镇被放逐者名单。"
-town_help_16: "参见该镇地皮组的清单。"
-town_help_17: "参见该镇的地皮类型清单。"
+town_help_16: "查看城镇地皮组清单。"
+town_help_17: "查看城镇地皮类型清单。"
 town_help_18: "向该镇成员发送一条消息。"
 town_help_19: "将您的城镇设置为“出售”，可供其他玩家购买。"
 town_help_20: "将您的城镇设置为“不出售”。"
@@ -224,7 +224,7 @@ mode_3: '在你移动到每个区块时自动放弃声明土地'
 mode_4: '默认进入城镇聊天频道'
 mode_5: '默认进入国家聊天频道'
 mode_6: '可以在敌国边界用 %s 来制造战区.'
-plot_perms: '用 %s 而不是 %s 来设置权限.'
+plot_perms: '在地皮权限中，请使用 %s 而非 %s。'
 res_list: '居民'
 res_sing: '居民'
 mayor_sing: '城主'
@@ -457,12 +457,12 @@ msg_mobremoval_world: '&b阻止世界怪物生成: %s'
 msg_mobremoval_town: '&b阻止城镇怪物生成: %s'
 msg_nation_peaceful: '&b你的国家现在'
 msg_tax_exempt: '&b城镇工作人员免税.'
-msg_del_nation: '&b国家 %s 已分崩离析!'
-msg_del_resident: '&b%s 的城镇数据已被删除!'
-msg_join_nation: '&b城镇 %s 加入了国家!'
+msg_del_nation: '&b国家 %s 已分崩离析！'
+msg_del_resident: '&b%s 失去了所有的Towny数据！'
+msg_join_nation: '&b城镇 %s 加入了国家！'
 msg_join_town: '&b%s 加入了城镇!'
-msg_friend_add: '&b%s 把你视为了朋友.'
-msg_friend_remove: '&b%s 不再把你视为朋友.'
+msg_friend_add: '&b%s 已将您添加为好友。'
+msg_friend_remove: '&b%s 已将您从好友中移除。'
 msg_left_town: '&b%s 离开了城镇'
 msg_you_left: '&b你离开了 %s.'
 msg_not_mayor: '&b你不是城主.'
@@ -473,11 +473,11 @@ msg_own_nation_disallow: '&b你不能对自己的国家这样做。'
 msg_no_perms_claim: '&b你没有权限扩张你的城镇。'
 msg_outpost_disable: '&b前哨现在不可用.'
 msg_kicked_by: '&b你被%s踢出了城镇。'
-msg_kicked: '&b%s 把 %s 踢出了城镇.'
+msg_kicked: '&b%s 把 %s 踢出了城镇。'
 msg_nation_kicked_by: '&b你的城镇被 %s 踢出了国家.'
 msg_town_left_nation: '&b你的城镇脱离了 %s.'
 msg_nation_town_left: '&b城镇 %s 离开了你的国家.'
-msg_nation_kicked: '&b%s 把 %s 从这个国家踢出.'
+msg_nation_kicked: '&b%s 把 %s 踢出了国家。'
 msg_nation_you_kicked: '&b你把 %s 踢出了国家。'
 msg_raised_ass: '&b%s 把 %s 提升为 %s 助手.'
 msg_lowered_to_res_by: '&b你被 %s 降职了.'
