@@ -437,8 +437,8 @@ msg_plot_fs_radius: '出售你输入的半径的地皮'
 #+------------------------------------------------------+ #
 ############################################################
 msg_buy: '&b你花费%3$s购买了%1$d个%2$s。'
-msg_buy_resident_plot: '&b%1$s花费%$3s购买了%$2s的土地！'
-msg_buy_resident_plot_group: '&b%s为%s购买了%s的区块。'
+msg_buy_resident_plot: '&b%1$s花费%3$s购买了%2$s的土地！'
+msg_buy_resident_plot_group: '&b%1$s花费%3$s购买了%2$s的地皮组！'
 msg_couldnt_pay_taxes: '&b%s 因为交不起税而被踢出了 %s.'
 msg_couldnt_pay_plot_taxes: '&b%s 交不起税而失去了他的土地所有权.'
 msg_you_couldnt_pay_plot_tax: '&b你无法支付 %s 的地块税所以失去了对%s地块的所有权。'
