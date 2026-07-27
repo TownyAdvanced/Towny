@@ -97,7 +97,7 @@ town_list_help_4: "在指定的页面，按照字母顺序列出城镇。"
 town_list_help_5: "在指定的页面，按照已声明的土地数量列出城镇。"
 town_list_help_6: "在指定的页面，按照在线玩家数量列出城镇。"
 town_set_help_0: "设置你的城镇的公告栏。"
-town_set_help_1: "将城镇的Home区块设置到你所站立的地方。"
+town_set_help_1: "将城镇的中心区块设置在你所站立的地方。"
 town_set_help_2: "在城镇中心区块内设置传送点，或者在前哨区块内设置前哨的传送点。"
 town_set_help_3: "查看/town set perm ?以获得帮助。"
 town_set_help_4: "设置你的城镇的税额。"
@@ -449,10 +449,10 @@ msg_bankrupt_town: ' 银行资金不足以维持城镇的日常开销.'
 msg_bankrupt_nation: ' 银行资金不足以维持国家的日常开销.'
 msg_nation_not_peaceful: '&b国家的和平已被打破.'
 msg_nation_cant_peaceful: '&b国家支付不起转变为和平国家的费用。你必须能够每天支付%s的费用。'
-msg_peaceful_disabled: '&b所有国家的和平都已被打破.'
-msg_you_paid: '&b你花费了 %s 来保持战时中立.'
+msg_peaceful_disabled: '&b全局国家和平已禁用。'
+msg_you_paid: '&b你花费了%s来设置和平状态。'
 msg_nation_set_peace: '&b成功改变国家状态.'
-msg_nation_allow_peaceful: '&b国家的和平现在: %s'
+msg_nation_allow_peaceful: '&b现在国家保持和平的权限为：%s'
 msg_mobremoval_world: '&b阻止世界怪物生成: %s'
 msg_mobremoval_town: '&b阻止城镇怪物生成: %s'
 msg_nation_peaceful: '&b你的国家现在'
@@ -481,7 +481,7 @@ msg_nation_kicked: '&b%s 把 %s 从这个国家踢出.'
 msg_nation_you_kicked: '&b你把 %s 踢出了国家。'
 msg_raised_ass: '&b%s 把 %s 提升为 %s 助手.'
 msg_lowered_to_res_by: '&b你被 %s 降职了.'
-msg_lowered_to_res: '&b%2$s 被 %1$s 炒了鱿鱼。'
+msg_lowered_to_res: '&b%s 将 %s 降级为普通居民。'
 msg_invalid_name: '&b以上名称无效。'
 msg_invited_join_town: '&b%s 邀请 %s 加入城镇.'
 msg_invited_join_nation: '&b%s 邀请 %s 加入国家.'
@@ -492,12 +492,12 @@ msg_nation_online: '国家在线玩家'
 msg_allied_nations: '&b%s 加盟了 %s.'
 msg_enemy_nations: '&b%s 将 %s 视为敌国 .'
 msg_enemy_to_neutral: '&b%s 把 %s 调整为和平状态.'
-msg_added_ally: '&b%s 加盟了你的国家.'
+msg_added_ally: '&b%s 与你的国家结盟了。'
 msg_removed_ally: '&b%s 不再将你的国家视为盟国.'
 msg_added_enemy: '&b%s 把你的国家视为敌国.'
 msg_removed_enemy: '&b%s 不再把你的国家视为敌国.'
 msg_unable_ally_enemy: '&c无法将 %s 视为盟国,因为他们已经将你视为敌国.'
-msg_deny_ally: '&b%s 拒绝了你的加盟.'
+msg_deny_ally: '&b%s 拒绝了你的结盟请求。'
 msg_accept_ally: '&b国家%s接受了你的邀请，你们成为了盟国。'
 msg_ally_req_sent: '&b成为盟国的邀请已发送给%s。'
 msg_ally_request: '&b%s想要与你国结盟。'
@@ -528,7 +528,7 @@ msg_not_claimed_1: '&b这片区域还未被声明.'
 msg_not_own_area: '&c你选择的区域不属于你.'
 msg_not_own_place: '&b这块地方不属于任何人.'
 msg_area_not_own: '&c这片区域不属于你.'
-msg_area_not_recog: '&c这片区域不归城镇所管.'
+msg_area_not_recog: '&c这片区域未被Towny识别。'
 msg_specify_name: '&b请指定城镇名'
 msg_specify_nation_name: '&b请指定国家名'
 msg_peasant_right: '&b贱民没有权利强迫他的领导者让出宝座.'
@@ -536,8 +536,8 @@ msg_cost_spawn: '&b你花费了 %s 来传送到城镇传送点.'
 msg_cost_spawn_refund: '&b你获得了被退回的城镇传送费用.'
 msg_town_spawn_warmup: '&b等待传送...'
 msg_town_rename_disabled: '&b已关闭城镇重命名'
-msg_town_set_name: '&b%s 重命镇名为 %s.'
-msg_nation_set_name: '&b%s 重命国名为 %s.'
+msg_town_set_name: '&b%s 将城镇重命名为 %s。'
+msg_nation_set_name: '&b%s 将国家重命名为 %s。'
 msg_changed_pvp: '&c%s PVP状态变更为 %s.'
 msg_changed_public: '&c城镇的公开状态变更为 %s.'
 msg_changed_expl: '&c%s 中的允许爆炸变更为 %s.'
@@ -548,11 +548,11 @@ msg_changed_taxpercent: '&c按比例收税模式变更为 %s.'
 msg_changed_open: '&c免邀请加入变更为 %s.'
 msg_toggle_open_on_warning: '警告: 如果城镇设为开放那么城镇权限最好关闭. 输入 /town set perm off 关闭,  /town set perm reset重置.'
 msg_changed_world_setting: '&c世界%2$s的%1$s状态已变更为：%3$s。'
-msg_world_pvp: '&c这个世界强制开启PVP.'
-msg_world_mobs: '&c这个世界强制开启怪物生成.'
-msg_world_expl: '&c这个世界强制开启爆炸.'
-msg_world_fire: '&c这个世界强制开启火势蔓延.'
-msg_town_mobs: '&c这个世界强制生成怪物。'
+msg_world_pvp: '&c这个世界仅限PvP。'
+msg_world_mobs: '&c这个世界强制开启怪物生成。'
+msg_world_expl: '&c这个世界强制开启爆炸。'
+msg_world_fire: '&c这个世界强制开启火势蔓延。'
+msg_town_mobs: '&c这个城镇强制开启怪物生成。'
 msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
 msg_reloaded: '&2Towny配置已重载。'
@@ -637,13 +637,13 @@ msg_err_cant_afford_blocks: '&c城镇支付不起声明 %s 城镇区块的钱: %
 msg_err_not_in_town_claim: '&你必须加入城镇才能声明这块土地.'
 msg_err_must_belong_town: '&c你必须是一个城镇居民.'
 msg_err_dont_belong_town: '&c你不属于一个城镇.'
-msg_err_dont_belong_nation: '&b你不属于一个国家的臣民.'
+msg_err_dont_belong_nation: '&b你不属于任何一个国家。'
 msg_err_already_belong_nation: '&b你应经属于一个国家了。'
 msg_err_town_already_belong_nation: '&b%s 已经属于国家 %s 了。'
 msg_err_not_same_nation: '&b%s不属于你的国家.'
 msg_err_rect_auto: '&c只有城镇及其居民才能使用 auto.'
 msg_err_invalid_radius: '&c半径无效。请使用整数或“auto”。'
-msg_err_not_configured: '&c这个世界还未被城镇主宰.'
+msg_err_not_configured: '&c这个世界尚未被Towny配置。'
 msg_err_updating_item_perms: '&c更新物品使用权限缓存时出错.'
 msg_err_updating_switch_perms: '&c更新交互权限缓存时出错.'
 msg_err_updating_destroy_perms: '&c更新破坏权限缓存时出错.'
@@ -668,7 +668,7 @@ msg_err_invalid_choice: '&c无效的选择'
 msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
 msg_err_plot_preclaim_disable: "&c你现在不能声明地皮 %s。"
-msg_err_plot_preunclaim_disable: "&c你现在不能声明地皮 %s。"
+msg_err_plot_preunclaim_disable: "&c居民现在不能放弃声明地皮 %s。"
 msg_err_you_dont_have_permission_to_use_colours: "您没有权限在头衔和姓氏中使用彩色代码。"
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
 msg_err_too_many_npc: '&c已注册的NPC太多了.'
@@ -686,7 +686,7 @@ msg_admin_only_create_town: '&c只有管理员能够创建城镇!'
 #Required residents to be part of a nation
 msg_err_not_enough_residents_new_nation: '&c你的城镇居民数不足以建国.'
 msg_err_not_enough_residents_join_nation: '&b城镇 %s 没有足够的居民数所以无法加入国家.'
-msg_not_enough_residents_no_longer_capital: '&b国家旧都居民数不足所以不再是首都.新的首都将在 %s.'
+msg_not_enough_residents_no_longer_capital: '&b因旧首都的居民不够，它不再是首都。新的首都是：%s。'
 msg_town_not_enough_residents_left_nation: '&b城镇%s被赶出了国家，因为它不再有足够的居民来成为国家的一员。'
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
 msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了,因此你获得了 $%s。'
@@ -757,8 +757,8 @@ msg_err_outlaw_in_open_town: '你无法加入一个已经将你放逐的公开�
 msg_you_are_an_outlaw_in_this_town: '&4小心, %s 放逐了你,死在这你将会被监禁.'
 msg_you_are_an_outlaw_in_this_town_jail_time: '&4违法者被监禁%s小时'
 msg_you_are_an_outlaw_in_this_town_bail_amount: '你的保释金需要%s'
-msg_err_town_not_close_enough_to_nation: '%ss 的城镇中心离你的首都中心太远了所以不能加入你的国家.'
-msg_nation_town_moved_their_homeblock_too_far: '由于%ss 的城镇中心离你的首都中心太远了所以已不再属于这个国家.'
+msg_err_town_not_close_enough_to_nation: '%s的中心区块距你首都的中心区块过远，所以它无法加入你的国家。'
+msg_nation_town_moved_their_homeblock_too_far: '%s的中心区块距你首都的中心区块过远，所以它不再属于你的国家。'
 #Added in 0.33
 msg_err_invalid_radius_number: '&c半径无效。请使用%s或更小的值。'
 #Added in 0.34
@@ -842,7 +842,7 @@ successful_deny: '&b邀请已被拒绝.'
 successful_deny_request: '&b已拒绝结盟请求.'
 msg_ally_removed_successfully: '&b已成功删除联盟.'
 town_deleted_by_admin: '&b已成功删除城镇 %s '
-nation_deleted_by_admin: '&已成功灭国 %s '
+nation_deleted_by_admin: '&b国家 %s 已成功删除'
 are_you_sure_you_want_to_continue: '你确定你要继续操作吗?'
 you_have_been_invited_to_join: '你被邀请加入 '
 you_have_been_requested_to_ally: '你被要求结盟 '
@@ -865,7 +865,7 @@ msg_err_spawn_not_within_homeblock: '传送点不在 homeBlock, 使用 ''/town s
 #Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: '错误: 无效的命令!'
-tc_settings_reloaded: '[城镇聊天] 已重制聊天配置!'
+tc_settings_reloaded: '[TownyChat] 配置已重载！'
 tc_err_unrecognized_command_format: '错误: 无法识别的命令格式!'
 tc_channel_list_status: '(状态)'
 tc_channel_list_in: '加入'
@@ -880,17 +880,17 @@ tc_err_you_dont_have_mute_perms: '您没有禁言权限'
 tc_err_you_cant_mute_admin: '你不能禁言一个Towny管理员。'
 tc_err_you_cant_mute_chat_mod: '你不能禁言聊天管理者.'
 tc_player_already_muted_in_channel: '[城镇聊天] 玩家在 &f%s 频道内被禁言'
-tc_player_is_now_muted_in_channel: '[城镇聊天] &f%s &2禁言了 &f%s'
+tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2已在 &f%s &2中被禁言'
 tc_player_is_not_muted_in_channel: '[城镇聊天] 玩家没有在&f%s被禁言'
-tc_player_is_now_unmuted_in_channel: '[城镇聊天] &f%s &2目前不在 &f%s'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2已在 &f%s &2中解除禁言'
 tc_err_you_are_currently_muted_in_channel: '你目前处于禁言状态 &f%s&c!'
 tc_err_you_cannot_leave_channel: '你不能离开 &f%s'
 tc_you_already_left_channel: '[城镇聊天] 你已经离开了 &f%s'
 tc_you_left_channel: '[城镇聊天] 你离开了 &f%s'
 tc_you_are_now_talking_in_channel: '[城镇聊天] 你正在说话 &f%s'
 tc_err_you_cannot_join_channel: '你不能加入 &f%s'
-tc_you_are_already_in_channel: '[城镇聊天] 你已经在 &f%s'
-tc_you_joined_channel: '[城镇聊天] 你加入了 &f%s'
+tc_you_are_already_in_channel: '[TownyChat] 你已经在 &f%s'
+tc_you_joined_channel: '[TownyChat] 你加入了 &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: '你已经在默认频道聊天 使用该频道的命令切换到另一个频道.'
 tc_err_unable_to_talk_essentials_mute: '你不能说话...因为你被禁言了！'
 tc_err_unable_to_talk_you_are_spamming: '住口...你刷屏了!'
@@ -1068,21 +1068,21 @@ msg_error_invalid_comparator_nation: '&b你不能比较这个！你可以尝试�
 msg_error_invalid_comparator_town: '&b你不能比较这个！你可以尝试这些：%s。'
 msg_err_merging_for_kings_only: '&b只有国家领导者能合并。'
 msg_err_king_of_that_nation_is_not_online: '&b国家%s的领导者%s目前不在线，合并失败。'
-nation1_has_merged_with_nation2: '&6国家 %s t同意与 %s 合并.'
+nation1_has_merged_with_nation2: '&6国家 %s 已同意与主导方 %s 合并。'
 msg_would_you_merge_your_nation_into_other_nation: '&6你想要将你的国家 %s 并入 %s 吗? 这会将城镇和国家银行内的钱存入 %s.'
 no_open_towns: '没有开放的城镇。'
 #Added in 0.52:
 msg_error_nation_has_no_allies: '没有可以成为盟国的国家.'
 msg_error_nation_has_no_enemies: '没有可以成为敌国的国家.'
 msg_error_ta_plot_claim: '缺少玩家名, 示例: /ta plot claim 玩家名'
-msg_error_no_player_with_that_name: '找不到 %s 这名玩家'
+msg_error_no_player_with_that_name: '找不到名为 %s 的玩家'
 msg_admin_has_given_you_a_plot: '管理员为你声明了一块土地: %s'
 msg_town_forcemobs_setting_set_to: '城镇%s将强制生物生成设为了%s'
 msg_town_forcepvp_setting_set_to: '城镇 %s 的强制PVP设置为 %s'
 msg_town_forcedisabledpvp_setting_set_to: '城镇 %s 的强制管理员禁用PVP设置为 %s'
 msg_nation_changed_open: '&c国家的公开状态为 %s.'
 msg_err_already_in_a_nation: '你的城镇已经加入了一个国家.'
-msg_err_nation_not_open: '&c国家%s不是对所有人开放的，请询问这个国家的领导者或助手以加入。'
+msg_err_nation_not_open: '&c国家 %s 的大门并不是对所有人敞开的。如需加入，请询问国家领导者或其助手。'
 msg_err_nation_homeblock_in_another_world: '&c你的城镇之家与国都不在同一个世界.'
 status_bank_town_penalty_upkeep: '额外领地维护费'
 #Added in 0.53:
@@ -1105,8 +1105,8 @@ msg_has_paid_bail: '%s缴纳了赎金并被释放了。'
 msg_err_unable_to_pay_bail: '无法支付保释金.'
 msg_err_bail_not_enabled: '保释金功能未开启.'
 msg_you_have_been_freed_from_jail: '你被释放了.'
-msg_player_has_been_freed_from_jail_number: '%s 被 %s 释放了.'
-msg_player_has_been_sent_to_jail_number: '%s 被 %s 监禁了.'
+msg_player_has_been_freed_from_jail_number: '%s 从%s号监狱获释了。'
+msg_player_has_been_sent_to_jail_number: '%s 被%s号监狱监禁了。'
 msg_player_is_not_online: '%s 不在线.'
 msg_mysql_dump_success: 'MySQL 数据库转储完成.'
 msg_err_mysql_not_being_used: '你的配置没有设置为 保存 & 加载 mysql.'
@@ -1165,13 +1165,13 @@ msg_the_wilderness: '荒野'
 msg_enemy_areas: '敌对区域'
 msg_neutral_towns: '中立城镇'
 #Added in 0.64
-msg_err_no_nation_with_that_name: '找不到名为 %s 的城镇'
+msg_err_no_nation_with_that_name: '找不到名为 %s 的国家'
 msg_err_cannot_unclaim_homeblock: '你无法放弃声明城镇之家, 请使用 ''/town set homeblock'' 来搬家.'
 #Added in 0.65
 msg_err_rename_cancelled: '重命名被其他插件取消了.'
 #Added in 0.66
 #Added in 0.67
-msg_conquered: '[Conquered]'
+msg_conquered: '&4（占领中）'
 #Added in 0.68
 msg_plot_group_claim_confirmation: '这块土地是 %s 组内的一部分，如果你声明这块土地，你将购买一整组土地.'
 msg_plot_group_unclaim_confirmation: '这块土地是 %s 组内的一部分，如果你放弃声明这块土地，你将失去一整组土地.'
@@ -1209,7 +1209,7 @@ msg_err_plot_belongs_to_group_plot_nfs: '土地: %s属于土地组, 请使用 /p
 #Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '管理员控制的%s设置阻止你将pvp状态改为%s.'
 #Added in 0.73
-msg_err_you_aren't currently jailed: '你已被监禁.'
+msg_err_you_aren't currently jailed: '你未被监禁。'
 #Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '你不能在这里创建传送门的另一端.'
 #Added in 0.75
@@ -1677,7 +1677,7 @@ msg_deleting_resident: '正在删除居民%s。'
 #Shown during resident purge
 msg_purge_complete: '清理完成，共删除了%s个居民。'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: '你被给予了%s个额外的城镇区块上限。'
+msg_you_have_been_given_bonus_blocks: '你获得了%s个额外的城镇区块上限。'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: '你城镇的额外城镇区块上限已达到最大值，不能再购买了。'
 #Added in 0.128
@@ -1809,7 +1809,7 @@ msg_a_town_you_are_outlawed_in: '你在这个城镇是放逐者。'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: '找不到任何拥有可出售地块的开放、公开城镇来随机传送。'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou 被收取了传送到随机的销售城镇地皮的费用 %s。'
+msg_cost_spawn_rtp: '&b你被收取了%s来随机传送到一个出售的城镇地皮。'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: '您将被传送到%s中出售的地块，这会让您加入它。到达后，可使用"/plot claim "声明您的地块。'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
@@ -1995,7 +1995,7 @@ msg_err_taking_over_claims_is_not_enabled: "这个服务器没有开启领地掠
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
 msg_err_this_townblock_cannot_be_taken_over: "这个城镇不能被接管，它所属的城镇不会被过度圈地"
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "你不能声明这里，这会使得这个城镇区块成为Homeblock，但这是不允许的。"
+msg_err_you_cannot_make_this_your_homeblock: "你不能声明这里，这会使得这个城镇区块成为中心区块，但这是不允许的。"
 #Message shown when taking over a claim is stopped by another plugin.
 msg_err_another_plugin_cancelled_takeover: "另外的插件阻止了你接管这块土地。"
 #Confirmation shown when taking over a claim.
@@ -2009,7 +2009,7 @@ chunk_notification_takeover_available: " <red>[领地掠夺可用]"
 #Message shown when a takeover claim would cut a town into two sections.
 msg_err_you_cannot_over_claim_would_cut_into_two: "你不能接管这个区块，因为这会把城镇分成两部分。你必须从其他的的方向来进行领地掠夺。"
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
+msg_err_that_town_is_not_conquered: "%s 已不再处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
 msg_setup_command_folia: "由于对话API不工作，“/ta install”命令当前在Folia上不起作用，因此请参阅下面的安装指南。"
@@ -2017,6 +2017,8 @@ msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia
 msg_folia_scoreboard: "目前不支持在Folia的服务端上更改计分板。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "您不能取消声明这个城镇区块，因为它位于%s，且%s将没有足够的相邻的区块（必须有%s。）"
+#Message shown when a player tries to unclaim an outpost with attached townblocks, while the min_adjacent_blocks setting is in use.
+msg_err_cannot_unclaim_outpost_with_adjacent_claims: "你不能放弃声明附带城镇区块的前哨。"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>你的国家从自己的各个城镇中征收了%s的税。"
 #Message shown when a nation pays taxes to its towns.
@@ -2035,7 +2037,7 @@ msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被�
 msg_nation_set_conquered_tax__amount_set: "%s把征服的税额设置为%s。"
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服税额设置到%s以上。"
 msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行领地掠夺。你必须再等%s。"
-msg_err_your_cannot_overclaim_for_another: "你不可以在%s的时间内再次进行领地掠夺。"
+msg_err_your_cannot_overclaim_for_another: "你还需要等待%s秒才能进行领地掠夺。"
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>世界未加载。"
 #Message shown when denying a cross world teleport
@@ -2099,8 +2101,8 @@ msg_all_of_your_towns_sent_invites_have_been_cancelled: "您的城镇发出的�
 msg_err_name_validation_invalid_characters: "%s包含了一些在Towny正则表达式中不被允许的字符。"
 msg_err_name_validation_begins_with_eco_prefix: "%s 以经济中使用的字母开头，您不能使用此名称"
 msg_err_name_validation_name_already_in_use: "%s 已经被使用了"
-msg_err_name_validation_title_too_long: "%s 不能用作前缀，因为字数太太太太长了"
-msg_err_name_validation_name_too_long: "%s 不能用作名称，因为字数太太太太长了"
+msg_err_name_validation_title_too_long: "%s 不能用作头衔或后缀，因为字数过长。"
+msg_err_name_validation_name_too_long: "%s 不能用作名称，因为字数过长。"
 msg_err_name_validation_is_empty: "你不能提供一个空名称"
 msg_err_name_validation_is_not_permitted: "不允许%s。"
 msg_err_name_validation_is_all_underscores: "%s 里头全是下划线!"
@@ -2115,12 +2117,12 @@ msg_warning_nation_deposit_hint: "使用/nation deposit [amount]把钱存入国�
 teleport_warmup_title_dont_move: "&6不要移动！"
 teleport_warmup_subtitle_seconds_remaining: "&7离开始传送还有&c%s&7秒。"
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为你的城镇已经被毁， %s 区块许可线已经改变，故不再提供对城镇的任何保护。"
-console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为他们部分地块被摧毁，%s已使用%s在区块限制内的区块用于保护%s区块"
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为废墟状态，%s 的%s个地皮权限行已被修改，不再提供保护：%s。"
 msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "你不能把一块地割让给自己的城镇。"
-msg_err_town_cede_you_cannot_cede_your_homeblock: "你不能割让你城镇的home区块。"
+msg_err_town_cede_you_cannot_cede_your_homeblock: "你不能割让你城镇的中心区块。"
 msg_err_town_cede_the_mayor_is_not_online: "%s的市长%s不在线，因此无法接受您的地皮。"
 msg_err_town_no_longer_owns_this_plot: "%s不再拥有此区块。"
-msg_err_town_cede_town_cannot_cede_their_homeblock: "%s不能割让他们的Home区块。"
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s不能割让他们的中心区块。"
 msg_town_cede_plot_confirmation_give_plot: "你确定你要把这个区块给%s吗？"
 msg_town_cede_plot_confirmation_accept_plot: "%s想要将在%s的区块割让给你的城镇。你接受吗？"
 msg_town_cede_plot_accepted: "%s已接受你所割让的区块。"
