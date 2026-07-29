@@ -949,7 +949,7 @@ status_nation_tax: '国税：'
 status_nation_conquered_tax: '征服税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
-status_nation_enemies: '敌人'
+status_nation_enemies: '敌国'
 status_nation_enemied_by: '和此国敌对的国家'
 status_world_claimable: '&a可宣称'
 status_world_noclaims: '&a不可宣称'
@@ -1585,7 +1585,7 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: '你不能监�
 #Added in 0.120
 msg_resident_prompt: '在聊天栏里输入玩家名，或输入q退出。30秒内不输入将自动取消。'
 msg_prompt_cancel: '请求已取消或超时。'
-status_home_element: ' &7[城镇中心区块：%s]'
+status_home_element: ' &7[中心区块：%s]'
 status_about: "关于:"
 status_registered: '注册于：'
 status_lastonline: '最后在线时间：'
@@ -2083,7 +2083,7 @@ msg_err_nation_town_already_sanctioned: "你的国家已经城镇进行了制裁
 msg_err_nation_town_sanctioned: "你的国家已经制裁了%s, 他们将无法加入你的国家"
 msg_err_nation_town_unsanctioned: "你的国家不再制裁%s"
 msg_err_nation_has_no_sanctioned_towns: "你的国家没有制裁的城镇"
-title_nation_sanctioned_towns: '受制裁的城镇'
+title_nation_sanctioned_towns: '制裁的城镇'
 msg_err_cannot_add_sanctioned_town: "你的国家无法添加%s, 因为你的国家已经制裁了他们"
 msg_err_cannot_join_nation_sanctioned_town: "你的城镇无法加入%s, 这个国家已经制裁了你的城镇"
 msg_err_no_nation_cannot_do: "你不能执行这个操作，因为没有国家被执行"
