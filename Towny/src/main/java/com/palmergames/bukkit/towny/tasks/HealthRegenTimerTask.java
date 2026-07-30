@@ -77,22 +77,24 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	}
 
 	private void evaluateHealth(Player player) {
-		// Heal 1 HP while in town.
-		final double currentHP = player.getHealth();
-		final double futureHP = currentHP + 1;
-		
-		final AttributeInstance maxHealth = player.getAttribute(MAX_HEALTH);
-		if (maxHealth == null)
-			return;
-
-		final double maxHP = maxHealth.getValue();
-
-		// Shrink gained to fit below the maxHP.
-		final double gained = futureHP > maxHP ? 1.0 - (futureHP - maxHP) : 1.0;
-		if (gained <= 0)
-			return;
-
 		// Drop back to Sync so we can heal the player
-		plugin.getScheduler().run(player, () -> player.heal(gained, RegainReason.REGEN));
+		plugin.getScheduler().run(player, () -> {
+			// Heal 1 HP while in town.
+			final double currentHP = player.getHealth();
+			final double futureHP = currentHP + 1;
+
+			final AttributeInstance maxHealth = player.getAttribute(MAX_HEALTH);
+			if (maxHealth == null)
+				return;
+
+			final double maxHP = maxHealth.getValue();
+
+			// Shrink gained to fit below the maxHP.
+			final double gained = futureHP > maxHP ? 1.0 - (futureHP - maxHP) : 1.0;
+			if (gained <= 0)
+				return;
+
+			player.heal(gained, RegainReason.REGEN);
+		});
 	}
 }
