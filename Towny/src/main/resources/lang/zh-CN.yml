@@ -74,13 +74,13 @@ town_help_18: "向该镇成员发送一条消息。"
 town_help_19: "将您的城镇设置为“出售”，可供其他玩家购买。"
 town_help_20: "将您的城镇设置为“不出售”。"
 town_help_21: "购买指定的城镇（只要它是正在出售中的）。"
-town_help_22: "向您的城镇银行存钱。"
+town_help_22: "向城镇银行存钱。"
 town_help_23: "用来修改您城镇居民的头衔。"
 town_help_24: "用来删除您的城镇。"
 town_help_25: "用来修改您城镇所放逐的玩家。"
 town_help_26: "列出所有的城镇，查看/t list ?以获得帮助。"
 town_help_27: "离开你所在的城镇。"
-town_help_28: "从您的城镇银行取钱。"
+town_help_28: "从城镇银行取钱。"
 town_help_29: "使用指令/t claim ?以获得帮助。"
 town_help_30: "用来取消声明你城镇的土地。"
 town_help_31: "添加或移除一个居民。"
@@ -180,7 +180,7 @@ nation_sanction_help_4: "列出某个国家所制裁城镇列表。"
 king_help_1: '国家领导人帮助'
 king_help_2: '设置你的盟国.'
 king_help_3: '设置你的敌国.'
-king_help_4: "从您的国家银行取钱。"
+king_help_4: "从国家银行取钱。"
 king_help_5: "从你的国家中添加或移除一个城镇"
 king_help_6: "使用指令/n set ?以获得帮助。"
 king_help_7: "使用指令/n toggle ?以获得帮助。"
@@ -461,8 +461,8 @@ msg_del_nation: '&b国家 %s 已分崩离析！'
 msg_del_resident: '&b%s 失去了所有的Towny数据！'
 msg_join_nation: '&b城镇 %s 加入了国家！'
 msg_join_town: '&b%s 加入了城镇!'
-msg_friend_add: '&b%s 已将您添加为好友。'
-msg_friend_remove: '&b%s 已将您从好友中移除。'
+msg_friend_add: '&b%s 已将你添加为好友。'
+msg_friend_remove: '&b%s 已将你从好友中移除。'
 msg_left_town: '&b%s 离开了城镇'
 msg_you_left: '&b你离开了 %s.'
 msg_not_mayor: '&b你不是城主.'
@@ -669,7 +669,7 @@ msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
 msg_err_plot_preclaim_disable: "&c你现在不能声明地皮 %s。"
 msg_err_plot_preunclaim_disable: "&c居民现在不能放弃声明地皮 %s。"
-msg_err_you_dont_have_permission_to_use_colours: "您没有权限在头衔和姓氏中使用彩色代码。"
+msg_err_you_dont_have_permission_to_use_colours: "你没有权限在头衔和后缀中使用颜色代码。"
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
 msg_err_too_many_npc: '&c已注册的NPC太多了.'
 msg_err_negative_money: '&c你不能拥有负数的钱.'
@@ -809,7 +809,7 @@ nation_ally_help_4: '列出你收到的所有盟国请求'
 nation_ally_help_5: '接受与盟国结盟的请求'
 nation_ally_help_6: '拒绝成为盟国的请求'
 nation_ally_help_7: '撤销结盟请求'
-msg_player_denied_all_invites: "已拒绝您收到的所有邀请"
+msg_player_denied_all_invites: "已拒绝你收到的所有邀请。"
 msg_err_player_no_invites: '&c你没有任何邀请!'
 msg_err_player_has_multiple_invites: '&c你有多个邀请, 请注明!'
 msg_err_player_has_too_many_invites: '%s 有太多邀请, 请他拒绝一些邀请，然后再进行邀请.'
@@ -1220,7 +1220,7 @@ msg_you: '你'
 msg_click_town_info: '<green>点击查看城镇状态屏幕。'
 msg_click_nation_info: '<green>点击查看国家状态屏幕。'
 msg_click_spawn: '&a点击传送到:&e%s'
-msg_click_spawn_brief: '<green>[Spawn]'
+msg_click_spawn_brief: '<green>[传送]'
 msg_spawn_cost: '&a传送价格=&e%s'
 #Added in 0.78
 msg_reload_error: '重载Towny时出错.'
@@ -1957,7 +1957,7 @@ msg_err_cannot_create_new_town_x_seconds_remaining: '你不能创建新的城镇
 #Message shown when a player is claiming land too soon after unclaiming it.
 msg_err_cannot_claim_townblock_x_seconds_remaining: '你不能宣称这个城镇区块: %s，冷却时间 %s 秒。'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: '城镇 %s 已将建立者设置为 %s。'
+msg_founder_set: '已将城镇 %s 的建立者设置为 %s。'
 #Message shown when toggling town allowed to war admin setting
 msg_town_allowedtowar_setting_set_to: '城镇 %s 已将允许战争设置为 %s。'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
@@ -2097,7 +2097,7 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: '您不能在银行�
 msg_err_you_cannot_outlaw_your_mayor: "你不能放逐你的镇长"
 msg_err_you_cannot_outlaw_because_of_rank: "你不能放逐%s, 因为它持有一些城镇头衔"
 status_nation_sanctioned_towns: "制裁的城镇"
-msg_all_of_your_towns_sent_invites_have_been_cancelled: "您的城镇发出的邀请已被取消"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "已取消你的城镇发出的所有邀请。"
 msg_err_name_validation_invalid_characters: "%s包含了一些在Towny正则表达式中不被允许的字符。"
 msg_err_name_validation_begins_with_eco_prefix: "%s 以经济中使用的字母开头，您不能使用此名称"
 msg_err_name_validation_name_already_in_use: "%s 已经被使用了"
@@ -2142,11 +2142,11 @@ msg_err_you_cannot_delete_this_nation: "您已被阻止删除这个国家。"
 status_district_name_and_size: '城镇区块隶属于区域：%s。该区域共有%s个城镇区块。'
 msg_err_district_name_required: '你必须设置选区名称，请输入/plot district add {name}来命名'
 msg_err_rename_district_name_required: '你必须设置选区名称，请输入 /plot district rename {name}来命名'
-msg_district_renamed_from_x_to_y: '选区%s已经重命名为%s'
+msg_district_renamed_from_x_to_y: '区域 %s 已重命名为 %s。'
 msg_err_plot_not_associated_with_a_district: '这块地皮没有与选区相连'
 msg_plot_was_removed_from_district_x: '地皮 <blue>(%s,%s) <dark_green>已经从%s选区中移除'
-msg_district_empty_deleted: '这个选区%s中未包含任何城镇区块，已被删除'
-msg_district_deleted: '选区%s已被删除'
+msg_district_empty_deleted: '区域 %s 未包含任何城镇区块，已被删除。'
+msg_district_deleted: '区域 %s 已删除。'
 msg_err_this_plot_is_already_part_of_the_district_x: '该城镇区块已归属于%s区域。'
 msg_townblock_transferred_from_x_to_x_district: '城镇区块已从%s区域划归至%s区域。'
 msg_district_already_exists_did_you_want_to_transfer: '该城镇区块已属于区域“%s”。你确定要将其划归至区域“%s”吗？'
@@ -2154,9 +2154,9 @@ msg_plot_was_put_into_district_x: '区块<blue>(%s,%s)<dark_green>已被划入%s
 msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "你不能将此城镇区块从区域“%s”中移除，因为这会导致该区域的一部分与其余部分分离。"
 map_hover_district: '区域： '
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "你在服务器上的时间尚不够长，须再等待 %s 后才可加入一座城镇。"
-msg_your_nation_has_pending_ally_invites: "您的国家收到了其他国家的盟友邀请，使用'/n ally received'查看您收到的邀请"
-msg_your_town_has_pending_nation_invites: "您的城镇收到了加入国家的邀请，使用 '/t invite received' 查看您收到的邀请。"
-msg_you_have_pending_town_invites: "你收到了其他城市的邀请。 使用 '/invite list' 查看您收到的邀请，或使用 '/invite all' 拒绝所有邀请。"
+msg_your_nation_has_pending_ally_invites: "你的国家收到了来自一个或多个国家的结盟邀请。使用“/n ally received”查看你收到的邀请。"
+msg_your_town_has_pending_nation_invites: "你的城镇收到了来自一个或多个国家的加入邀请。使用“/t invite received”查看你收到的邀请。"
+msg_you_have_pending_town_invites: "你收到了来自一个或多个城镇的加入邀请。使用“/invite list”查看你收到的邀请，或使用“/invite deny all”拒绝所有邀请。"
 msg_admin_eco_convert_no_providers: "<red>无经济提供商"
 msg_admin_eco_convert_no_provider_specified: "<red>没有指定经济提供商"
 msg_admin_eco_convert_no_target_specified: "<red>没有指定目标经济"
