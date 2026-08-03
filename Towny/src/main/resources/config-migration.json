@@ -949,5 +949,15 @@
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       }
     ]
+  },
+  {
+    "version": "0.103.1.2",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.switch_ids",
+        "value": ",END_PORTAL_FRAME"
+      }
+    ]
   }
 ]
