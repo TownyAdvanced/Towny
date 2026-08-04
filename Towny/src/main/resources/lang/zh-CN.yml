@@ -145,7 +145,7 @@ nation_help_11: "列出国家中的城镇。"
 nation_help_12: "列出国家的盟国。"
 nation_help_13: "列出国家的敌国。"
 nation_help_14: "用来加入开放的国家。"
-nation_help_15: "向国家银行中存钱。"
+nation_help_15: "向国家银行存钱。"
 nation_help_16: "用来删除您的国家。"
 nation_help_17: "用来给一个居民添加或移除头衔。"
 nation_help_18: "查看/n rank ?以获得帮助。"
@@ -313,13 +313,13 @@ townyadmin_nation_help_7: "合并第二的国家到第一的国家"
 townyadmin_nation_help_8: "无视规则，合并第二国家到第一国家"
 townyadmin_nation_help_9: "使用一个国家的切换命令"
 townyadmin_nation_help_10: "使用国家的设置指令"
-townyadmin_nation_help_11: "把钱存入国家银行"
-townyadmin_nation_help_12: "从国家银行中取钱"
+townyadmin_nation_help_11: "向国家银行存钱。"
+townyadmin_nation_help_12: "从国家银行取钱。"
 townyadmin_nation_help_13: "打开银行历史"
 townyadmin_nation_help_14: "添加城镇进入国家"
 townyadmin_nation_help_15: "使用一个国家的头衔指令"
-townyadmin_nationrank_help_0: "使用国家的头衔指令"
-townyadmin_nationrank_help_1: "移除一个本国居民的头衔"
+townyadmin_nationrank_help_0: "给居民添加国家头衔。"
+townyadmin_nationrank_help_1: "移除居民的国家头衔。"
 townyadmin_database_help_0: "强制保存数据库。"
 townyadmin_database_help_1: "强制加载数据库。"
 townyadmin_database_help_2: "移除所有居民的头衔和后缀。"
@@ -560,10 +560,10 @@ msg_undo_complete: '&2成功撤销操作.'
 msg_give_total: '&b给予 %s 奖励区块上限. (总共: %s)'
 mag_backup_success: '&2备份成功。'
 msg_xx_withdrew_xx: '&b%1$s从%3$s银行取出了%2$s。'
-msg_xx_deposited_xx: '&b%1$s 向 %3$s 银行捐赠了%2$s。'
+msg_xx_deposited_xx: '&b%1$s 向 %3$s 银行存入了%2$s。'
 msg_insuf_funds: '&c你没有这么多钱.'
 msg_err_withdraw_disabled: '取款功能已关闭!'
-msg_err_deposit_capped: '无法捐款. 银行资金上限为 %s.'
+msg_err_deposit_capped: '无法存款。银行资金上限为 %s。'
 msg_set_town_home: '&b成功把城镇中心区块的位置变更为 %s'
 msg_set_town_spawn: '&b城镇传送点已成功更改。'
 msg_set_outpost_spawn: '&b成功改变前哨传送点.'
@@ -631,7 +631,7 @@ msg_err_cant_afford_tp: '&b无法支付传送到你的城镇传送点的费用.'
 msg_err_plot_nfs: '&c这块土地不供出售.'
 msg_err_not_part_town: '&c已选区域不属于你的城镇.'
 msg_err_not_attached_edge: '&c选择的区域不与你的城镇接壤.'
-msg_err_empty_area_selection: '&c选定区域包含无效区块.'
+msg_err_empty_area_selection: '&c选定区域无有效地皮。'
 msg_err_not_enough_blocks: '&c没有足够的可用城镇块来声明这片区域.'
 msg_err_cant_afford_blocks: '&c城镇支付不起声明 %s 城镇区块的钱: %s'
 msg_err_not_in_town_claim: '&你必须加入城镇才能声明这块土地.'
@@ -925,7 +925,7 @@ status_town: '城镇：'
 status_no_town: '无'
 status_town_ranks: '城镇头衔：'
 status_nation_ranks: '国家头衔：'
-jailed_in_town: ' 于城镇%s中'
+jailed_in_town: ' 在城镇：%s'
 status_friends: '好友'
 rank_list_title: '%s的头衔列表'
 rank_list_mayor: '市长：'
@@ -1033,8 +1033,8 @@ adjustable: '可调整'
 #Added in 0.48:
 msg_no_funds_new_town2: '&c%s不能在这里建立一个新城镇，因为这需要花费%s。'
 msg_no_funds_new_nation2: '&c这个城镇的国库不足够强大到足以建立一个新的国家, 建国需要花费 %s.'
-msg_no_funds_claim2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块，因此你需要使用/t deposit %4$s来向你的城镇银行中存款%3$s，才能继续声明这些城镇区块。'
-msg_err_cant_afford_blocks2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块，因此你需要使用/t deposit %4$s来向你的城镇银行中存款%3$s，才能继续声明这些城镇区块。'
+msg_no_funds_claim2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块。请使用/t deposit %4$s向你的城镇银行存入%3$s'
+msg_err_cant_afford_blocks2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块。请使用/t deposit %4$s向你的城镇银行存入%3$s'
 msg_err_not_enough_variables: '&c变量不足: '
 nation_rechecked_by_admin: '&b成功重新检测国家 %s 的城镇距离.'
 msg_err_nation_over_town_limit: '&c你的国家内的城镇已满，上限为: %s.'
@@ -1381,7 +1381,7 @@ msg_comptype_bankrupt: '破产状态'
 msg_ruined: '&c（废墟）'
 msg_bankrupt: '&c（已破产）'
 #Added in 0.98
-msg_del_town2: '&b城镇%s已删除！'
+msg_del_town2: '&b城镇 %s 已删除！'
 msg_ruin_town: '&b城镇%s沦为废墟！'
 gui_title_select_plot_type: '选择地皮类型'
 gui_title_no_restrictions: '此地皮类型没有限制。'
