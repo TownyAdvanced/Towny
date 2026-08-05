@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.event.town;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -31,11 +31,11 @@ public class TownPreUnclaimEvent extends CancellableTownyEvent {
         this.cause = cause;
 
         // Don't even bother with things if town is null.
-        if (this.town == null){
-            setCancelMessage(Translation.of("msg_area_not_recog"));
+        if (this.town == null) {
+            setCancelMessage(Translatable.of("msg_area_not_recog"));
             setCancelled(true);
         } else {
-            setCancelMessage(Translation.of("msg_err_town_unclaim_canceled"));
+            setCancelMessage(Translatable.of("msg_err_town_unclaim_canceled"));
         }
         
     }

@@ -1742,7 +1742,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void addAlly(Town town) {
 		TownAddAlliedTownEvent taate = new TownAddAlliedTownEvent(this, town);
 		if (BukkitTools.isEventCancelled(taate)) {
-			TownyMessaging.sendMsg(taate.getCancelMessage());
+			TownyMessaging.sendMsg(taate.getCancelTranslatable());
 			return;
 		}
 		enemies.remove(town.getUUID());
@@ -1752,7 +1752,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeAlly(Town town) {
 		TownRemoveAlliedTownEvent trate = new TownRemoveAlliedTownEvent(this, town);
 		if (BukkitTools.isEventCancelled(trate)) {
-			TownyMessaging.sendMsg(trate.getCancelMessage());
+			TownyMessaging.sendMsg(trate.getCancelTranslatable());
 			return;
 		}
 		allies.remove(town.getUUID());
@@ -1815,7 +1815,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void addEnemy(Town town) {
 		TownAddEnemiedTownEvent taete = new TownAddEnemiedTownEvent(this, town);
 		if (BukkitTools.isEventCancelled(taete)) {
-			TownyMessaging.sendMsg(taete.getCancelMessage());
+			TownyMessaging.sendMsg(taete.getCancelTranslatable());
 			return;
 		}
 		allies.remove(town.getUUID());
@@ -1825,7 +1825,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeEnemy(Town town) {
 		TownRemoveEnemiedTownEvent trete = new TownRemoveEnemiedTownEvent(this, town);
 		if (BukkitTools.isEventCancelled(trete)) {
-			TownyMessaging.sendMsg(trete.getCancelMessage());
+			TownyMessaging.sendMsg(trete.getCancelTranslatable());
 			return;
 		}
 		enemies.remove(town.getUUID());

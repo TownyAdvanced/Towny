@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public class TownRemoveResidentRankEvent extends CancellableTownyEvent {
 		this.resident = resident;
 		this.rank = rank;
 		this.town = town;
-		setCancelMessage(Translation.of("msg_err_command_disable"));
+		setCancelMessage(Translatable.of("msg_err_command_disable"));
 	}
 
 	/**
