@@ -553,7 +553,7 @@ msg_world_mobs: '&c这个世界强制开启怪物生成。'
 msg_world_expl: '&c这个世界强制开启爆炸。'
 msg_world_fire: '&c这个世界强制开启火焰蔓延。'
 msg_town_mobs: '&c这个城镇强制开启怪物生成。'
-msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
+msg_plot_pvp: '&c竞技场（Arena）区块中不能切换PVP。'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
 msg_reloaded: '&2Towny配置已重载。'
 msg_undo_complete: '&2成功撤销操作.'
@@ -703,7 +703,7 @@ msg_you_have_given_rank: '你给 %3$s 授予了%1$s头衔 %2$s。'
 msg_resident_not_your_town: '那个居民不是任何城镇的成员！'
 msg_resident_already_has_rank: '%s 已经拥有 %s 这个头衔了.'
 msg_town_or_nation_level_not_high_enough_for_this_rank: "您的 %s 级别不足以分配 %s 级别。您的 %s级别：需要 %s/%s"
-msg_rank_can_only_be_assigned_x_times: "您不能将 %s 的等级分配给 %s ，因为它只能分配给 %s 次。您的 %s 已经使用它了 %s 次。"
+msg_rank_can_only_be_assigned_x_times: "你不能将头衔 %s 授予 %s，因为该头衔仅能分配%s次，而你的%s已经使用了它%s次。"
 msg_you_have_had_rank_taken: '你被移除了%s的头衔%s。'
 msg_you_have_taken_rank_from: '你移除了 %3$s 的%1$s头衔 %2$s。'
 msg_resident_doesnt_have_rank: '%s 没有 %s 这个头衔.'
@@ -1316,8 +1316,8 @@ msg_warning_town_ruined_if_deleted: "警告！！！如果你删除你的城镇�
 msg_warning_town_ruined_if_deleted2: "%d小时后城镇中的任何居民都可以使用/t reclaim来重新声明此城镇。"
 msg_err_cannot_reclaim_town_unless_ruined: '&c你不能重新声明你的城镇，因为其并未倒闭。'
 msg_err_cannot_reclaim_town_yet: '&c%d小时后才可以重新声明你的城镇。'
-msg_town_reclaimed: '&b%s重新声明了城镇%s。'
-msg_err_cannot_use_command_because_town_ruined: "&c你不能使用此命令，因为你的城镇已经倒闭。要继续使用，请使用/t reclaim重新声明城镇，或使用/t leave离开此城镇。"
+msg_town_reclaimed: '&b%s 重新声明了城镇 %s。'
+msg_err_cannot_use_command_because_town_ruined: "&c你不能使用此命令，因为你的城镇已经沦为废墟。要继续使用，请使用/town reclaim重新声明城镇，或使用/town leave离开此城镇。"
 msg_warning_your_town_is_ruined_for_x_more_hours: '&c你的城镇已倒闭%d小时以上，使用/town reclaim来救回城镇并成为城主。'
 msg_time_remaining_before_full_removal: '距离完全删除：%d小时。'
 msg_time_until_reclaim_available: '距离可收复时间：%d小时。'
@@ -1785,7 +1785,7 @@ did_you_want_to_toggle_unlimited_claims: '你没有足够的圈地额度，你�
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: '你不能离开你的国家，你的城镇已被占领'
-msg_err_console_only: '此指令只能在控制台使用。'
+msg_err_console_only: '此指令仅供控制台使用。'
 msg_err_player_only: '此指令仅供玩家使用。'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
