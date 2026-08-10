@@ -2898,7 +2898,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Fire a cancellable event.
 		TownPreRenameEvent event = new TownPreRenameEvent(town, newName);
 		if (BukkitTools.isEventCancelled(event)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
+			TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
 			return;
 		}
 
