@@ -5,6 +5,3 @@ before_install:
     # Use Eclipse Temurin 25 builds
     - sdk install java 25-tem
     - sdk use java 25-tem
-    # Use a modern Maven binary
-    - sdk install maven 3.9.9
-    - sdk use maven 3.9.9
