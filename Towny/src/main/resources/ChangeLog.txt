@@ -10978,3 +10978,16 @@ v0.92.0.11:
   - API: New Cancellable API Events: TownSetForSaleEvent and TownSetNotForSaleEvent.
   - Add res check to isHideTownBalanceEnabled, courtesy of BladedNarwhal with PR #8256. (First-Time Contributor!)
     - Residents who are a part of a town will not have the town's bank balance hidden while hide_town_balance_on_status_screen is true.
+0.103.1.2:
+  - API: add TOWN_CLAIM to TownyCommandAddonAPI, courtesy of Lemar98 with PR #8257.
+  - Add maven wrapper file to fix jitpack builds, courtesy of Warrior with PR #8259.
+  - Remove manual regain health event call, courtesy of Warrior with PR #8263.
+  - Protect portal frames as a switch instead of build, courtesy of Warrior with PR #8264.
+  - Send proper error message to player when renaming a town is cancelled, courtesy of Veyronity with PR #8266.
+  - Fix townyadmin sanctiontown tabcomplete, courtesy of Veyronity with PR #8267.
+  - Add perm resident mode, courtesy of SulkyWhale with PR #8270.
+  - New Command: /res toggle perm, /res set mode perm
+    - Shows the player the townblock status screen when they enter a plot. Shows the wilderness status screen while in the wilderness.
+  - Make obfuscated decoration no longer user safe, courtesy of Warrior with PR #8273.
+  - Bump fr.mrmicky:fastboard from 2.2.0 to 2.2.1.
+  - Bump junit.version from 6.1.2 to 6.1.3.
