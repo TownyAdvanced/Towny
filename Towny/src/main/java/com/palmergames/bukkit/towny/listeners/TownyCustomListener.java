@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -105,6 +106,12 @@ public class TownyCustomListener implements Listener {
 			}
 			if (resident.hasMode("map"))
 				TownyCommand.showMap(player);
+			
+			if (resident.hasMode("perm"))
+				if (TownyAPI.getInstance().isWilderness(to))
+					TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(to.getTownyWorld(), player));
+				else
+					TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(to.getTownBlockOrNull(), player));
 
 			if (resident.hasMode("plotborder") || resident.hasMode("constantplotborder"))
 				BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));

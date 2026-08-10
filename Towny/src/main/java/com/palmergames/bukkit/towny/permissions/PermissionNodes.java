@@ -288,6 +288,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS("towny.command.resident.toggle.ignoreplots"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL("towny.command.resident.toggle.infotool"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MAP("towny.command.resident.toggle.map"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_PERM("towny.command.resident.toggle.perm"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTGROUP("towny.command.resident.toggle.plotgroup"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_DISTRICT("towny.command.resident.toggle.district"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER("towny.command.resident.toggle.townborder"),
