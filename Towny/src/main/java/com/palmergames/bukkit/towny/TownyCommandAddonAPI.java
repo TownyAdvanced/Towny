@@ -29,6 +29,7 @@ public class TownyCommandAddonAPI {
         NATION_TOGGLE,
         TOWN,
 		TOWN_BUY,
+		TOWN_CLAIM,
 		TOWN_LIST_BY,
         TOWN_SET,
         TOWN_TOGGLE,
