@@ -36,6 +36,7 @@ public class TownyCommandAddonAPI {
         PLOT,
         PLOT_SET,
         PLOT_TOGGLE,
+		PLOT_GROUP,
 		PLOT_GROUP_TOGGLE,
         TOWNY,
         TOWNYADMIN,

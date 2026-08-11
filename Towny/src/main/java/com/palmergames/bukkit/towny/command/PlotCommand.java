@@ -267,7 +267,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						break;
 				case "group":
 					if (args.length == 2)
-						return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_GROUP, plotGroupTabCompletes), args[1]);
 					
 					if (args.length < 2)
 						break;
@@ -1509,6 +1509,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "toggle" -> parsePlotGroupToggle(split, townBlock, player, resident);
 		case "trust" -> parsePlotGroupTrust(split, townBlock, player);
 		default -> {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_GROUP, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_GROUP, split[0]).execute(player, "group", split);
+				return;
+			}
 			HelpMenu.PLOT_GROUP_HELP.send(player);
 			if (townBlock.hasPlotObjectGroup())
 				TownyMessaging.sendMsg(player, Translatable.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
