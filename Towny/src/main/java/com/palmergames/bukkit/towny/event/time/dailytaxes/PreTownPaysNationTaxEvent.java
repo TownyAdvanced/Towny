@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.event.time.dailytaxes;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public class PreTownPaysNationTaxEvent extends CancellableTownyEvent {
 		this.town = town;
 		this.nation = nation;
 		this.tax = tax;
-		setCancelMessage(Translation.of("msg_your_town_was_exempt_from_the_nation_tax"));
+		setCancelMessage(Translatable.of("msg_your_town_was_exempt_from_the_nation_tax"));
 	}
 	
 	public Town getTown() {

@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.event.town;
 
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -25,7 +25,7 @@ public class TownSetSpawnEvent extends CancellableTownyEvent {
 		this.player = player;
 		this.oldSpawn = town.getSpawnOrNull();
 		this.newSpawn = newSpawn;
-		setCancelMessage(Translation.of("msg_err_command_disable"));
+		setCancelMessage(Translatable.of("msg_err_command_disable"));
 	}
 
 	/**

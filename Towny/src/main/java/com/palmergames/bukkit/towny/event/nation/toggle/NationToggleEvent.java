@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.nation.toggle;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -10,7 +11,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Translation;
 
 public abstract class NationToggleEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
@@ -26,7 +26,7 @@ public abstract class NationToggleEvent extends CancellableTownyEvent {
 			this.player = (Player) sender;
 		this.nation = nation;
 		this.isAdminAction = admin;
-		setCancelMessage(Translation.of("msg_err_command_disable"));
+		setCancelMessage(Translatable.of("msg_err_command_disable"));
 	}
 
 	@Nullable

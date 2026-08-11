@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 
@@ -26,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class CancellableTownyEvent extends Event implements Cancellable {
 	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry, this event was cancelled.";
+	private Translatable cancelMessage = Translatable.literal("Sorry, this event was cancelled.");
 
 	public CancellableTownyEvent() {
 		super(!Bukkit.getServer().isPrimaryThread());
@@ -57,6 +59,16 @@ public abstract class CancellableTownyEvent extends Event implements Cancellable
 	 */
 	@NotNull
 	public String getCancelMessage() {
+		return cancelMessage.translate();
+	}
+
+	/**
+	 * @return cancelMessage a Translatable which will be translated to the player/sender
+	 *         informing them that the action they commited is being denied, if
+	 *         cancelMessage is blank then no message will be displayed.
+	 */
+	@NotNull
+	public Translatable getCancelTranslatable() {
 		return cancelMessage;
 	}
 
@@ -67,7 +79,10 @@ public abstract class CancellableTownyEvent extends Event implements Cancellable
 	 * @param msg cancelMessage to display as feedback.
 	 */
 	public void setCancelMessage(@NotNull String msg) {
-		this.cancelMessage = msg;
+		this.cancelMessage = Translatable.literal(msg);
 	}
 
+	public void setCancelMessage(@NotNull Translatable translatable) {
+		this.cancelMessage = translatable;
+	}
 }

@@ -279,7 +279,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
 		if (BukkitTools.isEventCancelled(event)) {
-			TownyMessaging.sendPrefixedTownMessage(town, event.getCancelMessage());
+			TownyMessaging.sendPrefixedTownMessage(town, event.getCancelTranslatable());
 			return "";
 		}
 		taxAmount = event.getTax();
