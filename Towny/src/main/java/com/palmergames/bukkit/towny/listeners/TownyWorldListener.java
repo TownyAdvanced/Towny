@@ -182,6 +182,7 @@ public class TownyWorldListener implements Listener {
 			}
 		} else {
 			WorldCoord lastWorldCoord = null;
+			WorldCoord originCoord = event.getEntity() != null ? WorldCoord.parseWorldCoord(event.getEntity()) : null;
 
 			// No player is involved in the event as far as we can tell, prevent creating the portal based on whether there's a town on the other side.
 			for (final BlockState block : event.getBlocks()) {
@@ -194,8 +195,13 @@ public class TownyWorldListener implements Listener {
 				}
 
 				if (worldCoord.hasTownBlock()) {
-					event.setCancelled(true);
-					break;
+					// When originCoord isn't null we can assume a non-player entity is creating
+					// this portal, and use that entity to judge the town on the origin side.
+					if (originCoord == null || !originCoord.hasTown(worldCoord.getTownOrNull())) {
+						event.setCancelled(true);
+						break;
+					}
+					// originCoord isn't null and the town there is the same as our worldCoord.
 				}
 			}
 		}
