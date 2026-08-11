@@ -10965,8 +10965,7 @@ v0.92.0.11:
   - Fix spectators/vanished players being able to prevent pvp toggling, courtesy of Warrior with PR #8252.
   - Bump junit.version from 6.1.1 to 6.1.2.
   - Bump net.coreprotect:coreprotect from 23.2 to 24.0.
-0.103.1.0:
-  - Bump version for Release.
+c
 0.103.1.1:
   - Allow townless players to reclaim ruins.
     - Closes #8099.
@@ -10990,4 +10989,9 @@ v0.92.0.11:
     - Shows the player the townblock status screen when they enter a plot. Shows the wilderness status screen while in the wilderness.
   - Make obfuscated decoration no longer user safe, courtesy of Warrior with PR #8273.
   - Bump fr.mrmicky:fastboard from 2.2.0 to 2.2.1.
+0.103.1.3:
   - Bump junit.version from 6.1.2 to 6.1.3.
+  - Fix non-player portal creation not working when the town is the same on both ends.
+    - Closes #8262.
+0.103.2.0:
+  - Bump version for Release.
