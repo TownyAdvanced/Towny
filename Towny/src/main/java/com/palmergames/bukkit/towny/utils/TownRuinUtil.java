@@ -112,42 +112,50 @@ public class TownRuinUtil {
 		town.setRuinedTime(System.currentTimeMillis());
 		town.setPublic(TownySettings.areRuinsMadePublic());
 		town.setOpen(TownySettings.areRuinsMadeOpen());
-		if (TownySettings.doRuinsTownPermissionsAllowAll())
+		// Get the config setting for if all permissions should be allowed in ruined towns
+		final boolean setPermissionsAllowAll = TownySettings.doRuinsPermissionsAllowAll();
+		if (setPermissionsAllowAll)
 			town.getPermissions().setAll(true);
 
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
-			if (townBlock.hasResident())
-				townBlock.removeResident();               // Removes any personal ownership.
-			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
-			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
-			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
-			townBlock.removeDistrict();                   // Removes district if it were present.
-			townBlock.setPermissionOverrides(null);       // Removes all permission overrides from the plot.
-			townBlock.setTrustedResidents(null);          // Removes all trusted residents.
+			// Don't change townblock if config specifies not to
+			if (setPermissionsAllowAll) {
+				if (townBlock.hasResident())
+					townBlock.removeResident();               // Removes any personal ownership.
+				townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
+				townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
+				townBlock.removeDistrict();                   // Removes district if it were present.
+				townBlock.setPermissionOverrides(null);       // Removes all permission overrides from the plot.
+				townBlock.setTrustedResidents(null);          // Removes all trusted residents.
+			}
+			townBlock.setPlotPrice(-1);   // Makes the plot not for sale.
 			townBlock.save();
 		}
 		
-		// Unregister the now empty plotgroups.
-		if (town.getPlotGroups() != null) {
-			for (PlotGroup group : new ArrayList<>(town.getPlotGroups())) {
-				new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED).callEvent();
-				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+		// Perform ruin cleanup if we are setting permissions to AllowAll
+		if (setPermissionsAllowAll) {
+			// Unregister the now empty plotgroups.
+			if (town.getPlotGroups() != null) {
+				for (PlotGroup group : new ArrayList<>(town.getPlotGroups())) {
+					new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED).callEvent();
+					TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+				}
 			}
+
+			// Unregister the now empty districts.
+			if (town.getDistricts() != null) {
+				for (District district : new ArrayList<>(town.getDistricts())) {
+					new DistrictDeletedEvent(district, null, DistrictDeletedEvent.Cause.TOWN_DELETED).callEvent();
+					TownyUniverse.getInstance().getDataSource().removeDistrict(district);
+				}
+			}
+
+			// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
+			if (TownySettings.getMaxResidentsPerTown() > 0)
+				ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 		}
 
-		// Unregister the now empty districts.
-		if (town.getDistricts() != null) {
-			for (District district : new ArrayList<>(town.getDistricts())) {
-				new DistrictDeletedEvent(district, null, DistrictDeletedEvent.Cause.TOWN_DELETED).callEvent();
-				TownyUniverse.getInstance().getDataSource().removeDistrict(district);
-			}
-		}
-		
-		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
-		if (TownySettings.getMaxResidentsPerTown() > 0)
-			ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
-		
 		town.setForSale(false);
 		
 		town.save();
@@ -229,12 +237,15 @@ public class TownRuinUtil {
 		if (!resident.equals(town.getMayor()))
 			setMayor(town, resident); //Set player as mayor (and remove npc)
 
-		// Set permission line to the config's default settings.
-		town.getPermissions().loadDefault(town);
-		for (TownBlock townBlock : town.getTownBlocks()) {
-			townBlock.getPermissions().loadDefault(town);
-			townBlock.setChanged(false);
-			townBlock.save();
+		// Don't reset plot permissions if they were never changed
+		if (TownySettings.doRuinsPermissionsAllowAll()) {
+			// Set permission line to the config's default settings.
+			town.getPermissions().loadDefault(town);
+			for (TownBlock townBlock : town.getTownBlocks()) {
+				townBlock.getPermissions().loadDefault(town);
+				townBlock.setChanged(false);
+				townBlock.save();
+			}
 		}
 		
 		town.save();
@@ -285,7 +296,7 @@ public class TownRuinUtil {
 				continue;
 			}
 
-			if (TownySettings.doRuinsTownPermissionsAllowAll() && TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
+			if (TownySettings.doRuinsPermissionsAllowAll() && TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
 				final Town finalTown = town;
 				// We are configured to slowly open up plots' permissions while a town is ruined.
 				Towny.getPlugin().getScheduler().runAsync(() -> allowPermissionsOnRuinedTownBlocks(finalTown));
