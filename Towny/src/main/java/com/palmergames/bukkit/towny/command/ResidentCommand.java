@@ -55,6 +55,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"jail",
 		"plotlist",
 		"outlawlist",
+		"trustlist",
 		"spawn",
 		"toggle",
 		"set",
@@ -148,6 +149,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "tax":
 				case "outlawlist":
+				case "trustlist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
 					break;
@@ -250,6 +252,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		case "tax" -> parseResidentTax(player, StringMgmt.remFirstArg(split));
 		case "plotlist" -> parseResidentPlotlist(player, StringMgmt.remFirstArg(split));
 		case "outlawlist" -> parseResidentOutlawlist(player, StringMgmt.remFirstArg(split));
+		case "trustlist" -> parseResidentTrustlist(player, StringMgmt.remFirstArg(split));
 		case "jail" -> parseResidentJail(player, StringMgmt.remFirstArg(split));
 		case "set" -> residentSet(player, StringMgmt.remFirstArg(split));
 		case "toggle" -> residentToggle(player, StringMgmt.remFirstArg(split));
@@ -332,6 +335,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlawed_in").forLocale(player), new ArrayList<>(resident.getTownsOutlawedIn())));
+	}
+
+	private void parseResidentTrustlist(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TRUSTLIST.getNode());
+
+		Resident resident = split.length == 0 ? getResidentOrThrow(player) : getResidentOrThrow(split[0]);
+
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("trusted_in").forLocale(player), new ArrayList<>(resident.getTownsTrustedIn())));
 	}
 
 	private void parseResidentJail(Player player, String[] split) throws TownyException {
