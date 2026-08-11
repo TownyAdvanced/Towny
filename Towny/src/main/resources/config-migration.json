@@ -961,7 +961,7 @@
     ]
   },
   {
-    "version": "0.103.3.0",
+    "version": "0.103.2.1",
     "changes": [
       {
         "type": "TOWNYPERMS_ADD",
