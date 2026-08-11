@@ -3526,6 +3526,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank."),
+	TOWN_RUINING_TOWN_PERMISSIONS_CHANGE_ON_RUIN(
+			"town_ruining.town_ruins.do_permissions_change_on_ruin",
+			"true",
+			"",
+			"# If this is false, a town's and its plots' permission settings will not change when the town becomes a ruin or is reclaimed.",
+			"# The ruins_become_open setting is independent and can still make the ruined town open to join.",
+			"# The do_plots_permissions_change_to_allow_all setting has no effect while this is false."),
 	TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY(
 			"town_ruining.town_ruins.do_plots_permissions_change_to_allow_all",
 			"false",

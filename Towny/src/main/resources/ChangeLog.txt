@@ -10995,3 +10995,9 @@ c
     - Closes #8262.
 0.103.2.0:
   - Bump version for Release.
+  - Add an option to preserve town and plot permission settings while towns are ruined.
+  - New Config Option: town_ruining.town_ruins.do_permissions_change_on_ruin
+    - Default: true
+    - When false, town and plot permission settings remain unchanged when a town becomes a ruin or is reclaimed.
+    - ruins_become_open still controls whether the ruined town is open to join.
+    - do_plots_permissions_change_to_allow_all has no effect while this option is false.

@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 
@@ -39,8 +40,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -69,7 +74,7 @@ public class TownRuinUtil {
 	 * Put town into ruined state:
 	 * 1. Remove town from nation
 	 * 2. Set mayor to NPC
-	 * 3. Enable all perms
+	 * 3. Enable all perms, if configured
 	 * 4. Now, the residents cannot run /plot commands, and some /t commands
 	 * 5. Town will later be deleted full, unless it is reclaimed
 	 * @param town The town to put into a "ruined" state.
@@ -112,18 +117,34 @@ public class TownRuinUtil {
 		town.setRuinedTime(System.currentTimeMillis());
 		town.setPublic(TownySettings.areRuinsMadePublic());
 		town.setOpen(TownySettings.areRuinsMadeOpen());
-		town.getPermissions().setAll(true);
+		final boolean changePermissions = TownySettings.doRuinsPermissionsChange();
+		if (changePermissions)
+			town.getPermissions().setAll(true);
 
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
+			final String existingPermissions = changePermissions ? null : townBlock.getPermissions().toString();
+			final Map<Resident, PermissionData> existingPermissionOverrides = !changePermissions && townBlock.hasPermissionOverrides()
+				? new LinkedHashMap<>(townBlock.getPermissionOverrides())
+				: null;
+			final Set<Resident> existingTrustedResidents = !changePermissions && townBlock.hasTrustedResidents()
+				? new LinkedHashSet<>(townBlock.getTrustedResidents())
+				: null;
 			if (townBlock.hasResident())
 				townBlock.removeResident();               // Removes any personal ownership.
 			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
 			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
 			townBlock.removeDistrict();                   // Removes district if it were present.
-			townBlock.setPermissionOverrides(null);       // Removes all permission overrides from the plot.
-			townBlock.setTrustedResidents(null);          // Removes all trusted residents.
+			if (changePermissions) {
+				townBlock.setPermissionOverrides(null);   // Removes all permission overrides from the plot.
+				townBlock.setTrustedResidents(null);      // Removes all trusted residents.
+			} else {
+				townBlock.setPermissions(existingPermissions);
+				townBlock.setChanged(!existingPermissions.equals(town.getPermissions().toString()));
+				townBlock.setPermissionOverrides(existingPermissionOverrides);
+				townBlock.setTrustedResidents(existingTrustedResidents);
+			}
 			townBlock.save();
 		}
 		
@@ -228,12 +249,14 @@ public class TownRuinUtil {
 		if (!resident.equals(town.getMayor()))
 			setMayor(town, resident); //Set player as mayor (and remove npc)
 
-		// Set permission line to the config's default settings.
-		town.getPermissions().loadDefault(town);
-		for (TownBlock townBlock : town.getTownBlocks()) {
-			townBlock.getPermissions().loadDefault(town);
-			townBlock.setChanged(false);
-			townBlock.save();
+		if (TownySettings.doRuinsPermissionsChange()) {
+			// Set permission line to the config's default settings.
+			town.getPermissions().loadDefault(town);
+			for (TownBlock townBlock : town.getTownBlocks()) {
+				townBlock.getPermissions().loadDefault(town);
+				townBlock.setChanged(false);
+				townBlock.save();
+			}
 		}
 		
 		town.save();
