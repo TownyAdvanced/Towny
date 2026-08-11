@@ -112,7 +112,8 @@ public class TownRuinUtil {
 		town.setRuinedTime(System.currentTimeMillis());
 		town.setPublic(TownySettings.areRuinsMadePublic());
 		town.setOpen(TownySettings.areRuinsMadeOpen());
-		town.getPermissions().setAll(true);
+		if (TownySettings.doRuinsTownPermissionsAllowAll())
+			town.getPermissions().setAll(true);
 
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
@@ -284,7 +285,7 @@ public class TownRuinUtil {
 				continue;
 			}
 
-			if (TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
+			if (TownySettings.doRuinsTownPermissionsAllowAll() && TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
 				final Town finalTown = town;
 				// We are configured to slowly open up plots' permissions while a town is ruined.
 				Towny.getPlugin().getScheduler().runAsync(() -> allowPermissionsOnRuinedTownBlocks(finalTown));

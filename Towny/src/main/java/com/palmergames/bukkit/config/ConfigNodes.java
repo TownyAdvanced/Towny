@@ -3526,10 +3526,16 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank."),
+	TOWN_RUINING_TOWN_PERMISSIONS_ALLOW_ALL(
+			"town_ruining.town_ruins.do_town_permissions_change_to_allow_all",
+			"true",
+			"",
+			"# If this is true, when a town becomes a ruin, its permissions will be changed to allow all."),
 	TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY(
 			"town_ruining.town_ruins.do_plots_permissions_change_to_allow_all",
 			"false",
 			"",
+			"# This setting has no effect when do_town_permissions_change_to_allow_all is false.",
 			"# If this is true, when a town becomes a ruin, every hour more and more of their plots will have their permissions turned to allow",
 			"# build, destroy, switch, itemuse to on. This will affect the newest claims first and progress until the first claims made are opened up",
 			"# right before the max_duration_hours have passed. When a town has more claims than max_duration_hours, multiple plots will be opened up",

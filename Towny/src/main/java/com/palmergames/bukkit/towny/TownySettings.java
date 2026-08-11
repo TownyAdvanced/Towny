@@ -3933,6 +3933,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION);
 	}
 
+	public static boolean doRuinsTownPermissionsAllowAll() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_PERMISSIONS_ALLOW_ALL);
+	}
+
 	public static boolean doRuinsPlotPermissionsProgressivelyAllowAll() {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY);
 	}
