@@ -60,6 +60,7 @@ town_help_32: "Utilizași /t set ? pentru ajutor."
 town_help_33: "Utilizați /t buy pentru ajutor."
 town_help_34: "Utilizati /t toggle pentru ajutor."
 town_help_35: "Foloseste /t rank pentru ajutor."
+town_help_36: 'Listează oraşele din apropiere sortate după distanţă.'
 town_list_help_0: "Vezi pagina specificată."
 town_list_help_1: "Listează orașele în funcție de numărul de locuitori."
 town_list_help_2: "Listați orașele care sunt deschise."
