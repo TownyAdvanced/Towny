@@ -38,9 +38,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -374,7 +375,7 @@ public class BukkitTools {
 	
 	@ApiStatus.Internal
 	public static Collection<String> convertKeyedToString(@NotNull Collection<? extends Keyed> keys) {
-		final Set<String> set = new HashSet<>();
+		final Set<String> set = new LinkedHashSet<>();
 		
 		for (Keyed keyed : keys)
 			set.add(keyAsString(keyed.getKey()));

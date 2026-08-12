@@ -2578,53 +2578,51 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				nat_hm.put("unclaimedZoneName", world.getUnclaimedZoneName());
 
 			// Unclaimed Zone Ignore Ids
-			if (world.getUnclaimedZoneIgnoreMaterials() != null)
-				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), "#"));
+			if (world.getUnclaimedZoneIgnoreMaterialNames() != null)
+				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreMaterialNames(), "#"));
 
 			// Deleting EntityTypes from Townblocks on Unclaim.
 			nat_hm.put("isDeletingEntitiesOnUnclaim", world.isDeletingEntitiesOnUnclaim());
-			if (world.getUnclaimDeleteEntityTypes() != null)
-				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(BukkitTools.convertKeyedToString(world.getUnclaimDeleteEntityTypes()), "#"));
+			if (world.getUnclaimDeleteEntityTypeNames() != null)
+				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(world.getUnclaimDeleteEntityTypeNames(), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
 			// Plot Management Delete Ids
-			if (world.getPlotManagementDeleteIds() != null)
-				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteIds(), "#"));
+			if (world.getPlotManagementDeleteNames() != null)
+				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteNames(), "#"));
 
 			// Using PlotManagement Mayor Delete
 			nat_hm.put("usingPlotManagementMayorDelete", world.isUsingPlotManagementMayorDelete());
 			// Plot Management Mayor Delete
-			if (world.getPlotManagementMayorDelete() != null)
-				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDelete(), "#"));
+			if (world.getPlotManagementMayorDeleteNames() != null)
+				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDeleteNames(), "#"));
 
 			// Using PlotManagement Revert
 			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
 
 			// Plot Management Ignore Ids
-			if (world.getPlotManagementIgnoreIds() != null)
-				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), "#"));
+			if (world.getPlotManagementIgnoreNames() != null)
+				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreNames(), "#"));
 
 			// Revert on Unclaim whitelisted materials
-			if (world.getRevertOnUnclaimWhitelistMaterials() != null)
-				nat_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(world.getRevertOnUnclaimWhitelistMaterials(), "#"));
+			if (world.getRevertOnUnclaimWhitelistMaterialNames() != null)
+				nat_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(world.getRevertOnUnclaimWhitelistMaterialNames(), "#"));
 
 			// Using PlotManagement Wild Regen
 			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildEntityRevert());
 
 			// Wilderness Explosion Protection entities
-			if (world.getPlotManagementWildRevertEntities() != null)
-				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(BukkitTools.convertKeyedToString(world.getPlotManagementWildRevertEntities()), "#"));
+			if (world.getPlotManagementWildRevertEntityNames() != null)
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntityNames(), "#"));
 
 			// Wilderness Explosion Protection Block Whitelist
-			if (world.getPlotManagementWildRevertBlockWhitelist() != null)
-				nat_hm.put("PlotManagementWildRegenBlockWhitelist",
-						StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), "#"));
+			if (world.getPlotManagementWildRevertBlockWhitelistNames() != null)
+				nat_hm.put("PlotManagementWildRegenBlockWhitelist", StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelistNames(), "#"));
 
 			// Wilderness Explosion Protection Materials to not overwrite.
-			if (world.getWildRevertMaterialsToNotOverwrite() != null)
-				nat_hm.put("wildRegenBlocksToNotOverwrite",
-						StringMgmt.join(world.getWildRevertMaterialsToNotOverwrite(), "#"));
+			if (world.getWildRevertMaterialsToNotOverwriteNames() != null)
+				nat_hm.put("wildRegenBlocksToNotOverwrite", StringMgmt.join(world.getWildRevertMaterialsToNotOverwriteNames(), "#"));
 
 			// Using PlotManagement Wild Regen Delay
 			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
@@ -2633,9 +2631,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("usingPlotManagementWildRegenBlocks", world.isUsingPlotManagementWildBlockRevert());
 
 			// Wilderness Explosion Protection blocks
-			if (world.getPlotManagementWildRevertBlocks() != null)
-				nat_hm.put("PlotManagementWildRegenBlocks",
-						StringMgmt.join(world.getPlotManagementWildRevertBlocks(), "#"));
+			if (world.getPlotManagementWildRevertBlockNames() != null)
+				nat_hm.put("PlotManagementWildRegenBlocks", StringMgmt.join(world.getPlotManagementWildRevertBlockNames(), "#"));
 
 			// Using Towny
 			nat_hm.put("usingTowny", world.isUsingTowny());
