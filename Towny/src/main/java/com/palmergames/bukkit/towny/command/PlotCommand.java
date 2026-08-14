@@ -281,8 +281,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
-							if (args.length == 4)
-								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+							if (args.length == 4) {
+								if (args[2].equalsIgnoreCase("remove")) {
+									final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
+									final PlotGroup group = townBlock != null ? townBlock.getPlotObjectGroup() : null;
+									if (group != null) {
+										return NameUtil.filterByStart(group.getTrustedResidents().stream().map(Resident::getName).toList(), args[3]);
+									}
+								} else {
+									return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+								}
+							}
 						case "perm":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove", "gui"), args[2]);
@@ -313,7 +322,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if ("remove".equalsIgnoreCase(args[1])) {
 							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
 							if (townBlock != null && townBlock.hasTrustedResidents()) {
-								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
+								return NameUtil.filterByStart(townBlock.getTrustedResidents().stream().map(Resident::getName).toList(), args[2]);
 							}
 						} else {
 							return getTownyStartingWith(args[2], "r");
