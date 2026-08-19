@@ -30,6 +30,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LightningStrike;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
@@ -236,6 +237,9 @@ public class CombatUtil {
 			 * If Defender is a player, Attacker is not.
 			 */
 			if (defendingPlayer != null) {
+				if (attackingEntity instanceof Monster && !TownyAPI.getInstance().areMobsEnabled(defendingPlayer.getLocation())) {
+					return true;
+				}
 
 				/*
 				 * If attackingEntity is a tamed Wolf and...
