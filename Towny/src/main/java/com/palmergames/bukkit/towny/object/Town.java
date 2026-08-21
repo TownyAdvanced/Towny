@@ -79,7 +79,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private final Map<UUID, Town> trustedTowns = new LinkedHashMap<>();
 	private final List<Position> outpostSpawns = new ArrayList<>();
-	private List<Jail> jails = null;
+	private List<Jail> jails = new ArrayList<>();
 	private HashMap<String, PlotGroup> plotGroups = null;
 	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
 	private HashMap<String, District> districts = null;
@@ -1387,14 +1387,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public void addJail(Jail jail) {
-		if (!hasJails())
-			jails = new ArrayList<>(1);
-		
 		jails.add(jail);
 	}
 	
 	public void removeJail(Jail jail) {
-		if (hasJails() && hasJail(jail))
+		if (hasJail(jail))
 			jails.remove(jail);
 		
 		if (getPrimaryJail() != null && getPrimaryJail().getUUID().equals(jail.getUUID()))
@@ -1402,7 +1399,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasJails() {
-		return jails != null;
+		return !jails.isEmpty();
 	}
 	
 	public boolean hasJail(Jail jail) {
@@ -1411,8 +1408,6 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Nullable
 	public Collection<Jail> getJails() {
-		if (!hasJails())
-			return null;
 		return Collections.unmodifiableCollection(jails);
 	}
 	
@@ -1427,12 +1422,20 @@ public class Town extends Government implements TownBlockOwner {
 	public void setPrimaryJail(Jail jail) {
 		primaryJail = jail;
 	}
+
+	public boolean hasPrimaryJail() {
+		return primaryJail != null || !jails.isEmpty();
+	}
 	
 	@Nullable
 	public Jail getPrimaryJail() {
-		if (primaryJail == null && hasJails())
-			return getJail(1);
-		return primaryJail;
+		if (primaryJail != null)
+			return primaryJail;
+
+		if (!jails.isEmpty())
+			return jails.get(0);
+
+		return null;
 	}
 	
 	/**
