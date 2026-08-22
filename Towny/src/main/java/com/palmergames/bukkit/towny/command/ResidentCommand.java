@@ -399,7 +399,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Check if we're resetting before trying for nodes.
-		if (clearResidentModes(resident, newSplit))
+		if (clearOrResetResidentModes(resident, newSplit))
 			return;
 
 		TownyPermission perm = resident.getPermissions();
@@ -525,13 +525,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (clearResidentModes(resident, split))
+		if (clearOrResetResidentModes(resident, split))
 			return;
 
 		ResidentModeHandler.toggleModes(resident, split, true, false);
 	}
 
-	private boolean clearResidentModes(Resident resident, String[] split) throws NoPermissionException {
+	private boolean clearOrResetResidentModes(Resident resident, String[] split) throws NoPermissionException {
 		if (split[0].equalsIgnoreCase("clear")) {
 			checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR.getNode());
 			ResidentModeHandler.clearModes(resident, true);
