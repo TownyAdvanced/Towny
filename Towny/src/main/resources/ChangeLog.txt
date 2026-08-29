@@ -10995,3 +10995,16 @@ c
     - Closes #8262.
 0.103.2.0:
   - Bump version for Release.
+0.103.2.1:
+  - Add PLOT_GROUP to TownyCommandAddonAPI, courtesy of SulkyWhale with PR #8265.
+  - Add CancellableTownyEvent#setCancelMessage(Translatable), courtesy of Veyronity with PR #8268.
+    - Migrate (most) CancellableTownyEvent uses to use Translatables, making Towny better-able to show error messages in the language used by the player's minecraft client.
+  - Add resident trustlist command, courtesy of flyncoes with PR #8276.
+  - New Command: /res trustlist {playername}, shows you (or the given playername) which towns they are trusted in.
+  - Fix: Ensure ChunkNotificationEvent is always thrown, courtesy of SulkyWhale with PR #8281.
+  - Add tab complete to /plot group trust remove, courtesy of Warriorrr with PR #8282.
+  - Fix /t jail error that can occur when a jail is removed, courtesy of MidSpike with PR #8286. (First-Time Contributor!)
+  - Bring parity to District and Plotgroup metadata methods, courtesy of SulkyWhale with PR #8288.
+  - Fix resident toggle reset/clear behavior, courtesy of SulkyWhale with PR #8289.
+  - [Database Source Reflow] Internal loading and saving of TownyObjects.
+    - The first stage in updating Towny's loading and saving classes, which will make it easier to create new database types in the future.
