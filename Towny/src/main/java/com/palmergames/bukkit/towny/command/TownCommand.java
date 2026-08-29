@@ -1928,7 +1928,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			int page = 1;
-			int jailCount = town.getJails() == null ? 0 : town.getJails().size();
+			int jailCount = town.getJails().size();
 			int total = (int) Math.ceil(jailCount / 10D);
 			if (args.length == 1) {
 				page = MathUtil.getPositiveIntOrThrow(args[0]);
