@@ -833,6 +833,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return TownyUniverse.getInstance().getTowns().stream().filter(t -> t.hasOutlaw(this)).collect(Collectors.toList());
 	}
 
+	/**
+	 * @return All towns that the resident is trusted in.
+	 */
+	public List<Town> getTownsTrustedIn() {
+		return TownyUniverse.getInstance().getTowns().stream().filter(t -> t.hasTrustedResident(this)).collect(Collectors.toList());
+	}
+
 	@Override
 	public boolean hasTownBlock(TownBlock townBlock) {
 		return townBlocks.contains(townBlock);
