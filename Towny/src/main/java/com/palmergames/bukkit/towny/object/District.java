@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -124,6 +127,16 @@ public class District extends ObjectGroup implements Nameable, Savable {
 
 	public boolean hasTownBlock(TownBlock townBlock) {
 		return townBlocks.contains(townBlock);
+	}
+
+	@Override
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
+	}
+
+	@Override
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 
 	@Override

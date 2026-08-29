@@ -2,6 +2,10 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Suneet Tipirneni (Siris)
@@ -249,5 +251,15 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 
 	public int getMaxTownMembershipDays() {
 		return hasTownBlocks() ? townBlocks.get(0).getMaxTownMembershipDays() : -1;
+	}
+
+	@Override
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
+	}
+
+	@Override
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 }
