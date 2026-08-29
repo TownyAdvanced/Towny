@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.event.nation;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ public class NationRankRemoveEvent extends CancellableTownyEvent {
 		this.nation = nation;
 		this.rank = rank;
 		this.res = res;
-		setCancelMessage(Translation.of("msg_err_command_disable"));
+		setCancelMessage(Translatable.of("msg_err_command_disable"));
 	}
 
 	public Nation getNation() {

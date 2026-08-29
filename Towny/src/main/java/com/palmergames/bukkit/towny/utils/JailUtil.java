@@ -74,7 +74,7 @@ public class JailUtil {
 		// Fire cancellable event.
 		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, hours, bail, reason);
 		if (BukkitTools.isEventCancelled(event)) {
-			TownyMessaging.sendErrorMsg(jailer, event.getCancelMessage());
+			TownyMessaging.sendErrorMsg(jailer, event.getCancelTranslatable());
 			return;
 		}
 

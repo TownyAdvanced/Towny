@@ -4,7 +4,7 @@ import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class TownPreUnclaimCmdEvent extends CancellableTownyEvent {
 		this.resident = resident;
 		this.townyWorld = world;
 		this.worldCoords = selection;
-		setCancelMessage(Translation.of("msg_err_town_unclaim_canceled"));
+		setCancelMessage(Translatable.of("msg_err_town_unclaim_canceled"));
 	}
 
 	/**
