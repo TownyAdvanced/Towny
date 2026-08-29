@@ -11008,3 +11008,5 @@ c
   - Fix resident toggle reset/clear behavior, courtesy of SulkyWhale with PR #8289.
   - [Database Source Reflow] Internal loading and saving of TownyObjects.
     - The first stage in updating Towny's loading and saving classes, which will make it easier to create new database types in the future.
+0.103.2.2:
+  - Fix config migration file not having valid json.
