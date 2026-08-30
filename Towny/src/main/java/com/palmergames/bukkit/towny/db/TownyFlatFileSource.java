@@ -582,7 +582,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (groupFile.exists() && groupFile.isFile()) {
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
-				group.load(keys);
+				return group.load(keys);
 			} catch (Exception e) {
 				plugin.getLogger().log(Level.WARNING, e.getMessage());
 			}
