@@ -237,7 +237,12 @@ public class CombatUtil {
 			 * If Defender is a player, Attacker is not.
 			 */
 			if (defendingPlayer != null) {
-				if (attackingEntity instanceof Monster && !TownyAPI.getInstance().areMobsEnabled(defendingPlayer.getLocation())) {
+				/*
+				 * Protects players against monster damage when mobs spawns are not allowed.
+				 */
+				if (TownySettings.isMonsterDamageBlockedInMoblessAreas()
+					&& attackingEntity instanceof Monster
+					&& !TownyAPI.getInstance().areMobsEnabled(defendingPlayer.getLocation())) {
 					return true;
 				}
 
