@@ -4097,6 +4097,10 @@ public class TownySettings {
 	public static boolean areProtectedEntitiesProtectedAgainstBlockProjectileSource() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_BLOCK_PROJECTILE_SOURCE_BYPASS);
 	}
+
+	public static boolean isMonsterDamageBlockedInMoblessAreas() {
+		return getBoolean(ConfigNodes.PROT_PREVENT_MONSTER_DAMAGE_TO_PLAYERS_IN_MOBLESS_AREAS);
+	}
 	
 	public static String getBossBarNotificationColor() {
 		return getString(ConfigNodes.NOTIFICATION_BOSSBARS_COLOR);
