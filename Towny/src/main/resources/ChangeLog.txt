@@ -11012,3 +11012,6 @@ c
   - Fix config migration file not having valid json.
 0.103.2.3:
   - Fix plot groups causing database to not load.
+0.103.2.4:
+  - Fix outposts being loaded from incorrect key.
+    - Closes #8291.
