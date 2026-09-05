@@ -333,12 +333,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						if (args[1].equalsIgnoreCase("remove")) {
 							if (nation == null)
 								return Collections.emptyList();
-							return NameUtil.filterByStart(
-								TownyPerms.getNationRanks(nation).stream()
-									.flatMap(rank -> nation.getRank(rank).stream()).map(Resident::getName)
-									.toList(),
-								args[2]
-							);
+							List<String> residentsWithRanks = TownyPerms.getNationRanks(nation)
+								.stream()
+								.flatMap(rank -> nation.getRank(rank).stream())
+								.map(Resident::getName)
+								.toList();
+							return NameUtil.filterByStart(residentsWithRanks, args[2]);
 						}
 						return getNationResidentNamesOfPlayerStartingWith(player, args[2]);
 					case 4:
