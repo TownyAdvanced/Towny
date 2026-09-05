@@ -363,6 +363,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			case 2:
 				return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
 			case 3:
+				if (args[1].equalsIgnoreCase("remove")) {
+					if (town == null)
+						return Collections.emptyList();
+					List<String> residentsWithRanks = TownyPerms.getTownRanks(town)
+						.stream()
+						.flatMap(rank -> town.getRank(rank).stream())
+						.map(Resident::getName)
+						.toList();
+					return NameUtil.filterByStart(residentsWithRanks, args[2]);
+				}
 				return getTownResidentNamesOfPlayerStartingWith(player, args[2]);
 			case 4:
 				switch (args[1].toLowerCase(Locale.ROOT)) {

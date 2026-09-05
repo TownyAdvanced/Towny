@@ -484,6 +484,15 @@ public class Nation extends Government {
 
 	}
 
+	public List<Resident> getRank(String rank) {
+		List<Resident> residentsWithRank = new ArrayList<>();
+		for (Resident resident : getResidents()) {
+			if (resident.hasNationRank(rank))
+				residentsWithRank.add(resident);
+		}
+		return Collections.unmodifiableList(residentsWithRank);
+	}
+
 	@Override
 	public List<Resident> getResidents() {
 
