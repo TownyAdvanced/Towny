@@ -1310,6 +1310,11 @@ public enum ConfigNodes {
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents.",
 			"# This setting is ignored when limit_outposts_using_town_and_nation_levels is set to true."),
+	CLAIMING_LIMIT_OUTPOSTS_PER_WORLD(
+		"claiming.outposts.limit_outposts_per_world",
+		"false",
+		"",
+		"# Setting this value to true will only allow towns to claim outposts in worlds they don't have claims in"),
 
 	CLAIMING_OVERCLAIMING_ROOT("claiming.overclaiming", "", "", ""),
 	CLAIMING_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
