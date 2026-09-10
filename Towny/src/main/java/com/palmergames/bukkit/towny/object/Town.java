@@ -165,6 +165,16 @@ public class Town extends Government implements TownBlockOwner {
 	public Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks.values());
 	}
+	
+	public Collection<TownBlock> getTownBlocksInWorld(@NotNull TownyWorld world) {
+		List<TownBlock> list = new ArrayList<>();
+		for (Map.Entry<WorldCoord, TownBlock> entry : townBlocks.entrySet()) {
+			if (world.getName().equals(entry.getKey().getWorldName())) {
+				list.add(entry.getValue());
+			}
+		}
+		return Collections.unmodifiableCollection(list);
+	}
 
 	public int getNumTownBlocks() {
 		return getTownBlocks().size();

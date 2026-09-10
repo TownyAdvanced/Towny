@@ -3745,6 +3745,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// attached to a claimed plot.
 		if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
+		TownyWorld world = selection.getFirst().getTownyWorld();
+		if (outpost && TownySettings.getOutpostsLimitedPerWorld() && world != null && !town.getTownBlocksInWorld(world).isEmpty()) {
+			throw new TownyException(Translatable.of("msg_err_cannot_claim_outpost_in_claimed_world"));
+		}
 	}
 
 	private static void fireTownPreClaimEventOrThrow(Player player, Town town, boolean outpost, List<WorldCoord> selection) throws TownyException {

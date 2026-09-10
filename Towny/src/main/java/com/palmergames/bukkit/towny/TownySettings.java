@@ -3454,6 +3454,10 @@ public class TownySettings {
 	public static int getAmountOfResidentsForOutpost() {
 		return getInt(ConfigNodes.CLAIMING_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
+	
+	public static boolean getOutpostsLimitedPerWorld() {
+		return getBoolean(ConfigNodes.CLAIMING_LIMIT_OUTPOSTS_PER_WORLD);
+	}
 
 	public static int getMaximumInvitesSentTown() {
 		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN);
