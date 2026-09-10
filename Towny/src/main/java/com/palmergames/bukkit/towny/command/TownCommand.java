@@ -1817,8 +1817,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident jailedResident = getResidentOrThrow(split[0]);
 
 		// You can only jail your members of your own town.
-		if (!town.hasResident(jailedResident))
-			throw new TownyException(Translatable.of("msg_resident_not_your_town"));
+		if (!town.hasResident(jailedResident) && !TownySettings.canNationLeadersJailNationResidents())
+			throw new TownyException(Translatable.of("msg_err_not_same_town", jailedResident.getName()));
+
+		// When enabled, nation capitals can jail the residents of the nation.
+		if (!TownySettings.canNationLeadersJailNationResidents() || !town.isCapital() || !town.getNationOrNull().hasResident(jailedResident))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", jailedResident.getName()));
 
 		// Make sure they aren't already jailed.
 		if (jailedResident.isJailed())

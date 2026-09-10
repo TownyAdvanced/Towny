@@ -3329,6 +3329,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists."),
+	JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS(
+			"jail.can_nation_leaders_jail_nation_residents",
+			"false",
+			"",
+			"# If true, nation leaders can jail any resident of their nation inside of their capital city's jails."),
 	JAIL_OUTLAW_JAIL_HOURS(
 			"jail.outlaw_jail_hours",
 			"5",
