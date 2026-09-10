@@ -11019,6 +11019,9 @@ c
   - Fix PopulationTests hitting a null config when initializing town and nation objects.
   - Add ability for nation capitals to jail nation residents.
     - Closes #8292.
+  - New Config Option: jail.can_nation_leaders_jail_nation_residents
+    - Default: false
+    - If true, nation leaders can jail any resident of their nation inside of their capital city's jails.
   - Fix rank remove tab completes, courtesy of SulkyWhale with PR #8293.
   - Protect players from hostile mobs in claims, courtesy of pernio with PR #8284.
   - New Config Option: protection.prevent_monster_damage_to_players_in_mobless_areas
