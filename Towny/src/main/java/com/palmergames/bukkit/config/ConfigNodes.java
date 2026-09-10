@@ -2096,6 +2096,13 @@ public enum ConfigNodes {
 			"",
 			"# Setting this to false will allow block projectile sources, namely dispensers, to harm the above protected mobs (using potions, arrows, etc.), if they're in the same townblock and PvP is enabled."
 	),
+	PROT_PREVENT_MONSTER_DAMAGE_TO_PLAYERS_IN_MOBLESS_AREAS(
+			"protection.prevent_monster_damage_to_players_in_mobless_areas",
+			"false",
+			"",
+			"# When set to true, players will be protected from monster damage in locations where mobs are disabled.",
+			"# Warning: This allows players to abuse mob farms while being invulnerable in a nearby chunk where mob spawns are disabled."
+	),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
 			"BLINDNESS,NAUSEA,INSTANT_DAMAGE,HUNGER,POISON,SLOWNESS,MINING_FATIGUE,WEAKNESS,WITHER,WIND_CHARGED,WEAVING,INFESTED,OOZING",
