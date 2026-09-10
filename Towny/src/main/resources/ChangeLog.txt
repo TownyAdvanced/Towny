@@ -11015,3 +11015,22 @@ c
 0.103.2.4:
   - Fix outposts being loaded from incorrect key.
     - Closes #8291.
+0.103.2.5:
+  - Fix PopulationTests hitting a null config when initializing town and nation objects.
+  - Add ability for nation capitals to jail nation residents.
+    - Closes #8292.
+  - Fix rank remove tab completes, courtesy of SulkyWhale with PR #8293.
+  - Protect players from hostile mobs in claims, courtesy of pernio with PR #8284.
+  - New Config Option: protection.prevent_monster_damage_to_players_in_mobless_areas
+    - Default: false
+    - When set to true, players will be protected from monster damage in locations where mobs are disabled.
+    - Warning: This allows players to abuse mob farms while being invulnerable in a nearby chunk where mob spawns are disabled.
+  - Check if a town can bypass the adjacent chunk check per-world, courtesy of Veyronity with PR #8290.
+  - New Config Option: claiming.outposts.limit_outposts_per_world
+    - Default: false
+    - Setting this value to true will only allow towns to claim outposts in worlds they don't have claims in.
+  - Bump org.apache.maven.plugins:maven-jar-plugin from 3.5.0 to 3.5.1.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.6 to 3.6.0.
+  - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 10.0.0 to 10.0.1.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.15.0 to 3.16.0.
+  - Bump org.slf4j:slf4j-simple from 2.0.18 to 2.0.19.
