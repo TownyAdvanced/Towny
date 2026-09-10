@@ -2283,6 +2283,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
 	
+	public static boolean canNationLeadersJailNationResidents() {
+		return getBoolean(ConfigNodes.JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS);
+	}
+
 	public static int getJailedOutlawJailHours() {
 		
 		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
