@@ -93,7 +93,7 @@ public class Nation extends Government {
 
 		if (!hasAlly(nation)) {
 			removeEnemy(nation);
-			getAllies().add(nation);
+			allies.put(nation.getUUID(), nation);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class Nation extends Government {
 		if (!hasAlly(nation))
 			return false;
 		else
-			return getAllies().remove(nation);
+			return allies.remove(nation.getUUID(), nation);
 	}
 
 	public boolean removeAllAllies() {
@@ -128,7 +128,7 @@ public class Nation extends Government {
 
 		if (!hasEnemy(nation)) {
 			removeAlly(nation);
-			getEnemies().add(nation);
+			enemies.put(nation.getUUID(), nation);
 		}
 
 	}
@@ -138,7 +138,7 @@ public class Nation extends Government {
 		if (!hasEnemy(nation))
 			return false;
 		else
-			return getEnemies().remove(nation);
+			return enemies.remove(nation.getUUID(), nation);
 	}
 
 	public boolean removeAllEnemies() {
