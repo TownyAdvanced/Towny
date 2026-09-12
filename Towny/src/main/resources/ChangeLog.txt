@@ -11039,3 +11039,4 @@ c
   - Bump org.slf4j:slf4j-simple from 2.0.18 to 2.0.19.
 0.103.2.6:
   - Fix adding and removing or nation enemies and allies.
+  - Send a town message when a plot is claimed, courtesy of Veyronity with PR #8300.
