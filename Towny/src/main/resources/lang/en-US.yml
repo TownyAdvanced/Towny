@@ -2735,3 +2735,6 @@ msg_err_no_ruined_town_here: "You must be standing in a ruined town to reclaim i
 msg_err_cannot_claim_outpost_in_claimed_world: "You cannot claim an outpost in this world, as your town already has claims here."
 
 msg_claim_resident_plot: '&b%s claimed the plot at %s'
+
+msg_set_min_adj_chunks: '&bSuccessfully changed %s''s min adjacent chunks to %s'
+status_min_adjacency: 'Minimum adjacency:'

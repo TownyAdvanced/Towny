@@ -616,6 +616,8 @@ public class TownyFormatter {
 					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Plot Clear Block Delete: ON (see /towny plotclearblocks) | OFF
 			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + Colors.GREEN +" (see /towny plotclearblocks)" : translator.of("status_off")))); 
+			// Minimum Adjacency: 3
+			screen.addComponentOf("min_adjacency", colourKeyValue(translator.of("status_min_adjacency"), world.getMinAdjacentChunks() + Colors.GREEN + " (/tw set minadjacency)"));
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
 			//     Ignored Blocks: see /towny wildsblocks

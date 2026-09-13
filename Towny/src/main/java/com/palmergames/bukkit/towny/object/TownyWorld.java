@@ -92,6 +92,8 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 	
+	private int minAdjacentChunks = TownySettings.getMinAdjacentBlocks();
+	
 	public Map<Location, Material> bedMap = new HashMap<>();
 	public final List<UUID> tridentStrikeList = new ArrayList<>(0);
 
@@ -314,6 +316,16 @@ public class TownyWorld extends TownyObject {
 		return isDisableCreatureTrample;
 	}
 
+	public void setMinAdjacentChunks(int minAdjacentChunks) {
+
+		this.minAdjacentChunks = minAdjacentChunks;
+	}
+
+	public int getMinAdjacentChunks() {
+
+		return this.minAdjacentChunks;
+	}
+
 	public void setWorldMobs(boolean hasMobs) {
 
 		this.hasWorldMobs = hasMobs;
@@ -390,6 +402,7 @@ public class TownyWorld extends TownyObject {
 		setForceExpl(TownySettings.isForcingExplosions());
 		setEndermanProtect(TownySettings.getEndermanProtect());
 		setDisableCreatureTrample(TownySettings.isCreatureTramplingCropsDisabled());
+		setMinAdjacentChunks(TownySettings.getMinAdjacentBlocks());
 		// reset unclaiming deletes entities.
 		unclaimDeleteEntityTypes = null;
 		setDeletingEntitiesOnUnclaim(TownySettings.isDeletingEntitiesOnUnclaim());
@@ -1088,6 +1101,7 @@ public class TownyWorld extends TownyObject {
 			world_hm.put("forceexplosions", isForceExpl());
 			world_hm.put("endermanprotect", isEndermanProtect());
 			world_hm.put("disablecreaturetrample", isDisableCreatureTrample());
+			world_hm.put("minAdjacentChunks", getMinAdjacentChunks());
 			world_hm.put("unclaimedZoneBuild", getUnclaimedZoneBuild());
 			world_hm.put("unclaimedZoneDestroy", getUnclaimedZoneDestroy());
 			world_hm.put("unclaimedZoneSwitch", getUnclaimedZoneSwitch());
@@ -1178,6 +1192,7 @@ public class TownyWorld extends TownyObject {
 			setForceExpl(getOrDefault(worldAsMap, "forceexplosions", TownySettings.isForcingExplosions()));
 			setEndermanProtect(getOrDefault(worldAsMap, "endermanprotect", TownySettings.getEndermanProtect()));
 			setDisableCreatureTrample(getOrDefault(worldAsMap, "disablecreaturetrample", TownySettings.isCreatureTramplingCropsDisabled()));
+			setMinAdjacentChunks(Math.min(3, getOrDefault(worldAsMap, "minAdjacentChunks", TownySettings.getMinAdjacentBlocks())));
 			setUnclaimedZoneBuild(getOrDefault(worldAsMap, "unclaimedZoneBuild", TownySettings.getUnclaimedZoneBuildRights()));
 			setUnclaimedZoneDestroy(getOrDefault(worldAsMap, "unclaimedZoneDestroy", TownySettings.getUnclaimedZoneDestroyRights()));
 			setUnclaimedZoneSwitch(getOrDefault(worldAsMap, "unclaimedZoneSwitch", TownySettings.getUnclaimedZoneSwitchRights()));
