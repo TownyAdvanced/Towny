@@ -8,7 +8,7 @@ Hello Towny community,
 
 To the folks already sponsoring me: you are all awesome, the words below do not apply to you. I am grateful for the help you've provided me over the years (some of you, you know who you are,) and I am incredibly grateful for the support you've given.
 
-I have been working with Towny since 2011. I have been in charge of the project since 2014. I have put in more than 13 years of service to an Open Source project that you use. I have not run a minecraft server, or played minecraft in over 7 years.
+I have been working with Towny since 2011. I have been in charge of the project since 2014. I have put in more than 15 years of service to an Open Source project that you use. I have not run a minecraft server, or played minecraft in over 9 years.
 
 Some of you may know this, some may not: In 2021 my IRL work was up-ended, resulting in a major reset of my career. The result was that I have not been bringing in the same income as I was before, something I require to feed, cloth and house my wife and young children. Up until that point, my normal job fully-subsidized the time I put into coding Towny and its many add-on plugin. You all have enjoyed my works because I was able to feed and house my family via my regular work whilst paying myself to work on Towny.
 
@@ -54,12 +54,13 @@ ___
 
 ### Current Recommended Versions
 * [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.19.* & 1.20.* & 1.21.* & 26.1.* & 26.2.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label="> supports 1.19.* & 1.20.* & 1.21.* & 26.1.* & 26.2.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label="> supports 1.19.* & 1.20.* & 1.21.* & 26.1.* & 26.2.* & 26.3.*.
 
 **As of version 0.102.0.0 Towny requires the use of Paper, Folia or Purpur! Craftbukkit and Spigot are no longer supported!**
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
+<tr align=center><td> MC 26.3.* </td>Use the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 26.2.* </td><td rowspan=5> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.103.2.0>0.103.2.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 26.1.* </td>
 <tr align=center><td> MC 1.21.* </td>
