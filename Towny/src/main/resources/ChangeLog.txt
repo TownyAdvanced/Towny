@@ -11040,3 +11040,6 @@ c
 0.103.2.6:
   - Fix adding and removing or nation enemies and allies.
   - Send a town message when a plot is claimed, courtesy of Veyronity with PR #8300.
+  - Update to support MC 26.3.
+  - New Automatic Config Edit: global_town_settings.farm_plot_allow_blocks
+    - Will have ",SHELF_MUSHROOM" added to it.
