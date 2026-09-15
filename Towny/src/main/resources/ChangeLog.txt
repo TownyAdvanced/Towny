@@ -11043,3 +11043,4 @@ c
   - Update to support MC 26.3.
   - New Automatic Config Edit: global_town_settings.farm_plot_allow_blocks
     - Will have ",SHELF_MUSHROOM" added to it.
+  - Fix permission node for ignoreinvites resident toggle, courtesy of Warriorrr with PR #8305.
