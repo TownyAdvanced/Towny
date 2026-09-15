@@ -969,5 +969,15 @@
         "value": "towny.command.resident.trustlist"
       }
     ]
+  },
+  {
+    "version": "0.103.2.6",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "global_town_settings.farm_plot_allow_blocks",
+        "value": ",SHELF_MUSHROOM"
+      }
+    ]
   }
 ]
