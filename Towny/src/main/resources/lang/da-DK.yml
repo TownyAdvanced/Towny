@@ -22,6 +22,7 @@ town_help_7: 'Ny by med valgt borgmester.'
 town_help_8: 'Vis liste med kommandoer for borgmestre.'
 town_help_9: 'Idag er dagen!'
 town_help_10: 'Vis liste med alle online indbyggere i by'
+town_set_help_3: "Se /town set perm ? For hjælp."
 mayor_help_3: 'Gør krav på område som ikke er tilknyttet byen'
 mayor_help_4: 'Gør krav på områder rundt om dig med en radius på X'
 mayor_help_5: 'Gør krav på områder rundt om dig med den maximale radius'
