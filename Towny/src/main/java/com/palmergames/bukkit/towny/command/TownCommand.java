@@ -3558,13 +3558,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_town_cede_the_mayor_is_not_online", townGainingPlot, townGainingPlot.getMayor()));
 		Player otherMayor = townGainingPlot.getMayor().getPlayer();
 
-		Confirmation.runOnAccept(() -> offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord))
+		int cost = TownySettings.getCedePlotCost();
+		if (TownyEconomyHandler.isActive() && cost > 0) {
+			Confirmation.runOnAccept(() -> offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord, () -> {
+				playerTown.getAccount().deposit(cost, "Town Cede refunded");
+				}))
+				.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
+				.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot_cost", townGainingPlot, cost))
+				.setCost(new ConfirmationTransaction(() -> (double) cost, playerTown, "Cede plot to " + townGainingPlot.getName()))
+				.sendTo(player);
+			return;
+		}
+
+		Confirmation.runOnAccept(() -> offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord, () -> {}))
 		.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
 		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
 		.sendTo(player);
 	}
 
-	private void offerPlotToTown(Town townLosingPlot, Town townGainingPlot, Player playerGivingPlot, Player playerGainingPlot, WorldCoord worldCoord) {
+	private void offerPlotToTown(Town townLosingPlot, Town townGainingPlot, Player playerGivingPlot, Player playerGainingPlot, WorldCoord worldCoord, Runnable refund) {
 		Confirmation.runOnAccept(() -> {
 			try {
 				ProximityUtil.allowTownClaimOrThrow(worldCoord.getTownyWorld(), worldCoord, townGainingPlot, false, true);
@@ -3585,10 +3597,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(playerGainingPlot, e.getMessage(playerGainingPlot));
 				TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_unable_to_accept", playerGainingPlot.getName()));
+				refund.run();
 			}
 		})
 		.setCancellableEvent(new TownPreClaimEvent(townGainingPlot, worldCoord.getTownBlockOrNull(), playerGainingPlot, false, false, false))
-		.runOnCancel(() -> TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_denied", playerGainingPlot.getName())))
+		.runOnCancel(() -> {
+			TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_denied", playerGainingPlot.getName()));
+			refund.run();
+		})
 		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_accept_plot", playerGivingPlot.getName(), worldCoord.toString()))
 		.sendTo(playerGainingPlot);
 	}

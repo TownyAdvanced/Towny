@@ -2820,6 +2820,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.ECO_PRICE_TOWN_MERGE_PER_PLOT_PERCENTAGE);
 	}
 	
+	public static int getCedePlotCost() {
+		return getInt(ConfigNodes.ECO_PRICE_TOWN_CEDE);
+	}
+	
 	public static boolean isMinDistanceIgnoringTownsInSameNation() {
 
 		return getBoolean(ConfigNodes.CLAIMING_MIN_DISTANCE_IGNORED_FOR_NATIONS);
