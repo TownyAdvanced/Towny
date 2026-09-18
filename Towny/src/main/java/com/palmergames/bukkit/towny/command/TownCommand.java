@@ -3564,7 +3564,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				playerTown.getAccount().deposit(cost, "Town Cede refunded");
 				}))
 				.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
-				.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot_cost", townGainingPlot, cost))
+				.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot_cost", townGainingPlot, prettyMoney(cost)))
 				.setCost(new ConfirmationTransaction(() -> (double) cost, playerTown, "Cede plot to " + townGainingPlot.getName()))
 				.sendTo(player);
 			return;
