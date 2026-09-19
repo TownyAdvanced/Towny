@@ -2582,6 +2582,12 @@ msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
 
 msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
+    
+msg_town_cede_plot_confirmation_give_plot_cost: "Are you sure you want to give %s this plot? This action will cost %s"
+    
+msg_town_cede_plot_err_not_enough_money: "Could not cede plot to %s, not enough money! (%s)"
+
+msg_town_cede_plot_offer_sent: "Successfully offered %s the plot %s"
 
 msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
 
