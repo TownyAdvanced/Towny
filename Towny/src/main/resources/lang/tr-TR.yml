@@ -35,7 +35,7 @@ town_help_4: 'Arazisinde bulunduğunuz kasabanın durumu'
 town_help_5: 'Belirtilen kasabaya ışınlar'
 town_help_6: 'Belediye başkanı olarak sizinle yeni kasaba.'
 town_help_7: 'Valisi belirtilen oyuncu olacak şekilde yeni bir kasaba kurar'
-town_help_8: 'Valiler için olan komutları listeleyin'
+town_help_8: 'Valiler için olan komutları listeler'
 town_help_9: 'O gün bugün!'
 town_help_10: 'Belirtilen kasabadaki çevrim içi sakinleri listeler'
 town_help_13: "Belirtilen kasabadaki sakinleri listeler"
@@ -43,10 +43,10 @@ town_help_14: "Belirtilen kasabadaki rütbelileri ve rütbelerini listeler"
 town_help_15: "Belirtilen kasabadaki yasaklıları listeler"
 town_help_16: "Belirtilen kasabadaki arsa gruplarını listeler"
 town_help_17: "Belirtilen kasabadaki arsaların türlerini listeler"
-town_help_18: "Kasabanın sakinlerine bir mesaj iletin"
-town_help_19: "Kasabanızı satılığa çıkarın"
-town_help_20: "Kasabanızın satılıktan kaldırın"
-town_help_21: "Satılık olan bir kasabayı satın alın"
+town_help_18: "Kasabanın sakinlerine bir mesaj iletir"
+town_help_19: "Kasabanızı satılığa çıkarır"
+town_help_20: "Kasabanızın satılıktan kaldırır"
+town_help_21: "Satılık olan bir kasabayı satın alır"
 town_help_22: "Kasabanızın bankasına para yatırır"
 town_help_23: "Kasabanızın sakinlerinin rütbelerini ayarlar"
 town_help_24: "Kasabanızı siler"
@@ -56,7 +56,7 @@ town_help_27: "Sizi sakini olduğunuz kasabadan ayırır"
 town_help_28: "Kasabanızın bankasından para çeker"
 town_help_29: "Daha fazla bilgi için /t claim ?"
 town_help_30: "Kasabanızın arsalarını siler"
-town_help_31: "Sakin ekle ya da kaldır"
+town_help_31: "Kasabanıza sakin ekler/çıkarır"
 town_help_32: "Daha fazla bilgi için /t set ?"
 town_help_33: "Daha fazla bilgi için /t buy ?"
 town_help_34: "Daha fazla bilgi için /t toggle ?"
@@ -81,8 +81,8 @@ town_set_help_6: "Varsayılan bir arsa satış fiyatı belirler"
 town_set_help_7: "/t spawn komutunun kullanımı için bir fiyat belirler"
 town_set_help_8: "Kasabanın ismini değiştirir"
 town_set_help_9: "Kasabanızın etiketini ayarlar"
-town_set_help_10: "Sakininze bir soyad ya da ünvan ayarlar"
-town_set_help_11: "Sakinlerinizden alınabilecek maksimum vergi miktarını belirler"
+town_set_help_10: "Kasabanızın bir sakinine bir soyad ya da ünvan verir/kaldırır"
+town_set_help_11: "Kasabanızın sakinlerinden alınabilecek maksimum vergi miktarını belirler"
 town_jail_help_0: "Kasabanızdaki zindanları listeler"
 town_jail_help_1: "Belirtilen sakini ana zindana hapseder"
 town_jail_help_2: "Belirtilen sakini belirtilen süre boyunca ana zindana hapseder"
@@ -103,29 +103,29 @@ town_buy_help: "Kasabanın arazi limitini arttırmak için bonus arazi limiti sa
 town_cede_help: "Bulunduğunuz araziyi belirtilen kasabaya devretmeyi belirtilen kasabaya teklif eder"
 mayor_help_3: 'Kasabanıza toprak bağlantısı olmayan bir arazide bir karakol alır'
 mayor_help_4: 'Bulunduğunuz arazi dairenin merkezi olucak şekilde belirttiğiniz yarıçap doğrultusunda bir daire şeklinde arazi alır'
-mayor_help_5: 'Maksimum yarıçap için hak talebinde bulunun'
+mayor_help_5: 'Bulunduğunuz arazi dairenin merkezi olucak şekilde mümkün olan maksimum yarıçapta bir daire şeklinde arazi alır'
 mayor_help_6: 'Bu kasaba bloğu sahiplenilmemiş'
-mayor_help_7: 'Etrafında hak iddia etmekten vazgeçmeye çalış.'
-mayor_help_8: 'Tüm kasaba bloklarını kaldırmaya çalışın.'
-nation_help_1: 'Ulusların durumu'
-nation_help_2: '[Ulus]'
-nation_help_3: 'Hedef ülke durumu'
-nation_help_4: 'Tüm ulusları listeleyin'
-nation_help_5: 'Ulusunu terk et'
-nation_help_6: 'Yeni bir ulus yaratın'
-nation_help_7: 'Ulus lideri komutlarını listele'
-nation_help_8: 'Yeni bir ulus yaratın'
-nation_help_9: 'Ulustaki tüm çevrimiçi sakinleri listeleyin'
-nation_help_11: "Ulustaki kasabaların listesi."
-nation_help_12: "Ulusun ittifak olduğu ulusların listesi."
-nation_help_13: "Ulusun düşman olduğu ulusların listesi."
-nation_help_14: "Katılıma açık uluslara katılmak için kullanılır."
-nation_help_15: "Ulusun bankasına para yatır."
-nation_help_16: "Ulusu silmek için kullanılır."
-nation_help_17: "Sakinlere rütbe eklemek veya çıkarmak için kullanılır."
-nation_help_18: "Yardım için /n rank komutunu kullan."
-nation_help_19: "Ulusunuza ait karakollara ışınlanmak için kullanılır."
-nation_list_help_0: "Belirtilen sayfayı görüntüleyin."
+mayor_help_7: 'Etrafınızdaki chunkları kasabadan kaldırır'
+mayor_help_8: 'Ana arazi dışındaki tüm arazileri kasabadan kaldırır'
+nation_help_1: 'Ulusunuzun durumu'
+nation_help_2: '[ulus]'
+nation_help_3: 'Belirtilen ulusun durumu'
+nation_help_4: 'Tüm ulusları listeler'
+nation_help_5: 'Kasabanızı ulusunuzdan ayırır'
+nation_help_6: 'Yeni bir ulus kurar'
+nation_help_7: 'Ulus lideri için olan komutları listeler'
+nation_help_8: 'Başkentini sizin seçtiğiniz bir ulus kurar'
+nation_help_9: 'Belirtilen ulustaki tüm çevrim içi sakinleri listeler'
+nation_help_11: "Belirtilen ulustaki kasabaları listeler"
+nation_help_12: "Belirtilen ulusun müttefiklerini listeler"
+nation_help_13: "Belirtilen ulusun düşmanlarını listeler"
+nation_help_14: "Kasabanızı belirtilen açık ulusa katar"
+nation_help_15: "Ulusunuzun bankasına para yatırır"
+nation_help_16: "Ulusunuzu siler"
+nation_help_17: "Ulusunuzdaki sakinlerin rütbelerini ayarlar"
+nation_help_18: "Daha fazla bilgi için /n rank ?"
+nation_help_19: "Ulusunuzdaki kasabaların karakollarına ışınlar"
+nation_list_help_0: "Belirtilen sayfayı gösterir"
 nation_list_help_1: "Ulusları, belirtilen sayfayla birlikte sakinsayısına göre listeleyin."
 nation_list_help_2: "Ulusları kasaba sayısına göre, belirtilen sayfa ile listeleyin."
 nation_list_help_3: "Belirtilen sayfa ile Katılıma açık olan ulusları listeler."
@@ -133,30 +133,30 @@ nation_list_help_4: "Kasabaları banka bakiyelerine göre listelenmiş sayfada g
 nation_list_help_5: "Ulusları belirtilen sayfayla birlikte alfabetik sırayla listeleyin."
 nation_list_help_6: "Talep edilen bölgeye göre kasabaları listeleyin"
 nation_list_help_7: "Kasabaları çevrim içi sayılarına göre listele."
-nation_set_help_0: "Ulusunuzun liderini değiştirin."
-nation_set_help_1: "Ulusunuzun başkentini değiştirin."
-nation_set_help_2: "Kasabaların ödeyeceği vergi miktarını belirleyin."
-nation_set_help_3: "Fethedilen kasabaların ödeyeceği vergi miktarını ayarlayın."
-nation_set_help_4: "Ulusun ismini düzenle."
-nation_set_help_5: "Sakininizin soyismini düzenleyin."
-nation_set_help_6: "Ulusun etiketini düzenleyin."
-nation_set_help_7: "Ulus panosunun mesajını ayarlayın."
-nation_set_help_8: "Ulusun spawn noktasını ayarlayın."
-nation_set_help_9: "/n spawn komutunu kullanmanın ücretini belirleyin."
-nation_set_help_10: "Haritalama eklentilerinde kullanılan harita rengini ayarlayın."
-nation_toggle_help_0: "Ulusun barışçıl durumunu değiştirir."
-nation_toggle_help_1: "Herkese açık durumu değiştirir, üyelerinizden başkasının /n spawn komutunu kullanmasını engeller."
-nation_toggle_help_2: "Herkese açık katılım durumunu değiştirir, davete ihtiyaç duymadan kasabanıza üye olabilirler."
-nation_toggle_help_3: "Vergi miktarını değiştirir, kasabaların normal vergiden farklı bir ödeme yapmasını sağlar."
-nation_sanction_help_1: "Bir kasabayı, AmbargoKasabaları listesine ekler."
-nation_sanction_help_2: "Bir kasabayı, AmbargoKasabaları listesinden kaldırır."
-nation_sanction_help_3: "Ulusunuzdaki AmbargoKasabalarını listeler."
-nation_sanction_help_4: "Ulusunuzdaki AmbargoKasabalarını listeler."
-king_help_1: 'Ulus Lideri Yardımı'
-king_help_2: 'İttifakınızı kurun.'
-king_help_3: 'Düşmanlarınızı ayarlayın.'
-king_help_4: "Şehrin bankasından para çek."
-king_help_5: "Ulusundan kasabaları ekle yada çıkar."
+nation_set_help_0: "Ulusunuzun liderini değiştirir"
+nation_set_help_1: "Ulusunuzun başkentini değiştirir"
+nation_set_help_2: "Kasabaların ödeyeceği vergi oranını belirler"
+nation_set_help_3: "Fethedilen kasabaların ödeyeceği vergi oranını belirler"
+nation_set_help_4: "Ulusunuzun ismini değiştirir"
+nation_set_help_5: "Ulusunuzdaki bir sakine bir soyad ya da ünvan verir/kaldırır"
+nation_set_help_6: "Ulusunuzun etiketini ayarlar"
+nation_set_help_7: "Ulusunuzun panosunu ayarlar"
+nation_set_help_8: "Ulusunuzun doğma noktasını ayarlar"
+nation_set_help_9: "/n spawn komutunun kullanımı için bir fiyat belirler"
+nation_set_help_10: "Ulusunuzun haritadaki rengini belirler"
+nation_toggle_help_0: "Ulusunuzun barışçıl olma durumunu ayarlar"
+nation_toggle_help_1: "Ulusunuzun herkese açık olma durumunu değiştirir, açılırsa ulus sakini olmayanlar /n spawn komutunu kullanarak ulusunuza ışınlanabilir"
+nation_toggle_help_2: "Ulusunuzun açıklık durumunu değiştirir, açılırsa kasabalar davetiyesiz ulusunuza katılabilir"
+nation_toggle_help_3: "Kasabaların ulusunuza vereceği verginin sabit bir miktar mı yoksa yüzdeye göre hesaplanan bir miktar mı olacağını ayarlar"
+nation_sanction_help_1: "Belirtilen kasabayı AmbargoluKasabalar listesine ekler"
+nation_sanction_help_2: "Belirtilen kasabayı AmbargoluKasabalar listesinden çıkarır"
+nation_sanction_help_3: "Ulusunuzun AmbargoluKasabalar listesini listeler"
+nation_sanction_help_4: "Belirtilen ulusun AmbargoluKasabalar listesini listeler"
+king_help_1: 'Ulus Lideri Komutları'
+king_help_2: 'Ulusunuzun müttefiklerini ayarlar'
+king_help_3: 'Ulusunuzun düşmanlarını ayarlar'
+king_help_4: "Ulusunuzun bankasından para çeker"
+king_help_5: "Belirtilen kasabayı ulusunuza davet eder/ulusunuzdan atar"
 king_help_6: "yardım için /n set komutunu kullanın."
 king_help_7: "yardım için /n toggle komutunu kullanın."
 king_help_8: "Başka bir ulusu kendi ulusunuza katmak için kullanılır."
@@ -201,8 +201,8 @@ mode_5: 'Ulus kanalına varsayılan sohbet'
 mode_6: 'Savaş bölgeleri yapmak için düşman sınırlarına %s yerleştirebilir.'
 plot_perms: 'Çizim izinleri için %s yerine %s kullanın.'
 res_list: 'Sakinleri'
-res_sing: 'Yerleşik'
-mayor_sing: 'Belediye Başkanı'
+res_sing: 'Sakin'
+mayor_sing: 'Vali'
 admin_sing: 'Yönetici'
 town_sing: 'Kasaba'
 nation_sing: 'Ulus'
