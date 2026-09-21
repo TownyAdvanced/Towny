@@ -8,99 +8,101 @@ unclaimed_zone_name: 'Vahşi Doğa'
 #|help messages                                         | #
 #+------------------------------------------------------+ #
 ############################################################
-help_0: 'Genel Towny Yardımı'
+help_0: 'Genel Towny Komutları'
 help_1: 'Towny hakkında daha fazla bilgi edinmek için aşağıdaki komutları deneyin.'
 help_2: 'Kasaba Sohbeti'
 help_3: 'Ulus Sohbeti'
-help_4: 'Oyuncu komut listesi.'
-help_5: 'Towny komut listesi'
-help_6: 'Ulus komutları.'
-help_7: 'Arsa komut listesi.'
-help_8: 'Towny komut listesi.'
-help_9: 'Townyadmin komut listesi.'
-towny_help_0: "Genel Towny Yardımı"
+help_4: 'Sakin komutları listesi.'
+help_5: 'Towny komutları listesi.'
+help_6: 'Ulus komutları listesi.'
+help_7: 'Arsa komutları listesi.'
+help_8: 'Towny komutları listesi.'
+help_9: 'Townyadmin komutları listesi.'
+towny_help_0: "Towny komutları için genel yardım"
 towny_help_1: "Yakındaki kasaba arazilerinin bir haritasını görüntüler"
-towny_help_2: "Ekonomi tarafından kullanılan fiyatları görüntüler"
-towny_help_3: "Yüksek skorları göster"
-towny_help_4: "Yeni güne kalan zamanı göster"
-towny_help_5: "İstatistikleri Görüntüle"
-towny_help_6: "Towny'nin sürümünü göster"
+towny_help_2: "Ekonomi için kullanılan fiyatları görüntüler"
+towny_help_3: "Yüksek skorları gösterir"
+towny_help_4: "Yeni güne kalan zamanı gösterir"
+towny_help_5: "İstatistikleri gösterir"
+towny_help_6: "Towny sürümünü gösterir"
 towny_top_help_0: "En zenginleri listeleyin."
-towny_top_help_1: "En çok araziye sahip olanları listeleyin"
-towny_top_help_2: "En zenginleri listeleyin."
+towny_top_help_1: "Oyuncuları arazi sayılarına göre listeleyin."
+towny_top_help_2: "Oyuncuları zenginliklerine göre listeleyin."
 town_help_1: 'Kasabanızın durumu'
-town_help_2: '[Belediye Başkanı]'
-town_help_3: 'Seçilen şehirlerin durumu'
-town_help_4: 'Konumunuzun kasaba durumuna kısayol.'
-town_help_5: 'Kasabalara ışınlanır.'
+town_help_2: '[vali]'
+town_help_3: 'Belirtilen kasabanın durumu'
+town_help_4: 'Arazisinde bulunduğunuz kasabanın durumu'
+town_help_5: 'Belirtilen kasabaya ışınlar'
 town_help_6: 'Belediye başkanı olarak sizinle yeni kasaba.'
-town_help_7: 'Hedef belediye başkanı olan yeni kasaba.'
-town_help_8: 'Belediye başkanları için komutları listeleyin.'
+town_help_7: 'Valisi belirtilen oyuncu olacak şekilde yeni bir kasaba kurar'
+town_help_8: 'Valiler için olan komutları listeleyin'
 town_help_9: 'O gün bugün!'
-town_help_10: 'Kasabadaki tüm çevrimiçi sakinleri listeleyin'
-town_help_13: "Kasabada ikamet edenlerin listesine bakın."
-town_help_14: "Kasabadaki rütbelerin bir listesine bakın."
-town_help_15: "Kasabadaki yasaklıların listesine bakın."
-town_help_16: "Kasabadaki arsa gruplarının listesine bakın."
-town_help_17: "Kasabadaki arsa türlerinin listesi."
-town_help_18: "Şehrin sakinlerine mesaj yolla."
-town_help_19: "Şehri satışa çıkar."
-town_help_20: "Kasabanı satılışını iptal et."
-town_help_21: "Kasabayı, satılık olduğu zaman satın alın."
-town_help_22: "Şehrin bankasına para yatır."
-town_help_23: "Oyuncuların şehir üzerindeki yetkilerini ayarla."
-town_help_24: "Kasabanızı silmek için kullanılır."
-town_help_25: "Kasabadan yasaklananları ayarlar."
-town_help_26: "Tüm kasabaları listele. Yardım için /t list komutunu kullan."
-town_help_27: "Üyesi olduğun kasabadan ayrıl."
-town_help_28: "Şehrin bankasından para çek"
-town_help_29: "Yardım için /t buy ? kullanın."
-town_help_30: "Kasabanızdan toprak çıkarmak için kullanılır."
-town_help_31: "Üyeleri ekle ya da kaldır."
-town_help_32: "Yardım için /t set ? kullanın."
-town_help_33: "Yardım için /t buy ? kullanın."
-town_help_34: "Yardım için /t toggle ? kullanın."
-town_help_35: "Yardım için /t rank kullanın."
-town_help_36: 'Yakındaki kasabaları mesafeye göre sırala.'
-town_list_help_0: "Belirtilen sayfayı gör."
+town_help_10: 'Belirtilen kasabadaki çevrim içi sakinleri listeler'
+town_help_13: "Belirtilen kasabadaki sakinleri listeler"
+town_help_14: "Belirtilen kasabadaki rütbelileri ve rütbelerini listeler"
+town_help_15: "Belirtilen kasabadaki yasaklıları listeler"
+town_help_16: "Belirtilen kasabadaki arsa gruplarını listeler"
+town_help_17: "Belirtilen kasabadaki arsaların türlerini listeler"
+town_help_18: "Kasabanın sakinlerine bir mesaj iletin"
+town_help_19: "Kasabanızı satılığa çıkarın"
+town_help_20: "Kasabanızın satılıktan kaldırın"
+town_help_21: "Satılık olan bir kasabayı satın alın"
+town_help_22: "Kasabanızın bankasına para yatırır"
+town_help_23: "Kasabanızın sakinlerinin rütbelerini ayarlar"
+town_help_24: "Kasabanızı siler"
+town_help_25: "Kasabanızdaki yasaklıları ayarlar"
+town_help_26: "Tüm kasabaları listeler, daha fazla bilgi için /t list ?"
+town_help_27: "Sizi sakini olduğunuz kasabadan ayırır"
+town_help_28: "Kasabanızın bankasından para çeker"
+town_help_29: "Daha fazla bilgi için /t claim ?"
+town_help_30: "Kasabanızın arsalarını siler"
+town_help_31: "Sakin ekle ya da kaldır"
+town_help_32: "Daha fazla bilgi için /t set ?"
+town_help_33: "Daha fazla bilgi için /t buy ?"
+town_help_34: "Daha fazla bilgi için /t toggle ?"
+town_help_35: "Daha fazla bilgi için /t rank ?"
+town_help_36: 'Etrafınızdaki kasabaları yakınlığa göre listeler'
+town_help_37: 'Belirtilen kasabadaki belirtilen oyuncunun güvenildiği arsaları listeler'
+town_help_38: 'Belirtilen kasabadaki oyuncuların güvenildiği arsaları listeler'
+town_list_help_0: "Belirtilen sayfayı gösterir"
 town_list_help_1: "Kasabaları üye sayısına göre listelenmiş sayfada göster."
 town_list_help_2: "Açık kasabaları listelenmiş sayfada göster."
 town_list_help_3: "Kasabaları banka bakiyelerine göre listelenmiş sayfada göster."
 town_list_help_4: "Kasabaları alfabetik sıraya göre listelenmiş sayfada göster."
-town_list_help_5: "Talep edilen bölgeye göre kasabaları listeleyin"
+town_list_help_5: "Talep edilen bölgeye göre kasabaları listeleyin."
 town_list_help_6: "Kasabaları çevrim içi sayılarına göre listele."
-town_set_help_0: "Kasabanın ismini değiştir."
-town_set_help_1: "Üzerinde durduğunuz bloğa kasaba için spawn noktası ekleyin."
-town_set_help_2: "Kasabanın doğma noktasını veya bir sınır dışında dururken bir sınır dışı doğma noktasını ayarlar."
-town_set_help_3: "yardım için /town set perm komutunu kullan."
-town_set_help_4: "Şehrin vergi miktarını ayarla."
-town_set_help_5: "Arsa başına vergiler için özel miktar ayarlayın."
-town_set_help_6: "Arsa satın almak için varsayılan fiyatları ayarlayın."
-town_set_help_7: "/t spawn komutunun kullanımı için ücret belirle."
-town_set_help_8: "Şehrin ismini değiştir."
-town_set_help_9: "Şehrin etiketini belirle."
-town_set_help_10: "Oyuncunun soyadını belirle."
-town_set_help_11: "Oyunculardan alınabilecek maksimum vergiyi yüzdesini ayarla."
-town_jail_help_0: "Kasabanın hapisaneleri listele."
-town_jail_help_1: "Oyuncuyu ana hapishaneye hapset."
-town_jail_help_2: "Oyuncuyu belirli bir süre için ana hapishaneye hapset."
-town_jail_help_3: "Oyuncuyu belirli bir süre için ana hapishaneye hapset."
-town_jail_help_4: "Bir oyuncu ana hapishanede, belirtilen saatlerde, belirtilen hapishane ve hücrede hapsedin."
-town_jail_help_5: "Sakini belirtilen kefalet miktarıyla belirtilen saatler boyunca birincil hapishanede hapsedin."
-town_jail_help_6: "Sakini belirtilen saatlerde, belirtilen kefalet miktarıyla, belirtilen hapishanede birincil hapishanede hapsedin."
-town_jail_help_7: "Sakini birincil hapishanede, belirtilen saatlerde, verilen kefalet miktarıyla, belirtilen hapishanede ve hücrede hapsedin."
-town_jail_help_8: "Oyuncuyu hapishaneden çıkar."
-town_purge_help: "Belirlenen gün sayısı boyunca oturum açmamış sakinleri kaldırır."
-town_trust_help_0: "Kasabaya Güvenilir olarak bir sakin ekler."
-town_trust_help_1: "Bir sakini kasabadan Güvenilir olarak kaldırır."
-town_trust_help_2: "Bir kasabanın Güvenilir sakinlerini listeler."
-town_towntrust_help_0: "Kasabaya Güvenilen olarak bir kasaba ekler."
-town_towntrust_help_1: "Kasabayı kasabada Güvenilen olarak kaldırır."
-town_towntrust_help_2: "Bir kasabanın güvenilen kasabalarını listeler."
-town_buy_help: "Kasabanın arsa limitini artırmak için ekstra kasaba arsası satın alır."
-town_cede_help: "Bulunduğunuz arsanın Kasaba tarafından ele geçirilmesini teklif eder."
-mayor_help_3: 'Talep alanı şehire bağlı değil'
-mayor_help_4: 'Etrafınızda X yarıçapına kadar hak iddia edin'
+town_set_help_0: "Kasabanızın panosunu ayarlar"
+town_set_help_1: "Kasabanızın ana arazisini bulunduğunuz chunka yerleştirin"
+town_set_help_2: "Eğer ana arazinizdeyseniz kasaba doğma noktanızı, eğer bir karakoldaysanız karakol doğma noktanızı ayarlar"
+town_set_help_3: "Daha fazla bilgi için /t set perm ?"
+town_set_help_4: "Kasabanızın vergi oranını ayarlar"
+town_set_help_5: "Arsa türlerine özel vergi miktarı belirler"
+town_set_help_6: "Varsayılan bir arsa satış fiyatı belirler"
+town_set_help_7: "/t spawn komutunun kullanımı için bir fiyat belirler"
+town_set_help_8: "Kasabanın ismini değiştirir"
+town_set_help_9: "Kasabanızın etiketini ayarlar"
+town_set_help_10: "Sakininze bir soyad ya da ünvan ayarlar"
+town_set_help_11: "Sakinlerinizden alınabilecek maksimum vergi miktarını belirler"
+town_jail_help_0: "Kasabanızdaki zindanları listeler"
+town_jail_help_1: "Belirtilen sakini ana zindana hapseder"
+town_jail_help_2: "Belirtilen sakini belirtilen süre boyunca ana zindana hapseder"
+town_jail_help_3: "Belirtilen sakini belirtilen süre boyunca ana zindandaki belirtilen zindana hapseder "
+town_jail_help_4: "Belirtilen sakini belirtilen süre boyunca ana zindandaki belirtilen zindandaki belirtilen hücreye hapseder "
+town_jail_help_5: "Belirtilen sakini belirtilen süre boyunca ana zindana belirtilen kefalet miktarıyla hapseder"
+town_jail_help_6: "Belirtilen sakini belirtilen süre boyunca ana zindandaki belirtilen zindana belirtilen kefalet miktarıyla hapseder"
+town_jail_help_7: "Belirtilen sakini belirtilen süre boyunca ana zindandaki belirtilen zindandaki belirtilen hücreye belirtilen kefalet miktarıyla hapseder"
+town_jail_help_8: "Belirtilen sakini serbest bırakır"
+town_purge_help: "Belirtilen gün sayısı kadar gündür oyuna girmeyen sakinleri kasabadan atar"
+town_trust_help_0: "Belirtilen oyuncuyu kasabada Güvenilir yapar"
+town_trust_help_1: "Belirtilen oyuncuyu kasabada Güvenilir olmaktan çıkarır"
+town_trust_help_2: "Belirtilen kasabadaki Güvenilir oyuncuları listeler"
+town_towntrust_help_0: "Belirtilen kasabayı kendi kasabanızda Güvenilir yapar"
+town_towntrust_help_1: "Belirtilen kasabayı kendi kasabanızda Güvenilir olmaktan çıkarır"
+town_towntrust_help_2: "Belirtilen kasabada Güvenilir olan kasabaları listeler"
+town_buy_help: "Kasabanın arazi limitini arttırmak için bonus arazi limiti satın alır"
+town_cede_help: "Bulunduğunuz araziyi belirtilen kasabaya devretmeyi belirtilen kasabaya teklif eder"
+mayor_help_3: 'Kasabanıza toprak bağlantısı olmayan bir arazide bir karakol alır'
+mayor_help_4: 'Bulunduğunuz arazi dairenin merkezi olucak şekilde belirttiğiniz yarıçap doğrultusunda bir daire şeklinde arazi alır'
 mayor_help_5: 'Maksimum yarıçap için hak talebinde bulunun'
 mayor_help_6: 'Bu kasaba bloğu sahiplenilmemiş'
 mayor_help_7: 'Etrafında hak iddia etmekten vazgeçmeye çalış.'
