@@ -578,6 +578,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return getMoney(TownySettings.getBaseCostForTownMerge());
 		case "town_merge_per_plot_percentage": // %townyadvanced_town_merge_per_plot_percentage%
 			return String.valueOf(TownySettings.getPercentageCostPerPlot());
+		case "town_neutrality_cost": // %townyadvanced_town_neutrality_cost%
+			if (resident.hasTown())
+				return getMoney(TownySettings.getTownNeutralityCost(resident.getTownOrNull()));
+			else
+				return getMoney(TownySettings.getTownNeutralityCost());
 		case "town_reclaim_cost": // %townyadvanced_town_reclaim_cost%
 			return getMoney(TownySettings.getEcoPriceReclaimTown());
 		case "town_reclaim_max_duration_hours": // %townyadvanced_town_reclaim_max_duration_hours%

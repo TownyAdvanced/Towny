@@ -11045,3 +11045,6 @@ c
   - New Automatic Config Edit: global_town_settings.farm_plot_allow_blocks
     - Will have ",SHELF_MUSHROOM" added to it.
   - Fix permission node for ignoreinvites resident toggle, courtesy of Warriorrr with PR #8305.
+0.103.2.8:
+  - New PAPI Placeholder: %townyadvanced_town_neutrality_cost%
+    - Shows the player the cost their town's neutrality would be if they have a town. If they have no town it shows the generic neutrality cost.
