@@ -24,7 +24,6 @@ import com.palmergames.bukkit.util.Colors;
 
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 
 import java.util.logging.Level;
 
@@ -209,8 +208,9 @@ public class OnPlayerLogin implements Runnable {
 		// Done in a task because some plugins won't assign the vanished meta to the
 		// player until 1 tick after the player logs in.
 		plugin.getScheduler().runLater(player, () -> {
-			if (player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean))
+			if (!BukkitTools.isVanished(player)) {
 				resident.setLastOnline(System.currentTimeMillis());
+			}
 
 			if (!resident.hasUUID()) {
 				resident.setUUID(player.getUniqueId());
