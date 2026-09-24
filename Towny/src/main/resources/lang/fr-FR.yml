@@ -645,6 +645,7 @@ msg_err_invalid_sub: '&cSous-commande invalide.'
 msg_err_command_disable: '&cVous n''avez pas la permission d''utiliser cette commande.'
 msg_err_plot_preclaim_disable: "&cVous ne pouvez pas réclamer la parcelle %s pour le moment."
 msg_err_plot_preunclaim_disable: "&cLe Résident ne peut pas revendiquer la parcelle %s pour le moment."
+msg_err_you_dont_have_permission_to_use_colours: "Vous n'avez pas la permission d'utiliser des couleurs dans les titres et surnoms."
 msg_err_universe_limit: '&cLe monde ne peut pas supporter davantage de villes.'
 msg_err_too_many_npc: '&cBeaucoup trop de PNJ enregistrées.'
 msg_err_negative_money: '&cVous ne pouvez pas avoir un argent négatif.'
