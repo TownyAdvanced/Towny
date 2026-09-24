@@ -35,7 +35,7 @@ public class TeleportWarmupParticle {
 					for (final Player trackingPlayer : player.getTrackedBy()) {
 						trackingPlayer.spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
 					}
-				} else if (!BukkitTools.hasVanishedMeta(player)) {
+				} else if (!BukkitTools.isVanished(player)) {
 					player.getWorld().spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
 				}
 			}, (long) i * RING_DELAY_TICKS);

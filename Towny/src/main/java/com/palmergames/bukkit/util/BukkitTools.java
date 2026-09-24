@@ -121,6 +121,10 @@ public class BukkitTools {
 	public static Player getPlayer(UUID playerUUID) {
 		return getServer().getPlayer(playerUUID);
 	}
+
+	public static boolean isVanished(final @NotNull Player player) {
+		return !player.isVisibleByDefault() || hasVanishedMeta(player);
+	}
 	
 	public static boolean hasVanishedMeta(final @NotNull Player player) {
 		for (MetadataValue meta : player.getMetadata("vanished")) {
