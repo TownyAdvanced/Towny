@@ -24,7 +24,6 @@ import com.palmergames.bukkit.util.Colors;
 
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 
 import java.util.logging.Level;
 
