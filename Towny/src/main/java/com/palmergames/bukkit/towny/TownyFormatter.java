@@ -616,10 +616,12 @@ public class TownyFormatter {
 					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Plot Clear Block Delete: ON (see /towny plotclearblocks) | OFF
 			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + Colors.GREEN +" (see /towny plotclearblocks)" : translator.of("status_off")))); 
+			// Minimum Adjacency: 3
+			screen.addComponentOf("min_adjacency", colourKeyValue(translator.of("status_min_adjacency"), String.valueOf(world.getMinAdjacentChunks())));
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
 			//     Ignored Blocks: see /towny wildsblocks
-			screen.addComponentOf("wilderness", colourKey(world.getFormattedUnclaimedZoneName() + ": \n"));
+			screen.addComponentOf("wilderness", "\n" + colourKey(world.getFormattedUnclaimedZoneName() + ":"));
 			screen.addComponentOf("perms1", "    " + (world.getUnclaimedZoneBuild() ? Colors.GREEN : Colors.RED) + translator.of("build") + Colors.DARK_GRAY + ", " + 
 													(world.getUnclaimedZoneDestroy() ? Colors.GREEN : Colors.RED) + translator.of("destroy") + Colors.DARK_GRAY + ", " + 
 													(world.getUnclaimedZoneSwitch() ? Colors.GREEN : Colors.RED) + translator.of("switch") + Colors.DARK_GRAY + ", " + 
