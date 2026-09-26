@@ -2583,7 +2583,7 @@ msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if hom
 
 msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
     
-msg_town_cede_plot_confirmation_give_plot_cost: "Are you sure you want to give %s this plot? This action will cost %s"
+msg_town_cede_plot_confirmation_give_plot_cost: "Are you sure you want to give %s this plot? This action will cost %s."
     
 msg_town_cede_plot_err_not_enough_money: "Could not cede plot to %s, not enough money! (%s)"
 
@@ -2740,4 +2740,4 @@ msg_err_no_ruined_town_here: "You must be standing in a ruined town to reclaim i
 
 msg_err_cannot_claim_outpost_in_claimed_world: "You cannot claim an outpost in this world, as your town already has claims here."
 
-msg_claim_resident_plot: '&b%s claimed the plot at %s'
+msg_claim_resident_plot: '&b%s claimed the plot at %s.'
