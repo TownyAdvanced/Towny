@@ -2760,6 +2760,12 @@ public enum ConfigNodes {
 			"",
 			"# The percentage that a town has to pay per plot to merge with another town. The town that initiates the merge pays the cost.",
 			"# This is based on the price_claim_townblock."),
+	ECO_PRICE_TOWN_CEDE(
+		"economy.new_expand.price_town_cede",
+		"12",
+		"",
+		"# The cost of a town transferring a plot using /t cede",
+		"# The town offering the plot pays the cost"),
 	ECO_PRICE_RECLAIM_RUINED_TOWN(
 			"economy.new_expand.price_reclaim_ruined_town",
 			"500.0",
