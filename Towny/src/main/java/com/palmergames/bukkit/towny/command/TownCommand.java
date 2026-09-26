@@ -3582,9 +3582,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_town_cede_town_cannot_cede_their_homeblock", townLosingPlot));
 
 				int cost = TownySettings.getCedePlotCost();
-				if (TownyEconomyHandler.isActive() && cost > 0 && !townLosingPlot.getAccount().withdraw(cost, "Cede plot to " + townGainingPlot.getName())) {
+				if (TownyEconomyHandler.isActive() && cost > 0 && !townLosingPlot.getAccount().withdraw(cost, "Cede plot to " + townGainingPlot.getName()))
 					throw new TownyException(Translatable.of("msg_town_cede_plot_err_not_enough_money", townGainingPlot.getName(), prettyMoney(cost)));
-				}
+
 
 				tb.setTown(townGainingPlot);
 				tb.save();
