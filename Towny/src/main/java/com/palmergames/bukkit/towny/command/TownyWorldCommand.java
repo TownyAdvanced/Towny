@@ -501,13 +501,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	
 	private void setMinAdjacentChunks(CommandSender sender, TownyWorld world, String[] split) throws TownyException {
 		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_usage", "/townyworld set minadjacency <value>"));
-		} else {
-			int input = MathUtil.getIntOrThrow(split[1]);
-			int minAdjacentChunks = Math.max(-1, Math.min(3, input)); // Min of -1, max of 3
-			world.setMinAdjacentChunks(minAdjacentChunks);
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_min_adj_chunks", world.getName(), minAdjacentChunks));
+			throw new TownyException(Translatable.of("msg_usage", "/townyworld set minadjacency <value>"));
 		}
+		int input = MathUtil.getIntOrThrow(split[1]);
+		int minAdjacentChunks = Math.max(-1, Math.min(3, input)); // Min of -1, max of 3
+		world.setMinAdjacentChunks(minAdjacentChunks);
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_set_min_adj_chunks", world.getName(), minAdjacentChunks));
 	}
 	
 	private Translatable formatBool(boolean bool) {
