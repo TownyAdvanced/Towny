@@ -744,8 +744,7 @@ public enum ConfigNodes {
 			"global_town_settings.outsiders_prevent_pvp_toggle",
 			"false",
 			"",
-			"# If set to true, Towny will prevent a town or plot from enabling PVP while an outsider is within the town's or plot's boundaries.",
-			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
+			"# If set to true, Towny will prevent a town or plot from enabling PVP while an outsider is within the town's or plot's boundaries."
 	),
 	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
 			"global_town_settings.homeblocks_prevent_forcepvp",
@@ -1311,6 +1310,11 @@ public enum ConfigNodes {
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents.",
 			"# This setting is ignored when limit_outposts_using_town_and_nation_levels is set to true."),
+	CLAIMING_LIMIT_OUTPOSTS_PER_WORLD(
+		"claiming.outposts.limit_outposts_per_world",
+		"false",
+		"",
+		"# Setting this value to true will only allow towns to claim outposts in worlds they don't have claims in"),
 
 	CLAIMING_OVERCLAIMING_ROOT("claiming.overclaiming", "", "", ""),
 	CLAIMING_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
@@ -1982,7 +1986,7 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://jd.papermc.io/paper/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHESTS_WITHOUT_ENDERCHEST,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE",
+			"CHESTS_WITHOUT_ENDERCHEST,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE,END_PORTAL_FRAME",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
@@ -2096,6 +2100,13 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Setting this to false will allow block projectile sources, namely dispensers, to harm the above protected mobs (using potions, arrows, etc.), if they're in the same townblock and PvP is enabled."
+	),
+	PROT_PREVENT_MONSTER_DAMAGE_TO_PLAYERS_IN_MOBLESS_AREAS(
+			"protection.prevent_monster_damage_to_players_in_mobless_areas",
+			"false",
+			"",
+			"# When set to true, players will be protected from monster damage in locations where mobs are disabled.",
+			"# Warning: This allows players to abuse mob farms while being invulnerable in a nearby chunk where mob spawns are disabled."
 	),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
@@ -3330,6 +3341,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists."),
+	JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS(
+			"jail.can_nation_leaders_jail_nation_residents",
+			"false",
+			"",
+			"# If true, nation leaders can jail any resident of their nation inside of their capital city's jails."),
 	JAIL_OUTLAW_JAIL_HOURS(
 			"jail.outlaw_jail_hours",
 			"5",
@@ -3517,6 +3533,11 @@ public enum ConfigNodes {
 			"# If this is true, when a town becomes a ruin they also become open to join,",
 			"# meaning any townless player could join the town and reclaim it.",
 			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it."),
+	TOWN_RUINING_TOWNS_CAN_BE_CLAIMED_BY_TOWNLESS_PLAYERS(
+			"town_ruining.town_ruins.ruins_can_be_reclaimed_by_townless_players",
+			"false",
+			"",
+			"# When this is true, players who have no town can also reclaim the ruin. While false, only residents of the Town can reclaim the ruin."),
 	TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION(
 			"town_ruining.town_ruins.town_bank_is_sent_to_nation",
 			"false",

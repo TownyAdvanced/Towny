@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Internal utility class for common interactions with adventure components.
@@ -27,7 +29,7 @@ public class TownyComponents {
 	public static final MiniMessage USER_SAFE = MiniMessage.builder()
 		.tags(TagResolver.builder()
 			.resolver(StandardTags.color())
-			.resolvers(StandardTags.decorations())
+			.resolvers(TagResolver.resolver(Stream.of(TextDecoration.values()).filter(decoration -> decoration != TextDecoration.OBFUSCATED).map(StandardTags::decorations).toList()))
 			.resolvers(StandardTags.gradient())
 			.resolvers(StandardTags.rainbow())
 			.resolvers(getRecentlyAddedTagResolvers())

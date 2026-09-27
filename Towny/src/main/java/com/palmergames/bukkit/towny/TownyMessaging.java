@@ -645,15 +645,15 @@ public class TownyMessaging {
 	}
 
 	public static void sendTownOutpostList(Player player, Town town, int page, int total) {
-		sendOutpostList(player, town, page, total, "/towny:town outpost ");
+		sendOutpostList(player, town, page, total, "towny:town outpost ");
 	}
 
 	public static void sendNationOutpostList(Player player, Town town, int page, int total) {
-		sendOutpostList(player, town, page, total, "/towny:nation outpost " + town.getName() + " ");
+		sendOutpostList(player, town, page, total, "towny:nation outpost " + town.getName() + " ");
 	}
 
 	public static void sendNationAllTownsOutpostList(Player player, Nation nation, int page, int total) {
-		sendOutpostList(player, nation, page, total, "/towny:nation outpost ");
+		sendOutpostList(player, nation, page, total, "towny:nation outpost ");
 	}
 
 	public static void sendOutpostList(Player player, Town town, int page, int total, String clickCommand) {
@@ -812,7 +812,7 @@ public class TownyMessaging {
 	
 	public static void sendJailList(CommandSender sender, Town town, int page, int total) {
 		Translator translator = Translator.locale(sender);
-		List<Jail> jails = town.getJails() == null ? new ArrayList<>() : new ArrayList<>(town.getJails());
+		List<Jail> jails = new ArrayList<>(town.getJails()); // create copy
 		
 		int jailCount = jails.size();
 		int iMax = Math.min(page * 10, jailCount);

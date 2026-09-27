@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.event.plot;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public class PlotTrustRemoveEvent extends CancellableTownyEvent {
 		this.townBlocks = townBlocks;
 		this.trustedResident = trustedResident;
 		this.player = player;
-		setCancelMessage(Translation.of("msg_err_command_disable"));
+		setCancelMessage(Translatable.of("msg_err_command_disable"));
 	}
 
 	/**

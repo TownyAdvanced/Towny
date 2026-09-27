@@ -85,6 +85,11 @@ public class TownyBlockListener implements Listener {
 		if (block.getType() == Material.FIRE && block.getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
 			return;
 
+		// ignore a quirk where placing an eye into a frame can trigger this event
+		if (block.getType() == Material.END_PORTAL_FRAME && event.getBlockReplacedState().getType() == Material.END_PORTAL_FRAME) {
+			return;
+		}
+
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType())) {
 			event.setBuild(false);

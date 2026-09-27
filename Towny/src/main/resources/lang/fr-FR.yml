@@ -62,6 +62,9 @@ town_help_32: "Utiliser /t set ? pour de l'aide."
 town_help_33: "Utiliser /t buy ? pour de l'aide."
 town_help_34: "Utiliser /t toggle ? pour de l'aide."
 town_help_35: "Utilisez /t rank ? pour de l'aide."
+town_help_36: 'Liste des villes à proximité triées par distance.'
+town_help_37: 'Lister les plots approuvés par le joueur donné.'
+town_help_38: 'Lister les parcelles avec confiance données dans la ville.'
 town_list_help_0: "Voir la page spécifiée."
 town_list_help_1: "Liste les villes par nombre de résidents, avec la page spécifiée."
 town_list_help_2: "Liste les villes ouvertes, avec la page spécifiée."
@@ -122,6 +125,7 @@ nation_help_15: "Dépose de l'argent dans la banque de la nation."
 nation_help_16: "Utilisé pour supprimer votre nation."
 nation_help_17: "Utilisé pour ajouter ou retirer un rang des résidents."
 nation_help_18: "Voir /n rank ? pour de l'aide."
+nation_help_19: "Utilisé pour se téléporter aux avant-postes appartenant aux villes de votre nation."
 nation_list_help_0: "Voir la page spécifiée."
 nation_list_help_1: "Liste les nations par nombre de résidents, avec la page spécifiée."
 nation_list_help_2: "Liste les nations par nombre de villes, avec la page spécifiée."
@@ -162,6 +166,7 @@ res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
 res_4: 'Liste tout les joueurs actifs'
+res_8: 'Juste un humble agriculteur'
 res_9: "Combien de taxes vous payerez par jour."
 res_10: "Voir /n rank ? pour de l'aide."
 res_11: "Voir /n rank ? pour de l'aide."
@@ -227,6 +232,7 @@ world_toggle_help_8: "Active On/Off si la nouveauté revenir-en-cas-de-non-récl
 world_toggle_help_9: "Active On/Off si la nouveauté explosions-modifiées est active dans ce monde."
 world_toggle_help_10: "Active On/Off si la commande plot-clear-deletes-blocks est active dans ce monde."
 world_toggle_help_11: "Active On/Off si la nouveauté plot-unclaiming-deletes-blocks est active dans ce monde."
+world_toggle_help_12: "Active On/Off si le tir allié est autorisé dans ce monde."
 townyadmin_help_1: 'Désannexe cette parcelle de ville'
 townyadmin_help_2: 'Tente de désannexer autour de vous.'
 admin_panel_1: "Voir /ta set ? pour obtenir de l'aide"
@@ -302,6 +308,7 @@ ta_resident_help_1: "Ajouter ou enlever un ami."
 ta_resident_help_2: "Lister ou effacer la liste d'amis."
 ta_resident_help_3: "Supprimer un résident de la base de données."
 ta_resident_help_4: "Retire la ligne \"A propos\" d'un joueur."
+ta_resident_help_5: "Définissez le dernier horodatage en ligne ou enregistré d'un résident."
 ta_toggle_help_0: "Activer/Désactiver la possibilité d'utiliser d'utiliser la wilderness dans toutes les dimensions."
 ta_toggle_help_1: "Activer/Désactiver la régénération dans toutes les dimensions."
 ta_toggle_help_2: "Activer/Désactiver le mode développeur qui affiche des logs additionnels pour le jour spécifié dans la configuration."
@@ -337,6 +344,8 @@ ta_eco_convert_modern_help: "Convertit votre compte \"Towny\" dans la version mo
 ta_eco_convert_help: "Convertit votre compte \"Towny\" à l'économie cible d'implémentation, utile pour transférer des données entre les plugins d'économie."
 ta_eco_info_help: "Donne des informations sur les comptes économiques du serveur."
 ta_depositall_help_0: "Déposer le montant donné dans toutes les banques des villes et du pays."
+ta_depositall_help_1: "Déposer le montant donné dans toutes les banques des villes et du pays."
+ta_depositall_help_2: "Déposer le montant donné dans toutes les banques des villes et du pays."
 ta_info_help_0: "Voir les informations économiques pour un pays spécifié."
 ta_info_help_1: "Voir les informations économiques pour un habitant spécifié."
 ta_info_help_2: "Voir les informations économiques pour le compte \"Towny\" du serveur."
@@ -366,10 +375,38 @@ plot_group_help_6: "Par exemple : \"/plot group forsale 50\""
 plot_group_help_7: "Par exemple : \"/plot group notforsale\""
 plot_group_help_8: "Ajoute ou retire un habitant en tant que digne de confiance."
 plot_group_help_9: "Ajoute un habitant en tant que \"Digne de confiance\" dans le groupe de parcelle."
+plot_group_help_10: "Retire un habitant en tant que \"Digne de confiance\" dans la parcelle."
+plot_group_help_11: "Ouvre l'interface perm de la parcelle."
+plot_group_help_12: "Ajoute un joueur à l'interface de perm de parcelle."
+plot_group_help_13: "Supprime un joueur à l'interface de perm de parcelle."
+plot_toggle_help_0: "Active/désactive le pvp dans le plot."
+plot_toggle_help_1: "Active/désactive les explosions dans la parcelle."
+plot_toggle_help_2: "Active/désactive le feu dans la parcelle."
+plot_toggle_help_3: "Active/désactive les mobs dans la parcelle."
+plot_group_toggle_help_0: "Active/désactive le pvp dans le groupe de traces."
+plot_group_toggle_help_1: "Active/désactive les explosions dans le groupe de traces."
+plot_group_toggle_help_2: "Active/désactive le feu dans le groupe d'intrigues"
+plot_group_toggle_help_3: "Active/désactive les mobs dans le groupe de traces."
+plot_group_toggle_help_4: "Active/désactive le statut taxé du groupe de tracés."
+plot_set_help_0: "Ex: Inn, Wilds, Ferme, Ambassade, etc."
+plot_set_help_1: "Définit un tracé à un Avant-poste."
+plot_set_help_1.5: "Définit le nombre minimum de jours qu'un joueur doit être membre de la ville pour acheter le parc."
+plot_set_help_1.6: "Définit le nombre maximum de jours qu'un joueur doit être un membre de la ville pour acheter le parc."
+plot_set_help_2: "Supprime un type de tracé."
+plot_set_help_3: "Nomme un plot."
+plot_set_help_4: "Activer/désactiver toutes les permissions."
+plot_set_help_5: "Définit les permissions d'un niveau ou d'un type à on ou off."
+plot_set_help_6: "Définit la permission d'un niveau et de type à on ou off."
+plot_set_help_7: "Définit les permissions du résident ou de la ville propriétaire des parcelles."
+plot_jailcell_help_0: "Ajoute une cellule Jail."
+plot_jailcell_help_1: "Retire une cellule de Jailler où vous vous trouvez."
 msg_block_claim: 'Annexe cette parcelle de ville'
+msg_block_claim_radius: 'Réclamez un rayon de parcelles qui vous entourent.'
 msg_plot_nfs: 'Enlève une parcelle en vente'
+msg_plot_nfs_radius: 'Descendez un rayon de parcelles à vendre'
 msg_nfs_abr: '&e''fs'' et ''nfs'' sont des abréviations autorisées pour ''forsale'' et ''notforsale''.'
 msg_plot_fs: 'Mets cette zone aux enchères.'
+msg_plot_fs_radius: 'Montez un rayon de parcelles à vendre.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -377,12 +414,17 @@ msg_plot_fs: 'Mets cette zone aux enchères.'
 ############################################################
 msg_buy: '&bAchète %d %s pour %s.'
 msg_buy_resident_plot: '&b%s Achète la parcelle de %s pour %s !'
+msg_buy_resident_plot_group: '&b%s Achète la parcelle de %s pour %s !'
 msg_couldnt_pay_taxes: '&b%s ne pouvait pas payer les impôts et a été exclu de la %s.'
 msg_couldnt_pay_plot_taxes: '&b%s ne pouvait pas payer les impôts et a perdu la propriété d''une parcelle.'
+msg_you_couldnt_pay_plot_tax: '&bVous n''avez pas pu payer la taxe de la parcelle de %s et vous avez perdu la propriété de la parcelle sur %s.'
+msg_you_couldnt_pay_town_tax: '&bVous n''avez pas pu payer la taxe de ville de %s et avez été retiré de %s.'
 msg_you_paid_town_tax: '&bVous avez payé à votre ville une taxe de %s.'
+msg_you_paid_plottax_to_town: '&bVous avez payé des taxes de terrain totalisant %s à la ville de %s.'
 msg_bankrupt_town: ' n’avait pas les moyens de rester une ville.'
 msg_bankrupt_nation: ' n’avait pas les moyens de rester une nation.'
 msg_nation_not_peaceful: '&bLa nation n’avait pas les moyens de garder son état pacifique.'
+msg_nation_cant_peaceful: '&bLa nation n''a pas pu se permettre de devenir une nation pacifique. Vous devez pouvoir payer %s chaque jour.'
 msg_peaceful_disabled: '&bLa paix entre nations est globalement désactivée.'
 msg_you_paid: '&bVous avez payé %s pour mettre le statut pacifique.'
 msg_nation_set_peace: '&bStatut de la nation changé avec succès.'
@@ -412,6 +454,7 @@ msg_nation_kicked_by: '&bVotre ville a été expulsé de la nation par %s.'
 msg_town_left_nation: '&bVotre ville a quitté la nation de %s.'
 msg_nation_town_left: '&bLa ville de %s a quitté votre nation.'
 msg_nation_kicked: '&b%s a expulsé %s de la nation.'
+msg_nation_you_kicked: '&b%s a expulsé %s de la nation.'
 msg_raised_ass: '&b%s a promu %s en tant qu''assistant de %s.'
 msg_lowered_to_res_by: '&bVous avez été rétrogradé au rang de résident ordinaire par %s.'
 msg_lowered_to_res: '&b%s a rétrogradé %s au rang de résident ordinaire.'
@@ -571,6 +614,8 @@ msg_err_not_in_town_claim: '&cVous devez appartenir à une ville afin d''annexer
 msg_err_must_belong_town: '&cVous devez appartenir à une ville.'
 msg_err_dont_belong_town: '&cVous n''appartenez pas à une ville.'
 msg_err_dont_belong_nation: '&bVous n''appartenez pas à une nation.'
+msg_err_already_belong_nation: '&bVous n''appartenez pas à une nation.'
+msg_err_town_already_belong_nation: '&c%s fait déjà partie d''une ville.'
 msg_err_not_same_nation: '&b%s n''appartient pas à votre nation.'
 msg_err_rect_auto: '&cUniquement les villes et les résidents peuvent utiliser ''auto''.'
 msg_err_invalid_radius: '&cRayon invalide. Utilisez un entier ou ''auto''.'
@@ -598,6 +643,8 @@ msg_err_input_too_long: '&cLa donnée entrée est trop longue.'
 msg_err_invalid_choice: '&cChoix invalide'
 msg_err_invalid_sub: '&cSous-commande invalide.'
 msg_err_command_disable: '&cVous n''avez pas la permission d''utiliser cette commande.'
+msg_err_plot_preclaim_disable: "&cVous ne pouvez pas réclamer la parcelle %s pour le moment."
+msg_err_plot_preunclaim_disable: "&cLe Résident ne peut pas revendiquer la parcelle %s pour le moment."
 msg_err_universe_limit: '&cLe monde ne peut pas supporter davantage de villes.'
 msg_err_too_many_npc: '&cBeaucoup trop de PNJ enregistrées.'
 msg_err_negative_money: '&cVous ne pouvez pas avoir un argent négatif.'

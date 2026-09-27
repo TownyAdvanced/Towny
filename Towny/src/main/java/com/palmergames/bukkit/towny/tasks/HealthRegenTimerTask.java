@@ -12,21 +12,20 @@ import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.util.BukkitTools;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
 	
 	private static final boolean ATTRIBUTE_PREFIX = MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_2); // Attributes had a prefix before 1.21.2
-	private static final Attribute MAX_HEALTH = Objects.requireNonNull(Registry.ATTRIBUTE.get(NamespacedKey.minecraft((ATTRIBUTE_PREFIX ? "generic." : "") + "max_health")), "max health attribute");
+	private static final @NonNull Attribute MAX_HEALTH = Objects.requireNonNull(Registry.ATTRIBUTE.get(NamespacedKey.minecraft((ATTRIBUTE_PREFIX ? "generic." : "") + "max_health")), "max health attribute");
 
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:health-regen-task"), () -> TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen()));
@@ -78,30 +77,24 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	}
 
 	private void evaluateHealth(Player player) {
-		// Heal 1 HP while in town.
-		final double currentHP = player.getHealth();
-		final double futureHP = currentHP + 1;
-		
-		final AttributeInstance maxHealth = player.getAttribute(MAX_HEALTH);
-		if (maxHealth == null)
-			return;
+		// Drop back to Sync so we can heal the player
+		plugin.getScheduler().run(player, () -> {
+			// Heal 1 HP while in town.
+			final double currentHP = player.getHealth();
+			final double futureHP = currentHP + 1;
 
-		final double maxHP = maxHealth.getValue();
+			final AttributeInstance maxHealth = player.getAttribute(MAX_HEALTH);
+			if (maxHealth == null)
+				return;
 
-		// Shrink gained to fit below the maxHP.
-		final double gained = futureHP > maxHP ? 1.0 - (futureHP - maxHP) : 1.0;
-		if (gained <= 0)
-			return;
+			final double maxHP = maxHealth.getValue();
 
-		// Drop back to Sync so we can throw the EntityRegainHealthEvent.
-		plugin.getScheduler().run(player, () -> tryIncreaseHealth(player, currentHP, maxHP, gained));
-	}
+			// Shrink gained to fit below the maxHP.
+			final double gained = futureHP > maxHP ? 1.0 - (futureHP - maxHP) : 1.0;
+			if (gained <= 0)
+				return;
 
-	private void tryIncreaseHealth(Player player, double currentHealth, double maxHealth, double gained) {
-		EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, gained, RegainReason.REGEN);
-		if (BukkitTools.isEventCancelled(event))
-			return;
-
-		player.setHealth(Math.min(maxHealth, event.getAmount() + currentHealth));
+			player.heal(gained, RegainReason.REGEN);
+		});
 	}
 }

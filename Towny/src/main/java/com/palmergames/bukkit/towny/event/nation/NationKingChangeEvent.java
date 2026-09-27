@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public class NationKingChangeEvent extends CancellableTownyEvent {
         this.oldKing = oldKing;
         this.newKing = newKing;
         this.cost = isCapitalChange() ? TownySettings.getNationCapitalChangeCost() : 0;
-        this.setCancelMessage(Translation.of("msg_err_command_disable"));
+        this.setCancelMessage(Translatable.of("msg_err_command_disable"));
     }
 
     public Resident getOldKing() {

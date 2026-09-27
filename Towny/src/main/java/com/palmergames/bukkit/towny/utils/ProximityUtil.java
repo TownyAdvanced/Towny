@@ -104,7 +104,7 @@ public class ProximityUtil {
 	}
 
 	public static void testAdjacentClaimsRulesOrThrow(WorldCoord townBlockToClaim, Town town, boolean outpost, int minAdjacentBlocks) throws TownyException {
-		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks, townBlockToClaim)) {
 			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
 			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, townBlockToClaim);
 			// The number of adjacent TBs is not enough and there is not a nearby outpost.
@@ -113,11 +113,13 @@ public class ProximityUtil {
 		}
 	}
 
-	private static boolean townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(Town town, int minAdjacentBlocks) {
-		if (minAdjacentBlocks == 3 && town.getTownBlocks().size() < 5)
+	private static boolean townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(Town town, int minAdjacentBlocks, WorldCoord worldCoord) {
+		TownyWorld world = worldCoord.getTownyWorld();
+		int claimedTownBlocks = world != null ? town.getTownBlocksInWorld(world).size() : town.getNumTownBlocks();
+		if (minAdjacentBlocks == 3 && claimedTownBlocks < 5)
 			// Special rule that makes sure a town can claim a fifth plot after claiming a 2x2 square.
 			return false;
-		return town.getTownBlocks().size() > minAdjacentBlocks;
+		return claimedTownBlocks > minAdjacentBlocks;
 	}
 
 	private static int numAdjacentTownOwnedTownBlocks(Town town, WorldCoord worldCoord) {
@@ -181,7 +183,7 @@ public class ProximityUtil {
 	
 	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town, int minAdjacentBlocks) throws TownyException {
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
-		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks, townBlockToUnclaim)) {
 
 			// Outposts cannot be unclaimed when there are any connected townblocks.
 			if (townBlockToUnclaim.getTownBlockOrNull().isOutpost() && numAdjacentTownOwnedTownBlocks(town, townBlockToUnclaim) > 0)
@@ -213,7 +215,7 @@ public class ProximityUtil {
 	 */
 
 	public static void testAdjacentAddDistrictRulesOrThrow(WorldCoord townBlockToClaim, Town town, District district, int minAdjacentBlocks) throws TownyException {
-		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks, townBlockToClaim)) {
 			int numAdjacent = numAdjacentDistrictTownBlocks(town, district, townBlockToClaim);
 			// The number of adjacement TBs with the same District is not enough.
 			if (numAdjacent < minAdjacentBlocks)
@@ -231,7 +233,7 @@ public class ProximityUtil {
 
 	public static void testAdjacentRemoveDistrictRulesOrThrow(WorldCoord districtCoordBeingRemoved, Town town, District district, int minAdjacentBlocks) throws TownyException {
 		// Prevent removing parts of Districts that would cause a district to split into two sections.
-		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks, districtCoordBeingRemoved)) {
 			List<WorldCoord> allAdjacentDistrictWorldCoords = getAdjacentDistrictWorldCoords(town, district, districtCoordBeingRemoved, false);
 			int districtPlots = allAdjacentDistrictWorldCoords.size();
 

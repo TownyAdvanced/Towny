@@ -5,13 +5,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 
 import java.util.UUID;
 
-
+@ExtendWith(TownyConfigExtension.class)
 public class PopulationTests {
 
 	static Town town;

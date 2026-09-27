@@ -10959,3 +10959,93 @@ v0.92.0.11:
   - Bump me.clip:placeholderapi from 2.12.2 to 2.12.3.
 0.103.0.8:
   - Fix loading of override lang files.
+  - Fix errant /'s that break the nation and town outpost lists' clickable navigation.
+  - Fix rare teleport warmup player NPE, courtesy of Warrior with PR #8247.
+  - Remove nation prefix and postfix from new nation broadcast, courtesy of Warrior with PR #8248.
+  - Fix spectators/vanished players being able to prevent pvp toggling, courtesy of Warrior with PR #8252.
+  - Bump junit.version from 6.1.1 to 6.1.2.
+  - Bump net.coreprotect:coreprotect from 23.2 to 24.0.
+c
+0.103.1.1:
+  - Allow townless players to reclaim ruins.
+    - Closes #8099.
+  - New Config Option: town_ruining.town_ruins.ruins_can_be_reclaimed_by_townless_players
+    - Default: false
+    - When this is true, players who have no town can also reclaim the ruin. While false, only residents of the Town can reclaim the ruin.
+  - Add townforsale and townnotforsale events, thrown when a town is put up for sale or not for sale.
+    - Closes #7911.
+  - API: New Cancellable API Events: TownSetForSaleEvent and TownSetNotForSaleEvent.
+  - Add res check to isHideTownBalanceEnabled, courtesy of BladedNarwhal with PR #8256. (First-Time Contributor!)
+    - Residents who are a part of a town will not have the town's bank balance hidden while hide_town_balance_on_status_screen is true.
+0.103.1.2:
+  - API: add TOWN_CLAIM to TownyCommandAddonAPI, courtesy of Lemar98 with PR #8257.
+  - Add maven wrapper file to fix jitpack builds, courtesy of Warrior with PR #8259.
+  - Remove manual regain health event call, courtesy of Warrior with PR #8263.
+  - Protect portal frames as a switch instead of build, courtesy of Warrior with PR #8264.
+  - Send proper error message to player when renaming a town is cancelled, courtesy of Veyronity with PR #8266.
+  - Fix townyadmin sanctiontown tabcomplete, courtesy of Veyronity with PR #8267.
+  - Add perm resident mode, courtesy of SulkyWhale with PR #8270.
+  - New Command: /res toggle perm, /res set mode perm
+    - Shows the player the townblock status screen when they enter a plot. Shows the wilderness status screen while in the wilderness.
+  - Make obfuscated decoration no longer user safe, courtesy of Warrior with PR #8273.
+  - Bump fr.mrmicky:fastboard from 2.2.0 to 2.2.1.
+0.103.1.3:
+  - Bump junit.version from 6.1.2 to 6.1.3.
+  - Fix non-player portal creation not working when the town is the same on both ends.
+    - Closes #8262.
+0.103.2.0:
+  - Bump version for Release.
+0.103.2.1:
+  - Add PLOT_GROUP to TownyCommandAddonAPI, courtesy of SulkyWhale with PR #8265.
+  - Add CancellableTownyEvent#setCancelMessage(Translatable), courtesy of Veyronity with PR #8268.
+    - Migrate (most) CancellableTownyEvent uses to use Translatables, making Towny better-able to show error messages in the language used by the player's minecraft client.
+  - Add resident trustlist command, courtesy of flyncoes with PR #8276.
+  - New Command: /res trustlist {playername}, shows you (or the given playername) which towns they are trusted in.
+  - Fix: Ensure ChunkNotificationEvent is always thrown, courtesy of SulkyWhale with PR #8281.
+  - Add tab complete to /plot group trust remove, courtesy of Warriorrr with PR #8282.
+  - Fix /t jail error that can occur when a jail is removed, courtesy of MidSpike with PR #8286. (First-Time Contributor!)
+  - Bring parity to District and Plotgroup metadata methods, courtesy of SulkyWhale with PR #8288.
+  - Fix resident toggle reset/clear behavior, courtesy of SulkyWhale with PR #8289.
+  - [Database Source Reflow] Internal loading and saving of TownyObjects.
+    - The first stage in updating Towny's loading and saving classes, which will make it easier to create new database types in the future.
+0.103.2.2:
+  - Fix config migration file not having valid json.
+0.103.2.3:
+  - Fix plot groups causing database to not load.
+0.103.2.4:
+  - Fix outposts being loaded from incorrect key.
+    - Closes #8291.
+0.103.2.5:
+  - Fix PopulationTests hitting a null config when initializing town and nation objects.
+  - Add ability for nation capitals to jail nation residents.
+    - Closes #8292.
+  - New Config Option: jail.can_nation_leaders_jail_nation_residents
+    - Default: false
+    - If true, nation leaders can jail any resident of their nation inside of their capital city's jails.
+  - Fix rank remove tab completes, courtesy of SulkyWhale with PR #8293.
+  - Protect players from hostile mobs in claims, courtesy of pernio with PR #8284.
+  - New Config Option: protection.prevent_monster_damage_to_players_in_mobless_areas
+    - Default: false
+    - When set to true, players will be protected from monster damage in locations where mobs are disabled.
+    - Warning: This allows players to abuse mob farms while being invulnerable in a nearby chunk where mob spawns are disabled.
+  - Check if a town can bypass the adjacent chunk check per-world, courtesy of Veyronity with PR #8290.
+  - New Config Option: claiming.outposts.limit_outposts_per_world
+    - Default: false
+    - Setting this value to true will only allow towns to claim outposts in worlds they don't have claims in.
+  - Bump org.apache.maven.plugins:maven-jar-plugin from 3.5.0 to 3.5.1.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.6 to 3.6.0.
+  - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 10.0.0 to 10.0.1.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.15.0 to 3.16.0.
+  - Bump org.slf4j:slf4j-simple from 2.0.18 to 2.0.19.
+0.103.2.6:
+  - Fix adding and removing or nation enemies and allies.
+  - Send a town message when a plot is claimed, courtesy of Veyronity with PR #8300.
+0.103.2.7:
+  - Update to support MC 26.3.
+  - New Automatic Config Edit: global_town_settings.farm_plot_allow_blocks
+    - Will have ",SHELF_MUSHROOM" added to it.
+  - Fix permission node for ignoreinvites resident toggle, courtesy of Warriorrr with PR #8305.
+0.103.2.8:
+  - New PAPI Placeholder: %townyadvanced_town_neutrality_cost%
+    - Shows the player the cost their town's neutrality would be if they have a town. If they have no town it shows the generic neutrality cost.
+  - Add support for displaying Days in more of the TimeMgmt methods.

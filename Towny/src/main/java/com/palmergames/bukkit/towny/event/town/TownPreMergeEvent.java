@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.event.town;
 
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public class TownPreMergeEvent extends CancellableTownyEvent {
 	public TownPreMergeEvent(Town remainingTown, Town succumbingTown) {
 		this.remainingTown = remainingTown;
 		this.succumbingTown = succumbingTown;
-		setCancelMessage(Translation.of("msg_town_merge_cancelled"));
+		setCancelMessage(Translatable.of("msg_town_merge_cancelled"));
 	}
 
 	public Town getRemainingTown() {

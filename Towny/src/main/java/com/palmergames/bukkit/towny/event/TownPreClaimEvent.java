@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,7 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
         this.isOutpost = isOutpost;
         this.isHomeblock = isHomeblock;
 		this.isOverClaim = isOverClaim;
-        setCancelMessage(Translation.of("msg_claim_error"));
+        setCancelMessage(Translatable.of("msg_claim_error"));
     }
 
 	/**

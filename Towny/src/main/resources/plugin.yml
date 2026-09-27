@@ -664,6 +664,7 @@ permissions:
             towny.command.resident.list: true
             towny.command.resident.plotlist: true
             towny.command.resident.outlawlist: true
+            towny.command.resident.trustlist: true
             towny.command.resident.set.*: true
             towny.command.resident.otherresident: true
             towny.command.resident.tax: true
@@ -693,6 +694,7 @@ permissions:
             towny.command.resident.toggle.ignoreplots: true
             towny.command.resident.toggle.infotool: true
             towny.command.resident.toggle.map: true
+            towny.command.resident.toggle.perm: true
             towny.command.resident.toggle.plotgroup: true
             towny.command.resident.toggle.district: true
             towny.command.resident.toggle.constantplotborder: true

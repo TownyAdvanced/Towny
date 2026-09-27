@@ -2283,6 +2283,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
 	
+	public static boolean canNationLeadersJailNationResidents() {
+		return getBoolean(ConfigNodes.JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS);
+	}
+
 	public static int getJailedOutlawJailHours() {
 		
 		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
@@ -3450,6 +3454,10 @@ public class TownySettings {
 	public static int getAmountOfResidentsForOutpost() {
 		return getInt(ConfigNodes.CLAIMING_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
+	
+	public static boolean getOutpostsLimitedPerWorld() {
+		return getBoolean(ConfigNodes.CLAIMING_LIMIT_OUTPOSTS_PER_WORLD);
+	}
 
 	public static int getMaximumInvitesSentTown() {
 		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN);
@@ -3925,6 +3933,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_OPEN);
 	}
 
+	public static boolean canRuinsBeReclaimedByTownlessPlayers() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_CAN_BE_CLAIMED_BY_TOWNLESS_PLAYERS);
+	}
+
 	public static boolean areRuinedTownsBanksPaidToNation() {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION);
 	}
@@ -4092,6 +4104,10 @@ public class TownySettings {
 
 	public static boolean areProtectedEntitiesProtectedAgainstBlockProjectileSource() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_BLOCK_PROJECTILE_SOURCE_BYPASS);
+	}
+
+	public static boolean isMonsterDamageBlockedInMoblessAreas() {
+		return getBoolean(ConfigNodes.PROT_PREVENT_MONSTER_DAMAGE_TO_PLAYERS_IN_MOBLESS_AREAS);
 	}
 	
 	public static String getBossBarNotificationColor() {

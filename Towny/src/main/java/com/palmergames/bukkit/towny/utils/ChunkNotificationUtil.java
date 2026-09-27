@@ -30,7 +30,7 @@ public class ChunkNotificationUtil {
 	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
 
 	public static void showChunkNotification(Player player, Resident resident, WorldCoord to, WorldCoord from) {
-		String msg = null;
+		String msg = "";
 		try {
 			ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 			msg = chunkNotifier.getNotificationString(resident);
@@ -38,8 +38,6 @@ public class ChunkNotificationUtil {
 			Towny.getPlugin().getLogger().log(Level.WARNING, "ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful: " + System.lineSeparator() +
 				"  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ(), e);
 		}
-		if (msg == null)
-			return;
 
 		ChunkNotificationEvent cne = new ChunkNotificationEvent(player, msg, to, from);
 		BukkitTools.fireEvent(cne);

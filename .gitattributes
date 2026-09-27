@@ -1,3 +1,5 @@
 * text=auto eol=crlf
 
 *.jar binary
+
+mvnw eol=lf

@@ -267,7 +267,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						break;
 				case "group":
 					if (args.length == 2)
-						return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_GROUP, plotGroupTabCompletes), args[1]);
 					
 					if (args.length < 2)
 						break;
@@ -281,8 +281,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
-							if (args.length == 4)
-								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+							if (args.length == 4) {
+								if (args[2].equalsIgnoreCase("remove")) {
+									final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
+									final PlotGroup group = townBlock != null ? townBlock.getPlotObjectGroup() : null;
+									if (group != null) {
+										return NameUtil.filterByStart(group.getTrustedResidents().stream().map(Resident::getName).toList(), args[3]);
+									}
+								} else {
+									return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+								}
+							}
 						case "perm":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove", "gui"), args[2]);
@@ -313,7 +322,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if ("remove".equalsIgnoreCase(args[1])) {
 							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
 							if (townBlock != null && townBlock.hasTrustedResidents()) {
-								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
+								return NameUtil.filterByStart(townBlock.getTrustedResidents().stream().map(Resident::getName).toList(), args[2]);
 							}
 						} else {
 							return getTownyStartingWith(args[2], "r");
@@ -686,8 +695,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (TownBlockType.ARENA.equals(townBlockType) && TownySettings.getOutsidersPreventPVPToggle()) {
 			for (Player target : Bukkit.getOnlinePlayers()) {
-				if (!townBlock.getTownOrNull().hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+				if (!townBlock.getTownOrNull().hasResident(target) && !player.equals(target) && townBlock.getWorldCoord().containsCoordinate(target.getX(), target.getZ()) && !target.getGameMode().isInvulnerable() && player.canSee(target)) {
 					throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+				}
 			}
 		}
 
@@ -1212,8 +1222,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!townBlock.getPermissions().pvp)) {
 			for (Player target : Bukkit.getOnlinePlayers()) {
-				if (!town.hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+				if (!town.hasResident(target) && !player.equals(target) && townBlock.getWorldCoord().containsCoordinate(target.getX(), target.getZ()) && !target.getGameMode().isInvulnerable() && player.canSee(target)) {
 					throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+				}
 			}
 		}
 
@@ -1509,6 +1520,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "toggle" -> parsePlotGroupToggle(split, townBlock, player, resident);
 		case "trust" -> parsePlotGroupTrust(split, townBlock, player);
 		default -> {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_GROUP, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_GROUP, split[0]).execute(player, "group", split);
+				return;
+			}
 			HelpMenu.PLOT_GROUP_HELP.send(player);
 			if (townBlock.hasPlotObjectGroup())
 				TownyMessaging.sendMsg(player, Translatable.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
@@ -1929,8 +1944,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			if (TownBlockType.ARENA.equals(type) && TownySettings.getOutsidersPreventPVPToggle()) {
 				for (Player target : Bukkit.getOnlinePlayers()) {
-					if (!town.hasResident(target) && !player.getName().equals(target.getName()) && tb.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+					if (!town.hasResident(target) && !player.equals(target) && tb.getWorldCoord().containsCoordinate(target.getX(), target.getZ()) && !target.getGameMode().isInvulnerable() && player.canSee(target)) {
 						throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+					}
 				}
 			}
 

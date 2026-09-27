@@ -208,6 +208,8 @@ public class PlotClaim implements Runnable {
 		final Resident owner = townBlock.getResidentOrNull();
 		if (owner != null && price > 0)
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_buy_resident_plot", resident.getName(), owner.getName(), townBlock.getPlotPrice()));
+		else 
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_claim_resident_plot", resident.getName(), townBlock.toString()));
 
 		return claimTownBlockForResident(townBlock);
 	}

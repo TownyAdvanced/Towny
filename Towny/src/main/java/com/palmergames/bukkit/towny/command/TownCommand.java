@@ -35,6 +35,8 @@ import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetForSaleEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.town.TownSetOutpostSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustAddEvent;
@@ -361,6 +363,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			case 2:
 				return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
 			case 3:
+				if (args[1].equalsIgnoreCase("remove")) {
+					if (town == null)
+						return Collections.emptyList();
+					List<String> residentsWithRanks = TownyPerms.getTownRanks(town)
+						.stream()
+						.flatMap(rank -> town.getRank(rank).stream())
+						.map(Resident::getName)
+						.toList();
+					return NameUtil.filterByStart(residentsWithRanks, args[2]);
+				}
 				return getTownResidentNamesOfPlayerStartingWith(player, args[2]);
 			case 4:
 				switch (args[1].toLowerCase(Locale.ROOT)) {
@@ -426,15 +438,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return getTownyStartingWith(args[2], "t");
 			break;
 		case "claim":
-			switch (args.length) {
-			case 2:
-				return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
-			case 3:
-				if (!args[1].equalsIgnoreCase("outpost"))
-					return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
-			default:
+			if (args.length == 2)
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_CLAIM, townClaimTabCompletes), args[1]);
+			else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN_CLAIM, args[1]))
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_CLAIM, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length - 1]);
+			else if (args.length == 3 && !args[1].equalsIgnoreCase("outpost"))
+				return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
+			else
 				return Collections.emptyList();
-			}
 		case "unclaim":
 			if (args.length == 2)
 				return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
@@ -1522,8 +1533,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Test to see if an outsider being inside of the Town would prevent toggling PVP.
 			if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!town.isPVP())) {
 				for (Player target : Bukkit.getOnlinePlayers()) {
-					if (!town.hasResident(target) && town.equals(TownyAPI.getInstance().getTown(target.getLocation())))
+					if (!town.hasResident(target) && !sender.equals(target) && town.equals(WorldCoord.parseWorldCoord(target).getTownOrNull()) && !target.getGameMode().isInvulnerable() && (!(sender instanceof Player player) || player.canSee(target))) {
 						throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_town"));
+					}
 				}
 			}
 		}
@@ -1815,8 +1827,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident jailedResident = getResidentOrThrow(split[0]);
 
 		// You can only jail your members of your own town.
-		if (!town.hasResident(jailedResident))
-			throw new TownyException(Translatable.of("msg_resident_not_your_town"));
+		if (!town.hasResident(jailedResident) && !TownySettings.canNationLeadersJailNationResidents())
+			throw new TownyException(Translatable.of("msg_err_not_same_town", jailedResident.getName()));
+
+		// When enabled, nation capitals can jail the residents of the nation.
+		if (!TownySettings.canNationLeadersJailNationResidents() || !town.isCapital() || !town.getNationOrNull().hasResident(jailedResident))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", jailedResident.getName()));
 
 		// Make sure they aren't already jailed.
 		if (jailedResident.isJailed())
@@ -1926,7 +1942,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			int page = 1;
-			int jailCount = town.getJails() == null ? 0 : town.getJails().size();
+			int jailCount = town.getJails().size();
 			int total = (int) Math.ceil(jailCount / 10D);
 			if (args.length == 1) {
 				page = MathUtil.getPositiveIntOrThrow(args[0]);
@@ -2220,12 +2236,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(sender, oldMayor, newMayor);
 				if (BukkitTools.isEventCancelled(townMayorChangeEvent) && !admin)
-					throw new TownyException(townMayorChangeEvent.getCancelMessage());
+					throw new TownyException(townMayorChangeEvent.getCancelTranslatable());
 
 				if (town.isCapital()) {
 					NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldMayor, newMayor);
 					if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin)
-						throw new TownyException(nationKingChangeEvent.getCancelMessage());
+						throw new TownyException(nationKingChangeEvent.getCancelTranslatable());
 				}
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
@@ -2471,10 +2487,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_homeblock_has_not_been_set"));
 
 		TownSetSpawnEvent event = new TownSetSpawnEvent(town, player, player.getLocation());
-		if (BukkitTools.isEventCancelled(event) && 
-			!admin && 
-			!event.getCancelMessage().isEmpty())
-				throw new TownyException(event.getCancelMessage());
+		if (BukkitTools.isEventCancelled(event) && !admin)
+			throw new TownyException(event.getCancelTranslatable());
 
 		Location newSpawn = admin ? player.getLocation() : event.getNewSpawn();
 
@@ -2823,7 +2837,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
 		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true, false);
-		preClaimEvent.setCancelMessage(Translation.of("msg_claim_error", 1, 1));
+		preClaimEvent.setCancelMessage(Translatable.of("msg_claim_error", 1, 1));
 		
 		if (BukkitTools.isEventCancelled(preClaimEvent)) {
 			TownyUniverse.getInstance().removeTownBlock(townBlock);
@@ -2896,7 +2910,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Fire a cancellable event.
 		TownPreRenameEvent event = new TownPreRenameEvent(town, newName);
 		if (BukkitTools.isEventCancelled(event)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
+			TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
 			return;
 		}
 
@@ -3443,7 +3457,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 			} catch (CancelledEventException e) {
-				TownyMessaging.sendErrorMsg(sender, e.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, e.getCancelTranslatable());
 				continue;
 			}
 
@@ -3499,7 +3513,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				try {
 					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 				} catch (CancelledEventException e) {
-					TownyMessaging.sendErrorMsg(sender, e.getCancelMessage());
+					TownyMessaging.sendErrorMsg(sender, e.getCancelTranslatable());
 					return;
 				}
 				// Reset permissions
@@ -3583,6 +3597,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TOWN_CLAIM.send(player);
+			return;
+		}
+
+		if (split.length > 0 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN_CLAIM, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_CLAIM, split[0]).execute(player, "town", split);
 			return;
 		}
 
@@ -3726,6 +3745,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// attached to a claimed plot.
 		if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
+		TownyWorld world = selection.get(0).getTownyWorld();
+		if (outpost && TownySettings.getOutpostsLimitedPerWorld() && world != null && !town.getTownBlocksInWorld(world).isEmpty()) {
+			throw new TownyException(Translatable.of("msg_err_cannot_claim_outpost_in_claimed_world"));
+		}
 	}
 
 	private static void fireTownPreClaimEventOrThrow(Player player, Town town, boolean outpost, List<WorldCoord> selection) throws TownyException {
@@ -3736,7 +3759,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord), player, outpost, isHomeblock, false);
 			if(BukkitTools.isEventCancelled(preClaimEvent)) {
 				blockedClaims++;
-				cancelMessage = preClaimEvent.getCancelMessage();
+				cancelMessage = preClaimEvent.getCancelTranslatable().forLocale(player);
 			}
 		}
 		if (blockedClaims > 0)
@@ -3920,8 +3943,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.isOverClaimingPreventedByHomeBlockRadius() && AreaSelectionUtil.isTooCloseToHomeBlock(wc, town))
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
-		if(BukkitTools.isEventCancelled(new TownPreClaimEvent(town, wc.getTownBlockOrNull(), player, false, false, true)))
-			throw new TownyException(Translatable.of("msg_err_another_plugin_cancelled_takeover"));
+		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, wc.getTownBlockOrNull(), player, false, false, true);
+		preClaimEvent.setCancelMessage(Translatable.of("msg_err_another_plugin_cancelled_takeover")); // Set the default cancel message
+		BukkitTools.ifCancelledThenThrow(preClaimEvent);
 
 		double cost = TownySettings.getTakeoverClaimPrice();
 		String costSlug = !TownyEconomyHandler.isActive() || cost <= 0 ? Translatable.of("msg_spawn_cost_free").forLocale(player) : prettyMoney(cost);
@@ -4125,8 +4149,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(remainingTown, succumbingTown);
 			if (BukkitTools.isEventCancelled(townPreMergeEvent)) {
-				TownyMessaging.sendErrorMsg(succumbingTown.getMayor().getPlayer(), townPreMergeEvent.getCancelMessage());
-				TownyMessaging.sendErrorMsg(sender, townPreMergeEvent.getCancelMessage());
+				TownyMessaging.sendErrorMsg(succumbingTown.getMayor().getPlayer(), townPreMergeEvent.getCancelTranslatable());
+				TownyMessaging.sendErrorMsg(sender, townPreMergeEvent.getCancelTranslatable());
 				return;
 			}
 
@@ -4522,6 +4546,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				setTownForSale(town, forSalePrice, false);
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
 			})
+			.setCancellableEvent(new TownSetForSaleEvent(town, player, forSalePrice))
 			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
 			.serious()
 			.sendTo(player);
@@ -4533,7 +4558,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (!town.isForSale())
 			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
-		
+
+		TownSetNotForSaleEvent event = new TownSetNotForSaleEvent(town, player);
+		BukkitTools.ifCancelledThenThrow(event);
+
 		setTownNotForSale(town, false);
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
 	}

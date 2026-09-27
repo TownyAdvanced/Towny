@@ -550,6 +550,8 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
 		} else if (entityType == EntityType.SILVERFISH && ItemLists.INFESTED_BLOCKS.contains(event.getTo()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation())) {
 			event.setCancelled(true);
+		} else if (entity instanceof Player player && blockMat == Material.END_PORTAL_FRAME && TownySettings.isSwitchMaterial(blockMat, block.getLocation())) {
+			event.setCancelled(!TownyActionEventExecutor.canSwitch(player, block.getLocation(), blockMat));
 		}
 	}
 

@@ -282,7 +282,8 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(Town town, CommandSender sender) {
 		boolean isSenderAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender);
-		
+		boolean isSenderResidentOfTown = sender instanceof Player player && town.hasResident(player);
+        
 		final Translator translator = Translator.locale(sender);
 		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
@@ -352,7 +353,7 @@ public class TownyFormatter {
 		// Only display the remaining fields if town is not ruined
 		} else {
 			// | Bank: 534 coins
-			if (TownyEconomyHandler.isActive() && (!TownySettings.isHideTownBalanceEnabled() || isSenderAdmin))
+			if (TownyEconomyHandler.isActive() && (!TownySettings.isHideTownBalanceEnabled() || isSenderAdmin || isSenderResidentOfTown))
 				MoneyUtil.addTownMoneyComponents(town, translator, screen);
 
 			// Mayor: MrSand

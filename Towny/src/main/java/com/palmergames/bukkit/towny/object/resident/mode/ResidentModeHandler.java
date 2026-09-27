@@ -40,11 +40,12 @@ public class ResidentModeHandler {
 		addMode(new GenericResidentMode("adminbypass", "")); // No permission so that admins can toggle it when they don't have admin powers.
 		addMode(new GenericResidentMode("bedspawn", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BEDSPAWN.getNode()));
 		addMode(new GenericResidentMode("bordertitles", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES.getNode()));
-		addMode(new GenericResidentMode("ignoreinvites", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS.getNode()));
+		addMode(new GenericResidentMode("ignoreinvites", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREINVITES.getNode()));
 		addMode(new GenericResidentMode("ignoreotherchannels", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREOTHERCHANNELS.getNode()));
 		addMode(new GenericResidentMode("ignoreplots", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS.getNode()));
 		addMode(new GenericResidentMode("infotool", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL.getNode()));
 		addMode(new GenericResidentMode("map", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_MAP.getNode()));
+		addMode(new GenericResidentMode("perm", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PERM.getNode()));
 		addMode(new GenericResidentMode("plotgroup", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTGROUP.getNode()));
 		addMode(new GenericResidentMode("district", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_DISTRICT.getNode()));
 		addMode(new GenericResidentMode("townborder", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER.getNode()));
