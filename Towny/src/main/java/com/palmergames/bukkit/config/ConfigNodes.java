@@ -1163,7 +1163,8 @@ public enum ConfigNodes {
 			"",
 			"# The minimum adjacent town blocks required to expand.",
 			"# This can prevent long lines and snake-like patterns.",
-			"# Set to -1 to disable. Set to 3 to force wider expansions of towns."),
+			"# Set to -1 to disable. Set to 3 to force wider expansions of towns.",
+			"# Note that this is simply the default new towny worlds will follow"),
 	CLAIMING_MAX_CLAIM_RADIUS_VALUE(
 			"claiming.max_claim_radius_value",
 			"4",

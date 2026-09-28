@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -4129,7 +4130,10 @@ public class TownySettings {
 	public static int getNewTownMinDistanceFromTownHomeblocks() {
 		return getInt(ConfigNodes.CLAIMING_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
 	}
-	
+
+	/**
+	 * This method returns the default configuration for new worlds. To check for an existing world use {@link TownyWorld#getMinAdjacentChunks()}
+	 */
 	public static int getMinAdjacentBlocks() {
 		return Math.min(3, getInt(ConfigNodes.CLAIMING_MIN_ADJACENT_BLOCKS));
 	}

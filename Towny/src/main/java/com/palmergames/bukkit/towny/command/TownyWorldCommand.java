@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -73,7 +74,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"wildperm",
 		"wildignore",
 		"wildregen",
-		"wildname"
+		"wildname",
+		"minadjacency"
 	);
 	
 	public TownyWorldCommand(Towny instance) {
@@ -395,7 +397,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Jailing", world.getName(), formatBool(world.isJailingEnabled())));
 	}
 
-	public void worldSet(CommandSender sender, TownyWorld world, String[] split) throws NoPermissionException {
+	public void worldSet(CommandSender sender, TownyWorld world, String[] split) throws TownyException {
 
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode());
 
@@ -410,6 +412,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		case "wildignore" -> setWildIgnore(sender, world, split);
 		case "wildregen" -> setWildRegen(sender, world, split);
 		case "wildname" -> setWildName(sender, world, split);
+		case "minadjacency" -> setMinAdjacentChunks(sender, world, split);
 		default -> {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, split[0])) {
 				try {
@@ -494,6 +497,16 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			world.setUnclaimedZoneName(split[1]);
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_name", world.getName(), split[1]));
 		}
+	}
+	
+	private void setMinAdjacentChunks(CommandSender sender, TownyWorld world, String[] split) throws TownyException {
+		if (split.length < 2) {
+			throw new TownyException(Translatable.of("msg_usage", "/townyworld set minadjacency <value>"));
+		}
+		int input = MathUtil.getIntOrThrow(split[1]);
+		int minAdjacentChunks = Math.max(-1, Math.min(3, input)); // Min of -1, max of 3
+		world.setMinAdjacentChunks(minAdjacentChunks);
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_set_min_adj_chunks", world.getName(), minAdjacentChunks));
 	}
 	
 	private Translatable formatBool(boolean bool) {
