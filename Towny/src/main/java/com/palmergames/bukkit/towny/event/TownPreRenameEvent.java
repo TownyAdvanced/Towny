@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class TownPreRenameEvent extends CancellableTownyEvent {
 		this.oldName = town.getName();
 		this.town = town;
 		this.newName = newName;
-		setCancelMessage(Translation.of("msg_err_rename_cancelled"));
+		setCancelMessage(Translatable.of("msg_err_rename_cancelled"));
 	}
 
 	/**

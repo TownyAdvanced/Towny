@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -55,6 +56,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"jail",
 		"plotlist",
 		"outlawlist",
+		"trustlist",
 		"spawn",
 		"toggle",
 		"set",
@@ -96,13 +98,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> residentToggleModeTabCompletes = ResidentModeHandler.getValidModeNames();
 
 	private static final List<String> residentSetModeTabCompletesWithClearAndReset = Stream.concat(
-		Arrays.asList("reset", "clear").stream(),
+		Stream.of("reset", "clear"),
 		new ArrayList<>(residentToggleModeTabCompletes).stream()
 	).collect(Collectors.toList());
 
 	private static final List<String> residentCompleteToggleChoices = Stream.concat(
 		new ArrayList<>(residentToggleChoices).stream(),
-		new ArrayList<>(residentToggleModeTabCompletes).stream()
+		new ArrayList<>(residentSetModeTabCompletesWithClearAndReset).stream()
 	).collect(Collectors.toList());
 
 	public ResidentCommand(Towny instance) {
@@ -148,6 +150,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "tax":
 				case "outlawlist":
+				case "trustlist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
 					break;
@@ -250,6 +253,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		case "tax" -> parseResidentTax(player, StringMgmt.remFirstArg(split));
 		case "plotlist" -> parseResidentPlotlist(player, StringMgmt.remFirstArg(split));
 		case "outlawlist" -> parseResidentOutlawlist(player, StringMgmt.remFirstArg(split));
+		case "trustlist" -> parseResidentTrustlist(player, StringMgmt.remFirstArg(split));
 		case "jail" -> parseResidentJail(player, StringMgmt.remFirstArg(split));
 		case "set" -> residentSet(player, StringMgmt.remFirstArg(split));
 		case "toggle" -> residentToggle(player, StringMgmt.remFirstArg(split));
@@ -334,6 +338,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlawed_in").forLocale(player), new ArrayList<>(resident.getTownsOutlawedIn())));
 	}
 
+	private void parseResidentTrustlist(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TRUSTLIST.getNode());
+
+		Resident resident = split.length == 0 ? getResidentOrThrow(player) : getResidentOrThrow(split[0]);
+
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("trusted_in").forLocale(player), new ArrayList<>(resident.getTownsTrustedIn())));
+	}
+
 	private void parseResidentJail(Player player, String[] split) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode());
 
@@ -397,17 +409,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		// Check if we're reseting before trying for nodes.
-		if (newSplit[0].equalsIgnoreCase("clear")) {
-			checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR.getNode());
-			ResidentModeHandler.clearModes(resident, false);
+		// Check if we're resetting before trying for nodes.
+		if (clearOrResetResidentModes(resident, newSplit))
 			return;
-		}
 
-		if (newSplit[0].equalsIgnoreCase("reset")) {
-			ResidentModeHandler.resetModes(resident, false);
-			return;
-		}
 		TownyPermission perm = resident.getPermissions();
 		
 		Optional<Boolean> choice = Optional.empty();
@@ -531,18 +536,24 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if (clearOrResetResidentModes(resident, split))
+			return;
+
+		ResidentModeHandler.toggleModes(resident, split, true, false);
+	}
+
+	private boolean clearOrResetResidentModes(Resident resident, String[] split) throws NoPermissionException {
 		if (split[0].equalsIgnoreCase("clear")) {
 			checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR.getNode());
 			ResidentModeHandler.clearModes(resident, true);
-			return;
+			return true;
 		}
 
 		if (split[0].equalsIgnoreCase("reset")) {
 			ResidentModeHandler.resetModes(resident, true);
-			return;
+			return true;
 		}
-
-		ResidentModeHandler.toggleModes(resident, split, true, false);
+		return false;
 	}
 
 	private void setAbout(Player player, String about, Resident resident) throws TownyException {

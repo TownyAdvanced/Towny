@@ -1,5 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.ApiStatus.Internal;
+
+import com.palmergames.bukkit.towny.db.SerializationContext;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
+
 /**
  * Basic interface that depicts whether an object has a specified save method.
  * Most, if not all, save methods will redirect to a specific method in {@link com.palmergames.bukkit.towny.db.TownyDataSource}.
@@ -12,4 +19,13 @@ public interface Savable {
 	 * Schedules the object to be saved to the database.
 	 */
 	void save();
+	
+	/**
+	 * @param context SerializationContext with information.
+	 * @return a Map which stores keys and values, meant to be written to a
+	 *         database.
+	 * @throws ObjectSaveException when something cannot be saved.
+	 */
+	@Internal
+	Map<String, Object> getObjectDataMap(SerializationContext context) throws ObjectSaveException;
 }

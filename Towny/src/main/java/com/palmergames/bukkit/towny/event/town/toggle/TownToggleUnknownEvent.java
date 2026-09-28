@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny.event.town.toggle;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
 
 public class TownToggleUnknownEvent extends TownToggleEvent {
 
@@ -20,7 +20,7 @@ public class TownToggleUnknownEvent extends TownToggleEvent {
 		super(sender, town, admin);
 		this.args = args;
 		setCancelled(true);
-		setCancelMessage(Translation.of("msg_err_invalid_property", args[0]));
+		setCancelMessage(Translatable.of("msg_err_invalid_property", args[0]));
 	}
 
 	/**

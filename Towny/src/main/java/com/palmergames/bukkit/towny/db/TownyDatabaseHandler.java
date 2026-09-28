@@ -460,14 +460,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				TownRuinUtil.putTownIntoRuinedState(town);
 				return false;
 			} else if (sender != null && !tpre.getCancelMessage().isEmpty()) {
-				TownyMessaging.sendErrorMsg(tpre.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, tpre.getCancelTranslatable());
 			}
 		}
 
 		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town, cause, sender);
 		if (!cause.ignoresPreEvent() && BukkitTools.isEventCancelled(preEvent)) {
 			if (sender != null && !preEvent.getCancelMessage().isEmpty())
-				TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, preEvent.getCancelTranslatable());
 			
 			return false;
 		}
@@ -534,11 +534,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation, cause, sender);
 		if (sender != null)
-			preEvent.setCancelMessage(Translatable.of("msg_err_you_cannot_delete_this_nation").forLocale(sender));
+			preEvent.setCancelMessage(Translatable.of("msg_err_you_cannot_delete_this_nation"));
 		
 		if (!cause.ignoresPreEvent() && BukkitTools.isEventCancelled(preEvent)) {
 			if (sender != null && !preEvent.getCancelMessage().isEmpty())
-				TownyMessaging.sendErrorMsg(preEvent.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, preEvent.getCancelTranslatable());
 			
 			return false;
 		}

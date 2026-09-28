@@ -812,7 +812,7 @@ public class TownyMessaging {
 	
 	public static void sendJailList(CommandSender sender, Town town, int page, int total) {
 		Translator translator = Translator.locale(sender);
-		List<Jail> jails = town.getJails() == null ? new ArrayList<>() : new ArrayList<>(town.getJails());
+		List<Jail> jails = new ArrayList<>(town.getJails()); // create copy
 		
 		int jailCount = jails.size();
 		int iMax = Math.min(page * 10, jailCount);

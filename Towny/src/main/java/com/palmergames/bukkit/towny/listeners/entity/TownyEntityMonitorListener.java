@@ -280,7 +280,7 @@ public class TownyEntityMonitorListener implements Listener {
 			|| !attackerResident.hasTown()                 // Attacker has no town.
 			|| alreadyJailed(defenderResident, townBlock)  // Player was already jailed.
 			|| !hasJailingNode(attackerResident)           // Attacker doesn't have permission to jail.
-			|| !attackerTown.hasJails()                    // Town has no jails.
+			|| !attackerTown.hasPrimaryJail()              // Town has no primary jail.
 			|| !attackerTown.hasOutlaw(defenderResident)   // Player isn't an outlaw.
 			|| !attackerTown.hasTownBlock(townBlock)       // Victim died in a town that isn't the attackerResident's town.
 			)

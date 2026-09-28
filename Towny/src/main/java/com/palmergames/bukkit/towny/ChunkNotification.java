@@ -130,11 +130,11 @@ public class ChunkNotification {
 	public String getNotificationString(Resident resident) {
 
 		if (notificationFormat.length() == 0)
-			return null;
+			return "";
 		viewerResident = resident;
 		List<String> outputContent = getNotificationContent(resident);
 		if (outputContent.size() == 0)
-			return null;
+			return "";
 		return String.format(notificationFormat, StringMgmt.join(outputContent, notificationSplitter));
 	}
 

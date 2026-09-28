@@ -103,7 +103,7 @@ public class TownyActionEventExecutor {
 		 * Send any feedback when the action is denied.
 		 */
 		if (event.isCancelled() && !event.isMessageSuppressed() && !silent)
-			TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+			TownyMessaging.sendErrorMsg(player, event.getCancelTranslatable());
 
 		return !event.isCancelled();
 	}

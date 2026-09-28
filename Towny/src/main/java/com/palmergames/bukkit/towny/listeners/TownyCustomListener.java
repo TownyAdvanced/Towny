@@ -199,7 +199,7 @@ public class TownyCustomListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST) 
 	public void onTownLeaveNation(NationPreTownLeaveEvent event ) {
 		if (event.getTown().isConquered()) {
-			event.setCancelMessage(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
+			event.setCancelMessage(Translatable.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 			event.setCancelled(true);
 		}
 	}
@@ -232,7 +232,7 @@ public class TownyCustomListener implements Listener {
 		if (town == null || !town.hasOutlaw(event.getPlayer().getName()))
 			return;
 		event.setCancelled(true);
-		event.setCancelMessage(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town.getName()).forLocale(event.getPlayer()));
+		event.setCancelMessage(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town.getName()));
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class TownyCustomListener implements Listener {
 				!TownyAPI.getInstance().isWilderness(target.getLocation()) &&
 				unclaimSelection.contains(WorldCoord.parseWorldCoord(target))) {
 				event.setCancelled(true);
-				event.setCancelMessage(Translatable.of("msg_cant_unclaim_outsider_in_town").forLocale(event.getResident()));
+				event.setCancelMessage(Translatable.of("msg_cant_unclaim_outsider_in_town"));
 				break;
 			}
 		}
@@ -389,7 +389,7 @@ public class TownyCustomListener implements Listener {
 
 		String timeRemaining = TimeMgmt.getFormattedTimeValue(minTime - timePlayed, Translation.getLocale(resident));
 		event.setCancelled(true);
-		event.setCancelMessage(Translatable.of("msg_err_you_cannot_join_town_you_have_not_played_long_enough", timeRemaining).forLocale(resident));
+		event.setCancelMessage(Translatable.of("msg_err_you_cannot_join_town_you_have_not_played_long_enough", timeRemaining));
 	}
 
 	@EventHandler(ignoreCancelled = true)

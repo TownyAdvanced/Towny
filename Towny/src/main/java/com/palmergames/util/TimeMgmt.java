@@ -29,9 +29,14 @@ public class TimeMgmt {
 	
 	public static String formatCountdownTime(Long l, Locale locale) {
 		String out = "";
+		if (l >= 86400) {
+			int d = (int) (l / 86400);
+			out = d + Translatable.of("msg_days").translate(locale);
+			l -= d * 86400L;
+		}
 		if (l >= 3600) {
 			int h = (int) (l / 3600.0);
-			out = h + Translatable.of("msg_hours").translate(locale);
+			out = (out.length() > 0 ? ", " : "") + h + Translatable.of("msg_hours").translate(locale);
 			l -= h * 3600L;
 		}
 		if (l >= 60) {
@@ -44,6 +49,10 @@ public class TimeMgmt {
 		return out;
 	}
 
+	// Returns raw number of days, ex: "5"
+	public static String countdownTimeDaysRaw(long l) {
+		return String.valueOf(Duration.ofSeconds(l).toDays());
+	}
 	// Returns raw number of hours, ex: "12"
 	public static String countdownTimeHoursRaw(long l) {
 		return String.valueOf(Duration.ofSeconds(l).toHours());
@@ -57,6 +66,10 @@ public class TimeMgmt {
 		return String.valueOf(l % 60);
 	}
 
+	// Returns translation of "msg_days" formatted, ex: "2 days"
+	public static String formatCountdownTimeDays(long l, Player player) {
+		return Duration.ofSeconds(l).toDays() + Translatable.of("msg_days").forLocale(player);
+	}
 	// Returns translation of "msg_hours" formatted, ex: "12 hours"
 	public static String formatCountdownTimeHours(long l, Player player) {
 		return Duration.ofSeconds(l).toHours() + Translatable.of("msg_hours").forLocale(player);

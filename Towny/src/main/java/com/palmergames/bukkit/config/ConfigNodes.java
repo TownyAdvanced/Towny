@@ -1163,7 +1163,8 @@ public enum ConfigNodes {
 			"",
 			"# The minimum adjacent town blocks required to expand.",
 			"# This can prevent long lines and snake-like patterns.",
-			"# Set to -1 to disable. Set to 3 to force wider expansions of towns."),
+			"# Set to -1 to disable. Set to 3 to force wider expansions of towns.",
+			"# Note that this is simply the default new towny worlds will follow"),
 	CLAIMING_MAX_CLAIM_RADIUS_VALUE(
 			"claiming.max_claim_radius_value",
 			"4",
@@ -1310,6 +1311,11 @@ public enum ConfigNodes {
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents.",
 			"# This setting is ignored when limit_outposts_using_town_and_nation_levels is set to true."),
+	CLAIMING_LIMIT_OUTPOSTS_PER_WORLD(
+		"claiming.outposts.limit_outposts_per_world",
+		"false",
+		"",
+		"# Setting this value to true will only allow towns to claim outposts in worlds they don't have claims in"),
 
 	CLAIMING_OVERCLAIMING_ROOT("claiming.overclaiming", "", "", ""),
 	CLAIMING_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
@@ -2096,6 +2102,13 @@ public enum ConfigNodes {
 			"",
 			"# Setting this to false will allow block projectile sources, namely dispensers, to harm the above protected mobs (using potions, arrows, etc.), if they're in the same townblock and PvP is enabled."
 	),
+	PROT_PREVENT_MONSTER_DAMAGE_TO_PLAYERS_IN_MOBLESS_AREAS(
+			"protection.prevent_monster_damage_to_players_in_mobless_areas",
+			"false",
+			"",
+			"# When set to true, players will be protected from monster damage in locations where mobs are disabled.",
+			"# Warning: This allows players to abuse mob farms while being invulnerable in a nearby chunk where mob spawns are disabled."
+	),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
 			"BLINDNESS,NAUSEA,INSTANT_DAMAGE,HUNGER,POISON,SLOWNESS,MINING_FATIGUE,WEAKNESS,WITHER,WIND_CHARGED,WEAVING,INFESTED,OOZING",
@@ -2748,6 +2761,12 @@ public enum ConfigNodes {
 			"",
 			"# The percentage that a town has to pay per plot to merge with another town. The town that initiates the merge pays the cost.",
 			"# This is based on the price_claim_townblock."),
+	ECO_PRICE_TOWN_CEDE(
+		"economy.new_expand.price_town_cede",
+		"12",
+		"",
+		"# The cost of a town transferring a plot using /t cede",
+		"# The town offering the plot pays the cost"),
 	ECO_PRICE_RECLAIM_RUINED_TOWN(
 			"economy.new_expand.price_reclaim_ruined_town",
 			"500.0",
@@ -3329,6 +3348,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists."),
+	JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS(
+			"jail.can_nation_leaders_jail_nation_residents",
+			"false",
+			"",
+			"# If true, nation leaders can jail any resident of their nation inside of their capital city's jails."),
 	JAIL_OUTLAW_JAIL_HOURS(
 			"jail.outlaw_jail_hours",
 			"5",

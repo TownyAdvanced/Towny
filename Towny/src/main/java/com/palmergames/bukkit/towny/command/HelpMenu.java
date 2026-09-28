@@ -833,7 +833,7 @@ public enum HelpMenu {
 				.add("spy", Translatable.of("res_toggle_help_11"))
 				.add("infotool", Translatable.of("res_toggle_help_15"))
 				.add("adminbypass", Translatable.of("res_toggle_help_16"))
-				.add("Eg: /resident set mode map townclaim town nation general");
+				.add("Eg: /resident set mode map plotborder");
 		}
 	},
 

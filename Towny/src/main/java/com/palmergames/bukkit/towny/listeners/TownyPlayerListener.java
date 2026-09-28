@@ -193,8 +193,9 @@ public class TownyPlayerListener implements Listener {
 		
 		if (resident != null) {
 			// Don't set last online if the player was vanished.
-			if (!BukkitTools.hasVanishedMeta(event.getPlayer()))
+			if (!BukkitTools.isVanished(event.getPlayer())) {
 				resident.setLastOnline(System.currentTimeMillis());
+			}
 
 			resident.setGUIPageNum(0);
 			resident.setGUIPages(null);
