@@ -99,7 +99,8 @@ public class ProximityUtil {
 	}
 
 	public static void testAdjacentClaimsRulesOrThrow(WorldCoord townBlockToClaim, Town town, boolean outpost) throws TownyException {
-		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		TownyWorld world = townBlockToClaim.getTownyWorld();
+		int minAdjacentBlocks = world != null ? world.getMinAdjacentChunks() : TownySettings.getMinAdjacentBlocks();
 		testAdjacentClaimsRulesOrThrow(townBlockToClaim, town, outpost, minAdjacentBlocks);
 	}
 
@@ -177,7 +178,8 @@ public class ProximityUtil {
 
 	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town) throws TownyException {
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
-		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		TownyWorld world = townBlockToUnclaim.getTownyWorld();
+		int minAdjacentBlocks = world != null ? world.getMinAdjacentChunks() : TownySettings.getMinAdjacentBlocks();
 		testAdjacentUnclaimsRulesOrThrow(townBlockToUnclaim, town, minAdjacentBlocks);
 	}
 	
