@@ -3558,9 +3558,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_town_cede_the_mayor_is_not_online", townGainingPlot, townGainingPlot.getMayor()));
 		Player otherMayor = townGainingPlot.getMayor().getPlayer();
 
-		Confirmation.runOnAccept(() -> offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord))
+		int cost = TownySettings.getCedePlotCost();
+		Confirmation.runOnAccept(() -> {
+			offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord);
+			TownyMessaging.sendMsg(player, Translatable.of("msg_town_cede_plot_offer_sent", townGainingPlot.getName(), worldCoord.toString()));
+		})
 		.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
-		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
+		.setTitle(cost > 0 ? Translatable.of("msg_town_cede_plot_confirmation_give_plot_cost", townGainingPlot.getName(), prettyMoney(cost)) :Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
 		.sendTo(player);
 	}
 
@@ -3576,6 +3580,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_town_no_longer_owns_this_plot", townLosingPlot));
 				if (tb.isHomeBlock())
 					throw new TownyException(Translatable.of("msg_err_town_cede_town_cannot_cede_their_homeblock", townLosingPlot));
+
+				int cost = TownySettings.getCedePlotCost();
+				if (TownyEconomyHandler.isActive() && cost > 0 && !townLosingPlot.getAccount().withdraw(cost, "Cede plot to " + townGainingPlot.getName()))
+					throw new TownyException(Translatable.of("msg_town_cede_plot_err_not_enough_money", townGainingPlot.getName(), prettyMoney(cost)));
+
 
 				tb.setTown(townGainingPlot);
 				tb.save();
