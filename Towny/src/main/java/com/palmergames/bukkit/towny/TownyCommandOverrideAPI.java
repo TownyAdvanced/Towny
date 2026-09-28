@@ -18,15 +18,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BooleanSupplier;
 
-/**
- * Explicit replacements for Towny's command handlers. Ordinary addon command
- * registrations retain their existing precedence.
- *
- * <p>Overrides receive the original Bukkit command, label and complete argument
- * array. They replace all built-in handling for the matched path, including
- * permissions, validation and help. The registering plugin is responsible for
- * those checks. Overrides are inactive while Towny is in safe mode.</p>
- */
 public final class TownyCommandOverrideAPI {
 
 	private static final Set<String> ROOTS = Set.of("town", "nation", "resident", "plot",
@@ -37,8 +28,7 @@ public final class TownyCommandOverrideAPI {
 	}
 
 	/**
-	 * Registers a replacement, using the executor's TabCompleter if it implements it.
-	 * Otherwise completion is empty inside the replaced path.
+	 * Uses the executor's {@link TabCompleter}, if implemented, or empty completion.
 	 *
 	 * @see #registerOverride(Plugin, String, String, CommandExecutor, TabCompleter)
 	 */
@@ -49,19 +39,18 @@ public final class TownyCommandOverrideAPI {
 	}
 
 	/**
-	 * Registers a replacement for a subcommand and all its descendants.
+	 * Overrides a command path and its descendants. The longest matching path wins.
+	 * Callbacks receive the original command, label and full arguments; returning
+	 * {@code false} does not invoke Towny's handler.
 	 *
-	 * @param owner plugin owning the registration; registrations are removed on disable
-	 * @param command canonical root name, e.g. "nation" (also covers /n and /nat)
-	 * @param path space-separated, case-insensitive path, e.g. "ally" or "set board";
-	 *             "*" matches one argument, e.g. "town * set board" for an admin path;
-	 *             an empty path replaces the entire root, including no-argument calls
-	 * @param executor replacement receiving all original arguments, including the path;
-	 *                 its return value never causes fall-through to Towny's handler
-	 * @param completer replacement receiving all original arguments; null means no suggestions
-	 * @return false if an overlapping path of the same length is already registered;
-	 *         otherwise true. Of matching paths with different lengths, the longest wins.
-	 * @throws IllegalArgumentException if the root is not a canonical Towny command
+	 * @param owner owning plugin; registrations are removed on disable
+	 * @param command canonical root name; aliases are covered automatically
+	 * @param path space-separated, case-insensitive path; {@code *} matches one argument,
+	 *             empty matches the entire root
+	 * @param executor replacement handler
+	 * @param completer replacement completer, or {@code null} for no suggestions
+	 * @return {@code false} if an overlapping path of equal length is registered
+	 * @throws IllegalArgumentException if the root name is invalid
 	 */
 	public static synchronized boolean registerOverride(@NotNull Plugin owner, @NotNull String command,
 			@NotNull String path, @NotNull CommandExecutor executor, @Nullable TabCompleter completer) {
@@ -76,16 +65,14 @@ public final class TownyCommandOverrideAPI {
 		overrides.add(new OverrideRegistration(owner, root, parts, executor, completer));
 		return true;
 	}
-
-	/** Removes only the specified owner's registration. */
+	
 	public static boolean unregisterOverride(@NotNull Plugin owner, @NotNull String command, @NotNull String path) {
 		Objects.requireNonNull(owner, "owner");
 		String root = normalizeRoot(command);
 		List<String> parts = normalizePath(path);
 		return overrides.removeIf(entry -> entry.owner() == owner && entry.root().equals(root) && entry.path().equals(parts));
 	}
-
-	/** Removes all registrations belonging to a plugin. Called automatically on disable. */
+	
 	public static void unregisterOverrides(@NotNull Plugin owner) {
 		Objects.requireNonNull(owner, "owner");
 		overrides.removeIf(entry -> entry.owner() == owner);
@@ -139,7 +126,6 @@ public final class TownyCommandOverrideAPI {
 		return match;
 	}
 
-	/** Wraps a root handler without changing its behavior when no override matches. */
 	@ApiStatus.Internal
 	public static TabExecutor wrapExecutor(@NotNull CommandExecutor original, @NotNull BooleanSupplier safeMode) {
 		Objects.requireNonNull(original, "original");
@@ -157,7 +143,6 @@ public final class TownyCommandOverrideAPI {
 			@Override
 			public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
 					@NotNull String alias, @NotNull String[] args) {
-				// The final argument is still being completed, so it cannot select a new path.
 				OverrideRegistration match = safeMode.getAsBoolean() ? null : findOverride(command, args, Math.max(0, args.length - 1));
 				if (match != null) {
 					List<String> suggestions = match.completer() == null ? null : match.completer().onTabComplete(sender, command, alias, args);
