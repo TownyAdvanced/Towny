@@ -411,6 +411,7 @@ public class Towny extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		TownyCommandOverrideAPI.clearOverrides();
 
 		Bukkit.getLogger().info("==============================================================");
 
@@ -755,20 +756,20 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void registerCommands() {
-		getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
-		getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
-		getCommand("resident").setExecutor(new ResidentCommand(this));
-		getCommand("towny").setExecutor(new TownyCommand(this));
+		getCommand("townyadmin").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new TownyAdminCommand(this), this::isError));
+		getCommand("townyworld").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new TownyWorldCommand(this), this::isError));
+		getCommand("resident").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new ResidentCommand(this), this::isError));
+		getCommand("towny").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new TownyCommand(this), this::isError));
 
-		CommandExecutor townCommandExecutor = new TownCommand(this);
+		CommandExecutor townCommandExecutor = TownyCommandOverrideAPI.wrapExecutor(new TownCommand(this), this::isError);
 		getCommand("town").setExecutor(townCommandExecutor);
 		
 		// This is needed because the vanilla "/t" tab completer needs to be overridden.
 		getCommand("t").setTabCompleter((TabCompleter)townCommandExecutor);
 		
-		getCommand("nation").setExecutor(new NationCommand(this));
-		getCommand("plot").setExecutor(new PlotCommand(this));
-		getCommand("invite").setExecutor(new InviteCommand(this));
+		getCommand("nation").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new NationCommand(this), this::isError));
+		getCommand("plot").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new PlotCommand(this), this::isError));
+		getCommand("invite").setExecutor(TownyCommandOverrideAPI.wrapExecutor(new InviteCommand(this), this::isError));
 	}
 
 	private void addMetricsCharts() {
