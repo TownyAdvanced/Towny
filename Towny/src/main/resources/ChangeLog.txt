@@ -11049,3 +11049,19 @@ c
   - New PAPI Placeholder: %townyadvanced_town_neutrality_cost%
     - Shows the player the cost their town's neutrality would be if they have a town. If they have no town it shows the generic neutrality cost.
   - Add support for displaying Days in more of the TimeMgmt methods.
+  - Add automatic cost refunds to confirmations, courtesy of Warrior with PR #8254.
+  - Allow setting min adjacent chunks per-world, courtesy of Veyronity with PR #8302.
+  - New Command: /tw set minadjacency
+    - Used to set a world's min_adjacent_claim setting.
+  - Add a config option to set a cost for /t cede, courtesy of Veyronity with PR #8307.
+  - New Config Option: economy.new_expand.price_town_cede
+    - Default: 0
+    - The cost of a town transferring a plot using /t cede.
+    - The town offering the plot pays the cost.
+  - Check Entity#isVisibleByDefault when determining vanished status, courtesy of Warriorrr with PR #8308.
+  - Add protection for cobwebs spawned by weaving potions, courtesy of Warriorrr with PR #8310.
+    - Cobwebs spawned via weaving potions will now disappear like explosions' broken blocks, 60 seconds after they are created.
+  - Upload Towny jar directly as actions artifact, courtesy of Warriorrr with PR #8309.
+  - Bump org.slf4j:slf4j-simple from 2.0.19 to 2.0.20.
+  - Bump org.mockito:mockito-core from 5.23.0 to 5.24.0.
+  - Bump fr.mrmicky:fastboard from 2.2.1 to 2.2.2.

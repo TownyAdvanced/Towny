@@ -3564,7 +3564,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_cede_plot_offer_sent", townGainingPlot.getName(), worldCoord.toString()));
 		})
 		.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
-		.setTitle(cost > 0 ? Translatable.of("msg_town_cede_plot_confirmation_give_plot_cost", townGainingPlot.getName(), prettyMoney(cost)) :Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
+		.setTitle(cost > 0
+				? Translatable.of("msg_town_cede_plot_confirmation_give_plot_cost", townGainingPlot.getName(), prettyMoney(cost))
+				: Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
 		.sendTo(player);
 	}
 
