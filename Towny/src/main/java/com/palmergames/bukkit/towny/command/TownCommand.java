@@ -2806,11 +2806,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// Make town.
 				newTown(world, finalName, resident, key, spawnLocation, player, cost);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
+				return true;
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 				if (!(e instanceof CancelledEventException)) {
 					plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
 				}
+				return false;
 			}
 		})
 		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
@@ -2840,8 +2842,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (BukkitTools.isEventCancelled(preClaimEvent)) {
 			TownyUniverse.getInstance().removeTownBlock(townBlock);
 			TownyUniverse.getInstance().unregisterTown(town);
-			if (TownyEconomyHandler.isActive() && cost > 0)
-				resident.getAccount().deposit(cost, "Cancelled town creation refund.");
 			
 			throw new CancelledEventException(preClaimEvent);
 		}
