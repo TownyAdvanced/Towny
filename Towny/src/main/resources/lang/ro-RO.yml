@@ -60,6 +60,7 @@ town_help_32: "Utilizași /t set ? pentru ajutor."
 town_help_33: "Utilizați /t buy pentru ajutor."
 town_help_34: "Utilizati /t toggle pentru ajutor."
 town_help_35: "Foloseste /t rank pentru ajutor."
+town_help_36: 'Listează oraşele din apropiere sortate după distanţă.'
 town_list_help_0: "Vezi pagina specificată."
 town_list_help_1: "Listează orașele în funcție de numărul de locuitori."
 town_list_help_2: "Listați orașele care sunt deschise."
@@ -108,10 +109,15 @@ nation_help_9: 'Listează toți rezidenții online în națiune'
 king_help_1: 'Ajutor pentru lideri de naţiune'
 king_help_2: 'Setează-ți alianța.'
 king_help_3: 'Setează-ți dușmanii.'
+king_help_7: "Utilizati /t toggle pentru ajutor."
+king_help_9: "Folosit pentru a trimite mesaje tuturor din naţiunea dumneavoastră."
 res_1: 'Starea ta'
 res_2: '[rezident]'
 res_3: 'Starea jucătorului țintă'
 res_4: 'Lista tuturor jucătorilor online'
+res_8: 'Doar un fermier umil'
+res_9: "Cât impozit veți plăti pe zi."
+res_10: "Vedeți /res închisoare? pentru ajutor."
 mode_1: 'Arată harta între fiecare block town'
 mode_2: 'Incearcă să cucereşti în timp ce mergi'
 mode_3: 'Incearcă să abandonezi în timp ce mergi'
