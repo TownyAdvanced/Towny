@@ -76,6 +76,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.Nullable;
@@ -87,6 +88,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 
@@ -548,10 +550,13 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), block));
 			else if (potion.getShooter() instanceof Player player)
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
-		} else if (entityType == EntityType.SILVERFISH && ItemLists.INFESTED_BLOCKS.contains(event.getTo()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation())) {
+		} else if (entityType == EntityType.SILVERFISH && ItemLists.INFESTED_BLOCKS.contains(event.getTo()) && !TownyAPI.getInstance().isWilderness(block.getLocation())) {
 			event.setCancelled(true);
 		} else if (entity instanceof Player player && blockMat == Material.END_PORTAL_FRAME && TownySettings.isSwitchMaterial(blockMat, block.getLocation())) {
 			event.setCancelled(!TownyActionEventExecutor.canSwitch(player, block.getLocation(), blockMat));
+		} else if (event.getTo() == Material.COBWEB && entity instanceof LivingEntity livingEntity && livingEntity.hasPotionEffect(PotionEffectType.WEAVING) && !TownyAPI.getInstance().isWilderness(block.getLocation())) {
+			// Block griefing using cobwebs spawned by the weaving effect by reverting it back to the old block
+			TownyRegenAPI.beginProtectionRegenTask(block, ThreadLocalRandom.current().nextInt(1, 6), townyWorld, event);
 		}
 	}
 
