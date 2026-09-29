@@ -49,8 +49,8 @@ public class ResidentJailEvent extends Event {
 		return resident.getJailCell();
 	}
 	
-	public int getJailHours() {
-		return resident.getJailHours();
+	public long getUnjailTime() {
+		return resident.getUnjailTime();
 	}
 	
 	public Town getJailTown() {

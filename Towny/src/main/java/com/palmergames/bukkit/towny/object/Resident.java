@@ -80,7 +80,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private transient EconomyAccount account;
 	private Jail jail = null;
 	private int jailCell;
-	private int jailHours;
+	private Long unjailTime;
 	private double jailBail;
 
 	private final List<String> townRanks = new ArrayList<>();
@@ -178,10 +178,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void setJailCell(int i) {
-		if (jail.hasJailCell(i))
+		if (jail.hasJailCell(i)) {
 			jailCell = i;
-		else
+		} else {
 			jailCell = 0;
+		}
 	}
 	
 	public Town getJailTown() {
@@ -191,14 +192,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean hasJailTown(String jailtown) {
 		return getJailTown().getName().equalsIgnoreCase(jailtown);
 	}
-	
-	public int getJailHours() {
-		return jailHours;
-	}
-	
-	public void setJailHours(Integer hours) {
-		jailHours = hours;
-	}
 
 	public double getJailBailCost() {
 		return jailBail;
@@ -207,11 +200,24 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailBailCost(double bail) {
 		jailBail = bail;
 	}
-	
-	public boolean hasJailTime() {
-		return jailHours > 0;
+
+	/**
+	 * @param timestamp unix timestamp of when this resident will be unjailed by having served their sentence. Null if the resident is being unjailed
+	 */
+	public void setUnjailTime(@Nullable Long timestamp) {
+		this.unjailTime = timestamp;
 	}
-	
+
+	/**
+	 * @return unix timestamp of when this resident will be unjailed by having served their sentence. Null if this resident is not jailed.
+	 */
+	public Long getUnjailTime() {
+		return unjailTime;
+	}
+
+	/**
+	 * @return The location of this resident's jail cell
+	 */
 	public Location getJailSpawn() {
 		return getJail().getJailCellLocations().get(getJailCell());
 	}
@@ -950,7 +956,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			res_hm.put("isNPC", isNPC());
 			res_hm.put("jailUUID", isJailed() ? getJail().getUUID() : "");
 			res_hm.put("jailCell", getJailCell());
-			res_hm.put("jailHours", getJailHours());
+			res_hm.put("jailUntil", getUnjailTime());
 			res_hm.put("jailBail", getJailBailCost());
 			res_hm.put("title", getTitle());
 			res_hm.put("surname", getSurname());
@@ -1023,9 +1029,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				if (hasData(line))
 					setJailCell(Integer.parseInt(line));
 
-				line = dataAsMap.get("jailHours");
-				if (hasData(line))
-					setJailHours(Integer.parseInt(line));
+				line = dataAsMap.get("jailUntil");
+				if (hasData(line)) {
+					setUnjailTime(Long.parseLong(line));
+				}
 
 				line = dataAsMap.get("jailBail");
 				if (hasData(line))

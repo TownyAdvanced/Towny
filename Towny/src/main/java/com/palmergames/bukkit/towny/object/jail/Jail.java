@@ -114,13 +114,16 @@ public class Jail extends Loadable implements Savable {
 		removeJailCell(SpawnPointLocation.parseSpawnPointLocation(loc));
 	}
 	
-	public void removeJailCell(SpawnPointLocation pos) {
-		TownyUniverse.getInstance().removeSpawnPoint(pos);
-		jailCellMap.remove(pos);
+	public void removeJailCell(SpawnPointLocation spawn) {
+		TownyUniverse.getInstance().removeSpawnPoint(spawn);
+		Position pos = jailCellMap.remove(spawn);
+		if (pos != null) {
+			jailCells.remove(pos);
+		}
 	}
 	
 	public void removeAllCells() {
-		for (SpawnPointLocation pos : this.jailCellMap.keySet())
+		for (SpawnPointLocation pos : new ArrayList<>(this.jailCellMap.keySet()))
 			removeJailCell(pos);
 	}
 	

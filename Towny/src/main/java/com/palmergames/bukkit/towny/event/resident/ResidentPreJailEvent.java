@@ -17,15 +17,15 @@ public class ResidentPreJailEvent extends CancellableTownyEvent {
 	private final Resident resident;
 	private final Jail jail;
 	private final int cell;
-	private final int hours;
+	private final long unjailTime;
 	private final double bail;
 	private final JailReason reason;
 	
-	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason) {
+	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, long unjailTime, double bail, JailReason reason) {
 		this.resident = resident;
 		this.jail = jail;
 		this.cell = cell;
-		this.hours = hours;
+		this.unjailTime = unjailTime;
 		this.bail = bail;
 		this.reason = reason;
 		setCancelMessage(Translatable.of("msg_err_command_disable"));
@@ -51,8 +51,8 @@ public class ResidentPreJailEvent extends CancellableTownyEvent {
 		return cell;
 	}
 
-	public int getHours() {
-		return hours;
+	public long getUnjailTime() {
+		return unjailTime;
 	}
 
 	public double getBail() {
