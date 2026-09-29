@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event.resident;
 
 import com.palmergames.bukkit.towny.object.Resident;
+
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +12,7 @@ public class NewResidentEvent extends Event {
 	private final Resident resident;
 
 	public NewResidentEvent(Resident resident) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.resident = resident;
 	}
 

@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
+
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 

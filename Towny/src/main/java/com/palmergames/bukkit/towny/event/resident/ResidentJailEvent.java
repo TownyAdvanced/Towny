@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -20,7 +21,7 @@ public class ResidentJailEvent extends Event {
 	private final Player sender;
 	
 	public ResidentJailEvent(Resident resident, JailReason reason, Player sender){
-
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.resident = resident;
 		this.reason = reason;
 		this.sender = sender;
