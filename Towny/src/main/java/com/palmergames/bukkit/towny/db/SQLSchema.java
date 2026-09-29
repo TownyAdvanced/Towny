@@ -350,6 +350,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("usingPlotManagementDelete", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("plotManagementDeleteIds", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("isDeletingEntitiesOnUnclaim", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("minAdjacentChunks", "int NOT NULL DEFAULT 0"));
 		columns.add(new ColumnData("unclaimDeleteEntityTypes", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("usingPlotManagementMayorDelete", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("plotManagementMayorDelete", "mediumtext NOT NULL"));
