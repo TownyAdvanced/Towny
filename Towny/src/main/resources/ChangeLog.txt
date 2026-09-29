@@ -11067,3 +11067,4 @@ c
   - Bump fr.mrmicky:fastboard from 2.2.1 to 2.2.2.
 0.103.2.9:
   - Fix some resident events firing async when they ought not to.
+  - Fix forgotten minAdjacentChunks SQL Column declaration, courtesy of Veyronity with PR #8315.
