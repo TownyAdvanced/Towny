@@ -219,7 +219,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public boolean hasJailTime() {
-		return unjailTime > System.currentTimeMillis();
+		return unjailTime != null && unjailTime > System.currentTimeMillis();
 	}
 
 	/**
