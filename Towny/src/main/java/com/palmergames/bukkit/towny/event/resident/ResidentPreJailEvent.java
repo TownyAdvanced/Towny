@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.object.jail.JailReason;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 public class ResidentPreJailEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 
@@ -49,6 +51,11 @@ public class ResidentPreJailEvent extends CancellableTownyEvent {
 	
 	public int getCell() {
 		return cell;
+	}
+
+	@Deprecated(since = "0.103.2.10")
+	public int getHours() {
+		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
 	}
 
 	public long getUnjailTime() {

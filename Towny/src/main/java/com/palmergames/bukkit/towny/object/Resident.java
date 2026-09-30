@@ -60,6 +60,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -178,11 +179,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void setJailCell(int i) {
-		if (jail.hasJailCell(i)) {
+		if (jail.hasJailCell(i))
 			jailCell = i;
-		} else {
+		else
 			jailCell = 0;
-		}
 	}
 	
 	public Town getJailTown() {
@@ -193,12 +193,33 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return getJailTown().getName().equalsIgnoreCase(jailtown);
 	}
 
+	@Deprecated(since = "0.103.2.10")
+	public int getJailHours() {
+		if (unjailTime == null || unjailTime < System.currentTimeMillis()) {
+			return 0;
+		}
+		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
+	}
+
+	@Deprecated(since = "0.103.2.10")
+	public void setJailHours(Integer hours) {
+		if (hours == 0) {
+			unjailTime = null;
+			return;
+		}
+		unjailTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours);
+	}
+
 	public double getJailBailCost() {
 		return jailBail;
 	}
 
 	public void setJailBailCost(double bail) {
 		jailBail = bail;
+	}
+
+	public boolean hasJailTime() {
+		return unjailTime > System.currentTimeMillis();
 	}
 
 	/**
@@ -1001,7 +1022,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 						if (hasData(line))
 							setNationRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
-					
+
 					line = dataAsMap.get("joinedTownAt");
 					if (hasData(line)) {
 						setJoinedTownAt(Long.valueOf(line));
@@ -1028,6 +1049,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				line = dataAsMap.get("jailCell");
 				if (hasData(line))
 					setJailCell(Integer.parseInt(line));
+				
+				line = dataAsMap.get("jailHours");
+				if (hasData(line)) {
+					int hours = Integer.parseInt(line);
+					if (hours > 0) {
+						setUnjailTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours));
+					}
+				}
 
 				line = dataAsMap.get("jailUntil");
 				if (hasData(line)) {
