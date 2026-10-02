@@ -1816,7 +1816,7 @@ public class Town extends Government implements TownBlockOwner {
 			line = dataAsMap.get(dataAsMap.containsKey("homeblock") ? "homeblock" : "homeBlock"); // Old DB's used homeBlock
 			if (line != null) {
 				try {
-					setHomeBlock(parseTownBlockFromDB(line));
+					forceSetHomeBlock(parseTownBlockFromDB(line));
 				} catch (NumberFormatException e) {
 					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", getName()));
 				} catch (NotRegisteredException e) {
