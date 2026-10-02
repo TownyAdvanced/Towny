@@ -11070,3 +11070,9 @@ c
   - Fix forgotten minAdjacentChunks SQL Column declaration, courtesy of Veyronity with PR #8315.
 0.103.2.10:
   - Fix town's loading the allowedToWar setting. 
+  - Allowing looking up other towns' outpost lists, courtesy of Veyronity with PR #8320.
+  - New Command: /t outpost list [page] [other town]
+    - Allows players to view other towns' outpost lists.
+  - New Permission node: towny.command.town.outpost.list.other
+    - Allows players to use the /t outpost list [page] [othertown] command.
+  - Fix possible NPE during town loading, courtesy of Warriorrr with PR #8318.
