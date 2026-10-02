@@ -713,7 +713,7 @@ public class Town extends Government implements TownBlockOwner {
 			return;
 
 		Nation townNation = getNationOrNull();
-		if (townNation == null || !townNation.getCapital().hasHomeBlock())
+		if (townNation == null || !townNation.hasCapital() || !townNation.getCapital().hasHomeBlock())
 			return;
 
 		List<Town> outOfRangeTowns = ProximityUtil.gatherOutOfRangeTowns(townNation);
