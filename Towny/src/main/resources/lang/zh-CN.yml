@@ -2112,6 +2112,7 @@ msg_err_name_validation_contains_numbers: "%s包含数字，而数字不允许�
 msg_err_name_validation_used_in_command_structure: "%s 在指令结构中被使用，所以你不能用它作为名称"
 msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的最后一个居民也离开了"
 outlawed_in: "放逐于"
+trusted_in: "信任于"
 msg_warning_town_deposit_hint: "使用/town deposit [amount]把钱存入城镇银行。"
 msg_warning_nation_deposit_hint: "使用/nation deposit [amount]把钱存入国家银行。"
 teleport_warmup_title_dont_move: "&6不要移动！"
