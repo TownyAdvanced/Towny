@@ -409,10 +409,31 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			break;
 		case "outpost":
-			if (args.length == 2) {
-				List<String> outpostNames = town == null ? new ArrayList<>() : town.getOutpostNames();
-				outpostNames.add("list");
-				return NameUtil.filterByStart(outpostNames, args[1]);
+			switch (args.length) {
+				case 2 -> {
+					List<String> outpostNames = town == null ? new ArrayList<>() : town.getOutpostNames();
+					outpostNames.add("list");
+					return NameUtil.filterByStart(outpostNames, args[1]);
+				}
+				case 3 -> {
+					if (args[1].equalsIgnoreCase("list")) {
+						int outposts = town != null ? town.getOutpostSpawns().size() : 0;
+						if (outposts <= 10) {
+							return NameUtil.filterByStart(List.of("1"), args[2]);
+						}
+						List<String> pages = new ArrayList<>();
+						for (int i = 1; i <= (outposts / 9) * 10; i++) {
+							pages.add(String.valueOf(i));
+						}
+						
+						return NameUtil.filterByStart(pages, args[2]);
+					}
+				}
+				case 4 -> {
+					if (args[1].equalsIgnoreCase("list")) {
+						return getTownyStartingWith(args[3], "t");
+					}
+				}
 			}
 			break;
 		case "outlaw":
@@ -4259,30 +4280,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void townOutpost(Player player, String[] args) throws TownyException {
-		catchRuinedTown(player);
-		if (args.length >= 1) {
-			if (args[0].equalsIgnoreCase("list")) {
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode());
+		switch (args.length) {
+			case 0 -> townSpawn(player, args, true, false);
+			case 1, 2, 3 -> {
+				if (args[0].equalsIgnoreCase("list")) {
+					Town town;
+					if (args.length > 2) {
+						town = getTownOrThrow(args[2]);
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST_OTHER.getNode());
+						if (town.isRuined())
+							throw new TownyException(Translatable.of("msg_err_cannot_list_outposts_because_town_ruined"));
+					} else {
+						catchRuinedTown(player);
+						town = getTownFromPlayerOrThrow(player);
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode());
+					}
 
-				Town town = getTownFromPlayerOrThrow(player);
-				List<Location> outposts = town.getAllOutpostSpawns();
-				int page = 1;
-				int total = (int) Math.ceil(((double) outposts.size()) / ((double) 10));
-				if (args.length == 2) {
-					page = MathUtil.getPositiveIntOrThrow(args[1]);
+					List<Location> outposts = town.getAllOutpostSpawns();
+					int page = args.length > 1 ? MathUtil.getPositiveIntOrThrow(args[1]) : 1;
+					int total = (int) Math.ceil(((double) outposts.size()) / ((double) 10));
+
 					if (page == 0)
 						throw new TownyException(Translatable.of("msg_error_must_be_int"));
-				}
-				if (page > total)
-					throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
-				TownyMessaging.sendTownOutpostList(player, town, page, total);
-			} else {
-				boolean ignoreWarning = args.length == 1 && args[0].equals("-ignore");
-				townSpawn(player, args, true, ignoreWarning);
+					if (page > total)
+						throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+					TownyMessaging.sendTownOutpostList(player, town, page, total);
+				} else {
+					boolean ignoreWarning = args[0].equals("-ignore");
+					townSpawn(player, args, true, ignoreWarning);
+				}
 			}
-		} else {
-			townSpawn(player, args, true, false);
+			default -> throw new TownyException(Translatable.of("msg_usage", "/t outpost list [page] [town]"));
 		}
 	}
 	

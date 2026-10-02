@@ -1012,7 +1012,7 @@ public class Town extends Government implements TownBlockOwner {
 		outpostSpawns.add(position);
 		
 		// Add a SpawnPoint so a particle effect is displayed.
-		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(position, SpawnPointType.OUTPOST_SPAWN));
 		
 		// Save the town.
 		this.save();
