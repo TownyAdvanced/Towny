@@ -11077,3 +11077,6 @@ c
     - Allows players to use the /t outpost list [page] [othertown] command.
   - Fix possible NPE during town loading, courtesy of Warriorrr with PR #8318.
   - Fix loading towns' homeblocks.
+0.103.2.11:
+  - Update townyperms.yml with new towny.command.town.outpost.list.other node in nomad section.
+  - Add towny.command.town.outpost.list.other as a child node of towny.command.town.outpost.list
