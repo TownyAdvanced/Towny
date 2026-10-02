@@ -11068,3 +11068,5 @@ c
 0.103.2.9:
   - Fix some resident events firing async when they ought not to.
   - Fix forgotten minAdjacentChunks SQL Column declaration, courtesy of Veyronity with PR #8315.
+0.103.2.10:
+  - Fix town's loading the allowedToWar setting. 

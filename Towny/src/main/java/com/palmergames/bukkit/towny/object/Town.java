@@ -1879,7 +1879,7 @@ public class Town extends Government implements TownBlockOwner {
 			setForSalePrice(getOrDefault(dataAsMap, "forSalePrice", 0.0));
 			setForSaleTime(getOrDefault(dataAsMap, "forSaleTime", 0l));
 			setVisibleOnTopLists(getOrDefault(dataAsMap, "visibleOnTopLists", true));
-			setAllowedToWar(getOrDefault(dataAsMap, "hasActiveWar", false));
+			setActiveWar(getOrDefault(dataAsMap, "hasActiveWar", false));
 			line = dataAsMap.get("metadata");
 			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
