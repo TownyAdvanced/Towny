@@ -63,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -2288,9 +2289,15 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS);
 	}
 
+	@Deprecated(since = "0.103.2.12")
 	public static int getJailedOutlawJailHours() {
 		
-		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
+		return (int) TimeUnit.SECONDS.toHours(getJailedOutlawJailSeconds());
+	}
+
+	public static long getJailedOutlawJailSeconds() {
+		
+		return getSeconds(ConfigNodes.JAIL_OUTLAW_JAIL_DURATION);
 	}
 
 	public static int getJailedPOWJailHours() {

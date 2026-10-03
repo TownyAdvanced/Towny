@@ -60,6 +60,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -80,7 +81,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private transient EconomyAccount account;
 	private Jail jail = null;
 	private int jailCell;
-	private int jailHours;
+	private Long unjailTime;
 	private double jailBail;
 
 	private final List<String> townRanks = new ArrayList<>();
@@ -191,13 +192,22 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean hasJailTown(String jailtown) {
 		return getJailTown().getName().equalsIgnoreCase(jailtown);
 	}
-	
+
+	@Deprecated(since = "0.103.2.12")
 	public int getJailHours() {
-		return jailHours;
+		if (unjailTime == null || unjailTime < System.currentTimeMillis()) {
+			return 0;
+		}
+		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
 	}
-	
+
+	@Deprecated(since = "0.103.2.12")
 	public void setJailHours(Integer hours) {
-		jailHours = hours;
+		if (hours == 0) {
+			unjailTime = null;
+			return;
+		}
+		unjailTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours);
 	}
 
 	public double getJailBailCost() {
@@ -207,11 +217,28 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailBailCost(double bail) {
 		jailBail = bail;
 	}
-	
+
 	public boolean hasJailTime() {
-		return jailHours > 0;
+		return unjailTime != null && unjailTime > System.currentTimeMillis();
 	}
-	
+
+	/**
+	 * @param timestamp unix timestamp of when this resident will be unjailed by having served their sentence. Null if the resident is being unjailed
+	 */
+	public void setUnjailTime(@Nullable Long timestamp) {
+		this.unjailTime = timestamp;
+	}
+
+	/**
+	 * @return unix timestamp of when this resident will be unjailed by having served their sentence. Null if this resident is not jailed.
+	 */
+	public Long getUnjailTime() {
+		return unjailTime;
+	}
+
+	/**
+	 * @return The location of this resident's jail cell
+	 */
 	public Location getJailSpawn() {
 		return getJail().getJailCellLocations().get(getJailCell());
 	}
@@ -950,7 +977,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			res_hm.put("isNPC", isNPC());
 			res_hm.put("jailUUID", isJailed() ? getJail().getUUID() : "");
 			res_hm.put("jailCell", getJailCell());
-			res_hm.put("jailHours", getJailHours());
+			res_hm.put("jailUntil", getUnjailTime());
 			res_hm.put("jailBail", getJailBailCost());
 			res_hm.put("title", getTitle());
 			res_hm.put("surname", getSurname());
@@ -995,7 +1022,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 						if (hasData(line))
 							setNationRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
-					
+
 					line = dataAsMap.get("joinedTownAt");
 					if (hasData(line)) {
 						setJoinedTownAt(Long.valueOf(line));
@@ -1022,10 +1049,19 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				line = dataAsMap.get("jailCell");
 				if (hasData(line))
 					setJailCell(Integer.parseInt(line));
-
+				
 				line = dataAsMap.get("jailHours");
-				if (hasData(line))
-					setJailHours(Integer.parseInt(line));
+				if (hasData(line)) {
+					int hours = Integer.parseInt(line);
+					if (hours > 0) {
+						setUnjailTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours));
+					}
+				}
+
+				line = dataAsMap.get("jailUntil");
+				if (hasData(line)) {
+					setUnjailTime(Long.parseLong(line));
+				}
 
 				line = dataAsMap.get("jailBail");
 				if (hasData(line))

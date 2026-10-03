@@ -1707,7 +1707,7 @@ msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 
 #Added in 0.107
-msg_jailed_for_x_hours: ' for %s hours.'
+msg_jailed_for_x_duration: ' for %s.'
 msg_err_this_jail_has_no_cells: 'This jail has no cells.'
 msg_err_no_cell_found_at_this_location : 'No jail cell found at this location.'
 msg_jail_cell_set: 'Jail cell set.'
@@ -1724,7 +1724,7 @@ msg_you_have_paid_bail: 'You have paid bail.'
 msg_you_have_been_freed_via_jailbreak: 'There''s been a jailbreak, you are free!'
 msg_you_have_served_your_sentence_and_are_free: 'You have served your jail sentence and are free.'
 msg_x_has_served_their_sentence_and_is_free: '%s has served their jail sentence and is free.'
-msg_you've_been_jailed_for_x_hours: 'You''ve been jailed for %s hours.'
+msg_you've_been_jailed_for_x_duration: 'You''ve been jailed for %s.'
 msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
 msg_err_you_cannot_remove_the_last_cell: 'You cannot remove the last jail cell in this jail, until another cell is added'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being teleported to jail, it would be fatal.'
@@ -2015,7 +2015,7 @@ msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3.1: 'You have been jailed for %s. By serving your sentence you will become free.'
 #Jail handbook messages
 msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
 #Jail handbook messages
@@ -2258,8 +2258,8 @@ msg_town_board_reset: '&bTown board reset.'
 msg_nation_board_reset: '&bNation board reset.'
 
 msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x: '%s has been sent to %s into cell number %s for %s by %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'

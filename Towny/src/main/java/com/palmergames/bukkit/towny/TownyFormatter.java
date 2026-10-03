@@ -36,6 +36,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
+import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -726,8 +727,10 @@ public class TownyFormatter {
 		String jailLine = colourKeyValue(translator.of("status_jailed"), (resident.isJailed() ? translator.of("status_bad_yes") : translator.of("status_good_no")));
 		if (resident.isJailed())
 			jailLine += colourKey(translator.of("jailed_in_town", resident.getJailTown().getName()));
-		if (resident.isJailed() && resident.hasJailTime())
-			jailLine += colourKey(translator.of("msg_jailed_for_x_hours", resident.getJailHours()));
+		if (resident.isJailed() && resident.hasJailTime()) {
+			String duration = TimeMgmt.formatCountdownTime(System.currentTimeMillis() - resident.getUnjailTime());
+			jailLine += colourKey(translator.of("msg_jailed_for_x_duration", duration));
+		}
 		return jailLine;
 	}
 	
