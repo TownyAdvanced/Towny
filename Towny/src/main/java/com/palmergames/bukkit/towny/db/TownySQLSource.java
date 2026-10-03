@@ -289,7 +289,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				} else {
 
-					stmt.setObject(count + 1, element.toString());
+					stmt.setObject(count + 1, element == null ? null : element.toString());
 
 				}
 
@@ -309,7 +309,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					stmt.close();
 				}
 
-				if (rs == 0) // if entry doesn't exist then try to insert
+				if (rs == 0 && keys != null) // if entry doesn't exist then try to insert. Check if keys is already null to prevent redundant calls causing an infinite loop
 					return updateDB(tb_name, args, null);
 
 			} catch (SQLException e) {
