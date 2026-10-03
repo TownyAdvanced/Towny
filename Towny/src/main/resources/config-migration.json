@@ -979,5 +979,15 @@
         "value": ",SHELF_MUSHROOM"
       }
     ]
+  },
+  {
+    "version": "0.103.2.11",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.town.outpost.list.other"
+      }
+    ]
   }
 ]

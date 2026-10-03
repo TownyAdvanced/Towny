@@ -90,6 +90,6 @@ public class OutpostUtil {
 		}
 		screen.addComponentOf("outposts", outpostLine,
 				HoverEvent.showText(translator.component("status_hover_click_for_more")),
-				ClickEvent.runCommand("/towny:town outpost list"));
+				ClickEvent.runCommand("/towny:town outpost list 1 " + town.getName()));
 	}
 }

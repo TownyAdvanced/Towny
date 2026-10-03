@@ -140,6 +140,12 @@ permissions:
         children:
             towny.command.town.outpost.list: true
 
+    towny.town.spawn.outpost.list:
+        description: User is permitted to use /town outpost list & /town outpost list [page] [othertown]
+        default: false
+        children:
+            towny.command.town.outpost.list.other: true
+
     towny.nation.spawn.*:
         description: Grants all Nation Spawn travel nodes
         default: false

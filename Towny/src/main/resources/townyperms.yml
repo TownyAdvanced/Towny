@@ -34,6 +34,7 @@ nomad:
     - towny.command.resident.trustlist
     - towny.command.town.allylist
     - towny.command.town.enemylist
+    - towny.command.town.outpost.list.other
 
 towns:
     default:

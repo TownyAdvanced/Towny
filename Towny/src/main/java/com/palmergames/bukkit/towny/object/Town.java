@@ -713,7 +713,7 @@ public class Town extends Government implements TownBlockOwner {
 			return;
 
 		Nation townNation = getNationOrNull();
-		if (townNation == null || !townNation.getCapital().hasHomeBlock())
+		if (townNation == null || !townNation.hasCapital() || !townNation.getCapital().hasHomeBlock())
 			return;
 
 		List<Town> outOfRangeTowns = ProximityUtil.gatherOutOfRangeTowns(townNation);
@@ -1012,7 +1012,7 @@ public class Town extends Government implements TownBlockOwner {
 		outpostSpawns.add(position);
 		
 		// Add a SpawnPoint so a particle effect is displayed.
-		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(position, SpawnPointType.OUTPOST_SPAWN));
 		
 		// Save the town.
 		this.save();
@@ -1816,7 +1816,7 @@ public class Town extends Government implements TownBlockOwner {
 			line = dataAsMap.get(dataAsMap.containsKey("homeblock") ? "homeblock" : "homeBlock"); // Old DB's used homeBlock
 			if (line != null) {
 				try {
-					setHomeBlock(parseTownBlockFromDB(line));
+					forceSetHomeBlock(parseTownBlockFromDB(line));
 				} catch (NumberFormatException e) {
 					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", getName()));
 				} catch (NotRegisteredException e) {
@@ -1879,7 +1879,7 @@ public class Town extends Government implements TownBlockOwner {
 			setForSalePrice(getOrDefault(dataAsMap, "forSalePrice", 0.0));
 			setForSaleTime(getOrDefault(dataAsMap, "forSaleTime", 0l));
 			setVisibleOnTopLists(getOrDefault(dataAsMap, "visibleOnTopLists", true));
-			setAllowedToWar(getOrDefault(dataAsMap, "hasActiveWar", false));
+			setActiveWar(getOrDefault(dataAsMap, "hasActiveWar", false));
 			line = dataAsMap.get("metadata");
 			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
