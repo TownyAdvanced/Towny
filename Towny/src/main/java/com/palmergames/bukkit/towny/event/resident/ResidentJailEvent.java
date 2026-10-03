@@ -49,7 +49,7 @@ public class ResidentJailEvent extends Event {
 		return resident.getJailCell();
 	}
 	
-	@Deprecated(since = "0.103.2.10")
+	@Deprecated(since = "0.103.2.12")
 	public int getJailHours() {
 		return resident.getJailHours();
 	}

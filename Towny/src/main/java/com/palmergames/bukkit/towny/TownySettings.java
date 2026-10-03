@@ -2289,7 +2289,7 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_NATION_RESIDENTS_ALLOWED_FOR_NATION_LEADERS);
 	}
 
-	@Deprecated(since = "0.103.2.10")
+	@Deprecated(since = "0.103.2.12")
 	public static int getJailedOutlawJailHours() {
 		
 		return (int) TimeUnit.SECONDS.toHours(getJailedOutlawJailSeconds());
@@ -2297,7 +2297,7 @@ public class TownySettings {
 
 	public static long getJailedOutlawJailSeconds() {
 		
-		return getSeconds(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
+		return getSeconds(ConfigNodes.JAIL_OUTLAW_JAIL_DURATION);
 	}
 
 	public static int getJailedPOWJailHours() {

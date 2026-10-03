@@ -53,7 +53,7 @@ public class ResidentPreJailEvent extends CancellableTownyEvent {
 		return cell;
 	}
 
-	@Deprecated(since = "0.103.2.10")
+	@Deprecated(since = "0.103.2.12")
 	public int getHours() {
 		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
 	}

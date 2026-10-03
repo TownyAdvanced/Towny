@@ -193,7 +193,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return getJailTown().getName().equalsIgnoreCase(jailtown);
 	}
 
-	@Deprecated(since = "0.103.2.10")
+	@Deprecated(since = "0.103.2.12")
 	public int getJailHours() {
 		if (unjailTime == null || unjailTime < System.currentTimeMillis()) {
 			return 0;
@@ -201,7 +201,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
 	}
 
-	@Deprecated(since = "0.103.2.10")
+	@Deprecated(since = "0.103.2.12")
 	public void setJailHours(Integer hours) {
 		if (hours == 0) {
 			unjailTime = null;

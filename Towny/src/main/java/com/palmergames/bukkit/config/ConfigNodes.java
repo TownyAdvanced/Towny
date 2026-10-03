@@ -3353,11 +3353,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true, nation leaders can jail any resident of their nation inside of their capital city's jails."),
-	JAIL_OUTLAW_JAIL_HOURS(
-			"jail.outlaw_jail_hours",
-			"5",
+	JAIL_OUTLAW_JAIL_DURATION(
+			"jail.outlaw_jail_duration",
+			"1h",
 			"",
-			"# How many hours an attacking outlaw will be jailed for."),
+			"# The duration in dhms format for how long an outlaw will be jailed for. E.g. 15m"),
 	JAIL_POW_JAIL_HOURS(
 			"jail.pow_jail_hours",
 			"5",
