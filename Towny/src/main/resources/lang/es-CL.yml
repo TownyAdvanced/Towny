@@ -86,13 +86,15 @@ town_help_25: "Utilizado para modificar los bandidos de tu ciudad."
 town_help_26: "Lista de todas las ciudades, ve /t list ? para obtener ayuda."
 town_help_27: "Abandona la ciudad de la que eres miembro."
 town_help_28: "Retirar dinero del banco de tu ciudad."
-town_help_29: "Utilice /t reclamar ? para obtener ayuda."
+town_help_29: "Use /t claim ? para obtener ayuda."
 town_help_30: "Utilizado para liberar tierras de tu ciudad."
 town_help_31: "Agregar o eliminar residentes."
 town_help_32: "Use /t set ? para obtener ayuda."
 town_help_33: "Use /t buy ? para obtener ayuda."
 town_help_34: "Use /t toggle ? para obtener ayuda."
 town_help_35: "Use /t rank ? para obtener ayuda."
+town_help_36: 'Listar las ciudades cercanas ordenadas por distancia.'
+town_help_37: 'Listar las parcelas donde el jugador es confiable.'
 town_list_help_0: "Ver la página especificada."
 town_list_help_1: "Ver un listado de ciudades según la cantidad de residentes con la página especificada."
 town_list_help_2: "Ver un listado de ciudades con residencia abierta con la página especificada."
@@ -193,6 +195,7 @@ res_1: 'Tu estado'
 res_2: '[habitante]'
 res_3: 'Estado del habitante seleccionado'
 res_4: 'Lista de todos los juegadores activos'
+res_8: 'Solo un humilde granjero'
 res_9: "Cuánto impuesto pagarás por día."
 res_10: "Use /res jail ? para obtener ayuda."
 res_11: "Use /res toggle ? para obtener ayuda."
@@ -435,6 +438,8 @@ msg_couldnt_pay_taxes: '&b%s no pudo pagar los impuestos y fue expulsado de %s.'
 msg_couldnt_pay_plot_taxes: '&b%s no pudo pagar los impuestos y perdió la propiedad de un terreno.'
 msg_you_couldnt_pay_plot_tax: '&bNo pudiste pagar el impuesto de parcela de %s y perdió la propiedad de la parcela en %s.'
 msg_you_couldnt_pay_town_tax: '&bNo pudiste pagar el impuesto de la ciudad de %s y se ha eliminado de %s.'
+msg_you_paid_town_tax: '&bHas pagado a tu ciudad un impuesto de %s.'
+msg_you_paid_plottax_to_town: '&bHas pagado impuestos de parcela por un total de %s en la ciudad %s.'
 msg_bankrupt_town: ' no tuvo el dinero para seguir siendo una ciudad.'
 msg_bankrupt_nation: ' no tuvo el dinero para seguir siendo una nación.'
 msg_nation_not_peaceful: '&bLa nación no tuvo el dinero para mantenerse como pacífica.'
