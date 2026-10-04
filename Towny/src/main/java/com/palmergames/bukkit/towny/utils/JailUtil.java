@@ -2,12 +2,19 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +43,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 public class JailUtil {
 	private static Long lastFeeChargedTimestamp;
 	private static final List<Resident> queuedJailedResidents = new ArrayList<>();
-	
+	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
+
 	/**
 	 * Jails a resident.
 	 * 
@@ -136,8 +144,10 @@ public class JailUtil {
 		// Call ResidentJailEvent.
 		BukkitTools.fireEvent(new ResidentJailEvent(resident, reason, jailer instanceof Player player ? player : null));
 
-		if (TownySettings.showBailTitle())
+		if (bail > 0 && TownySettings.showBailTitle())
 			Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 80L);
+		if (TownySettings.showJailBossbar())
+			showJailedBossBar(resident, translator);
 	}
 
 	public static void showBailTitleMessage(Resident resident, Translator translator) {
@@ -147,7 +157,83 @@ public class JailUtil {
 				translator.of("titlemsg_pay_your_bail_title", TownyEconomyHandler.getFormattedBalance(resident.getJailBailCost())),
 				translator.of("titlemsg_pay_your_bail_subtitle"),
 				200); // 10 seconds
-		Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 200L);
+		if (TownySettings.showBailTitlePermanently())
+			Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 200L);
+	}
+	
+	private static void showJailedBossBar(Resident resident, Translator translator) {
+		if (!resident.isOnline() || !resident.isJailed()) {
+			return;
+		}
+		Player player = resident.getPlayer();
+		if (player == null) {
+			return;
+		}
+		
+		BossBar bossBar = playerBossBarMap.get(player.getUniqueId());
+		boolean created = false;
+		if (bossBar == null) {
+			created = true;
+			bossBar = createBossBar(resident, translator);
+		}
+		
+		Component component = createBossBarMessage(resident, translator);
+		float progress = calculateProgress(resident);
+		
+		bossBar.progress(progress);
+		bossBar.name(component);
+
+		if (created) {
+			TownyMessaging.sendBossBarMessageToPlayer(player, bossBar);
+			playerBossBarMap.put(player.getUniqueId(), bossBar);
+		}
+		Towny.getPlugin().getScheduler().runLater(player, t -> showJailedBossBar(resident, translator), 20);
+	}
+	
+	private static BossBar createBossBar(Resident resident, Translator translator) {
+		Component component = createBossBarMessage(resident, translator);
+		float progress = calculateProgress(resident);
+		BossBar.Color color = BossBar.Color.NAMES.valueOr(TownySettings.getJailBossBarColor().toLowerCase(Locale.ROOT), BossBar.Color.WHITE);
+
+		return BossBar.bossBar(component, progress, color, BossBar.Overlay.PROGRESS);
+	}
+	
+	private static Component createBossBarMessage(Resident resident, Translator translator) {
+		String input = TownySettings.getJailBossBarTextColor();
+		TextColor color = NamedTextColor.NAMES.value(input.toLowerCase(Locale.ROOT));
+		if (color == null) {
+			color = TextColor.fromHexString(input.startsWith("#") ? input : ("#" + input));
+		}
+		String textColor = "<" + (color != null ? color : NamedTextColor.RED) + ">";
+
+		String town = resident.getJailTown().getName();
+		String duration = TimeMgmt.formatCountdownTime((resident.getUnjailTime() - System.currentTimeMillis()) / 1000, translator.locale());
+		double bail = resident.getJailBailCost();
+		String message = bail > 0 ? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, bail) : translator.of("msg_jail_bossbar_duration", textColor, town, duration);
+
+		return TownyComponents.miniMessage(message);
+	}
+	
+	private static float calculateProgress(Resident resident) {
+		Long jailedAt = resident.getJailedAt();
+		Long unjailTime = resident.getUnjailTime();
+		long now = System.currentTimeMillis();
+		if (jailedAt == null) {
+			jailedAt = now;
+		}
+
+		long totalDuration = unjailTime - jailedAt;
+		long elapsed = now - jailedAt;
+
+		float progress = (float) elapsed / totalDuration;
+		return Math.max(0.0f, Math.min(1.0f, progress));
+	}
+
+	public static void removePlayerBossBar(Player player) {
+		final BossBar bar = playerBossBarMap.remove(player.getUniqueId());
+		if (bar != null) {
+			player.hideBossBar(bar);
+		}
 	}
 
 
@@ -223,6 +309,10 @@ public class JailUtil {
 		resident.setJail(null);
 		resident.setJailBailCost(0.00);
 		resident.save();
+		Player player = resident.getPlayer();
+		if (player != null) {
+			removePlayerBossBar(player);
+		}
 	}
 
 	/**

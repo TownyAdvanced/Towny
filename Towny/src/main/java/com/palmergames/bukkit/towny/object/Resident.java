@@ -81,6 +81,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private transient EconomyAccount account;
 	private Jail jail = null;
 	private int jailCell;
+	private Long jailedAt;
 	private Long unjailTime;
 	private double jailBail;
 
@@ -205,9 +206,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailHours(Integer hours) {
 		if (hours == 0) {
 			unjailTime = null;
+			jailedAt = null;
 			return;
 		}
 		unjailTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours);
+		jailedAt = System.currentTimeMillis();
 	}
 
 	public double getJailBailCost() {
@@ -226,7 +229,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 * @param timestamp unix timestamp of when this resident will be unjailed by having served their sentence. Null if the resident is being unjailed
 	 */
 	public void setUnjailTime(@Nullable Long timestamp) {
+		this.jailedAt = timestamp != null ? System.currentTimeMillis() : null;
 		this.unjailTime = timestamp;
+	}
+
+	/**
+	 * @return unix timestamp of when this resident was jailed. To be used when calculating how much of their sentence has been served. Null of this resident is not jailed.
+	 */
+	public Long getJailedAt() {
+		return jailedAt;
 	}
 
 	/**

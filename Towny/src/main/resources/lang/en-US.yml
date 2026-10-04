@@ -2746,3 +2746,6 @@ msg_set_min_adj_chunks: '&bSuccessfully changed %s''s min adjacent chunks to %s.
 status_min_adjacency: 'Minimum adjacency:'
 
 msg_err_cannot_list_outposts_because_town_ruined: "You cannot use check this town's outpost(s) because the town is ruined."
+
+msg_jail_bossbar_duration: '%sYou are jailed in <red>%s</red> <gray>|</gray> Time left: <aqua>%s</aqua>'
+msg_jail_bossbar_duration_bail: '%sYou are jailed in <red>%s</red> <gray>|</gray> Time left: <aqua>%s</aqua> <gray>|</gray> Bail is set at <green>%s</green> <gray>(Pay with </gray>/res jail paybail<gray>)</gray>'

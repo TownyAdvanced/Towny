@@ -2317,6 +2317,19 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_JAIL_DENIES_TOWN_LEAVE);
 	}
+	
+	public static boolean showJailBossbar() {
+		
+		return getBoolean(ConfigNodes.JAIL_BOSSBAR_ENABLED);
+	}
+
+	public static String getJailBossBarColor() {
+		return getString(ConfigNodes.JAIL_BOSSBAR_COLOR);
+	}
+
+	public static String getJailBossBarTextColor() {
+		return getString(ConfigNodes.JAIL_BOSSBAR_TEXT_COLOR);
+	}
 
 	public static boolean isAllowingBail() {
 		
@@ -2372,6 +2385,10 @@ public class TownySettings {
 
 	public static boolean showBailTitle() {
 		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE);
+	}
+	
+	public static boolean showBailTitlePermanently() {
+		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE_PERMANENT);
 	}
 
 	public static boolean isDevMode() {
