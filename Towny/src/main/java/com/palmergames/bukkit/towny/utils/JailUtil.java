@@ -207,7 +207,8 @@ public class JailUtil {
 		String textColor = "<" + (color != null ? color : NamedTextColor.RED) + ">";
 
 		String town = resident.getJailTown().getName();
-		String duration = TimeMgmt.formatCountdownTime((resident.getUnjailTime() - System.currentTimeMillis()) / 1000, translator.locale());
+		long seconds = (resident.getUnjailTime() - System.currentTimeMillis()) / 1000;
+		String duration = seconds < 60 ? "<1m" : TimeMgmt.formatCountdownTime(seconds, translator.locale()); // use <1m for any duration less than a minute, in order to prevent negative seconds while waiting for ShortTimerTask to unjail them
 		double bail = resident.getJailBailCost();
 		String message = bail > 0 ? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, TownyEconomyHandler.getFormattedBalance(bail)) : translator.of("msg_jail_bossbar_duration", textColor, town, duration);
 
