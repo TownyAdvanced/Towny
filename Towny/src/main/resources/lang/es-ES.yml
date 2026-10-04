@@ -61,6 +61,8 @@ town_help_32: "Usa /t set ? para obtener ayuda."
 town_help_33: "Usa /t buy ? para obtener ayuda."
 town_help_34: "Usa /t toggle ? para obtener ayuda."
 town_help_35: "Usa /t rank ? para obtener ayuda."
+town_help_36: 'Listar las ciudades cercanas ordenadas por distancia.'
+town_help_37: 'Listar las parcelas donde el jugador es confiable.'
 town_list_help_0: "Ver la página especificada."
 town_list_help_1: "Listar ciudades por conteo de residentes, con la página especificada."
 town_list_help_2: "Listar ciudades abiertas, con la página especificada."
@@ -161,6 +163,7 @@ res_1: 'Tu estado'
 res_2: '[habitante]'
 res_3: 'Estado del habitante seleccionado'
 res_4: 'Lista de todos los jugadores activos'
+res_8: 'Solo un humilde granjero'
 res_9: "Cuántos impuestos pagará por día."
 res_10: "Usa /res jail ? para obtener ayuda."
 res_11: "Usa /res toggle ? para obtener ayuda."
@@ -402,6 +405,8 @@ msg_couldnt_pay_taxes: '&b%s no pudo pagar los impuestos y fue echado de %s.'
 msg_couldnt_pay_plot_taxes: '&b%s no pudo pagar los impuestos y perdió una parcela.'
 msg_you_couldnt_pay_plot_tax: '&bNo pudiste pagar el impuesto de parcela de %s y pediste la propiedad de la parcela en %s.'
 msg_you_couldnt_pay_town_tax: '&bNo pudiste pagar el impuesto de la ciudad de %s y se te ha eliminado de %s.'
+msg_you_paid_town_tax: '&bHas pagado a tu ciudad un impuesto de %s.'
+msg_you_paid_plottax_to_town: '&bHas pagado impuestos de parcela por un total de %s en la ciudad %s.'
 msg_bankrupt_town: ' no podía permitirse el lujo de seguir siendo una ciudad.'
 msg_bankrupt_nation: ' no podía permitirse el lujo de seguir siendo un país.'
 msg_nation_not_peaceful: '&bEl país no puede pagar su por su estado pacífico.'
