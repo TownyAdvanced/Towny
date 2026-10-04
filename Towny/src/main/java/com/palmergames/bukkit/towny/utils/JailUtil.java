@@ -53,8 +53,9 @@ public class JailUtil {
 			if (resident.isMayor())
 				bail = resident.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
 			jailResidentWithBail(resident, jail, cell, seconds, bail, reason, jailer);
-		} else
+		} else {
 			jailResidentWithBail(resident, jail, cell, seconds, 0.0, reason, jailer);
+		}
 	}
 
 	/**

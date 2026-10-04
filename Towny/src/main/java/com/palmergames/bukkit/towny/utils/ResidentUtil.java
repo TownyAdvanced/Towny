@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
@@ -346,7 +347,7 @@ public class ResidentUtil {
 					bail = outlaw.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
 				bailMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_bail_amount", TownyEconomyHandler.getFormattedBalance(bail));
 			}
-			Translatable timeMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_jail_time", TimeTools.formatRelativeTime(outlaw.getUnjailTime()));
+			Translatable timeMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_jail_duration", TownySettings.getString(ConfigNodes.JAIL_OUTLAW_JAIL_DURATION));
 			if (bailMsg != null)
 				timeMsg.append(Component.space()).append(bailMsg);
 			TownyMessaging.sendMsg(outlaw, timeMsg);
