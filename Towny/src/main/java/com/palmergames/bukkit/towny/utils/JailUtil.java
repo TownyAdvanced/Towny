@@ -209,7 +209,7 @@ public class JailUtil {
 		String town = resident.getJailTown().getName();
 		String duration = TimeMgmt.formatCountdownTime((resident.getUnjailTime() - System.currentTimeMillis()) / 1000, translator.locale());
 		double bail = resident.getJailBailCost();
-		String message = bail > 0 ? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, bail) : translator.of("msg_jail_bossbar_duration", textColor, town, duration);
+		String message = bail > 0 ? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, TownyEconomyHandler.getFormattedBalance(bail)) : translator.of("msg_jail_bossbar_duration", textColor, town, duration);
 
 		return TownyComponents.miniMessage(message);
 	}
