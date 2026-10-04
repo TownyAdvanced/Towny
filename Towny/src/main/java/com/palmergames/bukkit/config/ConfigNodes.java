@@ -3403,7 +3403,7 @@ public enum ConfigNodes {
 		"",
 		"# The text color to use for the jail bossbar.",
 		"# Valid colors include presets found in https://jd.papermc.io/adventure/5.2.0/net.kyori.adventure.api/net/kyori/adventure/text/format/NamedTextColor.html",
-		"# As well as any valid hex code"),
+		"# As well as any valid hex code. E.g. 'red' or '#34cceb'"),
 	JAIL_BAIL("jail.bail", "", ""),
 	JAIL_BAIL_IS_ALLOWING_BAIL(
 			"jail.bail.is_allowing_bail",
