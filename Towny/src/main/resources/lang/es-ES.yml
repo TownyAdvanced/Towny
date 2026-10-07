@@ -83,7 +83,7 @@ town_set_help_9: "Establece la etiqueta de tu ciudad."
 town_set_help_10: "Establezca el título o apellido de su residente."
 town_set_help_11: "Establecer la cantidad máxima de dinero que un impuesto porcentual puede tomar de un residente."
 town_jail_help_0: "Listar las cárceles de la ciudad."
-town_jail_help_1: "Cárcel residente en la cárcel primaria."
+town_jail_help_1: "Encarcelar a un residente en la cárcel primaria."
 town_jail_help_2: "Encarcelar a un residente en la cárcel primaria, durante las horas especificadas."
 town_jail_help_3: "Encarcelar a un residente en la cárcel primaria, durante las horas especificadas, en la cárcel especificada."
 town_jail_help_4: "Cárcel residente en la cárcel primaria, durante las horas especificadas, en la cárcel y celda especificadas."
@@ -119,7 +119,7 @@ nation_help_11: "Lista las ciudades de la nación."
 nation_help_12: "Lista las naciones aliadas de la nación."
 nation_help_13: "Lista las naciones enemigas de la nación."
 nation_help_14: "Usado para unirse a naciones abiertas."
-nation_help_15: "Deposits money into the nation bank."
+nation_help_15: "Deposita dinero en el banco nacional."
 nation_help_16: "Usado para eliminar tu nación."
 nation_help_17: "Usado para agregar o quitar rangos de los residentes."
 nation_help_18: "Usa /n rank ? para obtener ayuda."
@@ -229,7 +229,6 @@ world_toggle_help_8: "Activar/desactivar la función de revertir a petición en 
 world_toggle_help_9: "Activar/desactivar las características revertidas de las explosiones en este mundo."
 world_toggle_help_10: "Activar/desactivar el comando plot-clear-deletes-blocks en este mundo."
 world_toggle_help_11: "Activar/desactivar la característica de bloques de grafico sin reclamar-eliminar-borrar en este mundo."
-world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 townyadmin_help_1: 'Unclaimear esta parcela'
 townyadmin_help_2: 'Unclaimear a tu alrededor'
 admin_panel_1: "Usa /res set ? para obtener ayuda"
@@ -244,7 +243,7 @@ admin_panel_9: "Teletransportar a la parcela especificada"
 admin_panel_10: "Comprueba si el jugador tiene un nodo de permiso"
 admin_panel_11: "Restablecer tu configuración"
 admin_panel_12: "Hacer una copia de seguridad de los datos de tu ciudad"
-admin_panel_13: "Vuelca tu base de datos MySQL a flatfile"
+admin_panel_13: "Vuelca tu base de datos MySQL a archivo plano"
 admin_panel_14: "Forzar guardar o cargar su base de datos"
 admin_panel_15: "Ejecutar el código newhour"
 admin_panel_16: "Purgar antiguos residentes"
@@ -1174,7 +1173,7 @@ msg_already_ally: 'Tu nacion ya es aliada de %s.'
 #Added in 0.76
 msg_you: 'Tu'
 #Added in 0.77
-msg_click_town_info: '<green>Click para ver la pantalla de status de la ciudad.'
+msg_click_town_info: '<green>Click para ver la pantalla de estado de la ciudad.'
 msg_click_spawn: '&aClick para spawnear en: &e%s'
 msg_click_spawn_brief: '<green>[Spawn]'
 msg_spawn_cost: '&aCosto del spawn = &e%s'
@@ -1347,7 +1346,7 @@ flatfile_dbg_district_file_missing_town_delete: 'Falta el archivo de distrito, e
 flatfile_dbg_missing_file_delete_district_entry: 'Falta el archivo: %s eliminando la entrada en [districtuuid].data'
 flatfile_err_exception_reading_district_file_at_line: 'Cargando Error: Excepción mientras se leía el archivo de Distrito %s en la línea: %s'
 flatfile_dbg_loading_district_list: 'Cargando lista de distritos...'
-msg_ta_removed_all_titles_and_surnames_removed: 'se removiieron los titulos y apellidos de todos los ciudadanos.'
+msg_ta_removed_all_titles_and_surnames_removed: 'Se removieron los títulos y apellidos de todos los ciudadanos.'
 msg_err_homeblock_already_set_here: 'Este ya es el homeblock de tu ciudad.'
 #Added in 0.100
 msg_town_merge_err_mayor_only: '&cSolo el alcalde puede unir.'
