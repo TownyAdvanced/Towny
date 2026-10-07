@@ -728,7 +728,7 @@ public class TownyFormatter {
 		if (resident.isJailed())
 			jailLine += colourKey(translator.of("jailed_in_town", resident.getJailTown().getName()));
 		if (resident.isJailed() && resident.hasJailTime()) {
-			String duration = TimeMgmt.formatCountdownTime(System.currentTimeMillis() - resident.getUnjailTime());
+			String duration = TimeMgmt.formatCountdownTime(System.currentTimeMillis() - resident.getUnjailTime(), translator.locale());
 			jailLine += colourKey(translator.of("msg_jailed_for_x_duration", duration));
 		}
 		return jailLine;

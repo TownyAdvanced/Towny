@@ -45,6 +45,11 @@ public class JailUtil {
 	private static final List<Resident> queuedJailedResidents = new ArrayList<>();
 	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
 
+	@Deprecated(since = "0.103.2.12")
+	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer) {
+		jailResident(resident, jail, cell, TimeUnit.HOURS.toSeconds(hours), reason, jailer);
+	}
+
 	/**
 	 * Jails a resident.
 	 * 
@@ -64,6 +69,11 @@ public class JailUtil {
 		} else {
 			jailResidentWithBail(resident, jail, cell, seconds, 0.0, reason, jailer);
 		}
+	}
+
+	@Deprecated(since = "0.103.2.12")
+	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason, CommandSender jailer) {
+		jailResidentWithBail(resident, jail, cell, TimeUnit.HOURS.toSeconds(hours), bail, reason, jailer);
 	}
 
 	/**
@@ -338,7 +348,7 @@ public class JailUtil {
 	private static String getJailBookPages(Player player, JailReason reason, long seconds, double cost, Translator translator) {
 		String pages = translator.of("msg_jailed_handbook_1", translator.of(reason.getCause()));
 		pages += translator.of("msg_jailed_handbook_2") + "\n\n";
-		pages += translator.of("msg_jailed_handbook_3.1", TimeMgmt.formatCountdownTime(seconds)) + "\n\n";
+		pages += translator.of("msg_jailed_handbook_3.1", TimeMgmt.formatCountdownTime(seconds, player.locale())) + "\n\n";
 		pages += TownySettings.JailDeniesTownLeave() ? translator.of("msg_jailed_handbook_4_cant") : translator.of("msg_jailed_handbook_4_can") + "\n";
 		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
 			pages += translator.of("msg_jailed_handbook_bail_1");

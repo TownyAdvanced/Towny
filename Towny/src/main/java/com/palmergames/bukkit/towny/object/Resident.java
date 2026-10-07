@@ -1033,7 +1033,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 						if (hasData(line))
 							setNationRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
-
+					
 					line = dataAsMap.get("joinedTownAt");
 					if (hasData(line)) {
 						setJoinedTownAt(Long.valueOf(line));
@@ -1060,7 +1060,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				line = dataAsMap.get("jailCell");
 				if (hasData(line))
 					setJailCell(Integer.parseInt(line));
-				
+
 				line = dataAsMap.get("jailHours");
 				if (hasData(line)) {
 					int hours = Integer.parseInt(line);
