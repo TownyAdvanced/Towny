@@ -1145,11 +1145,11 @@ public class TownyWorld extends TownyObject {
 
 			// Wilderness Explosion Protection entities
 			if (getPlotManagementWildRevertEntities() != null)
-				world_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(getPlotManagementWildRevertEntities(), ","));
+				world_hm.put("plotManagementWildRegenEntities", StringMgmt.join(getPlotManagementWildRevertEntities(), ","));
 
 			// Wilderness Explosion Protection Block Whitelist
 			if (getPlotManagementWildRevertBlockWhitelist() != null)
-				world_hm.put("PlotManagementWildRegenBlockWhitelist", StringMgmt.join(getPlotManagementWildRevertBlockWhitelist(), ","));
+				world_hm.put("plotManagementWildRegenBlockWhitelist", StringMgmt.join(getPlotManagementWildRevertBlockWhitelist(), ","));
 
 			world_hm.put("wildRegenBlocksToNotOverwrite", StringMgmt.join(getWildRevertMaterialsToNotOverwrite(), ","));
 
@@ -1161,7 +1161,7 @@ public class TownyWorld extends TownyObject {
 
 			// Wilderness Explosion Protection blocks
 			if (getPlotManagementWildRevertBlocks() != null)
-				world_hm.put("PlotManagementWildRegenBlocks", StringMgmt.join(getPlotManagementWildRevertBlocks(), ","));
+				world_hm.put("plotManagementWildRegenBlocks", StringMgmt.join(getPlotManagementWildRevertBlocks(), ","));
 
 			world_hm.put("usingTowny", isUsingTowny());
 			world_hm.put("warAllowed", isWarAllowed());
@@ -1209,12 +1209,12 @@ public class TownyWorld extends TownyObject {
 			setPlotManagementIgnoreIds(toList(worldAsMap.get("plotManagementIgnoreIds")));
 			setRevertOnUnclaimWhitelistMaterials(toList(worldAsMap.get("revertOnUnclaimWhitelistMaterials")));
 			setUsingPlotManagementWildEntityRevert(getOrDefault(worldAsMap, "usingPlotManagementWildRegen", TownySettings.isUsingPlotManagementWildEntityRegen()));
-			setPlotManagementWildRevertEntities(toList(worldAsMap.get("PlotManagementWildRegenEntities")));
-			setPlotManagementWildRevertBlockWhitelist(toList(worldAsMap.get("PlotManagementWildRegenBlockWhitelist")));
+			setPlotManagementWildRevertEntities(toList(worldAsMap.getOrDefault("plotManagementWildRegenEntities", worldAsMap.get("PlotManagementWildRegenEntities"))));
+			setPlotManagementWildRevertBlockWhitelist(toList(worldAsMap.getOrDefault("plotManagementWildRegenBlockWhitelist", worldAsMap.get("PlotManagementWildRegenBlockWhitelist"))));
 			setWildRevertMaterialsToNotOverwrite(toList(worldAsMap.get("wildRegenBlocksToNotOverwrite")));
 			setPlotManagementWildRevertDelay(getOrDefault(worldAsMap, "plotManagementWildRegenSpeed", TownySettings.getPlotManagementWildRegenDelay()));
 			setUsingPlotManagementWildBlockRevert(getOrDefault(worldAsMap, "usingPlotManagementWildRegenBlocks", TownySettings.isUsingPlotManagementWildBlockRegen()));
-			setPlotManagementWildRevertMaterials(toList(worldAsMap.get("PlotManagementWildRegenBlocks")));
+			setPlotManagementWildRevertMaterials(toList(worldAsMap.getOrDefault("plotManagementWildRegenBlocks", worldAsMap.get("PlotManagementWildRegenBlocks"))));
 			setUsingTowny(getOrDefault(worldAsMap, "usingTowny", TownySettings.isUsingTowny()));
 			setWarAllowed(getOrDefault(worldAsMap, "warAllowed", TownySettings.isWarAllowed()));
 			line = worldAsMap.get("metadata");
