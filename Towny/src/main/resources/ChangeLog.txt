@@ -11080,3 +11080,5 @@ c
 0.103.2.11:
   - Update townyperms.yml with new towny.command.town.outpost.list.other node in nomad section.
   - Add towny.command.town.outpost.list.other as a child node of towny.command.town.outpost.list
+  - Fix wild regen entities and blocks not being saved on SQL, courtesy of Warriorrr with PR #8323.
+  - Bump org.apache.maven:apache-maven from 3.9.16 to 3.10.0.
