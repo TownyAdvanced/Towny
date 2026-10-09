@@ -45,6 +45,9 @@ public class JailUtil {
 	private static final List<Resident> queuedJailedResidents = new ArrayList<>();
 	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
 
+	/**
+	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use {@link #jailResident(Resident, Jail, int, long, JailReason, CommandSender)} supplying the seconds.
+	 */
 	@Deprecated(since = "0.103.2.12")
 	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer) {
 		jailResident(resident, jail, cell, TimeUnit.HOURS.toSeconds(hours), reason, jailer);
