@@ -2,10 +2,19 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import com.palmergames.bukkit.towny.object.Position;
+import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,27 +41,16 @@ import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class JailUtil {
+	private static Long lastFeeChargedTimestamp;
+	private static final List<Resident> queuedJailedResidents = new ArrayList<>();
+	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
 
-	private static List<Resident> queuedJailedResidents = new ArrayList<Resident>();
-	
 	/**
-	 * Jails a resident.
-	 * 
-	 * @param resident Resident being jailed.
-	 * @param jail Jail resident is being jailed into.
-	 * @param cell JailCell to spawn to.
-	 * @param hours Hours resident is jailed for.
-	 * @param reason JailReason resident is jailed for.
-	 * @param jailer CommandSender of who did the jailing or null.
+	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use {@link #jailResident(Resident, Jail, int, long, JailReason, CommandSender)} supplying the seconds.
 	 */
-	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer){
-		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
-			double bail = TownySettings.getBailAmount();
-			if (resident.isMayor())
-				bail = resident.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
-			jailResidentWithBail(resident, jail, cell, hours, bail, reason, jailer);
-		} else
-			jailResidentWithBail(resident, jail, cell, hours, 0.0, reason, jailer);
+	@Deprecated(since = "0.103.2.12")
+	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer) {
+		jailResident(resident, jail, cell, TimeUnit.HOURS.toSeconds(hours), reason, jailer);
 	}
 
 	/**
@@ -61,18 +59,48 @@ public class JailUtil {
 	 * @param resident Resident being jailed.
 	 * @param jail Jail resident is being jailed into.
 	 * @param cell JailCell to spawn to.
-	 * @param hours Hours resident is jailed for.
+	 * @param seconds Seconds resident is jailed for.
+	 * @param reason JailReason resident is jailed for.
+	 * @param jailer CommandSender of who did the jailing or null.
+	 */
+	public static void jailResident(Resident resident, Jail jail, int cell, long seconds, JailReason reason, CommandSender jailer) {
+		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
+			double bail = TownySettings.getBailAmount();
+			if (resident.isMayor())
+				bail = resident.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
+			jailResidentWithBail(resident, jail, cell, seconds, bail, reason, jailer);
+		} else {
+			jailResidentWithBail(resident, jail, cell, seconds, 0.0, reason, jailer);
+		}
+	}
+
+	/**
+	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use {@link #jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)} supplying the seconds.
+	 */
+	@Deprecated(since = "0.103.2.12")
+	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason, CommandSender jailer) {
+		jailResidentWithBail(resident, jail, cell, TimeUnit.HOURS.toSeconds(hours), bail, reason, jailer);
+	}
+
+	/**
+	 * Jails a resident.
+	 * 
+	 * @param resident Resident being jailed.
+	 * @param jail Jail resident is being jailed into.
+	 * @param cell JailCell to spawn to.
+	 * @param seconds Seconds resident is jailed for.
 	 * @param bail Bail amount to be paid to unjail.
 	 * @param reason JailReason resident is jailed for.
 	 * @param jailer CommandSender of who did the jailing or null.
 	 */
-	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason, CommandSender jailer) {
+	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, long seconds, double bail, JailReason reason, CommandSender jailer) {
 		
 		// Set senderName
 		String senderName = jailer instanceof Player ? (jailer).getName() : "Admin";
 
+		long unjailTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(seconds);
 		// Fire cancellable event.
-		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, hours, bail, reason);
+		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, unjailTime, bail, reason);
 		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(jailer, event.getCancelTranslatable());
 			return;
@@ -87,7 +115,7 @@ public class JailUtil {
 
 		// Give players an informative book.
 		if (TownySettings.isJailBookEnabled())
-			sendJailedBookToResident(jailedPlayer, reason, hours, bail);
+			sendJailedBookToResident(jailedPlayer, reason, seconds, bail);
 
 		// Do per-jail-reason operations here.
 		switch(reason) {
@@ -102,23 +130,24 @@ public class JailUtil {
 		}
 
 		String jailName = jail.hasName() ? jail.getName() : Translatable.of("jail_sing").toString();
+		String duration = TimeMgmt.formatCountdownTime(seconds, jailedPlayer.locale());
 		// Send feedback message to arresting town
 		if (TownySettings.isAllowingBail() && bail > 0 && TownyEconomyHandler.isActive())
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail", resident.getName(), jailName, cell, hours, bail, senderName));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x_for_x_bail", resident.getName(), jailName, cell, duration, bail, senderName));
 		else
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x", resident.getName(), jailName, cell, hours, senderName));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x", resident.getName(), jailName, cell, duration, senderName));
 
-		// Set the jail, cells, hours, bail, and add resident to the Universe's jailed resident map.
+		// Set the jail, cells, duration, bail, and add resident to the Universe's jailed resident map.
 		resident.setJail(jail);
 		resident.setJailCell(Math.max(0, cell - 1));
-		resident.setJailHours(hours);
+		resident.setUnjailTime(unjailTime);
 		resident.setJailBailCost(bail);
 		resident.save();
 		TownyUniverse.getInstance().getJailedResidentMap().add(resident);
 
 		Translator translator = Translator.locale(jailedPlayer);
 		// Tell the resident how long they've been jailed for and provide bail information if allowing bail and using economy
-		TownyMessaging.sendMsg(jailedPlayer, translator.of("msg_you've_been_jailed_for_x_hours", hours));
+		TownyMessaging.sendMsg(jailedPlayer, translator.of("msg_you've_been_jailed_for_x_duration", duration));
 		if (TownySettings.isAllowingBail() && bail > 0 && TownyEconomyHandler.isActive())
 			TownyMessaging.sendMsg(jailedPlayer, translator.of("msg_you_have_been_jailed_your_bail_is_x", bail));
 
@@ -131,8 +160,10 @@ public class JailUtil {
 		// Call ResidentJailEvent.
 		BukkitTools.fireEvent(new ResidentJailEvent(resident, reason, jailer instanceof Player player ? player : null));
 
-		if (TownySettings.showBailTitle())
+		if (bail > 0 && TownySettings.showBailTitle())
 			Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 80L);
+		if (TownySettings.showJailBossbar())
+			showJailedBossBar(resident, translator);
 	}
 
 	public static void showBailTitleMessage(Resident resident, Translator translator) {
@@ -142,7 +173,84 @@ public class JailUtil {
 				translator.of("titlemsg_pay_your_bail_title", TownyEconomyHandler.getFormattedBalance(resident.getJailBailCost())),
 				translator.of("titlemsg_pay_your_bail_subtitle"),
 				200); // 10 seconds
-		Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 200L);
+		if (TownySettings.showBailTitlePermanently())
+			Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 200L);
+	}
+	
+	private static void showJailedBossBar(Resident resident, Translator translator) {
+		if (!resident.isOnline() || !resident.isJailed()) {
+			return;
+		}
+		Player player = resident.getPlayer();
+		if (player == null) {
+			return;
+		}
+		
+		BossBar bossBar = playerBossBarMap.get(player.getUniqueId());
+		boolean created = false;
+		if (bossBar == null) {
+			created = true;
+			bossBar = createBossBar(resident, translator);
+		}
+		
+		Component component = createBossBarMessage(resident, translator);
+		float progress = calculateProgress(resident);
+		
+		bossBar.progress(progress);
+		bossBar.name(component);
+
+		if (created) {
+			TownyMessaging.sendBossBarMessageToPlayer(player, bossBar);
+			playerBossBarMap.put(player.getUniqueId(), bossBar);
+		}
+		Towny.getPlugin().getScheduler().runLater(player, t -> showJailedBossBar(resident, translator), 20);
+	}
+	
+	private static BossBar createBossBar(Resident resident, Translator translator) {
+		Component component = createBossBarMessage(resident, translator);
+		float progress = calculateProgress(resident);
+		BossBar.Color color = BossBar.Color.NAMES.valueOr(TownySettings.getJailBossBarColor().toLowerCase(Locale.ROOT), BossBar.Color.WHITE);
+
+		return BossBar.bossBar(component, progress, color, BossBar.Overlay.PROGRESS);
+	}
+	
+	private static Component createBossBarMessage(Resident resident, Translator translator) {
+		String input = TownySettings.getJailBossBarTextColor();
+		TextColor color = NamedTextColor.NAMES.value(input.toLowerCase(Locale.ROOT));
+		if (color == null) {
+			color = TextColor.fromHexString(input.startsWith("#") ? input : ("#" + input));
+		}
+		String textColor = "<" + (color != null ? color : NamedTextColor.RED) + ">";
+
+		String town = resident.getJailTown().getName();
+		long seconds = (resident.getUnjailTime() - System.currentTimeMillis()) / 1000;
+		String duration = seconds < 60 ? "<1m" : TimeMgmt.formatCountdownTime(seconds, translator.locale()); // use <1m for any duration less than a minute, in order to prevent negative seconds while waiting for ShortTimerTask to unjail them
+		double bail = resident.getJailBailCost();
+		String message = bail > 0 ? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, TownyEconomyHandler.getFormattedBalance(bail)) : translator.of("msg_jail_bossbar_duration", textColor, town, duration);
+
+		return TownyComponents.miniMessage(message);
+	}
+	
+	private static float calculateProgress(Resident resident) {
+		Long jailedAt = resident.getJailedAt();
+		Long unjailTime = resident.getUnjailTime();
+		long now = System.currentTimeMillis();
+		if (jailedAt == null) {
+			jailedAt = now;
+		}
+
+		long totalDuration = unjailTime - jailedAt;
+		long elapsed = now - jailedAt;
+
+		float progress = (float) elapsed / totalDuration;
+		return Math.max(0.0f, Math.min(1.0f, progress));
+	}
+
+	public static void removePlayerBossBar(Player player) {
+		final BossBar bar = playerBossBarMap.remove(player.getUniqueId());
+		if (bar != null) {
+			player.hideBossBar(bar);
+		}
 	}
 
 
@@ -214,10 +322,14 @@ public class JailUtil {
 	public static void unJailResident(Resident resident) {
 		TownyUniverse.getInstance().getJailedResidentMap().remove(resident);
 		resident.setJailCell(0);
-		resident.setJailHours(0);
+		resident.setUnjailTime(null);
 		resident.setJail(null);
 		resident.setJailBailCost(0.00);
 		resident.save();
+		Player player = resident.getPlayer();
+		if (player != null) {
+			removePlayerBossBar(player);
+		}
 	}
 
 	/**
@@ -225,12 +337,14 @@ public class JailUtil {
 	 * 
 	 * @param player Player who will receive a book.
 	 * @param reason JailReason the player is in jail for.
+	 * @param seconds The number of seconds a player has been jailed for.
+	 * @param cost The amount a a player's bail is.
 	 */
-	private static void sendJailedBookToResident(Player player, JailReason reason, int hours, double cost) {
+	private static void sendJailedBookToResident(Player player, JailReason reason, long seconds, double cost) {
 		final Translator translator = Translator.locale(player);
 
 		// A nice little book for the not so nice person in jail.
-		String pages = getJailBookPages(player, reason, hours, cost, translator);
+		String pages = getJailBookPages(player, reason, seconds, cost, translator);
 
 		// Send the book off to the BookFactory to be made.
 		ItemStack jailBook = new ItemStack(BookFactory.makeBook(translator.of("msg_jailed_title"), translator.of("msg_jailed_author"), pages));
@@ -239,10 +353,10 @@ public class JailUtil {
 		Towny.getPlugin().getScheduler().runLater(player, () -> player.getInventory().addItem(jailBook), 1L);
 	}
 
-	private static String getJailBookPages(Player player, JailReason reason, int hours, double cost, Translator translator) {
+	private static String getJailBookPages(Player player, JailReason reason, long seconds, double cost, Translator translator) {
 		String pages = translator.of("msg_jailed_handbook_1", translator.of(reason.getCause()));
 		pages += translator.of("msg_jailed_handbook_2") + "\n\n";
-		pages += translator.of("msg_jailed_handbook_3", hours) + "\n\n";
+		pages += translator.of("msg_jailed_handbook_3.1", TimeMgmt.formatCountdownTime(seconds, player.locale())) + "\n\n";
 		pages += TownySettings.JailDeniesTownLeave() ? translator.of("msg_jailed_handbook_4_cant") : translator.of("msg_jailed_handbook_4_can") + "\n";
 		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
 			pages += translator.of("msg_jailed_handbook_bail_1");
@@ -320,10 +434,40 @@ public class JailUtil {
 		if (jailedResidents.isEmpty())
 			return;
 		Resident unjailedresident = TownySettings.getMaxJailedNewJailBehavior() == 1
-				// Setting 1 gets the jailed player with lowest JailHours
-				? jailedResidents.stream().min(Comparator.comparingInt(Resident::getJailHours)).get()
+				// Setting 1 gets the jailed player with soonest unjail time
+				? jailedResidents.stream().min(Comparator.comparingLong(Resident::getUnjailTime)).get()
 				// Setting 2 gets the jailed player with lowest set Bail
 				: jailedResidents.stream().min(Comparator.comparingDouble(Resident::getJailBailCost)).get();
 		unJailResident(unjailedresident, UnJailReason.OUT_OF_SPACE);
+	}
+
+	/**
+	 * Check if a resident has served their sentence and remove hourly jail fee from town bank if possible
+	 */
+	public static void checkUnjailTimesAndIncurJailFees() {
+		boolean chargeFees = lastFeeChargedTimestamp == null || lastFeeChargedTimestamp <= (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1));
+		double hourlyJailFee = chargeFees && TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() > 0 ? TownySettings.hourlyJailFee() : 0;
+		
+		if (hourlyJailFee > 0) {
+			lastFeeChargedTimestamp = System.currentTimeMillis();
+		}
+		for (Resident resident : new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap())) {
+			// Resident has served their sentence.
+			if (resident.getUnjailTime() <= System.currentTimeMillis()) {
+				Towny.getPlugin().getScheduler().runLater(() -> JailUtil.unJailResident(resident, UnJailReason.SENTENCE_SERVED), 20);
+				continue;
+			}
+
+			// The jailing Town might have to pay to keep the resident locked up.
+			if (hourlyJailFee > 0) {
+				Town jailTown = resident.getJailTown();
+				if (!jailTown.getAccount().withdraw(hourlyJailFee, "Jailee Hourly Fee for " + resident.getName())) {
+					// Town receives unjail message stating lack of money from within JailUtil.
+					Towny.getPlugin().getScheduler().runLater(() -> JailUtil.unJailResident(resident, UnJailReason.INSUFFICIENT_FUNDS), 20);
+				} else {
+					TownyMessaging.sendPrefixedTownMessage(jailTown, Translatable.of("msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x", hourlyJailFee, resident));
+				}
+			}
+		}
 	}
 }

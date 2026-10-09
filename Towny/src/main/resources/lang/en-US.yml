@@ -869,7 +869,7 @@ msg_you_have_undeclared_an_outlaw: '%s is no longer an outlaw in %s.'
 msg_err_player_not_an_outlaw: 'That player was not listed as an outlaw.'
 msg_err_outlaw_in_open_town: 'You cannot join an open town that has deemed you an outlaw.'
 msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_jail_duration: '&4Outlaws are jailed for %s.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s''s homeblock isn''t near enough to your capital''s homeblock to join your nation.'
 msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too far away from your nation''s capital''s homeblock and has been removed from your nation.'
@@ -1707,7 +1707,7 @@ msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 
 #Added in 0.107
-msg_jailed_for_x_hours: ' for %s hours.'
+msg_jailed_for_x_duration: ' for %s.'
 msg_err_this_jail_has_no_cells: 'This jail has no cells.'
 msg_err_no_cell_found_at_this_location : 'No jail cell found at this location.'
 msg_jail_cell_set: 'Jail cell set.'
@@ -1724,7 +1724,7 @@ msg_you_have_paid_bail: 'You have paid bail.'
 msg_you_have_been_freed_via_jailbreak: 'There''s been a jailbreak, you are free!'
 msg_you_have_served_your_sentence_and_are_free: 'You have served your jail sentence and are free.'
 msg_x_has_served_their_sentence_and_is_free: '%s has served their jail sentence and is free.'
-msg_you've_been_jailed_for_x_hours: 'You''ve been jailed for %s hours.'
+msg_you've_been_jailed_for_x_duration: 'You''ve been jailed for %s.'
 msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
 msg_err_you_cannot_remove_the_last_cell: 'You cannot remove the last jail cell in this jail, until another cell is added'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being teleported to jail, it would be fatal.'
@@ -2015,7 +2015,7 @@ msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3.1: 'You have been jailed for %s. By serving your sentence you will become free.'
 #Jail handbook messages
 msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
 #Jail handbook messages
@@ -2258,8 +2258,8 @@ msg_town_board_reset: '&bTown board reset.'
 msg_nation_board_reset: '&bNation board reset.'
 
 msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x: '%s has been sent to %s into cell number %s for %s by %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
@@ -2746,3 +2746,6 @@ msg_set_min_adj_chunks: '&bSuccessfully changed %s''s min adjacent chunks to %s.
 status_min_adjacency: 'Minimum adjacency:'
 
 msg_err_cannot_list_outposts_because_town_ruined: "You cannot use check this town's outpost(s) because the town is ruined."
+
+msg_jail_bossbar_duration: '%sYou are jailed in <red>%s</red> <gray>|</gray> Time left: <aqua>%s</aqua>'
+msg_jail_bossbar_duration_bail: '%sYou are jailed in <red>%s</red> <gray>|</gray> Time left: <aqua>%s</aqua> <gray>|</gray> Bail is set at <green>%s</green> <gray>(Pay with </gray>/res jail paybail<gray>)</gray>'

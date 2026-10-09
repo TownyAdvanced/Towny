@@ -3353,11 +3353,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true, nation leaders can jail any resident of their nation inside of their capital city's jails."),
-	JAIL_OUTLAW_JAIL_HOURS(
-			"jail.outlaw_jail_hours",
-			"5",
+	JAIL_OUTLAW_JAIL_DURATION(
+			"jail.outlaw_jail_duration",
+			"5h",
 			"",
-			"# How many hours an attacking outlaw will be jailed for."),
+			"# The duration in dhms format for how long an outlaw will be jailed for. E.g. 15m"),
 	JAIL_POW_JAIL_HOURS(
 			"jail.pow_jail_hours",
 			"5",
@@ -3388,6 +3388,22 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If false jailed players can use /town leave, and escape a jail."),
+	JAIL_BOSSBAR("jail.bossbar", ""),
+	JAIL_BOSSBAR_ENABLED("jail.bossbar.enabled",
+		"true",
+		"",
+		"# If true, jailed residents will be shown a bossbar with their remaining jail time, and bail if available"),
+	JAIL_BOSSBAR_COLOR("jail.bossbar.color",
+		"red",
+		"",
+		"# The bossbar color to use for the jail bossbar.",
+		"# Valid colors are blue, green, pink, purple, red, white, or yellow."),
+	JAIL_BOSSBAR_TEXT_COLOR("jail.bossbar.text_color",
+		"red",
+		"",
+		"# The text color to use for the jail bossbar.",
+		"# Valid colors include presets found in https://jd.papermc.io/adventure/5.2.0/net.kyori.adventure.api/net/kyori/adventure/text/format/NamedTextColor.html",
+		"# As well as any valid hex code. E.g. 'red' or '#34cceb'"),
 	JAIL_BAIL("jail.bail", "", ""),
 	JAIL_BAIL_IS_ALLOWING_BAIL(
 			"jail.bail.is_allowing_bail",
@@ -3467,6 +3483,12 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When enabled, player that can pay their bail will see a title message telling them how to pay their bail."),
+	JAIL_SHOW_BAIL_TITLE_PERMANENT(
+		"jail.show_bail_command_in_title_message_permanently",
+		"false",
+		"",
+		"# When this and jail.show_bail_command_in_title_message are enabled, the title message is displayed permanently to residents.",
+		"# If this is false and jail.show_bail_command_in_title_message is enabled, the title message is only displayed for 10 seconds"),
 
 	BANK(
 			"bank",

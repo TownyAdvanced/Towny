@@ -11,21 +11,23 @@ import com.palmergames.bukkit.towny.object.jail.JailReason;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 public class ResidentPreJailEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final Resident resident;
 	private final Jail jail;
 	private final int cell;
-	private final int hours;
+	private final long unjailTime;
 	private final double bail;
 	private final JailReason reason;
 	
-	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason) {
+	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, long unjailTime, double bail, JailReason reason) {
 		this.resident = resident;
 		this.jail = jail;
 		this.cell = cell;
-		this.hours = hours;
+		this.unjailTime = unjailTime;
 		this.bail = bail;
 		this.reason = reason;
 		setCancelMessage(Translatable.of("msg_err_command_disable"));
@@ -51,8 +53,13 @@ public class ResidentPreJailEvent extends CancellableTownyEvent {
 		return cell;
 	}
 
+	@Deprecated(since = "0.103.2.12")
 	public int getHours() {
-		return hours;
+		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
+	}
+
+	public long getUnjailTime() {
+		return unjailTime;
 	}
 
 	public double getBail() {

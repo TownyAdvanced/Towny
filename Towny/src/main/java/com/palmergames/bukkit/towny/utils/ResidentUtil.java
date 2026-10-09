@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
@@ -22,6 +23,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
 import com.palmergames.util.JavaUtil;
+import com.palmergames.util.TimeTools;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -345,7 +347,9 @@ public class ResidentUtil {
 					bail = outlaw.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
 				bailMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_bail_amount", TownyEconomyHandler.getFormattedBalance(bail));
 			}
-			Translatable timeMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_jail_time", TownySettings.getJailedOutlawJailHours());
+			long duration = TownySettings.getSeconds(ConfigNodes.JAIL_OUTLAW_JAIL_DURATION);
+			String countdown = outlawPlayer != null ? TimeMgmt.formatCountdownTime(duration, outlawPlayer.locale()) : TimeMgmt.formatCountdownTime(duration);
+			Translatable timeMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_jail_duration", countdown);
 			if (bailMsg != null)
 				timeMsg.append(Component.space()).append(bailMsg);
 			TownyMessaging.sendMsg(outlaw, timeMsg);

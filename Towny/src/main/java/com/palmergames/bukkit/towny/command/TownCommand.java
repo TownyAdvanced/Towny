@@ -149,6 +149,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -1781,7 +1782,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Set default values.
-		int hours = 2; // default set to two in relation to https://github.com/TownyAdvanced/Towny/issues/6029
+		long seconds = 3600;
 		int jailNum = 1;
 		int cell = 1;
 		Jail jail = town.getPrimaryJail();
@@ -1794,7 +1795,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Players used to be able to get places faster by using jailing exploits. 
 		checkTeleportExploitsOrThrow(sender, admin, jailedResident);
 
-		// Begin getting hours, bail, jail and cell numbers from the inputted arguments, otherwise use the defaults.
+		// Begin getting duration, bail, jail and cell numbers from the inputted arguments, otherwise use the defaults.
 		if (split.length > 1) {
 			// offset is used to determine what argument in split is used for bail, jail # and cell #. 
 			int offset = bailEnabled ? 1 : 0;
@@ -1805,8 +1806,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!checkArgumentsPassedForJail(sender, split, offset))
 				return;
 
-			// Set the hours, which are mandatory.
-			hours = setJailHours(sender, split);
+			// Set the duration, which are mandatory.
+			seconds = parseJailDuration(sender, split);
 
 			// Set the bail if bailing is enabled and if the argument is given.
 			if (offset == 1 && split.length >= 3)
@@ -1831,7 +1832,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		testTownCanJailResidentOrThrow(town, initialJailFee, jailedResident);
 
 		// Jail the resident, when enabled it will apply the bail.
-		JailUtil.jailResidentWithBail(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
+		JailUtil.jailResidentWithBail(jailedResident, jail, cell, seconds, bail, JailReason.MAYOR, sender);
 
 		// Send an admin a message if the player was jailed via Admin.
 		if (admin)
@@ -1912,14 +1913,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	private static int setJailHours(CommandSender sender, String[] split) throws TownyException {
-		int hours = Math.min(2, MathUtil.getPositiveIntOrThrow(split[1]));
+	private static long parseJailDuration(CommandSender sender, String[] split) throws TownyException {
+		long seconds = Math.min(15, TimeTools.getSeconds(split[1]));
+		long hours = TimeUnit.SECONDS.toHours(seconds);
 
 		if (hours > TownySettings.getJailedMaxHours()) {
 			hours = TownySettings.getJailedMaxHours();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedMaxHours()));
 		}
-		return hours;
+		return seconds;
 	}
 
 	private static double setBail(CommandSender sender, String[] split) throws TownyException {

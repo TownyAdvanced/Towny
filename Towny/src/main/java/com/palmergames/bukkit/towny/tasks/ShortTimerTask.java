@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 /**
@@ -26,6 +27,8 @@ public class ShortTimerTask extends TownyTimerTask {
 		if (TownyRegenAPI.getPlotChunks().size() < 20 && TownyRegenAPI.regenQueueHasAvailable()) {
 			TownyRegenAPI.getWorldCoordFromQueueForRegeneration();
 		}
+
+		JailUtil.checkUnjailTimesAndIncurJailFees();
 		
 		/*
 		 * Fire an event other plugins can use.
