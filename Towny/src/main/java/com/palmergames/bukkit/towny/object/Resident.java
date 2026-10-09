@@ -194,6 +194,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return getJailTown().getName().equalsIgnoreCase(jailtown);
 	}
 
+	/**
+	 * @deprecated Jails times are no longer stored in hours, use {@link #getUnjailTime()} instead.
+	 */
 	@Deprecated(since = "0.103.2.12")
 	public int getJailHours() {
 		if (unjailTime == null || unjailTime < System.currentTimeMillis()) {
