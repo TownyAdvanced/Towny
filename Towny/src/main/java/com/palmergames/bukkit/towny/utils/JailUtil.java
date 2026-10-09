@@ -337,6 +337,8 @@ public class JailUtil {
 	 * 
 	 * @param player Player who will receive a book.
 	 * @param reason JailReason the player is in jail for.
+	 * @param seconds The number of seconds a player has been jailed for.
+	 * @param cost The amount a a player's bail is.
 	 */
 	private static void sendJailedBookToResident(Player player, JailReason reason, long seconds, double cost) {
 		final Translator translator = Translator.locale(player);
