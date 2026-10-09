@@ -74,6 +74,9 @@ public class JailUtil {
 		}
 	}
 
+	/**
+	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use {@link #jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)} supplying the seconds.
+	 */
 	@Deprecated(since = "0.103.2.12")
 	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason, CommandSender jailer) {
 		jailResidentWithBail(resident, jail, cell, TimeUnit.HOURS.toSeconds(hours), bail, reason, jailer);
