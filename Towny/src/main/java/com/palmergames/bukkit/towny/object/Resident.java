@@ -205,6 +205,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
 	}
 
+	/**
+	 * @deprecated Jails times are no longer set using hours, use {@link #getSetUnjailTime(Long)} instead.
+	 */
 	@Deprecated(since = "0.103.2.12")
 	public void setJailHours(Integer hours) {
 		if (hours == 0) {
