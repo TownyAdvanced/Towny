@@ -3392,7 +3392,7 @@ public enum ConfigNodes {
 	JAIL_BOSSBAR_ENABLED("jail.bossbar.enabled",
 		"true",
 		"",
-		"# If true, jailed residents will be shown a bossbar with their remaining jail time, and bail if available"),
+		"# If true, jailed residents will be shown a bossbar with their remaining jail time, and bail if available."),
 	JAIL_BOSSBAR_COLOR("jail.bossbar.color",
 		"red",
 		"",
@@ -3403,7 +3403,7 @@ public enum ConfigNodes {
 		"",
 		"# The text color to use for the jail bossbar.",
 		"# Valid colors include presets found in https://jd.papermc.io/adventure/5.2.0/net.kyori.adventure.api/net/kyori/adventure/text/format/NamedTextColor.html",
-		"# As well as any valid hex code. E.g. 'red' or '#34cceb'"),
+		"# As well as any valid hex code. E.g. 'red' or '#34cceb'."),
 	JAIL_BAIL("jail.bail", "", ""),
 	JAIL_BAIL_IS_ALLOWING_BAIL(
 			"jail.bail.is_allowing_bail",
@@ -3488,7 +3488,7 @@ public enum ConfigNodes {
 		"false",
 		"",
 		"# When this and jail.show_bail_command_in_title_message are enabled, the title message is displayed permanently to residents.",
-		"# If this is false and jail.show_bail_command_in_title_message is enabled, the title message is only displayed for 10 seconds"),
+		"# If this is false and jail.show_bail_command_in_title_message is enabled, the title message is only displayed for 10 seconds."),
 
 	BANK(
 			"bank",

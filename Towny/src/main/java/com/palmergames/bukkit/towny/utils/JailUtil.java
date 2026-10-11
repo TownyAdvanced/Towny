@@ -46,7 +46,9 @@ public class JailUtil {
 	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
 
 	/**
-	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use {@link #jailResident(Resident, Jail, int, long, JailReason, CommandSender)} supplying the seconds.
+	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use
+	 *             {@link #jailResident(Resident, Jail, int, long, JailReason, CommandSender)}
+	 *             supplying the seconds.
 	 */
 	@Deprecated(since = "0.103.2.12")
 	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer) {
@@ -75,7 +77,9 @@ public class JailUtil {
 	}
 
 	/**
-	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use {@link #jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)} supplying the seconds.
+	 * @deprecated Jailing no longer uses hours as a sentence duration, instead use
+	 *             {@link #jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)}
+	 *             supplying the seconds.
 	 */
 	@Deprecated(since = "0.103.2.12")
 	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason, CommandSender jailer) {
@@ -176,7 +180,7 @@ public class JailUtil {
 		if (TownySettings.showBailTitlePermanently())
 			Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 200L);
 	}
-	
+
 	private static void showJailedBossBar(Resident resident, Translator translator) {
 		if (!resident.isOnline() || !resident.isJailed()) {
 			return;
@@ -185,17 +189,17 @@ public class JailUtil {
 		if (player == null) {
 			return;
 		}
-		
+
 		BossBar bossBar = playerBossBarMap.get(player.getUniqueId());
 		boolean created = false;
 		if (bossBar == null) {
 			created = true;
 			bossBar = createBossBar(resident, translator);
 		}
-		
+
 		Component component = createBossBarMessage(resident, translator);
 		float progress = calculateProgress(resident);
-		
+
 		bossBar.progress(progress);
 		bossBar.name(component);
 
@@ -205,7 +209,7 @@ public class JailUtil {
 		}
 		Towny.getPlugin().getScheduler().runLater(player, t -> showJailedBossBar(resident, translator), 20);
 	}
-	
+
 	private static BossBar createBossBar(Resident resident, Translator translator) {
 		Component component = createBossBarMessage(resident, translator);
 		float progress = calculateProgress(resident);
@@ -213,7 +217,7 @@ public class JailUtil {
 
 		return BossBar.bossBar(component, progress, color, BossBar.Overlay.PROGRESS);
 	}
-	
+
 	private static Component createBossBarMessage(Resident resident, Translator translator) {
 		String input = TownySettings.getJailBossBarTextColor();
 		TextColor color = NamedTextColor.NAMES.value(input.toLowerCase(Locale.ROOT));
@@ -224,13 +228,16 @@ public class JailUtil {
 
 		String town = resident.getJailTown().getName();
 		long seconds = (resident.getUnjailTime() - System.currentTimeMillis()) / 1000;
-		String duration = seconds < 60 ? "<1m" : TimeMgmt.formatCountdownTime(seconds, translator.locale()); // use <1m for any duration less than a minute, in order to prevent negative seconds while waiting for ShortTimerTask to unjail them
+		// use <1m for any duration less than a minute, in order to prevent negative seconds while waiting for ShortTimerTask to unjail them
+		String duration = seconds < 60 ? "<1m" : TimeMgmt.formatCountdownTime(seconds, translator.locale());
 		double bail = resident.getJailBailCost();
-		String message = bail > 0 ? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, TownyEconomyHandler.getFormattedBalance(bail)) : translator.of("msg_jail_bossbar_duration", textColor, town, duration);
+		String message = bail > 0
+				? translator.of("msg_jail_bossbar_duration_bail", textColor, town, duration, TownyEconomyHandler.getFormattedBalance(bail))
+				: translator.of("msg_jail_bossbar_duration", textColor, town, duration);
 
 		return TownyComponents.miniMessage(message);
 	}
-	
+
 	private static float calculateProgress(Resident resident) {
 		Long jailedAt = resident.getJailedAt();
 		Long unjailTime = resident.getUnjailTime();

@@ -1782,7 +1782,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Set default values.
-		long seconds = 3600;
+		long seconds = (long) (TimeMgmt.ONE_HOUR_IN_MILLIS / 1000);
 		int jailNum = 1;
 		int cell = 1;
 		Jail jail = town.getPrimaryJail();

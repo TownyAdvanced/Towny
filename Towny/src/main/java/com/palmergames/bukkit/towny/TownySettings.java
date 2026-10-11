@@ -2290,7 +2290,8 @@ public class TownySettings {
 	}
 
 	/**
-	 * @deprecated Jails times are no longer stored in hours, use {@link #getJailedOutlawJailSeconds()} instead.
+	 * @deprecated Jails times are no longer stored in hours, use
+	 *             {@link #getJailedOutlawJailSeconds()} instead.
 	 */
 	@Deprecated(since = "0.103.2.12")
 	public static int getJailedOutlawJailHours() {
@@ -2299,7 +2300,6 @@ public class TownySettings {
 	}
 
 	public static long getJailedOutlawJailSeconds() {
-		
 		return getSeconds(ConfigNodes.JAIL_OUTLAW_JAIL_DURATION);
 	}
 
@@ -2320,9 +2320,8 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_JAIL_DENIES_TOWN_LEAVE);
 	}
-	
+
 	public static boolean showJailBossbar() {
-		
 		return getBoolean(ConfigNodes.JAIL_BOSSBAR_ENABLED);
 	}
 
@@ -2389,7 +2388,7 @@ public class TownySettings {
 	public static boolean showBailTitle() {
 		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE);
 	}
-	
+
 	public static boolean showBailTitlePermanently() {
 		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE_PERMANENT);
 	}

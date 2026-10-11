@@ -195,7 +195,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	/**
-	 * @deprecated Jails times are no longer stored in hours, use {@link #getUnjailTime()} instead.
+	 * @deprecated Jails times are no longer stored in hours, use
+	 *             {@link #getUnjailTime()} instead.
 	 */
 	@Deprecated(since = "0.103.2.12")
 	public int getJailHours() {
@@ -206,7 +207,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	/**
-	 * @deprecated Jails times are no longer set using hours, use {@link #setUnjailTime(Long)} instead.
+	 * @deprecated Jails times are no longer set using hours, use
+	 *             {@link #setUnjailTime(Long)} instead.
 	 */
 	@Deprecated(since = "0.103.2.12")
 	public void setJailHours(Integer hours) {
@@ -226,13 +228,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailBailCost(double bail) {
 		jailBail = bail;
 	}
-
+	
 	public boolean hasJailTime() {
 		return unjailTime != null && unjailTime > System.currentTimeMillis();
 	}
 
 	/**
-	 * @param timestamp unix timestamp of when this resident will be unjailed by having served their sentence. Null if the resident is being unjailed
+	 * @param timestamp unix timestamp of when this resident will be unjailed by
+	 *                  having served their sentence. Null if the resident is being
+	 *                  unjailed.
 	 */
 	public void setUnjailTime(@Nullable Long timestamp) {
 		this.jailedAt = timestamp != null ? System.currentTimeMillis() : null;
@@ -240,22 +244,29 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	/**
-	 * @return unix timestamp of when this resident was jailed. To be used when calculating how much of their sentence has been served. Null of this resident is not jailed.
+	 * @return unix timestamp of when this resident was jailed. To be used when
+	 *         calculating how much of their sentence has been served. Null if this
+	 *         resident is not jailed.
 	 */
+	@Nullable
 	public Long getJailedAt() {
 		return jailedAt;
 	}
 
 	/**
-	 * @return unix timestamp of when this resident will be unjailed by having served their sentence. Null if this resident is not jailed.
+	 * @return unix timestamp of when this resident will be unjailed by having
+	 *         served their sentence. Null if this resident is not jailed.
 	 */
+	@Nullable
 	public Long getUnjailTime() {
 		return unjailTime;
 	}
 
 	/**
-	 * @return The location of this resident's jail cell
+	 * @return The location of this resident's jail cell. Null if this resident is
+	 *         not jailed.
 	 */
+	@Nullable
 	public Location getJailSpawn() {
 		return getJail().getJailCellLocations().get(getJailCell());
 	}

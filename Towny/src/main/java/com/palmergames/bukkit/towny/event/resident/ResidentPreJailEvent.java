@@ -53,6 +53,10 @@ public class ResidentPreJailEvent extends CancellableTownyEvent {
 		return cell;
 	}
 
+	/**
+	 * @deprecated Jails times are no longer stored in hours, use
+	 *             {@link #getUnjailTime()} instead.
+	 */
 	@Deprecated(since = "0.103.2.12")
 	public int getHours() {
 		return (int) TimeUnit.MILLISECONDS.toHours(unjailTime - System.currentTimeMillis());
