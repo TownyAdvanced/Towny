@@ -217,11 +217,24 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param silent - Whether to show an error message if disallowed.
+	 * @return true if allowed.
+	 */
+	public static boolean canBuild(Player player, Location loc, Material mat, boolean silent) {
+		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
+		return isAllowedAction(player, loc, mat, ActionType.BUILD, event, silent);
+	}
+
+	/**
+	 * Can the player build this material at this location?
+	 *
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canBuild(Player player, Location loc, Material mat) {
-		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
-		return isAllowedAction(player, loc, mat, ActionType.BUILD, event);
+		return canBuild(player, loc, mat);
 	}
 
 	/**
@@ -241,11 +254,24 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param silent - Whether to show an error message if disallowed.
+	 * @return true if allowed.
+	 */
+	public static boolean canDestroy(Player player, Location loc, Material mat, boolean silent) {
+		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
+		return isAllowedAction(player, loc, mat, ActionType.DESTROY, event, silent);
+	}
+
+	/**
+	 * Can the player destroy this material at this location?
+	 *
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canDestroy(Player player, Location loc, Material mat) {
-		TownyDestroyEvent event = new TownyDestroyEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
-		return isAllowedAction(player, loc, mat, ActionType.DESTROY, event);
+		return canDestroy(player, loc, mat, false);
 	}
 
 	/**
@@ -277,7 +303,7 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
-	 * @param silent Whether to show an error message.
+	 * @param silent - Whether to show an error message if disallowed.
 	 * @return true if allowed.
 	 */
 	public static boolean canSwitch(Player player, Location loc, Material mat, boolean silent) {
@@ -291,11 +317,24 @@ public class TownyActionEventExecutor {
 	 * @param player     - Player involved in the event.
 	 * @param loc   - Location of the event.
 	 * @param mat   - Material being involved in the event.
+	 * @param silent - Whether to show an error message if disallowed.
+	 * @return true if allowed.
+	 */
+	public static boolean canItemuse(Player player, Location loc, Material mat, boolean silent) {
+		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
+		return isAllowedAction(player, loc, mat, ActionType.ITEM_USE, event, silent);
+	}
+
+	/**
+	 * Can the player use items of this material at this location?
+	 *
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
 	 * @return true if allowed.
 	 */
 	public static boolean canItemuse(Player player, Location loc, Material mat) {
-		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
-		return isAllowedAction(player, loc, mat, ActionType.ITEM_USE, event);
+		return canItemuse(player, loc, mat, false);
 	}
 	
 	/**
