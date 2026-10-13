@@ -11084,3 +11084,29 @@ c
   - Bump org.apache.maven:apache-maven from 3.9.16 to 3.10.0.
 0.103.2.12:
   - Fix loading of spawn points and homeblocks on servers where bukkit loads worlds after Towny loads.
+  - Add non-hourly jail sentences, boss bars to Jails, courtesy of Veyronity with PR #8316.
+    - Jailing now support specified time periods instead of fixed hourly amounts.
+    - Mayors and jailors can now supply times in the dhms format, ie: 5d = 5 days, 15m = 15 minutes.
+    - Existing jail hours stored on jailed residents in databases will be loaded and converted into the new JailUntil value.
+    - MySQL databases will have the resident table altered to drop the jailhours column, replacing it with the jailuntil column.
+      - This has been tested but anyone running a mysql database should probably be reminded to make a backup before they update.
+    - Jail information can now be made to appear in the bossbar, giving constant updates on a player's jail duration.
+  - Changed Config Option: jail.outlaw_jail_hours is renamed to jail.outlaw_jail_duration.
+  - New Config Options:
+    - jail.bossbar.enabled
+      - Default: true
+      - If true, jailed residents will be shown a bossbar with their remaining jail time, and bail if available.
+    - jail.bossbar.color
+      - Default: red
+      - The bossbar color to use for the jail bossbar.
+      - Valid colors are blue, green, pink, purple, red, white, or yellow.
+    - jail.bossbar.text_color
+      - Default: red
+      - The text color to use for the jail bossbar.
+      - Valid colors include presets found in https://jd.papermc.io/adventure/5.2.0/net.kyori.adventure.api/net/kyori/adventure/text/format/NamedTextColor.html
+      - As well as any valid hex code. E.g. 'red' or '#34cceb'.
+    - jail.show_bail_command_in_title_message_permanently
+      - Default: false
+      - When this and jail.show_bail_command_in_title_message are enabled, the title message is displayed permanently to residents.
+      - If this is false and jail.show_bail_command_in_title_message is enabled, the title message is only displayed for 10 seconds.
+  - API: Add methods to check if players can build, destroy and itemuse silently, courtesy of whimxiqal with PR #8325. (First-Time Contributor!)
