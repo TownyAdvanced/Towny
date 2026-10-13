@@ -1128,10 +1128,10 @@ will not have set their mayor yet.</div>
  org.bukkit.entity.Player&nbsp;sender)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../event/resident/ResidentPreJailEvent.html#%3Cinit%3E(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason)" class="member-name-link">ResidentPreJailEvent</a><wbr>(<a href="../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+<div class="col-second even-row-color"><code><a href="../../event/resident/ResidentPreJailEvent.html#%3Cinit%3E(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason)" class="member-name-link">ResidentPreJailEvent</a><wbr>(<a href="../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
  int&nbsp;cell,
- int&nbsp;hours,
+ long&nbsp;unjailTime,
  double&nbsp;bail,
  <a href="../jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -2134,13 +2134,42 @@ assistant, co-mayor, as definded in the config?</div>
  <a href="../jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
  org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Jails a resident.</div>
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="../../utils/JailUtil.html#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>JailUtil.jailResident(Resident, Jail, int, long, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
 </div>
 <div class="col-first odd-row-color"><code>static void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JailUtil.</span><code><a href="../../utils/JailUtil.html#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResidentWithBail</a><wbr>(<a href="../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+<div class="col-second odd-row-color"><span class="type-name-label">JailUtil.</span><code><a href="../../utils/JailUtil.html#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResident</a><wbr>(<a href="../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+ <a href="../jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
+ int&nbsp;cell,
+ long&nbsp;seconds,
+ <a href="../jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
+ org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Jails a resident.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JailUtil.</span><code><a href="../../utils/JailUtil.html#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResidentWithBail</a><wbr>(<a href="../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
  int&nbsp;cell,
  int&nbsp;hours,
+ double&nbsp;bail,
+ <a href="../jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
+ org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="../../utils/JailUtil.html#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>JailUtil.jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JailUtil.</span><code><a href="../../utils/JailUtil.html#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResidentWithBail</a><wbr>(<a href="../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+ <a href="../jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
+ int&nbsp;cell,
+ long&nbsp;seconds,
  double&nbsp;bail,
  <a href="../jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
  org.bukkit.command.CommandSender&nbsp;jailer)</code></div>

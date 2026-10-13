@@ -162,6 +162,16 @@ attempt to create a default entity when it is not available, but you should use 
 <div class="col-last even-row-color">
 <div class="block">This event no longer includes the delegate PlayerMoveEvent. Use <a href="com/palmergames/bukkit/towny/event/PlayerChangePlotEvent.html#getFrom()"><code>PlayerChangePlotEvent.getFrom()</code></a> and <a href="com/palmergames/bukkit/towny/event/PlayerChangePlotEvent.html#getTo()"><code>PlayerChangePlotEvent.getTo()</code></a> instead.</div>
 </div>
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/event/resident/ResidentJailEvent.html#getJailHours()">com.palmergames.bukkit.towny.event.resident.ResidentJailEvent.getJailHours()</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Jails times are no longer stored in hours, use
+            <a href="com/palmergames/bukkit/towny/event/resident/ResidentJailEvent.html#getUnjailTime()"><code>ResidentJailEvent.getUnjailTime()</code></a> instead.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/event/resident/ResidentPreJailEvent.html#getHours()">com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent.getHours()</a></div>
+<div class="col-last even-row-color">
+<div class="block">Jails times are no longer stored in hours, use
+            <a href="com/palmergames/bukkit/towny/event/resident/ResidentPreJailEvent.html#getUnjailTime()"><code>ResidentPreJailEvent.getUnjailTime()</code></a> instead.</div>
+</div>
 <div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/huds/HUDManager.html#getMapHUDUsers()">com.palmergames.bukkit.towny.huds.HUDManager.getMapHUDUsers()</a></div>
 <div class="col-last odd-row-color">
 <div class="block">since 0.102.0.8</div>
@@ -190,6 +200,16 @@ attempt to create a default entity when it is not available, but you should use 
 <div class="col-last odd-row-color">
 <div class="block">Changing UUIDs of Government objects is no longer supported.</div>
 </div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/object/Resident.html#getJailHours()">com.palmergames.bukkit.towny.object.Resident.getJailHours()</a></div>
+<div class="col-last even-row-color">
+<div class="block">Jails times are no longer stored in hours, use
+            <a href="com/palmergames/bukkit/towny/object/Resident.html#getUnjailTime()"><code>Resident.getUnjailTime()</code></a> instead.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/object/Resident.html#setJailHours(java.lang.Integer)">com.palmergames.bukkit.towny.object.Resident.setJailHours<wbr>(Integer)</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Jails times are no longer set using hours, use
+            <a href="com/palmergames/bukkit/towny/object/Resident.html#setUnjailTime(java.lang.Long)"><code>Resident.setUnjailTime(Long)</code></a> instead.</div>
+</div>
 <div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/object/Resident.html#setUUID(java.util.UUID)">com.palmergames.bukkit.towny.object.Resident.setUUID<wbr>(UUID)</a></div>
 <div class="col-last even-row-color">
 <div class="block">Changing UUIDs of Resident objects is no longer supported.</div>
@@ -198,36 +218,53 @@ attempt to create a default entity when it is not available, but you should use 
 <div class="col-last odd-row-color">
 <div class="block">use <a href="com/palmergames/bukkit/towny/object/TownyWorld.html#getTownsInWorld()"><code>TownyWorld.getTownsInWorld()</code></a> instead.</div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevel(int)">com.palmergames.bukkit.towny.TownySettings.getNationLevel<wbr>(int)</a></div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getJailedOutlawJailHours()">com.palmergames.bukkit.towny.TownySettings.getJailedOutlawJailHours()</a></div>
 <div class="col-last even-row-color">
-<div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevel(com.palmergames.bukkit.towny.object.Nation,int)"><code>TownySettings.getNationLevel(Nation, int)</code></a> instead.</div>
+<div class="block">Jails times are no longer stored in hours, use
+            <a href="com/palmergames/bukkit/towny/TownySettings.html#getJailedOutlawJailSeconds()"><code>TownySettings.getJailedOutlawJailSeconds()</code></a> instead.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevelWithModifier(int)">com.palmergames.bukkit.towny.TownySettings.getNationLevelWithModifier<wbr>(int)</a></div>
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevel(int)">com.palmergames.bukkit.towny.TownySettings.getNationLevel<wbr>(int)</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevel(com.palmergames.bukkit.towny.object.Nation,int)"><code>TownySettings.getNationLevel(Nation, int)</code></a> instead.</div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getResidentCountForTownLevel(int)">com.palmergames.bukkit.towny.TownySettings.getResidentCountForTownLevel<wbr>(int)</a></div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevelWithModifier(int)">com.palmergames.bukkit.towny.TownySettings.getNationLevelWithModifier<wbr>(int)</a></div>
 <div class="col-last even-row-color">
+<div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getNationLevel(com.palmergames.bukkit.towny.object.Nation,int)"><code>TownySettings.getNationLevel(Nation, int)</code></a> instead.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getResidentCountForTownLevel(int)">com.palmergames.bukkit.towny.TownySettings.getResidentCountForTownLevel<wbr>(int)</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevel(com.palmergames.bukkit.towny.object.Town,int)"><code>TownySettings.getTownLevel(Town, int)</code></a> and <a href="com/palmergames/bukkit/towny/TownySettings.TownLevel.html#modifier()"><code>TownySettings.TownLevel.modifier()</code></a> if you really need to</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevel(int)">com.palmergames.bukkit.towny.TownySettings.getTownLevel<wbr>(int)</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevel(com.palmergames.bukkit.towny.object.Town,int)"><code>TownySettings.getTownLevel(Town, int)</code></a> instead.</div>
-</div>
-<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevelWithModifier(int,com.palmergames.bukkit.towny.object.Town)">com.palmergames.bukkit.towny.TownySettings.getTownLevelWithModifier<wbr>(int, Town)</a></div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevel(int)">com.palmergames.bukkit.towny.TownySettings.getTownLevel<wbr>(int)</a></div>
 <div class="col-last even-row-color">
 <div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevel(com.palmergames.bukkit.towny.object.Town,int)"><code>TownySettings.getTownLevel(Town, int)</code></a> instead.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/utils/PlayerCacheUtil.html#cacheBlockErrMsg(org.bukkit.entity.Player,java.lang.String)">com.palmergames.bukkit.towny.utils.PlayerCacheUtil.cacheBlockErrMsg<wbr>(Player, String)</a></div>
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevelWithModifier(int,com.palmergames.bukkit.towny.object.Town)">com.palmergames.bukkit.towny.TownySettings.getTownLevelWithModifier<wbr>(int, Town)</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Use <a href="com/palmergames/bukkit/towny/TownySettings.html#getTownLevel(com.palmergames.bukkit.towny.object.Town,int)"><code>TownySettings.getTownLevel(Town, int)</code></a> instead.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/utils/JailUtil.html#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)">com.palmergames.bukkit.towny.utils.JailUtil.jailResident<wbr>(Resident, Jail, int, int, JailReason, CommandSender)</a></div>
+<div class="col-last even-row-color">
+<div class="block">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="com/palmergames/bukkit/towny/utils/JailUtil.html#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>JailUtil.jailResident(Resident, Jail, int, long, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/utils/JailUtil.html#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)">com.palmergames.bukkit.towny.utils.JailUtil.jailResidentWithBail<wbr>(Resident, Jail, int, int, double, JailReason, CommandSender)</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="com/palmergames/bukkit/towny/utils/JailUtil.html#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>JailUtil.jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/utils/PlayerCacheUtil.html#cacheBlockErrMsg(org.bukkit.entity.Player,java.lang.String)">com.palmergames.bukkit.towny.utils.PlayerCacheUtil.cacheBlockErrMsg<wbr>(Player, String)</a></div>
+<div class="col-last even-row-color">
 <div class="block">Unused by Towny now, use <a href="com/palmergames/bukkit/towny/object/PlayerCache.html#setBlockErrMsg(java.lang.String)"><code>PlayerCache.setBlockErrMsg(String)</code></a> instead.</div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/towny/utils/SpawnUtil.html#sendToTownySpawn(org.bukkit.entity.Player,java.lang.String%5B%5D,com.palmergames.bukkit.towny.object.TownyObject,java.lang.String,boolean,boolean,com.palmergames.bukkit.towny.object.SpawnType)">com.palmergames.bukkit.towny.utils.SpawnUtil.sendToTownySpawn<wbr>(Player, String[], TownyObject, String, boolean, boolean, SpawnType)</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/towny/utils/SpawnUtil.html#sendToTownySpawn(org.bukkit.entity.Player,java.lang.String%5B%5D,com.palmergames.bukkit.towny.object.TownyObject,java.lang.String,boolean,boolean,com.palmergames.bukkit.towny.object.SpawnType)">com.palmergames.bukkit.towny.utils.SpawnUtil.sendToTownySpawn<wbr>(Player, String[], TownyObject, String, boolean, boolean, SpawnType)</a></div>
+<div class="col-last odd-row-color">
 <div class="block">since 0.102.0.14, use <a href="com/palmergames/bukkit/towny/utils/SpawnUtil.html#sendToTownySpawn(org.bukkit.entity.Player,java.lang.String%5B%5D,com.palmergames.bukkit.towny.object.TownyObject,java.lang.String,boolean,com.palmergames.bukkit.towny.object.SpawnType)"><code>SpawnUtil.sendToTownySpawn(Player, String[], TownyObject, String, boolean, SpawnType)</code></a> instead.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="com/palmergames/bukkit/util/BukkitTools.html#getCommandMap()">com.palmergames.bukkit.util.BukkitTools.getCommandMap()</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="com/palmergames/bukkit/util/BukkitTools.html#getCommandMap()">com.palmergames.bukkit.util.BukkitTools.getCommandMap()</a></div>
+<div class="col-last even-row-color">
 <div class="block">Use <code>Server.getCommandMap()</code> instead.</div>
 </div>
 </div>

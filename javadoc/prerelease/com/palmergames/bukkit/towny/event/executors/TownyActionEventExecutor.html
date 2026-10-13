@@ -64,12 +64,15 @@ loadScripts(document, 'script');</script>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
+<li><a href="#canBuild(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" tabindex="0">canBuild(Player, Location, Material, boolean)</a></li>
 <li><a href="#canBuild(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" tabindex="0">canBuild(Player, Location, Material)</a></li>
 <li><a href="#canBuild(org.bukkit.entity.Player,org.bukkit.block.Block)" tabindex="0">canBuild(Player, Block)</a></li>
+<li><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" tabindex="0">canDestroy(Player, Location, Material, boolean)</a></li>
 <li><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" tabindex="0">canDestroy(Player, Location, Material)</a></li>
 <li><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.block.Block)" tabindex="0">canDestroy(Player, Block)</a></li>
 <li><a href="#canSwitch(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" tabindex="0">canSwitch(Player, Location, Material)</a></li>
 <li><a href="#canSwitch(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" tabindex="0">canSwitch(Player, Location, Material, boolean)</a></li>
+<li><a href="#canItemuse(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" tabindex="0">canItemuse(Player, Location, Material, boolean)</a></li>
 <li><a href="#canItemuse(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" tabindex="0">canItemuse(Player, Location, Material)</a></li>
 <li><a href="#filterExplodableBlocks(java.util.List,org.bukkit.Material,org.bukkit.entity.Entity,org.bukkit.event.Event)" tabindex="0">filterExplodableBlocks(List, Material, Entity, Event)</a></li>
 <li><a href="#canExplosionDamageEntities(org.bukkit.Location,org.bukkit.entity.Entity,org.bukkit.event.entity.EntityDamageEvent.DamageCause)" tabindex="0">canExplosionDamageEntities(Location, Entity, EntityDamageEvent.DamageCause)</a></li>
@@ -140,20 +143,36 @@ when an action is cancelled.</div>
 <div class="block">Can the player build this material at this location?</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canBurn(org.bukkit.block.Block)" class="member-name-link">canBurn</a><wbr>(org.bukkit.block.Block&nbsp;block)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canBuild(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" class="member-name-link">canBuild</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat,
+ boolean&nbsp;silent)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Test is fire can burn this block.</div>
+<div class="block">Can the player build this material at this location?</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.block.Block)" class="member-name-link">canDestroy</a><wbr>(org.bukkit.entity.Player&nbsp;player,
- org.bukkit.block.Block&nbsp;block)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canBurn(org.bukkit.block.Block)" class="member-name-link">canBurn</a><wbr>(org.bukkit.block.Block&nbsp;block)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Can the player destroy this block?</div>
+<div class="block">Test is fire can burn this block.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" class="member-name-link">canDestroy</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.block.Block)" class="member-name-link">canDestroy</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.block.Block&nbsp;block)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Can the player destroy this block?</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" class="member-name-link">canDestroy</a><wbr>(org.bukkit.entity.Player&nbsp;player,
  org.bukkit.Location&nbsp;loc,
  org.bukkit.Material&nbsp;mat)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Can the player destroy this material at this location?</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canDestroy(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" class="member-name-link">canDestroy</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat,
+ boolean&nbsp;silent)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Can the player destroy this material at this location?</div>
 </div>
@@ -172,26 +191,34 @@ when an action is cancelled.</div>
 <div class="block">Can the player use items of this material at this location?</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canSwitch(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" class="member-name-link">canSwitch</a><wbr>(org.bukkit.entity.Player&nbsp;player,
- org.bukkit.Location&nbsp;loc,
- org.bukkit.Material&nbsp;mat)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Can the player use switches of this material at this location?</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canSwitch(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" class="member-name-link">canSwitch</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canItemuse(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" class="member-name-link">canItemuse</a><wbr>(org.bukkit.entity.Player&nbsp;player,
  org.bukkit.Location&nbsp;loc,
  org.bukkit.Material&nbsp;mat,
  boolean&nbsp;silent)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Can the player use items of this material at this location?</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canSwitch(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)" class="member-name-link">canSwitch</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Can the player use switches of this material at this location?</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;org.bukkit.block.Block&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filterExplodableBlocks(java.util.List,org.bukkit.Material,org.bukkit.entity.Entity,org.bukkit.event.Event)" class="member-name-link">filterExplodableBlocks</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.bukkit.block.Block&gt;&nbsp;blockList,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canSwitch(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)" class="member-name-link">canSwitch</a><wbr>(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat,
+ boolean&nbsp;silent)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Can the player use switches of this material at this location?</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;org.bukkit.block.Block&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filterExplodableBlocks(java.util.List,org.bukkit.Material,org.bukkit.entity.Entity,org.bukkit.event.Event)" class="member-name-link">filterExplodableBlocks</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.bukkit.block.Block&gt;&nbsp;blockList,
  org.bukkit.Material&nbsp;mat,
  org.bukkit.entity.Entity&nbsp;entity,
  org.bukkit.event.Event&nbsp;bukkitExplodeEvent)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Filters out blocks which should not be exploded, from a list
 of blocks which have been caused to explode.</div>
 </div>
@@ -229,6 +256,27 @@ of blocks which have been caused to explode.</div>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="canBuild(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)">
+<h3>canBuild</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canBuild</span><wbr><span class="parameters">(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat,
+ boolean&nbsp;silent)</span></div>
+<div class="block">Can the player build this material at this location?</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>player</code> - - Player involved in the event.</dd>
+<dd><code>loc</code> - - Location of the event.</dd>
+<dd><code>mat</code> - - Material being involved in the event.</dd>
+<dd><code>silent</code> - - Whether to show an error message if disallowed.</dd>
+<dt>Returns:</dt>
+<dd>true if allowed.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="canBuild(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material)">
 <h3>canBuild</h3>
 <div class="horizontal-scroll">
@@ -258,6 +306,27 @@ of blocks which have been caused to explode.</div>
 <dt>Parameters:</dt>
 <dd><code>player</code> - Player involved in the event.</dd>
 <dd><code>block</code> - The block being built</dd>
+<dt>Returns:</dt>
+<dd>true if allowed.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="canDestroy(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)">
+<h3>canDestroy</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canDestroy</span><wbr><span class="parameters">(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat,
+ boolean&nbsp;silent)</span></div>
+<div class="block">Can the player destroy this material at this location?</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>player</code> - - Player involved in the event.</dd>
+<dd><code>loc</code> - - Location of the event.</dd>
+<dd><code>mat</code> - - Material being involved in the event.</dd>
+<dd><code>silent</code> - - Whether to show an error message if disallowed.</dd>
 <dt>Returns:</dt>
 <dd>true if allowed.</dd>
 </dl>
@@ -333,7 +402,28 @@ of blocks which have been caused to explode.</div>
 <dd><code>player</code> - - Player involved in the event.</dd>
 <dd><code>loc</code> - - Location of the event.</dd>
 <dd><code>mat</code> - - Material being involved in the event.</dd>
-<dd><code>silent</code> - Whether to show an error message.</dd>
+<dd><code>silent</code> - - Whether to show an error message if disallowed.</dd>
+<dt>Returns:</dt>
+<dd>true if allowed.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="canItemuse(org.bukkit.entity.Player,org.bukkit.Location,org.bukkit.Material,boolean)">
+<h3>canItemuse</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canItemuse</span><wbr><span class="parameters">(org.bukkit.entity.Player&nbsp;player,
+ org.bukkit.Location&nbsp;loc,
+ org.bukkit.Material&nbsp;mat,
+ boolean&nbsp;silent)</span></div>
+<div class="block">Can the player use items of this material at this location?</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>player</code> - - Player involved in the event.</dd>
+<dd><code>loc</code> - - Location of the event.</dd>
+<dd><code>mat</code> - - Material being involved in the event.</dd>
+<dd><code>silent</code> - - Whether to show an error message if disallowed.</dd>
 <dt>Returns:</dt>
 <dd>true if allowed.</dd>
 </dl>

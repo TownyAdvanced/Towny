@@ -65,13 +65,17 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" tabindex="0">jailResident(Resident, Jail, int, int, JailReason, CommandSender)</a></li>
+<li><a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" tabindex="0">jailResident(Resident, Jail, int, long, JailReason, CommandSender)</a></li>
 <li><a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" tabindex="0">jailResidentWithBail(Resident, Jail, int, int, double, JailReason, CommandSender)</a></li>
+<li><a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" tabindex="0">jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)</a></li>
 <li><a href="#showBailTitleMessage(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.Translator)" tabindex="0">showBailTitleMessage(Resident, Translator)</a></li>
+<li><a href="#removePlayerBossBar(org.bukkit.entity.Player)" tabindex="0">removePlayerBossBar(Player)</a></li>
 <li><a href="#unJailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.UnJailReason)" tabindex="0">unJailResident(Resident, UnJailReason)</a></li>
 <li><a href="#unJailResident(com.palmergames.bukkit.towny.object.Resident)" tabindex="0">unJailResident(Resident)</a></li>
 <li><a href="#createJailPlot(com.palmergames.bukkit.towny.object.TownBlock,com.palmergames.bukkit.towny.object.Town,org.bukkit.Location)" tabindex="0">createJailPlot(TownBlock, Town, Location)</a></li>
 <li><a href="#isQueuedToBeJailed(com.palmergames.bukkit.towny.object.Resident)" tabindex="0">isQueuedToBeJailed(Resident)</a></li>
 <li><a href="#maxJailedUnjail(com.palmergames.bukkit.towny.object.Town)" tabindex="0">maxJailedUnjail(Town)</a></li>
+<li><a href="#checkUnjailTimesAndIncurJailFees()" tabindex="0">checkUnjailTimesAndIncurJailFees()</a></li>
 </ol>
 </li>
 </ol>
@@ -111,43 +115,80 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createJailPlot(com.palmergames.bukkit.towny.object.TownBlock,com.palmergames.bukkit.towny.object.Town,org.bukkit.Location)" class="member-name-link">createJailPlot</a><wbr>(<a href="../object/TownBlock.html" title="class in com.palmergames.bukkit.towny.object">TownBlock</a>&nbsp;townBlock,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkUnjailTimesAndIncurJailFees()" class="member-name-link">checkUnjailTimesAndIncurJailFees</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Check if a resident has served their sentence and remove hourly jail fee from town bank if possible</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createJailPlot(com.palmergames.bukkit.towny.object.TownBlock,com.palmergames.bukkit.towny.object.Town,org.bukkit.Location)" class="member-name-link">createJailPlot</a><wbr>(<a href="../object/TownBlock.html" title="class in com.palmergames.bukkit.towny.object">TownBlock</a>&nbsp;townBlock,
  <a href="../object/Town.html" title="class in com.palmergames.bukkit.towny.object">Town</a>&nbsp;town,
  org.bukkit.Location&nbsp;location)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isQueuedToBeJailed(com.palmergames.bukkit.towny.object.Resident)" class="member-name-link">isQueuedToBeJailed</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResident</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isQueuedToBeJailed(com.palmergames.bukkit.towny.object.Resident)" class="member-name-link">isQueuedToBeJailed</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResident</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
  int&nbsp;cell,
  int&nbsp;hours,
  <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
  org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>jailResident(Resident, Jail, int, long, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResident</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+ <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
+ int&nbsp;cell,
+ long&nbsp;seconds,
+ <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
+ org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Jails a resident.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResidentWithBail</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResidentWithBail</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
  int&nbsp;cell,
  int&nbsp;hours,
  double&nbsp;bail,
  <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
  org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Jails a resident.</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#maxJailedUnjail(com.palmergames.bukkit.towny.object.Town)" class="member-name-link">maxJailedUnjail</a><wbr>(<a href="../object/Town.html" title="class in com.palmergames.bukkit.towny.object">Town</a>&nbsp;town)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)" class="member-name-link">jailResidentWithBail</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+ <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
+ int&nbsp;cell,
+ long&nbsp;seconds,
+ double&nbsp;bail,
+ <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
+ org.bukkit.command.CommandSender&nbsp;jailer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Jails a resident.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#maxJailedUnjail(com.palmergames.bukkit.towny.object.Town)" class="member-name-link">maxJailedUnjail</a><wbr>(<a href="../object/Town.html" title="class in com.palmergames.bukkit.towny.object">Town</a>&nbsp;town)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#removePlayerBossBar(org.bukkit.entity.Player)" class="member-name-link">removePlayerBossBar</a><wbr>(org.bukkit.entity.Player&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#showBailTitleMessage(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.Translator)" class="member-name-link">showBailTitleMessage</a><wbr>(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
@@ -199,10 +240,29 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)">
 <h3>jailResident</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jailResident</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="0.103.2.12")
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jailResident</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
  int&nbsp;cell,
  int&nbsp;hours,
+ <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
+ org.bukkit.command.CommandSender&nbsp;jailer)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="#jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>jailResident(Resident, Jail, int, long, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="jailResident(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)">
+<h3>jailResident</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jailResident</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+ <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
+ int&nbsp;cell,
+ long&nbsp;seconds,
  <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
  org.bukkit.command.CommandSender&nbsp;jailer)</span></div>
 <div class="block">Jails a resident.</div>
@@ -211,7 +271,7 @@ loadScripts(document, 'script');</script>
 <dd><code>resident</code> - Resident being jailed.</dd>
 <dd><code>jail</code> - Jail resident is being jailed into.</dd>
 <dd><code>cell</code> - JailCell to spawn to.</dd>
-<dd><code>hours</code> - Hours resident is jailed for.</dd>
+<dd><code>seconds</code> - Seconds resident is jailed for.</dd>
 <dd><code>reason</code> - JailReason resident is jailed for.</dd>
 <dd><code>jailer</code> - CommandSender of who did the jailing or null.</dd>
 </dl>
@@ -222,10 +282,30 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,int,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)">
 <h3>jailResidentWithBail</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jailResidentWithBail</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="0.103.2.12")
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jailResidentWithBail</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
  int&nbsp;cell,
  int&nbsp;hours,
+ double&nbsp;bail,
+ <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
+ org.bukkit.command.CommandSender&nbsp;jailer)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Jailing no longer uses hours as a sentence duration, instead use
+            <a href="#jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)"><code>jailResidentWithBail(Resident, Jail, int, long, double, JailReason, CommandSender)</code></a>
+            supplying the seconds.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="jailResidentWithBail(com.palmergames.bukkit.towny.object.Resident,com.palmergames.bukkit.towny.object.jail.Jail,int,long,double,com.palmergames.bukkit.towny.object.jail.JailReason,org.bukkit.command.CommandSender)">
+<h3>jailResidentWithBail</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jailResidentWithBail</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
+ <a href="../object/jail/Jail.html" title="class in com.palmergames.bukkit.towny.object.jail">Jail</a>&nbsp;jail,
+ int&nbsp;cell,
+ long&nbsp;seconds,
  double&nbsp;bail,
  <a href="../object/jail/JailReason.html" title="enum class in com.palmergames.bukkit.towny.object.jail">JailReason</a>&nbsp;reason,
  org.bukkit.command.CommandSender&nbsp;jailer)</span></div>
@@ -235,7 +315,7 @@ loadScripts(document, 'script');</script>
 <dd><code>resident</code> - Resident being jailed.</dd>
 <dd><code>jail</code> - Jail resident is being jailed into.</dd>
 <dd><code>cell</code> - JailCell to spawn to.</dd>
-<dd><code>hours</code> - Hours resident is jailed for.</dd>
+<dd><code>seconds</code> - Seconds resident is jailed for.</dd>
 <dd><code>bail</code> - Bail amount to be paid to unjail.</dd>
 <dd><code>reason</code> - JailReason resident is jailed for.</dd>
 <dd><code>jailer</code> - CommandSender of who did the jailing or null.</dd>
@@ -249,6 +329,14 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">showBailTitleMessage</span><wbr><span class="parameters">(<a href="../object/Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident,
  <a href="../object/Translator.html" title="class in com.palmergames.bukkit.towny.object">Translator</a>&nbsp;translator)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="removePlayerBossBar(org.bukkit.entity.Player)">
+<h3>removePlayerBossBar</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removePlayerBossBar</span><wbr><span class="parameters">(org.bukkit.entity.Player&nbsp;player)</span></div>
 </div>
 </section>
 </li>
@@ -303,6 +391,15 @@ loadScripts(document, 'script');</script>
 <h3>maxJailedUnjail</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">maxJailedUnjail</span><wbr><span class="parameters">(<a href="../object/Town.html" title="class in com.palmergames.bukkit.towny.object">Town</a>&nbsp;town)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="checkUnjailTimesAndIncurJailFees()">
+<h3>checkUnjailTimesAndIncurJailFees</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">checkUnjailTimesAndIncurJailFees</span>()</div>
+<div class="block">Check if a resident has served their sentence and remove hourly jail fee from town bank if possible</div>
 </div>
 </section>
 </li>

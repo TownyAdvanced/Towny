@@ -67,7 +67,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#parseTownBlockFromDB(java.lang.String)" tabindex="0">parseTownBlockFromDB(String)</a></li>
 <li><a href="#parseTownFromDB(java.lang.String)" tabindex="0">parseTownFromDB(String)</a></li>
 <li><a href="#parseNationFromDB(java.lang.String)" tabindex="0">parseNationFromDB(String)</a></li>
-<li><a href="#parseSpawnLocationFromDB(java.lang.String)" tabindex="0">parseSpawnLocationFromDB(String)</a></li>
+<li><a href="#parsePositionLocationFromDB(java.lang.String)" tabindex="0">parsePositionLocationFromDB(String)</a></li>
 <li><a href="#parseResidentsFromDB(java.lang.String)" tabindex="0">parseResidentsFromDB(String)</a></li>
 <li><a href="#parseTownsFromDB(java.lang.String)" tabindex="0">parseTownsFromDB(String)</a></li>
 <li><a href="#parseNationsFromDB(java.lang.String)" tabindex="0">parseNationsFromDB(String)</a></li>
@@ -179,11 +179,11 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Nation.html" title="class in com.palmergames.bukkit.towny.object">Nation</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseNationsFromDB(java.lang.String)" class="member-name-link">parseNationsFromDB</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;line)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseResidentsFromDB(java.lang.String)" class="member-name-link">parseResidentsFromDB</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;line)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @Nullable <a href="Position.html" title="class in com.palmergames.bukkit.towny.object">Position</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parsePositionLocationFromDB(java.lang.String)" class="member-name-link">parsePositionLocationFromDB</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @Nullable org.bukkit.Location</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseSpawnLocationFromDB(java.lang.String)" class="member-name-link">parseSpawnLocationFromDB</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseResidentsFromDB(java.lang.String)" class="member-name-link">parseResidentsFromDB</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;line)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="TownBlock.html" title="class in com.palmergames.bukkit.towny.object">TownBlock</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseTownBlockFromDB(java.lang.String)" class="member-name-link">parseTownBlockFromDB</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
@@ -273,11 +273,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="parseSpawnLocationFromDB(java.lang.String)">
-<h3>parseSpawnLocationFromDB</h3>
+<section class="detail" id="parsePositionLocationFromDB(java.lang.String)">
+<h3>parsePositionLocationFromDB</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@Nullable org.bukkit.Location</span>&nbsp;<span class="element-name">parseSpawnLocationFromDB</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw)</span></div>
+</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@Nullable <a href="Position.html" title="class in com.palmergames.bukkit.towny.object">Position</a></span>&nbsp;<span class="element-name">parsePositionLocationFromDB</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw)</span></div>
 </div>
 </section>
 </li>
