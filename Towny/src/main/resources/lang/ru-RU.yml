@@ -753,7 +753,6 @@ msg_you_have_undeclared_an_outlaw: '%s больше не преступник в
 msg_err_player_not_an_outlaw: 'Этот игрок не был указан в качестве преступника.'
 msg_err_outlaw_in_open_town: 'Вы не можете присоединиться к городу где вас считают преступником.'
 msg_you_are_an_outlaw_in_this_town: '&4Будьте осторожны, %s считает вас преступником. Если вы погибните здесь, то окажитесь в тюрьме.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Преступников садят на %s часов.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Стоимость вашего залога будет стоить %s.'
 msg_err_town_not_close_enough_to_nation: 'Городской блок %s недостаточно близок к городским блокоам вашей столицы, для того чтобы войти в нацию.'
 msg_nation_town_moved_their_homeblock_too_far: '%s городские блоки были слишком далеко от столичных и они были удалены из нации.'
@@ -1441,8 +1440,6 @@ msg_wilderness_use_x_in_all_worlds: 'Флаг use в диких землях %s 
 msg_regenerations_use_x_in_all_worlds: 'Регенерация %s во всех мирах.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Вы не можете использовать эту команду, поскольку вы не живёте в %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' на %s часов.'
 msg_err_this_jail_has_no_cells: 'В этой тюрьме нет камер.'
 msg_err_no_cell_found_at_this_location: 'На этой локации нет тюремных камер.'
 msg_jail_cell_set: 'Тюремная камера создана.'
@@ -1459,7 +1456,6 @@ msg_you_have_paid_bail: 'Вы заплатили тюремный залог.'
 msg_you_have_been_freed_via_jailbreak: 'Произошёл джейлбрейк, вы свободны!'
 msg_you_have_served_your_sentence_and_are_free: 'Вы отбыли свой тюремный срок и теперь свободны.'
 msg_x_has_served_their_sentence_and_is_free: '%s отбыли свой тюремный срок и теперь свободны.'
-msg_you've_been_jailed_for_x_hours: 'Вы заключены в тюрьму на %s часов.'
 msg_you_are_being_sent_to_jail: 'Вы были отправлены в тюрьму.'
 msg_err_you_cannot_remove_the_last_cell: 'Вы не можете удалить последнюю камеру в этой тюрьме, пока не будет добавлена другая камера'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Не выходите с сервера, прежде чем телепортироваться в тюрьму, иначе вы умрёте.'
@@ -1703,8 +1699,6 @@ msg_jailed_handbook_1: 'Похоже, ты попал в тюрьму по пр�
 #Jail handbook messages
 msg_jailed_handbook_2: 'Нехорошо, правда? Что-ж поделать. Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Вы заключены в тюрьму на %s часов. Отбыв своё наказание, вы выйдете на свободу.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Вы можете избежать тюрьмы, покинув свой город с помощью ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Вы не можете покинуть свой город, находясь в тюрьме.'
@@ -1900,8 +1894,6 @@ msg_plot_already_of_type: 'Этот участок уже %s вида.'
 msg_town_board_reset: '&bДоска объявлений города очищена.'
 msg_nation_board_reset: '&bДоска объявлений города очищена.'
 msg_town_has_no_jailslots: 'Городская тюрьма переполнена.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s был заключен в %s в камеру №%s на %s часов с залогом в %s игроком %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
 msg_you_have_been_jailed_your_bail_is_x: 'Вы были заключены в тюрьму, ваш залог: %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Ваш установленный залог был выше, чем максимальный: %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Ваш установленный срок был выше, чем максимальный: %s.'

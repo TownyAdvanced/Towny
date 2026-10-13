@@ -1018,8 +1018,6 @@ msg_wilderness_use_x_in_all_worlds: 'Villmarksbruk endret til %s i alle verdener
 msg_regenerations_use_x_in_all_worlds: 'Regenerering endret til %s i alle verdener.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Du kan ikke bruke den kommandoen fordi du ikke bor i %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' i %s timer.'
 msg_err_this_jail_has_no_cells: 'Dette fengslet har ingen celler.'
 msg_err_no_cell_found_at_this_location: 'Ingen fengselsceller funnet på dette stedet.'
 msg_jail_cell_set: 'Fengselscelle satt.'
@@ -1036,7 +1034,6 @@ msg_you_have_paid_bail: 'Du har betalt kausjon.'
 msg_you_have_been_freed_via_jailbreak: 'Du har rømt fra fengselet, du er fri!'
 msg_you_have_served_your_sentence_and_are_free: 'Du har sonet fengselsstraffen din og er fri.'
 msg_x_has_served_their_sentence_and_is_free: '%s har sonet fengselsstraffen og er fri.'
-msg_you've_been_jailed_for_x_hours: 'Du har blitt satt i fengsel i %s timer.'
 msg_you_are_being_sent_to_jail: 'Du har blitt satt i fengsel.'
 msg_err_you_cannot_remove_the_last_cell: 'Du kan ikke fjerne den siste fengselscellen i dette fengselet før en annen celle er lagt til'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Ikke logg ut før du blir teleportert til fengsel, det vil være dødelig.'
@@ -1263,8 +1260,6 @@ msg_jailed_handbook_1: 'Ser ut som du har blitt fengslet, for årsaken %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Dette var synd. Vel, hva kan du gjøre med det? Her er noen nyttige tips for deg mens du soner straffen.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Du har blitt fengslet i %s timer. Ved å sone straffen blir du fri.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Du kan rømme fra fengselet ved å forlate byen ved å bruke ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Mens du er fengslet vil du ikke kunne forlate byen din for å unnslippe fengselet.'
@@ -1417,4 +1412,3 @@ msg_perm_hud_plot_name: 'Tomt: '
 msg_town_level_overridden_with: 'Byen %s har fått bynivået sitt satt til %s.'
 #Added in 0.156
 msg_spawn_cost_free: 'Gratis'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s ble sendt til %s på cellenummer %s i %s timer av %s.'

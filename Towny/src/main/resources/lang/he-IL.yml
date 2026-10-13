@@ -717,7 +717,6 @@ msg_you_have_undeclared_an_outlaw: '%s כבר אינו פורע חוק בעיר 
 msg_err_player_not_an_outlaw: 'שחקן זה לא נרשם כפורע חוק.'
 msg_err_outlaw_in_open_town: 'אתה לא יכול להצטרף לעיר פתוחה שהגדירה אותך כפורע חוק.'
 msg_you_are_an_outlaw_in_this_town: '&4היזהר, %s מחשיבים אותך כפורע חוק, מוות פה יכול להוביל לכלא.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4פורעי חוק נכלאים למשך %s שעות.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'הערבות שלך תעלה %s.'
 msg_err_town_not_close_enough_to_nation: 'הבלוק הביתי של %s אינו קרוב מספיק לבלוק הביתי של עיר הבירה שלך כדי להצטרף לאומה שלך.'
 msg_nation_town_moved_their_homeblock_too_far: 'הבלוק הביתי של %s הועבר רחוק מדי מבלוק הביתי של עיר הבירה של האומה שלך, ולכן הוסר מהאומה שלך.'
@@ -1400,8 +1399,6 @@ msg_wilderness_use_x_in_all_worlds: 'השימוש בשטח הפרא הוגדר �
 msg_regenerations_use_x_in_all_worlds: 'מצב התחדשות הינו %s בכל העולמות.'
 #Added in 0.106
 msg_command_outsider_blocked: 'אתה לא יכול להשתמש בפקודה זאת בגלל שאתה לא גר ב - %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' בשביל %s שעות.'
 msg_err_this_jail_has_no_cells: 'לכלא זה אין תאים.'
 msg_err_no_cell_found_at_this_location: 'לא נמצא תא בית כלא במיקום זה.'
 msg_jail_cell_set: 'תא כלא נקבע.'
@@ -1418,7 +1415,6 @@ msg_you_have_paid_bail: 'שילמת ערבות.'
 msg_you_have_been_freed_via_jailbreak: 'הייתה פריצה לכלא, אתה חופשי!'
 msg_you_have_served_your_sentence_and_are_free: 'תם זמן המאסר שלך ושוחררת.'
 msg_x_has_served_their_sentence_and_is_free: 'תם זמן המאסר של %s והוא שוחרר.'
-msg_you've_been_jailed_for_x_hours: 'נכלאת למשך %s שעות.'
 msg_you_are_being_sent_to_jail: 'אתה נשלח לכלא.'
 msg_err_you_cannot_remove_the_last_cell: 'אתה לא יכול למחוק את תא הכלא האחרון בכלא זה לפני שתוסיף תא אחר'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'אל תנתק לפני שהשתגרת לבית הכלא, זה יוביל למוות.'
@@ -1658,8 +1654,6 @@ msg_jailed_handbook_1: 'נראה שנכלאת, מסיבה: %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'זה חבל, נכון? ובכן, מה אפשר לעשות בעניין? הנה כמה טיפים שימושיים עבורך בזמן שאתה משרת את עונשך.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'נכלאת למשך %s שעות. ביצוע העונש ישחרר אותך.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'אתה יכול לברוח מהכלא על ידי עזיבת העיר שלך באמצעות ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'בזמן שאתה בכלא, לא תוכל לעזוב את העיר כדי לברוח.'
@@ -1855,8 +1849,6 @@ msg_plot_already_of_type: 'מגרש זה כבר מסוג %s.'
 msg_town_board_reset: '&bלוח העיר אופס.'
 msg_nation_board_reset: '&bלוח האומה אופס.'
 msg_town_has_no_jailslots: 'הכלא של העיר מלא.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s נשלח ל-%s לתא מספר %s למשך %s שעות עם ערבות של %s על ידי %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: 'השחקן %1$s נשלח ל - %2$s לתא מספר %3$s למשך %4$s שעות על ידי %5$s.'
 msg_you_have_been_jailed_your_bail_is_x: 'אתה נכלאת, הערבות שלך הוא %s.'
 msg_err_higher_than_max_allowed_bail_x: 'הערבות שהגדרת הייתה גבוהה מהמקסימום, שהוא %s.'
 msg_err_higher_than_max_allowed_hours_x: 'שעות המאסר שהגדרת היו גבוהות מהמקסימום, שהוא %s.'

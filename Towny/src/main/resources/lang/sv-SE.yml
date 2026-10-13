@@ -1026,8 +1026,6 @@ msg_wilderness_use_x_in_all_worlds: 'Vildmarksanvändning sattes till %s i alla 
 msg_regenerations_use_x_in_all_worlds: 'Regenerationer sattes till %s i alla världar.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Du kan inte köra det kommandot eftersom du inte bor i %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' i %s timmar.'
 msg_err_this_jail_has_no_cells: 'Detta fängelse har inga celler.'
 msg_err_no_cell_found_at_this_location: 'Ingen fängelsecell hittades på denna plats.'
 msg_jail_cell_set: 'Fängelsecell inrättad.'
@@ -1044,7 +1042,6 @@ msg_you_have_paid_bail: 'Du har betalat borgen.'
 msg_you_have_been_freed_via_jailbreak: 'Det har varit en fängelserymning, du är fri!'
 msg_you_have_served_your_sentence_and_are_free: 'Du har avtjänat ditt fängelsestraff och är fri.'
 msg_x_has_served_their_sentence_and_is_free: '%s har avtjänat sitt fängelsestraff och är fri.'
-msg_you've_been_jailed_for_x_hours: 'Du har fängslats i %s timmar.'
 msg_you_are_being_sent_to_jail: 'Du skickas till fängelse.'
 msg_err_you_cannot_remove_the_last_cell: 'Du kan inte ta bort den sista fängelsecellen i detta fängelse, tills en annan cell läggs till'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Logga inte ut innan du teleporteras till fängelset, det skulle vara ödesdigert.'
@@ -1271,8 +1268,6 @@ msg_jailed_handbook_1: 'Ser ut som om du har blivit fängslad, av anledningen %s
 #Jail handbook messages
 msg_jailed_handbook_2: 'Det var väl typiskt. Ja, vad kan du göra åt det? Här är några användbara tips för dig medan du sitter av ditt straff.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Du har fängslats i %s timmar. Genom att avtjäna din dom blir du fri.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Du kan fly från fängelse genom att lämna din stad genom att använda /lämna staden''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Medan du är fängslad kommer du inte att kunna lämna din stad för att fly fängelse.'
@@ -1386,4 +1381,3 @@ msg_err_no_pages_to_display: 'Inga sidor att visa!'
 msg_err_nation_unaffiliated: 'Den nationen är inte kopplad till dig.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Den staden är inte kopplad till dig.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s har skickats till %s till cell nummer %s i %s timmar av %s.'
