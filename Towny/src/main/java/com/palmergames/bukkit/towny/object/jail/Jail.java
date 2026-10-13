@@ -184,9 +184,9 @@ public class Jail extends Loadable implements Savable {
 		if (line != null) {
 			String[] jails = line.split(";");
 			for (String spawn : jails) {
-				Location loc = parseSpawnLocationFromDB(spawn);
-				if (loc != null)
-					addJailCell(loc);
+				Position pos = parsePositionLocationFromDB(spawn);
+				if (pos != null)
+					addJailCell(pos);
 			}
 			if (getJailCellLocations().isEmpty()) {
 				TownyMessaging.sendErrorMsg("Jail " + getUUID() + " loaded with zero spawns " + line + " deleting ");

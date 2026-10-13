@@ -736,9 +736,9 @@ public class Nation extends Government {
 
 			line = dataAsMap.get("nationSpawn");
 			if (hasData(line)) {
-				Location loc = parseSpawnLocationFromDB(line);
-				if (loc != null)
-					setSpawn(loc);
+				Position pos = parsePositionLocationFromDB(line);
+				if (pos != null)
+					spawnPosition(pos);
 			}
 
 			line = dataAsMap.get("metadata");

@@ -1826,17 +1826,17 @@ public class Town extends Government implements TownBlockOwner {
 			
 			line = dataAsMap.get("spawn");
 			if (hasData(line)) {
-				Location loc = parseSpawnLocationFromDB(line);
-				if (loc != null)
-					setSpawn(loc);
+				Position pos = parsePositionLocationFromDB(line);
+				if (pos != null)
+					spawnPosition(pos);
 			}
 			line = dataAsMap.get(dataAsMap.containsKey("outpostspawns") ? "outpostspawns" : "outpostSpawns"); // Old FF DB's used outpostspawns
 			if (hasData(line)) {
 				String[] outposts = line.split(";");
 				for (String spawn : outposts) {
-					Location loc = parseSpawnLocationFromDB(spawn);
-					if (loc != null)
-						forceAddOutpostSpawn(Position.ofLocation(loc));
+					Position pos = parsePositionLocationFromDB(spawn);
+					if (pos != null)
+						forceAddOutpostSpawn(pos);
 				}
 			}
 			line = dataAsMap.get("outlaws");
