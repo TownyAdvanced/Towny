@@ -1023,8 +1023,6 @@ msg_wilderness_use_x_in_all_worlds: 'Penggunaan alam liar menjadi %s di semua du
 msg_regenerations_use_x_in_all_worlds: 'Regenerasi menjadi %s di semua dunia.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Anda tidak dapat menjalankan perintah tersebut karena Anda tidak tinggal di %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' untuk %s jam.'
 msg_err_this_jail_has_no_cells: 'Penjara ini tidak memiliki sel.'
 msg_err_no_cell_found_at_this_location: 'Tidak ada sel penjara ditemukan di lokasi ini.'
 msg_jail_cell_set: 'Memasang sel penjara.'
@@ -1041,7 +1039,6 @@ msg_you_have_paid_bail: 'Anda telah membayar jaminan.'
 msg_you_have_been_freed_via_jailbreak: 'Terjadi pembobolan penjara, Anda bebas!'
 msg_you_have_served_your_sentence_and_are_free: 'Anda telah menyelesaikan masa hukuman penjara dan bebas.'
 msg_x_has_served_their_sentence_and_is_free: '%s telah menjalani masa hukuman penjara dan kini bebas.'
-msg_you've_been_jailed_for_x_hours: 'Anda telah dipenjara selama %s jam.'
 msg_you_are_being_sent_to_jail: 'Anda telah dikirim ke penjara.'
 msg_err_you_cannot_remove_the_last_cell: 'Anda tidak dapat menghapus sel penjara terakhir dengan penjara ini, hingga sel lainnya ditambahkan'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Jangan keluar sebelum diteleportasi ke penjara, akibatnya bisa fatal.'
@@ -1268,8 +1265,6 @@ msg_jailed_handbook_1: 'Sepertinya kamu telah dipenjara, untuk alasan %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Sayang sekali ya. Yah, mau bagaimana lagi? Berikut ini beberapa tips bermanfaat untukmu selagi kamu menjalani hukumanmu.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Kamu telah dipenjara selama %s jam. Kamu akan dibebaskan dengan cara menjalani hukumanmu.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Kamu dapat melarikan diri dari penjara dengan meninggalkan kotamu menggunakan ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Selagi kamu dipenjara kamu tidak akan bisa meninggalkan kotamu untuk kabur dari penjara.'
@@ -1448,8 +1443,6 @@ msg_spawn_cost_free: 'Kosong'
 msg_plot_already_of_type: 'Lahan ini sudah berjenis %s.'
 msg_town_board_reset: '&bPengaturan ulang dewan kota.'
 msg_town_has_no_jailslots: 'Penjara kota penuh.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s telah masuk ke %s ke sel nomor %s selama %s jam dengan jaminan berupa %s oleh %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s telah dikirim ke %s ke sel nomor %s selama %s jam oleh %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'Kamu telah dipenjara, jaminanmu adalah %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Jaminan yang kamu pasang lebih tinggi dari pada maksimumnya, yaitu %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Jam yang kamu pasang lebih tinggi dari pada maksimumnya, yaitu %s.'
