@@ -221,7 +221,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("isNPC", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("jailUUID", "VARCHAR(36) DEFAULT NULL"));
 		columns.add(new ColumnData("jailCell", "mediumint"));
-		columns.add(new ColumnData("jailHours", "mediumint"));
+		columns.add(new ColumnData("jailUntil", "BIGINT DEFAULT NULL"));
 		columns.add(new ColumnData("jailBail", "float DEFAULT NULL"));
 		columns.add(new ColumnData("title", "mediumtext"));
 		columns.add(new ColumnData("surname", "mediumtext"));

@@ -209,6 +209,9 @@ public class TownyPlayerListener implements Listener {
 			
 			if (JailUtil.isQueuedToBeJailed(resident))
 				event.getPlayer().setHealth(0);
+			if (resident.isJailed()) {
+				JailUtil.removePlayerBossBar(event.getPlayer());
+			}
 		}
 
 		ChunkNotificationUtil.cancelPlayerTasks(event.getPlayer());

@@ -287,7 +287,7 @@ public class TownyEntityMonitorListener implements Listener {
 			return;
 
 		// Send to jail.
-		JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 1, TownySettings.getJailedOutlawJailHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
+		JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 1, TownySettings.getJailedOutlawJailSeconds(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
 	}
 
 	private boolean hasJailingNode(Resident attackerResident) {
