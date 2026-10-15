@@ -27,15 +27,10 @@ public abstract class Loadable {
 
 	protected TownBlock parseTownBlockFromDB(String input) throws NumberFormatException, NotRegisteredException {
 		String[] tokens = input.split(getSplitter(input));
-		final World world = parseWorld(tokens[0]);
-		String worldName = tokens[0];
+		String worldName = parseWorldName(tokens[0]);
 
-		if (world == null) {
-			if (!TownyUniverse.getInstance().hasTownyWorld(worldName))
-				throw new NotRegisteredException("TownBlock tried to load an invalid world! World name: " + worldName);
-		} else {
-			worldName = world.getName();
-		}
+		if (!TownyUniverse.getInstance().hasTownyWorld(worldName))
+			throw new NotRegisteredException("TownBlock tried to load an invalid world! World name: " + worldName);
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		return universe.getTownBlock(new WorldCoord(worldName, Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
@@ -54,9 +49,25 @@ public abstract class Loadable {
 		}
 
 		if (world == null) {
-			world = TownyAPI.getInstance().getTownyWorld(keyOrName).getBukkitWorld(); // Last ditch fall back attempt.
+			world = TownyAPI.getInstance().getTownyWorld(keyOrName.contains(":") ? keyOrName.split(":")[1] : keyOrName).getBukkitWorld(); // Last ditch fall back attempt.
 		}
 		return world;
+	}
+
+	private String parseWorldName(final String keyOrName) {
+		NamespacedKey worldKey = NamespacedKey.fromString(keyOrName);
+		World world = null;
+
+		if (worldKey != null) {
+			world = Bukkit.getWorld(worldKey);
+		}
+
+		if (world == null) {
+			world = Bukkit.getWorld(keyOrName); // Legacy worlds used Name instead of Key.
+		}
+
+		return world != null ? world.getName()
+			: TownyAPI.getInstance().getTownyWorld(keyOrName.contains(":") ? keyOrName.split(":")[1] : keyOrName).getName(); // Last ditch fall back attempt.
 	}
 
 	@Nullable
@@ -96,7 +107,7 @@ public abstract class Loadable {
 		String[] tokens = raw.split(getSplitter(raw));
 		if (tokens.length >= 4)
 			try {
-				final TownyWorld world = TownyUniverse.getInstance().getWorld(tokens[0]);
+				final TownyWorld world = TownyUniverse.getInstance().getWorld(parseWorldName(tokens[0]));
 				if (world == null) {
 					return null;
 				}

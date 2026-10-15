@@ -11110,3 +11110,6 @@ c
       - When this and jail.show_bail_command_in_title_message are enabled, the title message is displayed permanently to residents.
       - If this is false and jail.show_bail_command_in_title_message is enabled, the title message is only displayed for 10 seconds.
   - API: Add methods to check if players can build, destroy and itemuse silently, courtesy of whimxiqal with PR #8325. (First-Time Contributor!)
+0.103.2.13:
+  - Fix loading fo spawn points and homeblocks on servers using namespacedkey'd worlds.
+    - Closes #8326.
