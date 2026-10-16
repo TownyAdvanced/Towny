@@ -26,6 +26,8 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists DYEABLE = newBuilder().add("sheep", "wolf", "cat").build();
 	
+	public static final EntityLists SHEARABLE = newBuilder().add("sheep", "copper_golem", "bogged", "mooshroom", "snow_golem", "sulfur_cube").build();
+	
 	public static final EntityLists SWITCH_PROTECTED = newBuilder().add("chest_minecart", "furnace_minecart", "hopper_minecart", "chest_boat").build();
 	
 	public static final EntityLists RIGHT_CLICK_PROTECTED = newBuilder().add("tropical_fish", "salmon", "cod", "item_frame", "glow_item_frame", "painting", "leash_knot", "command_block_minecart", "tnt_minecart", "spawner_minecart", "tadpole", "axolotl", "copper_golem", "interaction").build();
