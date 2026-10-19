@@ -1458,6 +1458,7 @@ msg_you_have_paid_bail: '你已支付保释金。'
 msg_you_have_been_freed_via_jailbreak: '监狱发生了劫狱事件，你自由了！'
 msg_you_have_served_your_sentence_and_are_free: '你已刑满释放。'
 msg_x_has_served_their_sentence_and_is_free: '%s已刑满释放。'
+msg_you've_been_jailed_for_x_duration: '你已被监禁了%s。'
 msg_you_are_being_sent_to_jail: '你将被送入监狱。'
 msg_err_you_cannot_remove_the_last_cell: '在添加另一个牢房之前，您不能移除此监狱中的最后一个牢房。'
 msg_do_not_log_out_while_waiting_to_be_teleported: '传送至监狱前请不要登出，这样做是致命的。'
@@ -2205,3 +2206,4 @@ msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
 msg_err_no_ruined_town_here: "当你不是居民时，你必须站在城镇废墟里才能重新声明它。"
+msg_err_cannot_list_outposts_because_town_ruined: "你不能检查这个城镇的前哨，因为该镇已沦为废墟。"
