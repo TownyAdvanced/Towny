@@ -328,7 +328,7 @@ ta_nationmeta_help_1: "Ver los metadatos almacenados en la nación que especifiq
 ta_nationmeta_help_2: "Establecer clave y valor de metadatos de la nación."
 ta_nationmeta_help_3: "Agrega o elimina un metadata por clave de la nación."
 ta_reload_help_0: "Recargar la base de datos."
-ta_reload_help_1: "Rcargar config."
+ta_reload_help_1: "Recargar configuración."
 ta_reload_help_2: "Recargar archivos de idioma."
 ta_reload_help_3: "Recargar los permisos de Towny."
 ta_reload_help_4: "Recarga todos los componentes de Towny."
@@ -569,7 +569,6 @@ msg_new_mayor: '&b%s es ahora el alcalde!'
 msg_new_nation: '&b%s creó un nuevo país llamado %s'
 msg_new_town: '&b%s creó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b%s puso la parcela (%s) a la venta!'
-msg_plot_for_sale_amount: '&b%s pon la parcela (%s) a la venta por %s!'
 msg_plot_set_type: '&bTipo de parcela cambiado a %s'
 msg_cache_block_error: '&cNo fuiste registrado en Towny. Prueba a entrar nuevamente.'
 msg_cache_block_error_wild: '&cEn salvaje no tenes permiso para: %s'
@@ -877,7 +876,7 @@ owner_of_x_plots: 'Propietario de %s lotes.'
 status_bank: 'Banco:'
 status_town: 'Población:'
 status_no_town: 'Ninguna'
-status_town_ranks: 'Ranking de Poblaciones:'
+status_town_ranks: 'Ranking de Ciudades:'
 status_nation_ranks: 'Ranking de Naciones:'
 jailed_in_town: ' en la Población: %s'
 status_friends: 'Amigos'
@@ -888,7 +887,6 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Abierto)'
 status_town_board: 'Anuncios:'
 status_founded: 'Fundado:'
-status_founded_by: 'Encontrado por:'
 status_town_size: 'Tamaño de la Población:'
 status_town_size_bought: 'Comprado:'
 status_town_size_bonus: 'Bonificación:'
