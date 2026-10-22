@@ -709,7 +709,6 @@ msg_you_have_undeclared_an_outlaw: '%s nebėra nepageidaujamas mieste pavadinimu
 msg_err_player_not_an_outlaw: 'Tas žaidėjas nebuvo paskelbtas nepageidaujamu.'
 msg_err_outlaw_in_open_town: 'Jūs negalite prisijungti prie atviro miesto, kuris Jus yra paskelbęs nepageidaujamu.'
 msg_you_are_an_outlaw_in_this_town: '&4Būkite atsargus, %s laiko Jus nepageidaujamu, todėl žūtis šiame mieste galėtų reikšti kalėjimą.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Nepageidaujami asmenys yra kalinami %s valandoms.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Jūsų užstatas kainuotų %s.'
 msg_err_town_not_close_enough_to_nation: '%s pagrindinis miesto blokas yra nepakankamai arti Jūsų sostinės pagrindinio sklypo, kad galėtų prisijungti prie Jūsų valstybės.'
 msg_nation_town_moved_their_homeblock_too_far: '%s pagrindinis miesto blokas buvo perkeltas pernelyg toli nuo Jūsų valstybės sostinės pagrindinio sklypo ir buvo išmestas iš Jūsų valstybės.'
@@ -1372,8 +1371,6 @@ msg_command_limited: 'Jūs galite naudoti šią komandą tik savo sklypuose.'
 msg_plot_perm_claimed_at: 'Užimta:'
 #Added in 0.106
 msg_command_outsider_blocked: 'Jūs negalite įvykdyti šios komandos, nes Jūs negyvenate %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' %s valandoms.'
 msg_err_this_jail_has_no_cells: 'Šis kalėjimas neturi kamerų.'
 msg_err_no_cell_found_at_this_location: 'Šioje vietoje nepavyko rasti kalėjimo kameros.'
 msg_jail_cell_set: 'Kalėjimo kamera nustatyta.'
@@ -1388,7 +1385,6 @@ msg_err_player_is_not_jailed: 'Tas žaidėjas nėra įkalintas.'
 msg_you_have_paid_bail: 'Jūs sumokėjote užstatą.'
 msg_you_have_served_your_sentence_and_are_free: 'Jūs atlikote savo laisvės atėmimo bausmę ir dabar esate laisvas.'
 msg_x_has_served_their_sentence_and_is_free: '%s atliko savo laisvės atėmimo bausmę ir dabar yra laisvas.'
-msg_you've_been_jailed_for_x_hours: 'Jūs buvote įkalintas %s valandoms.'
 msg_you_are_being_sent_to_jail: 'Jūs esate siunčiamas į kalėjimą.'
 msg_err_you_cannot_remove_the_last_cell: 'Jūs negalite panaikinti paskutinės kameros šiame kalėjime, kol nepridėjote kitos'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Neatsijunkite prieš nusiunčiant Jus į kalėjimą, tai būtų pražūtinga.'
@@ -1558,8 +1554,6 @@ msg_jailed_war: 'Karo belaisvis.'
 msg_jailed_handbook_1: 'Panašu, kad buvote įkalintas dėl %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Visai nepasisekė, a. Ir ką gi dabar galėtumėte dėl to padaryti? Štai keletas naudingų patarimų Jums, kol atliekate savo bausmę.'
-#Jail handbook messages
-msg_jailed_handbook_3: 'Jūs buvote įkalintas %s valandoms. Atlikęs savo bausmę vėl būsite laisvas.'
 #Jail handbook messages
 msg_jailed_handbook_4_can: 'Jūa galite pabėgti iš kalėjimo palikdami miestą, panaudoję "/town leave".'
 #Jail handbook messages

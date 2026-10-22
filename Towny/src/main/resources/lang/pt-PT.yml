@@ -1008,8 +1008,6 @@ msg_wilderness_use_x_in_all_worlds: 'O uso da selva virou %s em todos os mundos.
 msg_regenerations_use_x_in_all_worlds: 'As regenerações viraram %s em todos os mundos.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Você não pode executar esse comando porque você não mora em %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' por %s horas.'
 msg_err_this_jail_has_no_cells: 'Esta prisão não tem células.'
 msg_err_no_cell_found_at_this_location: 'Nenhuma cela de prisão encontrada neste local.'
 msg_jail_cell_set: 'Conjunto de cela de prisão.'
@@ -1026,7 +1024,6 @@ msg_you_have_paid_bail: 'Você pagou fiança.'
 msg_you_have_been_freed_via_jailbreak: 'Houve uma fuga de presos, você está livre!'
 msg_you_have_served_your_sentence_and_are_free: 'Você cumpriu sua pena de prisão e está livre.'
 msg_x_has_served_their_sentence_and_is_free: '%s cumpriu a pena de prisão e está livre.'
-msg_you've_been_jailed_for_x_hours: 'Você está preso há %s horas.'
 msg_you_are_being_sent_to_jail: 'Estás a ser preso.'
 msg_err_you_cannot_remove_the_last_cell: 'Você não pode remover a última célula de prisão nesta prisão, até que outra célula seja adicionada'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Não saia antes de ser teletransportado para a prisão, seria fatal.'
@@ -1206,4 +1203,3 @@ msg_admin_blocked_login: '&2 Um jogador de endereço de IP &c%s &2tentou iniciar
 msg_scanning_for_old_residents: 'À procura de antigos habitantes...'
 #Jail handbook messages
 msg_jailed_teleport: 'Felizmente, pérolas do ender e frutas do coro são permitidas para te ajudarem a escapar, agora só tens de conseguir algumas.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s foi enviado para %s no número de celular %s por %s horas por %s.'
