@@ -33,7 +33,7 @@ public class DevmodeResidentMode extends OptionResidentMode<Set<Player>> {
 	}
 
 	@Override
-	protected void toggle(Resident resident, String... options) {
+	protected void toggle(Resident resident, @NotNull String... options) {
 		if (ResidentModeHandler.hasMode(resident, this) && options.length == 0) {
 			Set<Player> targets = getOption(resident);
 			if (!targets.isEmpty()) {
