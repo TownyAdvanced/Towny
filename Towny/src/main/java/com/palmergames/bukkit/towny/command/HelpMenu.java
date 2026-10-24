@@ -278,7 +278,6 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin toggle")
 				.add("wildernessuse", Translatable.of("ta_toggle_help_0"))
 				.add("regenerations", Translatable.of("ta_toggle_help_1"))
-				.add("devmode", Translatable.of("ta_toggle_help_2"))
 				.add("debug", Translatable.of("ta_toggle_help_3"))
 				.add("townwithdraw/nationwithdraw", Translatable.of("ta_toggle_help_4"))
 				.add("npc [resident]", Translatable.of("ta_toggle_help_5"));
