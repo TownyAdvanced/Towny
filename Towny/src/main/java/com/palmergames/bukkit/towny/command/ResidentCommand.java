@@ -164,7 +164,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase(Locale.ROOT))) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					} else if (args.length >= 3 && player.hasPermission(PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode())) {
-						return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getResidents()), args[args.length - 1]);
+						return getTownyStartingWith(args[args.length - 1], "r");
 					}
 					break;
 				case "set":
