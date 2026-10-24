@@ -163,6 +163,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentCompleteToggleChoices), args[1]);
 					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase(Locale.ROOT))) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+					} else if (args.length >= 3 && player.hasPermission(PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode())) {
+						return NameUtil.filterByStart(NameUtil.getNames(TownyUniverse.getInstance().getResidents()), args[args.length - 1]);
 					}
 					break;
 				case "set":
@@ -453,7 +455,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).execute(player, "resident", newSplit);
 			return;
 		} else {
-			ResidentModeHandler.toggleMode(resident, newSplit[0].toLowerCase(Locale.ROOT), true);
+			ResidentModeHandler.toggleMode(resident, newSplit[0].toLowerCase(Locale.ROOT), StringMgmt.remFirstArg(newSplit), true);
 			return;
 
 		}

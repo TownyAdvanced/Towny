@@ -1242,8 +1242,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public synchronized boolean saveTownBlock(TownBlock townBlock) {
 
-		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x"
-				+ townBlock.getZ());
+		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorldCoord().toString());
 		try {
 			updateDB("TOWNBLOCKS", townBlock.getObjectDataMap(context), Arrays.asList("world", "x", "z"));
 			return true;

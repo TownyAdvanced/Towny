@@ -2393,21 +2393,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE_PERMANENT);
 	}
 
-	public static boolean isDevMode() {
-
-		return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);
-	}
-
-	public static void setDevMode(boolean choice) {
-
-		setProperty(ConfigNodes.PLUGIN_DEV_MODE_ENABLE.getRoot(), choice);
-	}
-
-	public static String getDevName() {
-
-		return getString(ConfigNodes.PLUGIN_DEV_MODE_DEV_NAME);
-	}
-
 	public static double getTownUpkeepCost(Town town) {
 		if (!TownySettings.isTaxingDaily())
 			return 0.0;

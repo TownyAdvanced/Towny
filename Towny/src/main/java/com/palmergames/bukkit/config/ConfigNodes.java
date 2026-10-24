@@ -1762,13 +1762,6 @@ public enum ConfigNodes {
 			"BRICK",
 			"",
 			"# Info tool for server admins to use to query in game blocks and entities."),
-	PLUGIN_DEV_MODE(
-			"plugin.dev_mode",
-			"",
-			"",
-			"# Spams the player named in dev_name with all messages related to towny."),
-	PLUGIN_DEV_MODE_ENABLE("plugin.dev_mode.enable", "false"),
-	PLUGIN_DEV_MODE_DEV_NAME("plugin.dev_mode.dev_name", "LlmDl"),
 	PLUGIN_RESET_LOG_ON_BOOT(
 			"plugin.reset_log_on_boot",
 			"true",
