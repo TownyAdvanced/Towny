@@ -40,32 +40,33 @@ public class DevmodeResidentMode extends OptionResidentMode<Set<Player>> {
 				clearOptions(resident);
 			}
 			ResidentModeHandler.removeMode(resident, this);
-		} else {
-			List<Player> newTargets = Arrays.stream(options)
-				.map(playerName -> {
-					Player player = BukkitTools.getPlayerExact(playerName);
-					if (player == null) {
-						TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_resident_unknown", playerName));
-					}
-					return player;
-				})
-				.filter(Objects::nonNull)
-				.toList();
-			if (!newTargets.isEmpty()) {
-				Set<Player> targets = getOption(resident);
-				for (Player newTarget : newTargets) {
-					if (!targets.add(newTarget))
-						// newTarget is already in list and wants to be removed
-						targets.remove(newTarget);
+			return;
+		}
+
+		List<Player> newTargets = Arrays.stream(options)
+			.map(playerName -> {
+				Player player = BukkitTools.getPlayerExact(playerName);
+				if (player == null) {
+					TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_resident_unknown", playerName));
 				}
-				setOption(resident, targets);
+				return player;
+			})
+			.filter(Objects::nonNull)
+			.toList();
+		if (!newTargets.isEmpty()) {
+			Set<Player> targets = getOption(resident);
+			for (Player newTarget : newTargets) {
+				if (!targets.add(newTarget))
+					// newTarget is already in list and wants to be removed
+					targets.remove(newTarget);
 			}
-			if (ResidentModeHandler.hasMode(resident, this) && getOption(resident).isEmpty()) {
-				// Turn off devmode as player has removed all debug target players
-				ResidentModeHandler.removeMode(resident, this);
-			} else {
-				ResidentModeHandler.addMode(resident, this);
-			}
+			setOption(resident, targets);
+		}
+		if (ResidentModeHandler.hasMode(resident, this) && getOption(resident).isEmpty()) {
+			// Turn off devmode as player has removed all debug target players
+			ResidentModeHandler.removeMode(resident, this);
+		} else {
+			ResidentModeHandler.addMode(resident, this);
 		}
 	}
 }
