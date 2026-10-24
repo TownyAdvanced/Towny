@@ -65,8 +65,9 @@ public class DevmodeResidentMode extends OptionResidentMode<Set<Player>> {
 		if (ResidentModeHandler.hasMode(resident, this) && getOption(resident).isEmpty()) {
 			// Turn off devmode as player has removed all debug target players
 			ResidentModeHandler.removeMode(resident, this);
-		} else {
-			ResidentModeHandler.addMode(resident, this);
+			return;
 		}
+
+		ResidentModeHandler.addMode(resident, this);
 	}
 }
