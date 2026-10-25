@@ -11,7 +11,6 @@ import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.LinearComponents;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
@@ -74,12 +73,13 @@ public class Translatable {
 		StringBuilder converted = new StringBuilder();
 
 		for (Object object : this.appended) {
-			if (object instanceof String string)
+			if (object instanceof String string) {
 				converted.append(string);
-			else if (object instanceof Translatable translatable)
+			} else if (object instanceof Translatable translatable) {
 				converted.append(translatable.locale(this.locale).translate());
-			else if (object instanceof Component component)
-				converted.append(TownyComponents.toLegacy(component));
+			} else if (object instanceof Component component) {
+				converted.append(TownyComponents.toMiniMessage(component));
+			}
 		}
 
 		return converted.toString();
@@ -215,7 +215,7 @@ public class Translatable {
 			if (args[i] instanceof Translatable translatable) {
 				args[i] = translatable.locale(locale).translate();
 			} else if (args[i] instanceof Component component) {
-				args[i] = MiniMessage.miniMessage().serialize(component);
+				args[i] = TownyComponents.toMiniMessage(component);
 			}
 		}
 	}
