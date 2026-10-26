@@ -11113,3 +11113,20 @@ c
 0.103.2.13:
   - Fix loading fo spawn points and homeblocks on servers using namespacedkey'd worlds.
     - Closes #8326.
+0.103.2.14:
+  - Add shearing protection for Mooshrooms, Bogged, Copper Golems, Snow Golems and Sulfur Cubes, courtesy of Oribuin with PR #8327 (First-Time Contributor!)
+  - Overhaul devmode as a resident mode, courtesy of SulkyWhale with PR #8328.
+    - The old system that relied on a developer name in the towny config.yml, and /ta toggle devmode command has been replaced.
+    - Now requiring a permission node "towny.command.townyadmin.toggle.devmode", anyone with this node will be able to use /res toggle devmode {playername}.
+  - Added Commands:
+    - /res toggle devmode {resident} .. {resident}
+      - Turns on and off devmode, when supplied with a list of residents, the devmode-user will only see global dev messages and messages corresponding to the given residents.
+    - /res set mode devmode
+      - Turns on and off devmode.
+  - Removed command: /ta toggle devmode
+  - Removed config options:
+    - plugin.dev_mode
+    - plugin.dev_mode.enable
+    - plugin.dev_mode.dev_name
+  - Preserve components in translatable args/appended, courtesy of Warriorrr with PR #8330.
+  - Fix saving exception when a town is deleted, courtesy of Warriorrr with PR #8331.
