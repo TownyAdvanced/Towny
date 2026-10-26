@@ -27,17 +27,19 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.jetbrains.annotations.Unmodifiable;
 
 public class ResidentModeHandler {
 
-	private static Map<String, AbstractResidentMode> modes = new ConcurrentHashMap<>();
-	private static Map<Resident, Set<AbstractResidentMode>> residentModesMap = new ConcurrentHashMap<>();
+	private static final Map<String, AbstractResidentMode> modes = new ConcurrentHashMap<>();
+	private static final Map<Resident, Set<AbstractResidentMode>> residentModesMap = new ConcurrentHashMap<>();
 
 	public static void initialize() {
 		modes.clear();
 		residentModesMap.clear();
 
 		addMode(new GenericResidentMode("adminbypass", "")); // No permission so that admins can toggle it when they don't have admin powers.
+		addMode(new DevmodeResidentMode("devmode", PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode()));
 		addMode(new GenericResidentMode("bedspawn", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BEDSPAWN.getNode()));
 		addMode(new GenericResidentMode("bordertitles", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES.getNode()));
 		addMode(new GenericResidentMode("ignoreinvites", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREINVITES.getNode()));
@@ -164,21 +166,36 @@ public class ResidentModeHandler {
 	}
 
 	/**
+	 * Will attempt to toggle on or off, a named mode on a Player.
+	 *
+	 * @param resident Resident to toggle a mode on.
+	 * @param name     the String name of the {@link AbstractResidentMode} to toggle.
+	 * @param notify   whether to notify the Player of their mode changing.
+	 * @throws TownyException thrown when a mode doesn't exist, the Player does not
+	 *                        have permisson, or when the ResidentToggleModeEvent is
+	 *                        cancelled, or the Player isn't a registered Resident.
+	 */
+	public static void toggleMode(Resident resident, String name, boolean notify) throws TownyException {
+		toggleMode(resident, name, null, notify);
+	}
+
+	/**
 	 * Will attempt to toggle on or off, a named mode on a Resident.
 	 * 
 	 * @param resident Resident to toggle a mode on.
 	 * @param name     the String name of the {@link AbstractResidentMode} to
 	 *                 toggle.
+	 * @param options  Options for mode.
 	 * @param notify   whether to notify the Resident of their mode changing.
 	 * @throws TownyException thrown when a mode doesn't exist, the resident does
 	 *                        not have permisson, or when the
 	 *                        ResidentToggleModeEvent is cancelled.
 	 */
-	public static void toggleMode(Resident resident, String name, boolean notify) throws TownyException {
+	public static void toggleMode(Resident resident, String name, @Nullable String[] options, boolean notify) throws TownyException {
 		if (!isValidMode(name))
 			throw new TownyException(Translatable.of("msg_err_mode_does_not_exist", name));
 
-		toggleMode(resident, getMode(name), notify);
+		toggleMode(resident, getMode(name), options, notify);
 	}
 
 	/**
@@ -192,6 +209,21 @@ public class ResidentModeHandler {
 	 *                        ResidentToggleModeEvent is cancelled.
 	 */
 	public static void toggleMode(Resident resident, AbstractResidentMode mode, boolean notify) throws TownyException {
+		toggleMode(resident, mode, null, notify);
+	}
+
+	/**
+	 * Will attempt to toggle on or off, a AbstractResidentMode on a Resident.
+	 * 
+	 * @param resident Resident to toggle a mode on.
+	 * @param mode     {@link AbstractResidentMode} to toggle on or off.
+	 * @param options  Options for mode.
+	 * @param notify   whether to notify the Resident of their mode changing.
+	 * @throws TownyException thrown when a mode doesn't exist, the resident does
+	 *                        not have permisson, or when the
+	 *                        ResidentToggleModeEvent is cancelled.
+	 */
+	public static void toggleMode(Resident resident, AbstractResidentMode mode, @Nullable String[] options, boolean notify) throws TownyException {
 		if (!isValidMode(mode))
 			throw new TownyException(Translatable.of("msg_err_mode_does_not_exist", mode.name));
 
@@ -200,7 +232,11 @@ public class ResidentModeHandler {
 
 		BukkitTools.ifCancelledThenThrow(new ResidentToggleModeEvent(resident, mode.name));
 
-		mode.toggle(resident);
+		if (options != null && options.length > 0 && mode instanceof OptionResidentMode<?> optionMode) {
+			optionMode.toggle(resident, options);
+		} else {
+			mode.toggle(resident);
+		}
 
 		if (notify)
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ", ")));
@@ -256,6 +292,32 @@ public class ResidentModeHandler {
 			residentModesMap.get(resident).clear();
 
 		Towny.getPlugin().getScheduler().runAsyncLater(() -> applyDefaultModes(resident, notify), 1);
+	}
+
+	/**
+	 * Gets a list of Residents with a specific mode.
+	 *
+	 * @param name The mode name.
+	 * @return a list of Residents with a specific mode.
+	 */
+	@Unmodifiable
+	public static List<Resident> getResidentsWithMode(String name) {
+		return getResidentsWithMode(getMode(name));
+	}
+
+	/**
+	 * Gets a list of Residents with a specific mode.
+	 *
+	 * @param mode The mode.
+	 * @return a list of Residents with a specific mode.
+	 */
+	@Unmodifiable
+	public static List<Resident> getResidentsWithMode(AbstractResidentMode mode) {
+		return residentModesMap.entrySet().stream().filter(entry -> entry.getValue().contains(mode)).map(Map.Entry::getKey).toList();
+	}
+
+	public static <T> T getModeOption(OptionResidentMode<T> optionMode, Resident resident) {
+		return optionMode.getOption(resident);
 	}
 
 	public static void applyDefaultModes(Resident resident, boolean notify) {

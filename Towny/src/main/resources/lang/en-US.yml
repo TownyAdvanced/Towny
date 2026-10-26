@@ -257,6 +257,12 @@ res_toggle_help_13: "Toggle the ability to see title messages when you change pl
 res_toggle_help_14: "Toggle the ability to unclaim where you walk."
 res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
 res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
+res_toggle_help_17: "Toggle the ability to ignore invites to towns."
+res_toggle_help_18: "Toggle the ability to ignore unfocused chat channels."
+res_toggle_help_19: "Toggle the ability to spawn at your bed spawn rather than your town spawn."
+res_toggle_help_20: "Toggle the ability to add plots to a district you have started."
+res_toggle_help_21: "Toggle the ability to see the plot permissions when you change plots."
+res_toggle_help_22: "Toggle the ability to see debug information for devs to find a bug."
 
 res_jail_help_0: "Pays the bail cost to get out of jail."
 
@@ -269,7 +275,8 @@ mode_2: 'Attempt to claim as you walk'
 mode_3: 'Attempt to unclaim as you walk'
 mode_4: 'Default chat to town channel'
 mode_5: 'Default chat to nation channel'
-mode_6: 'Can place %s in enemy borders to make warzones.'
+mode_6: 'Default chat to ally channel'
+mode_7: 'Default chat to local channel'
 
 plot_perms: 'Use %s instead of %s for plot permissions.'
 

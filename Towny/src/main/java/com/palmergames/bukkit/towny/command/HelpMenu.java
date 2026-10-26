@@ -278,7 +278,6 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin toggle")
 				.add("wildernessuse", Translatable.of("ta_toggle_help_0"))
 				.add("regenerations", Translatable.of("ta_toggle_help_1"))
-				.add("devmode", Translatable.of("ta_toggle_help_2"))
 				.add("debug", Translatable.of("ta_toggle_help_3"))
 				.add("townwithdraw/nationwithdraw", Translatable.of("ta_toggle_help_4"))
 				.add("npc [resident]", Translatable.of("ta_toggle_help_5"));
@@ -785,19 +784,26 @@ public enum HelpMenu {
 				.add("fire", Translatable.of("res_toggle_help_1"))
 				.add("mobs", Translatable.of("res_toggle_help_2"))
 				.add("explosion", Translatable.of("res_toggle_help_3"))
+				.add("clear", Translatable.of("res_toggle_help_10"))
+				.add("reset", Translatable.of("res_toggle_help_10.5"))
 				.add("plotborder", Translatable.of("res_toggle_help_4"))
 				.add("constantplotborder", Translatable.of("res_toggle_help_5"))
 				.add("townborder", Translatable.of("res_toggle_help_6"))
+				.add("ignoreinvites", Translatable.of("res_toggle_help_17"))
+				.add("ignoreotherchannels", Translatable.of("res_toggle_help_18"))
 				.add("ignoreplots", Translatable.of("res_toggle_help_7"))
 				.add("bordertitles", Translatable.of("res_toggle_help_13"))
 				.add("townclaim", Translatable.of("res_toggle_help_8"))
 				.add("townunclaim", Translatable.of("res_toggle_help_14"))
+				.add("bedspawn", Translatable.of("res_toggle_help_19"))
 				.add("plotgroup", Translatable.of("res_toggle_help_12"))
+				.add("district", Translatable.of("res_toggle_help_20"))
 				.add("map", Translatable.of("res_toggle_help_9"))
-				.add("reset|clear", Translatable.of("res_toggle_help_10"))
+				.add("perm", Translatable.of("res_toggle_help_21"))
 				.add("spy", Translatable.of("res_toggle_help_11"))
 				.add("infotool", Translatable.of("res_toggle_help_15"))
-				.add("adminbypass", Translatable.of("res_toggle_help_16"));
+				.add("adminbypass", Translatable.of("res_toggle_help_16"))
+				.add("devmode", Translatable.of("res_toggle_help_22"));
 		}
 	},
 
@@ -815,24 +821,31 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident set mode")
-				.add("", "/resident set mode", "clear", Translatable.of("res_toggle_help_10"))
-				.add("", "/resident set mode", "reset", Translatable.of("res_toggle_help_10.5"))
+				.add("clear", Translatable.of("res_toggle_help_10"))
+				.add("reset", Translatable.of("res_toggle_help_10.5"))
 				.add("/resident set mode [mode]...[mode]")
-				.add("tc", "", Translatable.of("mode_4"))
-				.add("nc", "", Translatable.of("mode_5"))
+				.add("", "/tc", "", Translatable.of("mode_4"))
+				.add("", "/nc", "", Translatable.of("mode_5"))
+				.add("", "/ac", "", Translatable.of("mode_6"))
+				.add("", "/lc", "", Translatable.of("mode_7"))
 				.add("plotborder", Translatable.of("res_toggle_help_4"))
 				.add("constantplotborder", Translatable.of("res_toggle_help_5"))
 				.add("townborder", Translatable.of("res_toggle_help_6"))
+				.add("ignoreinvites", Translatable.of("res_toggle_help_17"))
+				.add("ignoreotherchannels", Translatable.of("res_toggle_help_18"))
 				.add("ignoreplots", Translatable.of("res_toggle_help_7"))
 				.add("bordertitles", Translatable.of("res_toggle_help_13"))
 				.add("townclaim", Translatable.of("res_toggle_help_8"))
 				.add("townunclaim", Translatable.of("res_toggle_help_14"))
+				.add("bedspawn", Translatable.of("res_toggle_help_19"))
 				.add("plotgroup", Translatable.of("res_toggle_help_12"))
+				.add("district", Translatable.of("res_toggle_help_20"))
 				.add("map", Translatable.of("res_toggle_help_9"))
-				.add("reset|clear", Translatable.of("res_toggle_help_10"))
+				.add("perm", Translatable.of("res_toggle_help_21"))
 				.add("spy", Translatable.of("res_toggle_help_11"))
 				.add("infotool", Translatable.of("res_toggle_help_15"))
 				.add("adminbypass", Translatable.of("res_toggle_help_16"))
+				.add("devmode", Translatable.of("res_toggle_help_22"))
 				.add("Eg: /resident set mode map plotborder");
 		}
 	},

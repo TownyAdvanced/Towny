@@ -90,7 +90,7 @@ public class PlayerCacheUtil {
 			result = cachedValue;
 		}
 
-		TownyMessaging.sendDebugMsg(() -> (cachedValue == null ? "New Cache created" : "Cache permissions") + " for " + player.getName() + " using " + material.getKey().asMinimalString() + ":" + action + ":" + cache.getStatus() + " = " + result);
+		TownyMessaging.sendDebugMsg(() -> (cachedValue == null ? "New Cache created" : "Cache permissions") + " for " + player.getName() + " using " + material.getKey().asMinimalString() + ":" + action + ":" + cache.getStatus() + " = " + result, player);
 		return result;
 	}
 
@@ -114,7 +114,7 @@ public class PlayerCacheUtil {
 			case ITEM_USE -> cache.setItemUsePermission(material, permission);
 		}
 
-		TownyMessaging.sendDebugMsg(() -> player.getName() + " (" + worldCoord + ") Cached " + action.getCommonName() + ": " + permission);
+		TownyMessaging.sendDebugMsg(() -> player.getName() + " (" + worldCoord + ") Cached " + action.getCommonName() + ": " + permission, player);
 		return permission;
 	}
 
@@ -138,7 +138,7 @@ public class PlayerCacheUtil {
 
 		cache.setStatus(townBlockStatus);
 
-		TownyMessaging.sendDebugMsg(() -> player.getName() + " (" + worldCoord + ") Cached Status: " + townBlockStatus);
+		TownyMessaging.sendDebugMsg(() -> player.getName() + " (" + worldCoord + ") Cached Status: " + townBlockStatus, player);
 		return townBlockStatus;
 	}
 

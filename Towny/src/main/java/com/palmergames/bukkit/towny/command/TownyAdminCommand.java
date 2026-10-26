@@ -204,7 +204,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"neutral",
 		"npc",
 		"debug",
-		"devmode",
 		"townwithdraw",
 		"nationwithdraw"
 	);
@@ -2573,7 +2572,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		switch(split[0].toLowerCase(Locale.ROOT)) {
 			case "wildernessuse" -> adminToggleWildernessUse(sender, choice);
 			case "regenerations" -> adminToggleRegenerations(sender, choice);
-			case "devmode" -> adminToggleDevMode(sender, choice);
 			case "debug" -> adminToggleDebug(sender, choice);
 			case "townwithdraw" -> adminToggleTownWithDraw(sender, choice);
 			case "nationwithdraw" -> adminToggleNationWithdraw(sender, choice);
@@ -2600,11 +2598,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		toggleRegenerations(choice.orElse(false));
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_regenerations_use_x_in_all_worlds", choice.orElse(false)));
 	}
-
-	private void adminToggleDevMode(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode());
-		TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Translatable.literal(Colors.DARK_GREEN).append(Translatable.of("enabled")) : Translatable.literal(Colors.DARK_RED).append(Translatable.of("disabled")))));	}
 
 	private void adminToggleDebug(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG.getNode());
