@@ -71,8 +71,10 @@ loadScripts(document, 'script');</script>
 <li><a href="#sendDevMsg(java.lang.String)" tabindex="0">sendDevMsg(String)</a></li>
 <li><a href="#sendDevMsg(java.util.function.Supplier)" tabindex="0">sendDevMsg(Supplier)</a></li>
 <li><a href="#sendDevMsg(java.lang.String%5B%5D)" tabindex="0">sendDevMsg(String[])</a></li>
+<li><a href="#sendDevMsg(java.util.function.Supplier,org.bukkit.entity.Player)" tabindex="0">sendDevMsg(Supplier, Player)</a></li>
 <li><a href="#sendDebugMsg(java.lang.String)" tabindex="0">sendDebugMsg(String)</a></li>
 <li><a href="#sendDebugMsg(java.util.function.Supplier)" tabindex="0">sendDebugMsg(Supplier)</a></li>
+<li><a href="#sendDebugMsg(java.util.function.Supplier,org.bukkit.entity.Player)" tabindex="0">sendDebugMsg(Supplier, Player)</a></li>
 <li><a href="#sendMessage(java.lang.Object,java.lang.String)" tabindex="0">sendMessage(Object, String)</a></li>
 <li><a href="#sendMessage(java.lang.Object,java.util.List)" tabindex="0">sendMessage(Object, List)</a></li>
 <li><a href="#sendMessage(java.lang.Object,java.lang.String%5B%5D)" tabindex="0">sendMessage(Object, String[])</a></li>
@@ -233,22 +235,31 @@ loadScripts(document, 'script');</script>
 <div class="block">Sends a message to the debug logger (and hence the console and debug.log)</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.lang.String)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDebugMsg(java.util.function.Supplier,org.bukkit.entity.Player)" class="member-name-link">sendDebugMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg,
+ org.bukkit.entity.Player&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Sends a message (red) to the named Dev (if DevMode is enabled)
-Uses default_towny_prefix</div>
+<div class="block">Sends a message to the debug logger (and hence the console and debug.log)</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.lang.String%5B%5D)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;msg)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.lang.String)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Sends a message (red) to the named Dev (if DevMode is enabled)
-Uses default_towny_prefix</div>
+<div class="block">Sends a message (red) to players with the devmode resident mode.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.util.function.Supplier)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.lang.String%5B%5D)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;msg)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Sends a message (red) to the named Dev (if DevMode is enabled)
-Uses default_towny_prefix</div>
+<div class="block">Sends a message (red) to players with the devmode resident mode.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.util.function.Supplier)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Sends a message (red) to players with the devmode resident mode.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendDevMsg(java.util.function.Supplier,org.bukkit.entity.Player)" class="member-name-link">sendDevMsg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg,
+ org.bukkit.entity.Player&nbsp;target)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Sends a message (red) to players with the devmode resident mode.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendErrorMsg(com.palmergames.bukkit.towny.object.Translatable)" class="member-name-link">sendErrorMsg</a><wbr>(<a href="object/Translatable.html" title="class in com.palmergames.bukkit.towny.object">Translatable</a>&nbsp;message)</code></div>
@@ -700,7 +711,7 @@ Uses default_towny_prefix</div>
 <h3>sendDevMsg</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendDevMsg</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
-<div class="block">Sends a message (red) to the named Dev (if DevMode is enabled)
+<div class="block">Sends a message (red) to players with the devmode resident mode.
 Uses default_towny_prefix</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -714,7 +725,7 @@ Uses default_towny_prefix</div>
 <h3>sendDevMsg</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendDevMsg</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg)</span></div>
-<div class="block">Sends a message (red) to the named Dev (if DevMode is enabled)
+<div class="block">Sends a message (red) to players with the devmode resident mode.
 Uses default_towny_prefix</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -728,11 +739,27 @@ Uses default_towny_prefix</div>
 <h3>sendDevMsg</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendDevMsg</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;msg)</span></div>
-<div class="block">Sends a message (red) to the named Dev (if DevMode is enabled)
+<div class="block">Sends a message (red) to players with the devmode resident mode.
 Uses default_towny_prefix</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>msg</code> - the message to be sent</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sendDevMsg(java.util.function.Supplier,org.bukkit.entity.Player)">
+<h3>sendDevMsg</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendDevMsg</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg,
+ org.bukkit.entity.Player&nbsp;target)</span></div>
+<div class="block">Sends a message (red) to players with the devmode resident mode.
+Uses default_towny_prefix</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>msg</code> - the message to be sent</dd>
+<dd><code>target</code> - the player the message refers to</dd>
 </dl>
 </div>
 </section>
@@ -759,6 +786,21 @@ Uses default_towny_prefix</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>msg</code> - the message to be sent</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sendDebugMsg(java.util.function.Supplier,org.bukkit.entity.Player)">
+<h3>sendDebugMsg</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendDebugMsg</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg,
+ org.bukkit.entity.Player&nbsp;target)</span></div>
+<div class="block">Sends a message to the debug logger (and hence the console and debug.log)</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>msg</code> - the message to be sent</dd>
+<dd><code>target</code> - the player the message refers to</dd>
 </dl>
 </div>
 </section>

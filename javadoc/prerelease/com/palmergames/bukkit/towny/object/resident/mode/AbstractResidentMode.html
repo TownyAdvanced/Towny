@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="BorderResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">BorderResidentMode</a>, <a href="ClaimingResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">ClaimingResidentMode</a>, <a href="GenericResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">GenericResidentMode</a></code></dd>
+<dd><code><a href="BorderResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">BorderResidentMode</a>, <a href="ClaimingResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">ClaimingResidentMode</a>, <a href="GenericResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">GenericResidentMode</a>, <a href="OptionResidentMode.html" title="class in com.palmergames.bukkit.towny.object.resident.mode">OptionResidentMode</a></code></dd>
 </dl>
 <hr>
 <div class="horizontal-scroll">
@@ -119,13 +119,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#name()" class="member-name-link">name</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Get the name of the resident mode.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permissionNode()" class="member-name-link">permissionNode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Get the permission node required to be able to toggle this resident mode.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toggle(com.palmergames.bukkit.towny.object.Resident)" class="member-name-link">toggle</a><wbr>(<a href="../../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Toggle the resident mode on or off.</div>
+</div>
 </div>
 </div>
 </div>
@@ -165,6 +171,11 @@ loadScripts(document, 'script');</script>
 <h3>name</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">name</span>()</div>
+<div class="block">Get the name of the resident mode.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the name of the resident mode.</dd>
+</dl>
 </div>
 </section>
 </li>
@@ -173,6 +184,11 @@ loadScripts(document, 'script');</script>
 <h3>permissionNode</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">permissionNode</span>()</div>
+<div class="block">Get the permission node required to be able to toggle this resident mode.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the permission node required.</dd>
+</dl>
 </div>
 </section>
 </li>
@@ -181,6 +197,11 @@ loadScripts(document, 'script');</script>
 <h3>toggle</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">toggle</span><wbr><span class="parameters">(<a href="../../Resident.html" title="class in com.palmergames.bukkit.towny.object">Resident</a>&nbsp;resident)</span></div>
+<div class="block">Toggle the resident mode on or off.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>resident</code> - Resident to toggle mode on or off for.</dd>
+</dl>
 </div>
 </section>
 </li>
