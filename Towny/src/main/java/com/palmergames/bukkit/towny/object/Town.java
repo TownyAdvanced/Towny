@@ -695,18 +695,19 @@ public class Town extends Government implements TownBlockOwner {
 	public void setHomeBlock(@Nullable TownBlock homeBlock) {
 
 		this.homeBlock = homeBlock;
+
+		// Unset the spawn if it is not inside of the new homeblock.
+		if (this.spawn != null && (homeBlock == null || !homeBlock.getWorldCoord().equals(this.spawn.worldCoord()))) {
+			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(this.spawn));
+			this.spawn = null;
+		}
 		
 		if (homeBlock == null)
 			return;
 
-		// Set the world if it has not been set yet, or if if has changed. 
-		if (world == null || !getHomeblockWorld().getName().equals(homeBlock.getWorld().getName()))
+		// Set the world if it has not been set yet, or if it has changed. 
+		if (world == null || !getHomeblockWorld().equals(homeBlock.getWorld())) {
 			setWorld(homeBlock.getWorld());
-
-		// Unset the spawn if it is not inside of the new homeblock.
-		if (spawn != null && !homeBlock.getWorldCoord().equals(spawn.worldCoord())) {
-			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(spawn));
-			spawn = null;
 		}
 
 		if (!hasNation() || TownySettings.getNationProximityToCapital() <= 0 || isCapital())
