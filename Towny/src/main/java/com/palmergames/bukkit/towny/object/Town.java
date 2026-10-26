@@ -886,8 +886,9 @@ public class Town extends Government implements TownBlockOwner {
 	@Nullable
 	@Override
 	public Location getSpawnOrNull() {
-		if (this.spawn != null)
+		if (this.spawn != null && this.homeBlock != null) {
 			return this.spawn.asLocation();
+		}
 		
 		return null;
 	}
