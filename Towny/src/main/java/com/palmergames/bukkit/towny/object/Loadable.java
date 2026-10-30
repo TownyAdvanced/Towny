@@ -27,14 +27,13 @@ public abstract class Loadable {
 
 	protected TownBlock parseTownBlockFromDB(String input) throws NumberFormatException, NotRegisteredException {
 		String[] tokens = input.split(getSplitter(input));
-		final World world = parseWorld(tokens[0]);
+		String worldName = parseWorldName(tokens[0]);
 
-		if (world == null) {
-			throw new NotRegisteredException("TownBlock tried to load an invalid world! World name: " + tokens[0]);
-		}
+		if (!TownyUniverse.getInstance().hasTownyWorld(worldName))
+			throw new NotRegisteredException("TownBlock tried to load an invalid world! World name: " + worldName);
 
 		TownyUniverse universe = TownyUniverse.getInstance();
-		return universe.getTownBlock(new WorldCoord(world.getName(), Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+		return universe.getTownBlock(new WorldCoord(worldName, Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
 	}
 	
 	private @Nullable World parseWorld(final String keyOrName) {
@@ -49,7 +48,26 @@ public abstract class Loadable {
 			world = Bukkit.getWorld(keyOrName); // Legacy worlds used Name instead of Key.
 		}
 
+		if (world == null) {
+			world = TownyAPI.getInstance().getTownyWorld(keyOrName.contains(":") ? keyOrName.split(":")[1] : keyOrName).getBukkitWorld(); // Last ditch fall back attempt.
+		}
 		return world;
+	}
+
+	private String parseWorldName(final String keyOrName) {
+		NamespacedKey worldKey = NamespacedKey.fromString(keyOrName);
+		World world = null;
+
+		if (worldKey != null) {
+			world = Bukkit.getWorld(worldKey);
+		}
+
+		if (world == null) {
+			world = Bukkit.getWorld(keyOrName); // Legacy worlds used Name instead of Key.
+		}
+
+		return world != null ? world.getName()
+			: TownyAPI.getInstance().getTownyWorld(keyOrName.contains(":") ? keyOrName.split(":")[1] : keyOrName).getName(); // Last ditch fall back attempt.
 	}
 
 	@Nullable
@@ -85,11 +103,11 @@ public abstract class Loadable {
 	}
 
 	@Nullable
-	protected Location parseSpawnLocationFromDB(String raw) {
+	protected Position parsePositionLocationFromDB(String raw) {
 		String[] tokens = raw.split(getSplitter(raw));
 		if (tokens.length >= 4)
 			try {
-				final World world = parseWorld(tokens[0]);
+				final TownyWorld world = TownyUniverse.getInstance().getWorld(parseWorldName(tokens[0]));
 				if (world == null) {
 					return null;
 				}
@@ -97,13 +115,11 @@ public abstract class Loadable {
 				double x = Double.parseDouble(tokens[1]);
 				double y = Double.parseDouble(tokens[2]);
 				double z = Double.parseDouble(tokens[3]);
+				float pitch = tokens.length == 6 ? Float.parseFloat(tokens[4]) : 0;
+				float yaw = tokens.length == 6 ? Float.parseFloat(tokens[5]) : 0;
 
-				Location loc = new Location(world, x, y, z);
-				if (tokens.length == 6) {
-					loc.setPitch(Float.parseFloat(tokens[4]));
-					loc.setYaw(Float.parseFloat(tokens[5]));
-				}
-				return loc;
+				return new Position(world, x, y, z, pitch, yaw);
+
 			} catch (NumberFormatException | NullPointerException ignored) {
 			}
 		return null;

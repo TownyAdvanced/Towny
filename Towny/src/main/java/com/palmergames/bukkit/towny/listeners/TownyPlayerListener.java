@@ -209,6 +209,9 @@ public class TownyPlayerListener implements Listener {
 			
 			if (JailUtil.isQueuedToBeJailed(resident))
 				event.getPlayer().setHealth(0);
+			if (resident.isJailed()) {
+				JailUtil.removePlayerBossBar(event.getPlayer());
+			}
 		}
 
 		ChunkNotificationUtil.cancelPlayerTasks(event.getPlayer());
@@ -747,9 +750,9 @@ public class TownyPlayerListener implements Listener {
 		// Handle things which need an item in hand.
 
 		/*
-		 * Sheep and mountable entities can be sheared, protect them if they aren't in the wilderness.
+		 * Shearables and mountable entities can be sheared, protect them if they aren't in the wilderness.
 		 */
-		if (item == Material.SHEARS && !TownyAPI.getInstance().isWilderness(event.getRightClicked().getLocation()) && (event.getRightClicked().getType().equals(EntityType.SHEEP) || EntityLists.MOUNTABLE.contains(entityType))) {
+		if (item == Material.SHEARS && !TownyAPI.getInstance().isWilderness(event.getRightClicked().getLocation()) && (EntityLists.SHEARABLE.contains(entityType) || EntityLists.MOUNTABLE.contains(entityType))) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
 			return;

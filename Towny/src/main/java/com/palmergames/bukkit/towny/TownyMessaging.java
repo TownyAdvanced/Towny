@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.resident.mode.DevmodeResidentMode;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
@@ -46,6 +48,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -149,34 +152,29 @@ public class TownyMessaging {
 	}
 	
 	/**
-	 * Sends a message (red) to the named Dev (if DevMode is enabled)
+	 * Sends a message (red) to players with the devmode resident mode.
 	 * Uses default_towny_prefix
 	 *
 	 * @param msg the message to be sent
 	 */
 	public static void sendDevMsg(String msg) {
-		if (TownySettings.isDevMode()) {
-			Player townyDev = BukkitTools.getPlayerExact(TownySettings.getDevName());
-			if (townyDev != null)
-				sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.DARK_RED + msg);
+		for (Resident dev : ResidentModeHandler.getResidentsWithMode("devmode")) {
+			sendMessage(dev, Translatable.of("default_towny_prefix").forLocale(dev) + " DevMode: " + Colors.DARK_RED + msg);
 		}
 	}
 
 	/**
-	 * Sends a message (red) to the named Dev (if DevMode is enabled)
+	 * Sends a message (red) to players with the devmode resident mode.
 	 * Uses default_towny_prefix
 	 *
 	 * @param msg the message to be sent
 	 */
 	public static void sendDevMsg(final Supplier<String> msg) {
-		final Player townyDev;
-		if (TownySettings.isDevMode() && (townyDev = BukkitTools.getPlayerExact(TownySettings.getDevName())) != null) {
-			sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.DARK_RED + msg.get());
-		}
+		sendDevMsg(msg.get());
 	}
 
 	/**
-	 * Sends a message (red) to the named Dev (if DevMode is enabled)
+	 * Sends a message (red) to players with the devmode resident mode.
 	 * Uses default_towny_prefix
 	 *
 	 * @param msg the message to be sent
@@ -184,6 +182,23 @@ public class TownyMessaging {
 	public static void sendDevMsg(String[] msg) {
 		for (String line : msg) {
 			sendDevMsg(line);
+		}
+	}
+
+	/**
+	 * Sends a message (red) to players with the devmode resident mode.
+	 * Uses default_towny_prefix
+	 *
+	 * @param msg the message to be sent
+	 * @param target the player the message refers to   
+	 */
+	public static void sendDevMsg(Supplier<String> msg, Player target) {
+		DevmodeResidentMode devmode = (DevmodeResidentMode) ResidentModeHandler.getMode("devmode");
+		for (Resident dev : ResidentModeHandler.getResidentsWithMode(devmode)) {
+			Set<Player> devTargets = ResidentModeHandler.getModeOption(devmode, dev);
+			if (devTargets == null || devTargets.isEmpty() || devTargets.contains(target)) {
+				sendMessage(dev, Translatable.of("default_towny_prefix").forLocale(dev) + " DevMode: " + Colors.DARK_RED + msg.get());
+			}
 		}
 	}
 
@@ -209,6 +224,19 @@ public class TownyMessaging {
 			LOGGER.debug(Colors.strip(msg.get()));
 		}
 		sendDevMsg(msg);
+	}
+
+	/**
+	 * Sends a message to the debug logger (and hence the console and debug.log)
+	 *
+	 * @param msg the message to be sent
+	 * @param target the player the message refers to
+	 */
+	public static void sendDebugMsg(final Supplier<String> msg, final Player target) {
+		if (TownySettings.getDebug()) {
+			LOGGER.debug(Colors.strip(msg.get()));
+		}
+		sendDevMsg(msg, target);
 	}
 
 	/**

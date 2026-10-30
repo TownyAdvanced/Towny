@@ -73,12 +73,13 @@ public class Translatable {
 		StringBuilder converted = new StringBuilder();
 
 		for (Object object : this.appended) {
-			if (object instanceof String string)
+			if (object instanceof String string) {
 				converted.append(string);
-			else if (object instanceof Translatable translatable)
+			} else if (object instanceof Translatable translatable) {
 				converted.append(translatable.locale(this.locale).translate());
-			else if (object instanceof Component component)
-				converted.append(TownyComponents.toLegacy(component));
+			} else if (object instanceof Component component) {
+				converted.append(TownyComponents.toMiniMessage(component));
+			}
 		}
 
 		return converted.toString();
@@ -210,9 +211,13 @@ public class Translatable {
 		if (args == null)
 			return;
 		
-		for (int i = 0; i < args.length; i++)
-			if (args[i] instanceof Translatable)
-				args[i] = ((Translatable) args[i]).locale(locale).translate();
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] instanceof Translatable translatable) {
+				args[i] = translatable.locale(locale).translate();
+			} else if (args[i] instanceof Component component) {
+				args[i] = TownyComponents.toMiniMessage(component);
+			}
+		}
 	}
 	
 	@Override

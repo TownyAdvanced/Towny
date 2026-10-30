@@ -989,5 +989,20 @@
         "value": "towny.command.town.outpost.list.other"
       }
     ]
+  },
+  {
+    "version": "0.103.2.12",
+    "changes": [
+      {
+        "type": "MOVE",
+        "path": "jail.outlaw_jail_hours",
+        "value": "jail.outlaw_jail_duration"
+      },
+      {
+        "type": "APPEND",
+        "path": "jail.outlaw_jail_duration",
+        "value": "h"
+      }
+    ]
   }
 ]

@@ -49,10 +49,19 @@ public class ResidentJailEvent extends Event {
 		return resident.getJailCell();
 	}
 	
+	/**
+	 * @deprecated Jails times are no longer stored in hours, use
+	 *             {@link #getUnjailTime()} instead.
+	 */
+	@Deprecated(since = "0.103.2.12")
 	public int getJailHours() {
 		return resident.getJailHours();
 	}
 	
+	public long getUnjailTime() {
+		return resident.getUnjailTime();
+	}
+
 	public Town getJailTown() {
 		return getJail().getTown();
 	}

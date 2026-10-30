@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.teleport;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -16,6 +17,7 @@ public class UnjailedResidentTeleportEvent extends Event implements Cancellable 
 	private Location location;
 	
 	public UnjailedResidentTeleportEvent(Resident resident, Location location) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.resident = resident;
 		this.setLocation(location);
 	}
