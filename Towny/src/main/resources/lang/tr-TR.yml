@@ -459,7 +459,7 @@ msg_world_pvp: '&cBu dünya sadece PvP dir.'
 msg_world_mobs: '&cBu dünyada Canavar doğma zorunluluğu var.'
 msg_world_expl: '&cBu dünyada zorla Patlamalar var. Bu dünyada zorla Patlamalar var.'
 msg_world_fire: '&cBu dünyada ateş yayıldı.'
-msg_town_mobs: '&cBu kasabada canavarlar zorunlu olarak ortaya çıkıyor.'
+msg_town_mobs: '<red>Bu kasabada canavarlar zorunlu olarak ortaya çıkıyor.'
 msg_plot_pvp: '&cPVP Arena Arsa da değiştirilemez.'
 msg_plot_regen_wrong_size: '&cRegen yalnızca varsayılan çizim boyutu (16) kullanıldığında gerçekleştirilebilir.'
 msg_reloaded: '&2Towny nin ayarları yeniden yüklendi.'
@@ -489,9 +489,9 @@ msg_set_wild_regen: '&b%s nin vahşi yenilenmesi şu şekilde başarıyla deği�
 msg_set_use_towny_on: '&bBu dünya artık kasaba kurallarını takip ediyor.'
 msg_set_use_towny_off: '&cBu dünya tüm şehir etkileşimlerinden muaftır.'
 msg_error_must_be_int: '&bMiktar tam sayı olmalıdır.'
-msg_error_input_must_be_int: '&c%s bir tam sayı olmalı'
+msg_error_input_must_be_int: '<red>%s bir tam sayı olmalı'
 msg_error_must_be_num: '&bMiktar bir sayı olmalıdır.'
-msg_error_input_must_be_num: '&c%s bir sayı olmalı'
+msg_error_input_must_be_num: '<red>%s bir sayı olmalı'
 msg_must_specify_amnt: '&bMiktarı belirtmelidir. Örneğin %s 54'
 msg_town_set_tax: '&b%s, günlük ikamet vergisini %s olarak ayarladı'
 msg_town_set_plottax: '&b%s, parsellerin günlük vergisini %s olarak belirledi'
@@ -506,7 +506,7 @@ msg_reset_town_tag: '&b%s kasaba etiketini sildi.'
 msg_mayor_abandon: '&bHalkını terk mi edeceksin? Eminseniz "/town set mayor" ile başka bir belediye başkanı seçin.'
 msg_new_day_tax: '&bYeni bir gün burada! Vergiler ve kira toplandı'
 msg_new_day: '&bYeni bir gün burada Herkese Günaydın!'
-msg_new_king: '&b%s Artık %s ulusunun lideri!'
+msg_new_king: '<aqua>%s Artık %s ulusunun lideri!'
 msg_err_new_king_notmayor: '&cYeni ulus lideri bir başkan değil.'
 msg_err_king_not_in_nation: '&cYeni ulus lideri bu ulusa ait değil.'
 msg_err_fight_like_king: '&cBarış bir seçenek değil! Bir lider gibi dövüş!'
@@ -516,7 +516,7 @@ msg_new_mayor: '&b%s şimdi belediye başkanı!'
 msg_new_nation: '&b%s isimli kişi &e%s &badında bir ulus kurdu'
 msg_new_town: '&b%s %s adında yeni bir kasaba kurdu'
 msg_plot_for_sale: '&b%s arsayı (%s) satışa sundu!'
-msg_plot_for_sale_amount: '&b%s, (%s) arsayı %s fiyata satışa sundu!'
+msg_plot_for_sale_amount: '<aqua>%s, (%s) arsayı %s fiyata satışa sundu!'
 msg_plot_set_type: '&bArsa türü %s olarak ayarlandı'
 msg_cache_block_error: '&cTowny ye kayıtlı değilsiniz. Yeniden günlüğe kaydetmeyi deneyin.'
 msg_cache_block_error_wild: '&cVahşi doğada %s izin verilmez.'
@@ -817,7 +817,7 @@ jailed_in_town: ' şu kasabada: %s'
 status_friends: 'Arkadaşlar'
 rank_list_title: '%s Rütbe Listesi'
 rank_list_mayor: 'Başkan:'
-status_title_capital: '&b(Başkent)'
+status_title_capital: '<aqua>(Başkent)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
@@ -838,8 +838,8 @@ status_nation_towns: 'Kasabalar'
 status_nation_allies: 'Müttefikler'
 status_nation_enemies: 'Düşmanlar'
 status_nation_enemied_by: 'Ulusunuzu düşman olarak gören uluslar'
-status_world_claimable: '&aAlınabilir'
-status_world_noclaims: '&cAlınamaz'
+status_world_claimable: '<green>Alınabilir'
+status_world_noclaims: '<red>Alınamaz'
 status_world_forcepvp: 'ZorunluPVP:'
 status_world_fire: 'Ateş:'
 status_world_forcefire: 'Zorla Ateş:'
@@ -885,7 +885,7 @@ msg_err_nation_spawn_forbidden_war: '&cUlus doğma yolculuğuna yalnızca savaş
 msg_err_nation_spawn_forbidden_peace: '&cSavaş sırasında ulus doğma yolculuğu yasaktır.'
 msg_err_nation_spawn_ally_forbidden: '&cUlusların müttefik ülkelere seyahat etmesi yasaktır.'
 msg_err_nation_spawn_nation_forbidden_war: '&cUlusların diğer müttefik ülkelere seyahatine yalnızca savaş sırasında izin verilir.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cSavaş sırasında ulusun diğer müttefik ülkelere seyahat etmesi yasaktır.'
+msg_err_nation_spawn_nation_forbidden_peace: '<red>Savaş sırasında ulusun diğer müttefik ülkelere seyahat etmesi yasaktır.'
 msg_err_public_nation_spawn_forbidden: '&cDiğer uluslara halka açık seyahat etmek yasaktır.'
 msg_err_public_nation_spawn_forbidden_war: '&cDiğer uluslara halka açık seyahatlere yalnızca savaş sırasında izin verilir.'
 msg_err_public_nation_spawn_forbidden_peace: '&cSavaş sırasında diğer uluslara halka açık seyahat etmek yasaktır.'
@@ -937,7 +937,7 @@ number_of_residents: '(Sakin Sayısı)'
 number_of_towns: '(İlçe Sayısı)'
 town_name: 'Kasaba Adı'
 nation_name: 'Ulus Adı'
-refund_message: '&aKasaba bloğu hakkınızdan vazgeçtiğiniz için %s kadar ödeme aldınız(İade edilen Kasaba bloğu:%s).'
+refund_message: '<green>Kasaba bloğu hakkınızdan vazgeçtiğiniz için %s kadar ödeme aldınız(İade edilen Kasaba bloğu:%s).'
 msg_bankrupt_town_multiple: '&bAşağıdaki kasabalar bakım masraflarını karşılayamadılar ve dağıldılar: '
 msg_bankrupt_nation_multiple: '&bAşağıdaki ülkeler bakım masraflarını karşılayamadılar ve dağıldılar: '
 msg_couldnt_pay_tax: '&b%s vergi ödeyemedi ve atıldı %s.'
@@ -948,10 +948,10 @@ msg_bankrupt_town2: '&b%s bir kasaba olarak kalamazdı.'
 msg_bankrupt_nation2: '&b%s ulus olarak kalamazdı.'
 status_embassy_town: 'Şu kasabalarda toprakları var'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bGeçersiz karşılaştırıcı. %s deneyin.'
-msg_error_invalid_comparator_town: '&bGeçersiz karşılaştırıcı. %s deneyin.'
-msg_err_merging_for_kings_only: '&bBirleştirme yalnızca bir Ulus Lideri tarafından yapılabilir.'
-msg_err_king_of_that_nation_is_not_online: '&b%s Ulusunun Lideri,%s çevrimiçi değil. Birleştirme başarısız oldu.'
+msg_error_invalid_comparator_nation: '<aqua>Geçersiz karşılaştırıcı. %s deneyin.'
+msg_error_invalid_comparator_town: '<aqua>Geçersiz karşılaştırıcı. %s deneyin.'
+msg_err_merging_for_kings_only: '<aqua>Birleştirme yalnızca bir Ulus Lideri tarafından yapılabilir.'
+msg_err_king_of_that_nation_is_not_online: '<aqua>%s Ulusunun Lideri,%s çevrimiçi değil. Birleştirme başarısız oldu.'
 nation1_has_merged_with_nation2: '&6%s ülkesi, hüküm süren milletiyle birleşmeyi kabul etti: %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6%s ülkenizi %s ulusuna dönüştürmeyi kabul eder misiniz? Bu, tüm kasaba ve ülke bankalarının parasını %s ye aktaracak.'
 no_open_towns: 'Listelenecek açık kasaba yok.'
@@ -966,7 +966,7 @@ msg_town_forcepvp_setting_set_to: '%s kasabasının pvp ayarı %s'
 msg_town_forcedisabledpvp_setting_set_to: '%s şehri, adhmindisabledpvp ayarlarını %s olarak zorladı'
 msg_nation_changed_open: '&cUlusun statüsü artık açk %s.'
 msg_err_already_in_a_nation: 'Kasabanız zaten bir ulusun içinde.'
-msg_err_nation_not_open: '&c%s ülkesinin kapıları herkese açık değil. Kralıdan veya bir asistandan kasabanızı davet etmesini isteyin.'
+msg_err_nation_not_open: '<red>%s ülkesinin kapıları herkese açık değil. Kralıdan veya bir asistandan kasabanızı davet etmesini isteyin.'
 msg_err_nation_homeblock_in_another_world: '&cKasabanızın ana bloğu, ulus başkentinin ana bloğu ile aynı dünyada değil.'
 status_bank_town_penalty_upkeep: 'Fazla vergi talep et:'
 #Added in 0.53:
@@ -1124,7 +1124,7 @@ msg_err_teleport_cancelled_damage: 'Hasar aldınız ışınlanmanız iptal edild
 #Added in 0.82
 invitation_prefix: "&8[&7Davetiye&8] &9"
 confirmation_prefix: "&8[&7Onayla&8] &9"
-this_message_will_expire2: '&9Bu işlem, %s saniye içinde otomatik olarak sona erecek!'
+this_message_will_expire2: '<blue>Bu işlem, %s saniye içinde otomatik olarak sona erecek!'
 msg_hover_next_page: 'Sonraki Sayfa'
 msg_hover_previous_page: 'Önceki sayfa'
 #Added in 0.83
@@ -1230,10 +1230,10 @@ towny_prices_price_plot: '&c    [Fiyat] &2Arsa: &a%s &8| &2Karakol: &a%s'
 towny_prices_price_shop: '&c            &2Market: &a%s &8| &2Elçilik: &a%s'
 towny_prices_taxes_plot: '&c    [Vergiler]    &2Yerleşik: &a%s &8| &2Arsa: &a%s'
 towny_prices_taxes_shop: '&c            &2Market: &a%s &8| &2Elçilik: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Barış durumu: &a%s'
-towny_prices_plots: '&c    [Arsa Ayarları]'
-towny_prices_type_single: '            &2%s: &a%s'
-towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
+towny_prices_town_neutral_tax: '<red>            <dark_green>Barış durumu: <green>%s'
+towny_prices_plots: '<red>    [Arsa Ayarları]'
+towny_prices_type_single: '            <dark_green>%s: <green>%s'
+towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
 towny_prices_nationname: '&cUlus: &6%s'
 towny_prices_nation_tax: '&c    [Vergiler] &2Kasaba: &a%s &8| &2Barış: &a%s'
 #Added in 0.96
@@ -1242,7 +1242,7 @@ msg_town_destroyed_by_nation_tax_multiple: '&bAşağıdaki fethedilen şehirler 
 msg_your_town_was_exempt_from_the_nation_tax: '&bKasabanız ulus vergisinden muaftı.'
 #Added in 0.97
 #The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '&a%s=&7'
+status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Yıkık Durumu'
 msg_comptype_bankrupt: 'İflas Durumu'
 msg_ruined: '&c(Yıkık)'
@@ -1273,7 +1273,7 @@ msg_town_merge_err_not_enough_money: '&cBirleştirme başarısız oldu: Yeterli 
 msg_town_merge_err_too_many_purchased_townblocks: '&cBirleştirme başarısız oldu: Çok fazla satın alınmış kasaba bloğu (%d)'
 msg_town_merge_warning: '&cUyarı: Kabul edilirse, %s ile birleştirmenin maliyeti %s Altın olacaktır.'
 msg_town_merge_debt_warning: '&cUyarı:%s şu anda borçlu, kabul edilirse borcunu ödemeniz gerekecek.'
-msg_town_merge_cost_breakdown: '&bMaliyet dökümü: Temel maliyet: %s, Kasaba arazi maliyeti: %s, İflas maliyeti: %s, Bonus arazi maliyeti: %s'
+msg_town_merge_cost_breakdown: '<aqua>Maliyet dökümü: Temel maliyet: %s, Kasaba arazi maliyeti: %s, İflas maliyeti: %s, Bonus arazi maliyeti: %s'
 msg_town_merge_failed: '&cBirleştirme başarısız oldu.'
 msg_town_merge_cancelled: '&cBirleştirme iptal edildi.'
 msg_town_merge_success: '&b%s tarafından sahip olunan %s kasabası, %s kasabasına başarıyla birleştirildi.'
@@ -1329,7 +1329,7 @@ jail_plu: 'Hapishaneler'
 jail_sing: 'Hapis'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hapse atılacak kadar uzun oynamadı, %s daha bekleyin'
 #Added in 0.108
-msg_town_not_peaceful: '&bTown barışçıl bir devleti karşılayamazdı.'
+msg_town_not_peaceful: '<aqua>Town barışçıl bir devleti karşılayamazdı.'
 msg_town_already_peaceful: '&bŞehir zaten barışçıl.'
 msg_town_already_not_peaceful: '&bKasaba zaten barışçıl değil.'
 msg_town_paid_for_neutral_status: '&bKasabanız, barışçıl statünüzü korumak için %s altın ödedi.'
@@ -1425,14 +1425,14 @@ msg_town_map_color_changed: '&bŞehir haritası rengi %s olarak değiştirildi.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Bu claim bloğu,  %s türden olmadığı için gruba eklenemez.'
 #Added in 0.118
-status_title_nopvp: '&a(PvP_kapalı)'
+status_title_nopvp: '<green>(PvP_kapalı)'
 #Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Yasadışı oldukları bir yerde vatandaşınızı hapse atamazsınız.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Düşman sayıldığı bir yerde olduğu için vatandaşınızı hapse atamazsınız.'
 #Added in 0.120
 msg_resident_prompt: 'Sohbette oyuncunun adını girin veya çıkmak için Q tuşuna basın. Bu işlem, 30 saniye içinde otomatik olarak zaman aşımına uğrayacaktır.'
 msg_prompt_cancel: 'İştem iptal edildi veya zaman aşımına uğradı.'
-status_home_element: ' &7[Ana Arsa: %s]'
+status_home_element: ' <gray>[Ana Arsa: %s]'
 status_about: "Hakkında."
 status_registered: 'Kayıt:'
 status_lastonline: 'En son görülme:'
@@ -1440,18 +1440,18 @@ status_fractions: '%s/%s'
 status_rank_list: 'Rütbe Listesi'
 status_hover_click_for_more: 'Daha fazla bilgi için tıklayın.'
 status_jailed: 'Hapis_Durumu:'
-status_bad_yes: '&cEVET'
-status_good_no: '&aHAYIR'
+status_bad_yes: '<red>EVET'
+status_good_no: '<green>HAYIR'
 status_resident_tax_title: '%s Vergisi'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.'
 #Added in 0.123
 msg_err_invalid_townyworld: "'%s' geçerli bir towny dünyası değil."
 msg_err_enter_world_name_first: 'Lütfen önce dünyanın adını girin.'
-msg_wilderness_use_set_to: '&bVahşi doğa kullanımı %s içinde %s olarak ayarlandı.'
+msg_wilderness_use_set_to: '<aqua>Vahşi doğa kullanımı %s içinde %s olarak ayarlandı.'
 #Added in 0.124
 msg_err_invalid_response: 'Geçersiz cevap! Çıkmak için Q tuşuna basın veya önceki soruya geri dönün.'
-msg_setup_full_guide_link: '&bTam kurulum kılavuzunun bağlantısı için burayı tıklayın.'
+msg_setup_full_guide_link: '<aqua>Tam kurulum kılavuzunun bağlantısı için burayı tıklayın.'
 msg_setup_wildernessuse: 'Vahşi doğada kullanımı etkinleştirmek ister misiniz? Bu, oyuncuların vahşi doğada blok kırmasına/inşa etmesine izin verecektir.'
 msg_setup_revertunclaim: 'Claim talebinde bulunmama durumunda geri döndürmeyi kullanmak ister misiniz? Bu, sahiplenilmediklerinde kasaba bloklarının yavaş yavaş yenilenmesini sağlayacaktır.'
 msg_setup_town_block_ratio: 'Kasaba blok oranınızı neye ayarlamak istersiniz? Varsayılan, ikamet eden kişi başına 8 şehir bloğudur. Daha yüksek miktarlar, kasabaların sahip oldukları her sakin için daha fazla talep etmesine izin verecektir. Bunu 0 sayısına ayarlamak, town_levels değerlerini kullanmasını sağlayacaktır.'
@@ -1508,11 +1508,11 @@ msg_perm_true: 'İzin Doğru.'
 msg_err_perm_false: 'İzin Yanlış.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Kasaba: &a%s &7| &2Sahibi: &a%s'
+status_towny_map_town_line: '<dark_green>Kasaba: <green>%s <gray>| <dark_green>Sahibi: <green>%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Sürümü: &a%s'
+msg_towny_version: '<dark_green>Towny Sürümü: <green>%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&c%s &2IP adresini kullanan bir oyuncu, sunucunuzun ekonomisine zarar verebilecek bir hesap adı olan &c%s &2ile oturum açmaya çalıştı, ancak Towny tarafından engellendi. Bu IP adresini yasaklamanızı öneriyoruz!'
+msg_admin_blocked_login: '<red>%s <dark_green>IP adresini kullanan bir oyuncu, sunucunuzun ekonomisine zarar verebilecek bir hesap adı olan <red>%s <dark_green>ile oturum açmaya çalıştı, ancak Towny tarafından engellendi. Bu IP adresini yasaklamanızı öneriyoruz!'
 #Shown during resident purge
 msg_scanning_for_old_residents: 'Eski sakinler taranıyor...'
 #Shown during resident purge
@@ -1532,7 +1532,7 @@ msg_changed_nationzone: 'Kasabayı çevreleyen Ulus Bölgesi artık %s'
 msg_err_your_town_has_no_nationzone_to_toggle: 'Kasabanızda değiştirilecek bir Ulus Bölgesi yok!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Ulus bakımı &a%s&7''''ye dayalıdır.'
+towny_prices_nation_upkeep_based_on: '<gray>Ulus bakımı <green>%s<gray>''''ye dayalıdır.'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'kasaba sayısı.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
@@ -1585,10 +1585,10 @@ tc_player_channel_sound_unmuted: 'Kanal susturulması kalktı'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Arsanızda bir yabancı var, pvp durumunuzu değiştiremezsiniz!'
 #Added in 0.136
-msg_view_on_web: '&7Webde görüntülemek için tıkla.'
+msg_view_on_web: '<gray>Webde görüntülemek için tıkla.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '&6%s Kasabası, %s Kasabası ile birleşmeyi kabul etti.'
+town1_has_merged_with_town2: '<gold>%s Kasabası, %s Kasabası ile birleşmeyi kabul etti.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Tarafsızlık Ücreti:'
 #Added in 0.138
@@ -1599,7 +1599,7 @@ msg_ptw_warning_2: 'Towny ekibi, şehir bloklarının gerçek parayla satın al�
 #Line 3 of the givebonus warning.
 msg_ptw_warning_3: 'Gerçek para ödediyseniz, Towny Takımının isteklerine saygı duyan bir Towny sunucusunda oynamayı düşünmelisiniz.'
 #Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: '%s Kasabasına davet edildiniz!&9 (Kasaba Ulusu: %s&9)'
+you_have_been_invited_to_join3: '%s Kasabasına davet edildiniz!<blue> (Kasaba Ulusu: %s<blue>)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Kasabanızın bu araziden vazgeçmek için yeterli parası bulunmamakta. Bankaya %s kadar altın atmalısınız.'
@@ -1648,7 +1648,7 @@ msg_a_town_you_are_outlawed_in: 'bu kasaba Haydut ilan edildiğin bir kasaba.'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: 'Rtp için herhangi bir açık, halka açık kasaba ile birlikle (karşılayabileceğiniz,) satılık arsalar bulunamadı.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bSatılık rastgele bir kasaba arsasına ışınlanmak için %s Kadar ücret Ödediniz.'
+msg_cost_spawn_rtp: '<aqua>Satılık rastgele bir kasaba arsasına ışınlanmak için %s Kadar ücret Ödediniz.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Katılmanızı sağlayacak, %s cinsinden satılık bir arsaya ışınlanmak üzeresiniz. Geldiğinizde arsanızı talep etmek için ''/plot claim''i kullanın.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
@@ -1737,7 +1737,7 @@ msg_town_plot_type_limit_reached: 'Kasaban %d olan %s limitine ulaştı.'
 msg_spawn_cost_free: 'Ücretsiz'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Bu arsa çoktan %s tipinde.'
-msg_town_board_reset: '&bKasaba tahtası temizlendi.'
+msg_town_board_reset: '<aqua>Kasaba tahtası temizlendi.'
 msg_town_has_no_jailslots: 'Kasaba hapishanesi dolu.'
 msg_you_have_been_jailed_your_bail_is_x: 'Hapse düştün, kefaret bedelin %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Belirlenmiş kefaletin maksimum değerden fazla. (%s)'
@@ -1752,11 +1752,11 @@ msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: 'Şehir kasasından %s çeki
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Tüm kasaba ve ulus bankalarını %s''e eşitlemek istediğinizden emin misiniz?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cUlusun maksimum izin verilen ulus başına vatandaş sayısına ulaştı, %s ve %s eklenilemiyor.'
+msg_err_cannot_add_nation_over_resident_limit: '<red>Ulusun maksimum izin verilen ulus başına vatandaş sayısına ulaştı, %s ve %s eklenilemiyor.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cBu ulusa katılamazsınız, çünkü bu ulus başına ikamet eden kişi sınırı olan %s''yi aşacaktır.'
+msg_err_cannot_join_nation_over_resident_limit: '<red>Bu ulusa katılamazsınız, çünkü bu ulus başına ikamet eden kişi sınırı olan %s''yi aşacaktır.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cBu ulusa katılamazsın, izin verilen maksimum kasaba sayısına ulaştı: %s.'
+msg_err_cannot_join_nation_over_town_limit: '<red>Bu ulusa katılamazsın, izin verilen maksimum kasaba sayısına ulaştı: %s.'
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Dünya ayarlarını, konfigürasyondaki normal ayarlara sıfırlamak istediğinize emin misiniz?'
 #Part of the /town plots output.
@@ -1852,14 +1852,14 @@ msg_err_cannot_unclaim_not_enough_adjacent_claims: "%s,%s adresindeki kasaba blo
 msg_tax_paid_to_residents_for_plots: "<aqua>Kasabanız arsa vergileri ile arsa sahiplerine %s vergi ödedi."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red> Dünya yüklenmedi."
-status_forsale: "&a(Satışta: %s)"
+status_forsale: "<green>(Satışta: %s)"
 msg_town_forsale: "%s %s fiyatına satışa çıkartıldı."
 msg_town_notforsale: "%s artık satışta değil."
 msg_town_sell_confirmation: "Kasaban %s fiyatına satışa çıkartılıcak. Devam etmek istediğine emin misin?"
 msg_town_buytown_already_mayor: "Zaten %s kasabasının belediye başkanısın."
 msg_town_buytown_not_forsale: "Bu kasaba satışta değil."
 msg_town_buytown_ruined: "Mahvolmuş kasabalar satın alınamaz."
-msg_resident_about_reset: "&b Sakin silinmek üzere."
+msg_resident_about_reset: "<aqua> Sakin silinmek üzere."
 #The format used for the /t say and /n say commands.
 town_say_format: "%s diyorki: %s"
 msg_unnamed: "İsimlendirilmemiş."
@@ -1889,8 +1889,8 @@ msg_err_name_validation_name_already_in_use: "%s daha önceden alınmış."
 msg_err_name_validation_title_too_long: "%s soyad olarak kullanmak için çok uzun."
 msg_err_name_validation_name_too_long: "%s isim olarak kullanmak için çok uzun."
 outlawed_in: "Yasaklandı"
-teleport_warmup_title_dont_move: "&6Hareket etme!"
-teleport_warmup_subtitle_seconds_remaining: "&c%s &Işınlanmanıza 7 saniye kaldı."
+teleport_warmup_title_dont_move: "<gold>Hareket etme!"
+teleport_warmup_subtitle_seconds_remaining: "<red>%s &Işınlanmanıza 7 saniye kaldı."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Kasaban mahvolmuş durumda. %s arsa koruma sınırları kaldırıldı."
 msg_err_town_no_longer_owns_this_plot: "%s artık bu arsanın sahibi değil."
 msg_town_cede_plot_confirmation_give_plot: "Arsayı %s adlı oyuncuya devretmek istediğine emin misin."
