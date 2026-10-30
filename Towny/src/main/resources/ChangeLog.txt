@@ -11130,3 +11130,5 @@ c
     - plugin.dev_mode.dev_name
   - Preserve components in translatable args/appended, courtesy of Warriorrr with PR #8330.
   - Fix saving exception when a town is deleted, courtesy of Warriorrr with PR #8331.
+0.103.2.15:
+  - Converted all lang files from using old colour codes (ie &a, &4,) to using minimessage colour codes (ie <aqua>, <dark_red>.)
