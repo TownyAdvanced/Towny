@@ -56,7 +56,6 @@ unclaimed_zone_name: 'Wilderness'
 # +------------------------------------------------------+ #
 ############################################################
 
-
 help_0: 'General Towny Help'
 help_1: 'Try the following commands to learn more about towny.'
 help_2: 'Town Chat'
@@ -315,7 +314,6 @@ world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
 world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
 world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
-
 
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
@@ -803,7 +801,6 @@ msg_not_enough_residents_capital: '<aqua>The town %s does not have enough reside
 
 list_page: '<aqua>Page %s of %s'
 list_err_not_enough_pages: '<red>Only %s pages available'
-
 
 msg_err_tax_minimum_not_met: 'You cannot set your town tax below %s.'
 
@@ -1306,7 +1303,6 @@ msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/tow
 
 msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'
 
-
 msg_conquered: '<dark_red>(Occupied)'
 
 msg_plot_group_claim_confirmation: 'This plot is part a group of %s plot(s) by confirming your claim you will purchase them all.'
@@ -1460,7 +1456,6 @@ msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d 
 msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
 msg_reclaim_available: 'Reclaim available.'
 msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
-
 
 msg_changed_peaceful: '<red>Town neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '<red>Unclaim canceled. You cannot unclaim this area at this time.'
@@ -1713,7 +1708,6 @@ msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in
 msg_legacy_economy_detected: "<aqua>Your Towny's economy implementation is set to Legacy, it is recommended that you let Towny update itself to using the Modern implementation. This will improve compatibility with more Economy plugins."
 msg_click_to_convert_to_modern_economy: "<aqua>Click here to convert your Towny's economy implementation from legacy to modern."
 
-
 status_trustedlist: 'Trusted'
 msg_click_to_edit: '<gold>Click to edit.'
 permission_gui_header: 'Towny Permission GUI'
@@ -1809,7 +1803,6 @@ help_menu_subcommand: '<aqua>'
 help_menu_explanation: '<gray>'
 help_menu_requirement: '<red>'
 
-
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
 
 msg_err_invalid_townyworld: "'%s' is not a valid towny world."
@@ -1833,7 +1826,6 @@ msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protectio
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 
-
 #Used in the nation screen:
 status_capital: 'Capital:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1846,7 +1838,6 @@ status_unknown: 'unknown'
 msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
-
 
 # Used in status screen:
 status_nation_zone_size: 'Nation Zone Size:'
@@ -1892,16 +1883,13 @@ msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
 
-
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
-
 
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
-
 
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Nation upkeep is based on <green>the %s'
@@ -1909,7 +1897,6 @@ towny_prices_nation_upkeep_based_on: '<gray>Nation upkeep is based on <green>the
 towny_prices_upkeep_num_towns: 'number of towns.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'nation level (num residents.)'
-
 
 #Jail causes
 msg_jailed_mayor: 'Jailed by mayor.'
@@ -1944,19 +1931,16 @@ msg_jailed_title: 'So you''ve been jailed :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 
-
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Town has no allies to list.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Town has no enemies to list.'
-
 
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
 
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Confirmation Timed Out.'
-
 
 tc_player_channel_sound_muted: 'The channel sound has been muted'
 tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
@@ -1965,12 +1949,10 @@ msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you ca
 
 msg_view_on_web: '<gray>Click to view on the web.'
 
-
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
-
 
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
@@ -1981,8 +1963,6 @@ msg_ptw_warning_3: 'If you did pay real money you should consider playing on a T
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'You have been invited to join %s<blue> (Nation: %s<blue>)'
 
-
-
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
@@ -1990,36 +1970,29 @@ msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
 
-
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
 
 msg_newday_already_running: 'A new day task is already currently running.'
 
-
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
 
-
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
-
 
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
 
-
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
 msg_err_console_only: 'This command can only be used by console.'
 msg_err_player_only: 'This command can only be used by a player.'
 
-
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
-
 
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
@@ -2046,7 +2019,7 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to
 townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
-#
+
 #Used in the town's status screen to display plots
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -2110,7 +2083,6 @@ msg_perm_hud_plot_for_sale: 'For Sale: '
 msg_perm_hud_no: 'No'
 #Seen in /plot perm hud:
 msg_perm_hud_yes: 'Yes'
-
 
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
@@ -2463,9 +2435,9 @@ msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
 
 msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
-    
+
 msg_town_cede_plot_confirmation_give_plot_cost: "Are you sure you want to give %s this plot? This action will cost %s."
-    
+
 msg_town_cede_plot_err_not_enough_money: "Could not cede plot to %s, not enough money! (%s)"
 
 msg_town_cede_plot_offer_sent: "Successfully offered %s the plot %s"
@@ -2597,7 +2569,7 @@ msg_err_must_specify_days_to_be_conquered: "You must specify a number of days to
 msg_conquered_status_granted: "You have set %s to have the conquered status for %s days."
 msg_conquered_status_granted_unlimited: "You have set %s to have the conquered status for an indefinite amount of days."
 msg_err_must_specify_on_or_off: "You must specify on or off."
-    
+
 msg_nation_level_overridden_with: 'The nation %s has had their nationlevel set to %s.'
 msg_nation_level_unset: 'The nation %s has had their manually-set nationlevel unset. Current nationlevel is %s.'
 
