@@ -441,17 +441,17 @@ msg_plot_fs_radius: 'Выставить на продажу все участк�
 ############################################################
 msg_buy: '&bКуплено %d %s за %s.'
 msg_buy_resident_plot: '&b%s купил участок %s за %s!'
-msg_buy_resident_plot_group: '&b%s купил группу участков %s за %s!'
+msg_buy_resident_plot_group: '<aqua>%s купил группу участков %s за %s!'
 msg_couldnt_pay_taxes: '&b%s не смог оплатить налоги, и был изгнан из города %s.'
 msg_couldnt_pay_plot_taxes: '&b%s не смог заплатить налоги и потерял свой участок.'
-msg_you_couldnt_pay_plot_tax: '&bВы не смогли заплатить налог на %s и потеряли право собственности на участок: %s.'
-msg_you_couldnt_pay_town_tax: '&bВы не смогли заплатить городской налог в размере %s и были изгнаны из %s.'
-msg_you_paid_town_tax: '&bВы уплатили налог на ваш город в размере %s.'
-msg_you_paid_plottax_to_town: '&bВы уплатили налоги на общую сумму %s в город %s.'
+msg_you_couldnt_pay_plot_tax: '<aqua>Вы не смогли заплатить налог на %s и потеряли право собственности на участок: %s.'
+msg_you_couldnt_pay_town_tax: '<aqua>Вы не смогли заплатить городской налог в размере %s и были изгнаны из %s.'
+msg_you_paid_town_tax: '<aqua>Вы уплатили налог на ваш город в размере %s.'
+msg_you_paid_plottax_to_town: '<aqua>Вы уплатили налоги на общую сумму %s в город %s.'
 msg_bankrupt_town: ' не смог себе позволить остаться городом.'
 msg_bankrupt_nation: ' больше не может быть нацией, так как не имеет денег на содержание.'
 msg_nation_not_peaceful: '&bНация не может себе позволить быть мирной.'
-msg_nation_cant_peaceful: '&bTown не может позволить себе стать мирным городом. Вам нужно платить %s в день.'
+msg_nation_cant_peaceful: '<aqua>Town не может позволить себе стать мирным городом. Вам нужно платить %s в день.'
 msg_peaceful_disabled: '&bМирный статус Нации отменен.'
 msg_you_paid: '&bВы заплатили %s за мирный статус.'
 msg_nation_set_peace: '&bУспешно изменен статус нации.'
@@ -642,7 +642,7 @@ msg_err_must_belong_town: '&cВы должны быть жителем горо�
 msg_err_dont_belong_town: '&cУ вас нет родного города.'
 msg_err_dont_belong_nation: '&bУ вас нет нации.'
 msg_err_already_belong_nation: 'Вы сейчас в нации.'
-msg_err_town_already_belong_nation: '&b%s уже в нации: %s.'
+msg_err_town_already_belong_nation: '<aqua>%s уже в нации: %s.'
 msg_err_not_same_nation: '&b%s не принадлежит к нации'
 msg_err_rect_auto: '&cТолько города и горожане могут использовать авто режим.'
 msg_err_invalid_radius: '&cНеверный радиус. Используйте целое число или ''auto''.'
@@ -670,8 +670,8 @@ msg_err_input_too_long: '&cСлишком длинно.'
 msg_err_invalid_choice: '&cНеверный выбор'
 msg_err_invalid_sub: '&cНеверная подкоманда.'
 msg_err_command_disable: '&cУ вас недостаточно прав для этой команды.'
-msg_err_plot_preclaim_disable: "&cВы не можете получить диаграмму %s прямо сейчас."
-msg_err_plot_preunclaim_disable: "&cЖитель не может снять заговор %s прямо сейчас."
+msg_err_plot_preclaim_disable: "<red>Вы не можете получить диаграмму %s прямо сейчас."
+msg_err_plot_preunclaim_disable: "<red>Житель не может снять заговор %s прямо сейчас."
 msg_err_you_dont_have_permission_to_use_colours: "У вас нет прав для использования цветовых кодов в 'title' и 'surname'."
 msg_err_universe_limit: '&cМаксимальный предел городов достигнут.'
 msg_err_too_many_npc: '&cСлишком много NPC зарегистрировано.'
@@ -692,7 +692,7 @@ msg_err_not_enough_residents_join_nation: '&bГород %s не имеет до�
 msg_not_enough_residents_no_longer_capital: '&bНаша столица не имеет достаточного кол-ва горожан чтобы быть столицей. Новая столица теперь - %s.'
 msg_town_not_enough_residents_left_nation: '&bГород %s не имеет достаточно горожан, чтобы состоять в нации и он был исключен из госудасртва.'
 msg_nation_disbanded_town_not_enough_residents: '&bГород %s не имеет достаточно горожан, и поэтому нация была распущена.'
-msg_not_enough_residents_refunded: '&bВам было возвращено %s за расформирования нации из-за нехватки жителей.'
+msg_not_enough_residents_refunded: '<aqua>Вам было возвращено %s за расформирования нации из-за нехватки жителей.'
 msg_not_enough_residents_capital: '&bГород %s не имеет достаточно горожан, чтобы стать столицей нации.'
 list_page: '&bСтраница %s из %s'
 list_err_not_enough_pages: '&cТолько %s страниц доступно'
@@ -823,7 +823,7 @@ msg_err_nation_sent_too_many_requests: '&bНация отправила слиш
 msg_err_nation_has_too_many_requests: '&bНация %s имеет слишком много запросов. Попросите её отказаться от некоторых, прежде чем снова приглашать.'
 player_received_invites: '&bВы получили %a/%m приглашений.'
 town_revoke_invite: '&bГород %s, отозвал ваше приглашение присоединиться к ним'
-town_revoke_invite_successful: '&bВы отказали %s присоединиться к вашему городу.'
+town_revoke_invite_successful: '<aqua>Вы отказали %s присоединиться к вашему городу.'
 town_received_invites: '&bГород получил %a/%m приглашений.'
 town_sent_invites: '&bГород отправил %a/%m приглашений.'
 nation_revoke_invite: '&bНация %s, отозвала ваше приглашение присоединиться к ним.'
@@ -1001,7 +1001,7 @@ msg_err_public_nation_spawn_forbidden: '&cПубличный спавн в др�
 msg_err_public_nation_spawn_forbidden_war: '&cПубличный спавн в другие нации разрешено только во время войны.'
 msg_err_public_nation_spawn_forbidden_peace: '&cПубличный спавн в другие нации запрещен во время войны.'
 msg_spawn_cost_set_to: '&b%s установил стоимость использования /%s spawn на %s'
-msg_spawn_fail_safe_teleport: '&cТелепортация не удалась, местоположение небезопасно, попросите вашего мэра изменить точку телепорта.'
+msg_spawn_fail_safe_teleport: '<red>Телепортация не удалась, местоположение небезопасно, попросите вашего мэра изменить точку телепорта.'
 msg_err_cannot_set_spawn_cost_more_than: '&cВы не можете установить стоимость спана выше, чем %s'
 msg_err_ally_isnt_public: '&cВаш союзник, %s, не имеет публичной точки спавна. Телепорт запрещен.'
 msg_nation_changed_public: '&cПубличный статус нации теперь %s.'
@@ -1344,7 +1344,7 @@ towny_prices_overclaimed_upkeep: '&e[Налог на переприват] &2Г�
 towny_prices_claiming_townblock: '&e[Приват] &2Участок: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2Рост цен за каждый участок: &a+%s'
 towny_prices_claiming_outposts: '&e[Приват] &2Аванпосты: &a%s'
-towny_prices_outposts_upkeept: '&7Аванпосты требуют дополнительной ежедневной платы за обслуживание каждого аванпоста: &a%s'
+towny_prices_outposts_upkeept: '<gray>Аванпосты требуют дополнительной ежедневной платы за обслуживание каждого аванпоста: <green>%s'
 towny_prices_upkeep_based_on: '&7Стоимость содержания города основана на &a%s'
 towny_prices_upkeep_num_plots: 'количество участков.'
 towny_prices_upkeep_town_level: 'уровень города (кол-во жителей)'
@@ -1466,7 +1466,7 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s должны наиг�
 msg_town_not_peaceful: '&bНация не смогла себе позволить быть мирной.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
-msg_town_cant_peaceful: '&bTown не может позволить себе стать мирным городом. Вам нужно платить %s в день.'
+msg_town_cant_peaceful: '<aqua>Town не может позволить себе стать мирным городом. Вам нужно платить %s в день.'
 msg_town_paid_for_neutral_status: '&bВаш город заплатил %s для удержания своего мирного статуса.'
 msg_nation_paid_for_neutral_status: '&bВаша нация заплатила %s для удержания своего мирного статуса.'
 your_town_has_been_invited_to_join_nation: 'Ваш город был приглашен вступить в нацию %s'
@@ -1474,8 +1474,8 @@ your_town_has_been_invited_to_join_nation: 'Ваш город был пригл�
 msg_err_no_one_to_purge: '&bНет неактивных участников для очистки.'
 msg_purging_will_remove_the_following_residents: '&bПожалуйста, подтвердите, что вы хотите очистить следующих жителей: %s'
 msg_purge_complete_x_removed: '&bОчистка завершена, %s жителей удалено.'
-msg_purge_complete_x_removed_from_towns: '&bОчистить, %s неактивных жителей, удаленных из городов.'
-msg_purge_reached_50_residents: '&bPurge достигла 50, дальнейшее удаление не будет зарегистрировано для сокращения спама.'
+msg_purge_complete_x_removed_from_towns: '<aqua>Очистить, %s неактивных жителей, удаленных из городов.'
+msg_purge_reached_50_residents: '<aqua>Purge достигла 50, дальнейшее удаление не будет зарегистрировано для сокращения спама.'
 msg_err_days_must_be_greater_than_0: 'Дни должни быть больше нуля.'
 msg_err_outlawed_players_no_teleport: '&4Вы вне закона в городе, в котором вы сейчас находитесь и не можете телепортироваться!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Вы не можете использовать эту команду находясь в городе, который объявил вас вне закона.'
@@ -1510,8 +1510,8 @@ msg_latest_version: '&2Версия Towny: &a%s &2| Последняя верс�
 msg_up_to_date: 'Обновлений не требуется.'
 msg_click_purchase: 'Нажмите, чтобы купить'
 msg_you_must_join_this_town_to_claim_this_plot: 'Вы должны вступить в город %s чтобы получить этот участок. Хотите продолжить?'
-msg_legacy_economy_detected: "&bЭкономика вашего города установлена в Legacy, рекомендуется позволить самому обновиться в соответствии с современной реализацией. Это улучшит совместимость с плагинами Economy."
-msg_click_to_convert_to_modern_economy: "&bНажмите здесь, чтобы преобразовать реализацию экономики вашего города из 'legacy' в современную."
+msg_legacy_economy_detected: "<aqua>Экономика вашего города установлена в Legacy, рекомендуется позволить самому обновиться в соответствии с современной реализацией. Это улучшит совместимость с плагинами Economy."
+msg_click_to_convert_to_modern_economy: "<aqua>Нажмите здесь, чтобы преобразовать реализацию экономики вашего города из 'legacy' в современную."
 #Added in 0.113
 status_trustedlist: 'Доверенный'
 msg_click_to_edit: '&6Нажмите, чтобы изменить.'
@@ -1520,7 +1520,7 @@ msg_last_edited: '&7&oВ последний раз изменено %s %s.'
 #Last %s is either town or townblock
 msg_trusted_added: '&b%s теперь доверенный в этом %s.'
 msg_already_trusted: '&b%s уже доверенный(ая) в этом %s.'
-msg_cannot_trust_your_own_town: '&bВы не можете сделать доверенным ваш собственный город.'
+msg_cannot_trust_your_own_town: '<aqua>Вы не можете сделать доверенным ваш собственный город.'
 #Last %s is the town name or worldcoord.
 msg_trusted_added_2: '&b%s добавил вас на пост доверенного в %s: %s.'
 msg_not_trusted: '&b%s не является доверенным в этом %s.'
@@ -1892,7 +1892,7 @@ msg_spawn_cost_free: 'Бесплатно'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Этот участок уже %s вида.'
 msg_town_board_reset: '&bДоска объявлений города очищена.'
-msg_nation_board_reset: '&bДоска объявлений города очищена.'
+msg_nation_board_reset: '<aqua>Доска объявлений города очищена.'
 msg_town_has_no_jailslots: 'Городская тюрьма переполнена.'
 msg_you_have_been_jailed_your_bail_is_x: 'Вы были заключены в тюрьму, ваш залог: %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Ваш установленный залог был выше, чем максимальный: %s.'
@@ -2029,8 +2029,8 @@ msg_err_your_cannot_overclaim_for_another: "Вы не можете перепр�
 msg_err_world_not_loaded: "<red>Мир не загружен."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cЭтому участку присвоен статус налогооблажения %s.'
-msg_changed_plotgroup_taxed: '&cЭтому участку присвоен статус налогообложения %s.'
-status_forsale: "&a(Продаётся: %s)"
+msg_changed_plotgroup_taxed: '<red>Этому участку присвоен статус налогообложения %s.'
+status_forsale: "<green>(Продаётся: %s)"
 msg_town_forsale: "%s был выставлен на продажу за %s."
 msg_town_notforsale: "%s больше не продаётся."
 msg_town_sell_confirmation: "Это выставит ваш город на продажу за %s. Вы уверены, что хотите продолжить?"
@@ -2038,7 +2038,7 @@ msg_town_buytown_already_mayor: "Вы уже мэр %s."
 msg_town_buytown_confirmation: "Покупка %s будет стоить %s и выселит вас из вашего текущего города. Вы уверены, что хотите продолжить?"
 msg_town_buytown_not_forsale: "Указанный город не продаётся."
 msg_town_buytown_ruined: "Руины не могут быть куплены."
-msg_resident_about_reset: "&bПоле \"О себе\" жителя сброшено."
+msg_resident_about_reset: "<aqua>Поле \"О себе\" жителя сброшено."
 msg_err_invalid_string_about_not_set: "Неверная строка, биография жителя не установлена."
 msg_set_about: "%s выставил информацию о себе: %s."
 msg_clear_about: "%s удалил инфо о себе."
@@ -2097,8 +2097,8 @@ msg_town_being_deleted_because_no_residents: "%s Удаляется, потом�
 outlawed_in: "Преступник в"
 msg_warning_town_deposit_hint: "Чтобы положить деньги в ваш городской банк используйте /town deposit [количество]."
 msg_warning_nation_deposit_hint: "Чтобы положить деньги в ваш национальный банк используйте /nation deposit [количество]."
-teleport_warmup_title_dont_move: "&6Не двигаться!"
-teleport_warmup_subtitle_seconds_remaining: "&c%s &7секунд до телепорта."
+teleport_warmup_title_dont_move: "<gold>Не двигаться!"
+teleport_warmup_subtitle_seconds_remaining: "<red>%s <gray>секунд до телепорта."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Поскольку ваш город имеет статус 'Руины', %s участки(ов) строки разрешений были изменены, что бы не обеспечивать защиты."
 console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Из-за статуса 'Руины', %s было %s участки(ов) строк разрешений были изменены, что бы не обеспечивать защиту: %s."
 msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "Вы не можете уступить участок своему городу."
