@@ -1082,8 +1082,6 @@ msg_wilderness_use_x_in_all_worlds: 'การใช้ถิ่นทุรก�
 msg_regenerations_use_x_in_all_worlds: 'การ Regenerations %s เกิดขึ้นในทุก World'
 #Added in 0.106
 msg_command_outsider_blocked: 'คุณไม่สามารถเรียกใช้คำสั่งนั้นได้เพราะคุณไม่ได้อาศัยอยู่ใน %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' เป็นเวลา %s ชั่วโมง'
 msg_err_no_cell_found_at_this_location: 'ไม่พบห้องขังในสถานที่นี้'
 msg_jail_cell_set: 'ชุดห้องขัง.'
 msg_err_resident_is_already_jailed: '%s ถูกใช้งานแล้ว'
@@ -1097,7 +1095,6 @@ msg_you_have_paid_bail: 'คุณได้จ่ายเงินประก�
 msg_you_have_been_freed_via_jailbreak: 'มีการแหกคุก คุณเป็นอิสระแล้ว'
 msg_you_have_served_your_sentence_and_are_free: 'คุณได้รับโทษจำคุกและเป็นอิสระ'
 msg_x_has_served_their_sentence_and_is_free: '%s ได้รับโทษจำคุกและเป็นอิสระ'
-msg_you've_been_jailed_for_x_hours: 'คุณถูกจำคุกเป็นเวลา %s ชั่วโมง'
 jail_plu: 'คุก'
 jail_sing: 'คุก'
 map_hover_plot_group_size: ' ขนาด: '

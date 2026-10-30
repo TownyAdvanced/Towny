@@ -716,7 +716,6 @@ msg_you_have_undeclared_an_outlaw: '%s không còn là kẻ ngoài vòng pháp l
 msg_err_player_not_an_outlaw: 'Người chơi đó không được liệt kê là kẻ sống ngoài vòng pháp luật.'
 msg_err_outlaw_in_open_town: 'Bạn không thể gia nhập một thị trấn mở nơi bạn bị coi là kẻ sống ngoài vòng pháp luật.'
 msg_you_are_an_outlaw_in_this_town: '&4Cẩn thận %s coi bạn là kẻ ngoài vòng pháp luật, chết ở đây có nghĩa là vào tù.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Kẻ ngoài vòng pháp luật sẽ bị bỏ tù trong %s giờ.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Tiền bảo lãnh của bạn sẽ tốn %s.'
 msg_err_town_not_close_enough_to_nation: 'Ô trung tâm của %s không đủ gần khu ô trung tâm của bạn để có thể gia nhập quốc gia của bạn.'
 msg_nation_town_moved_their_homeblock_too_far: 'Ô trung tâm của %s đã được di chuyển quá xa khỏi ô trung tâm quốc gia của bạn và đã bị xóa khỏi quốc gia của bạn.'
@@ -1397,8 +1396,6 @@ msg_wilderness_use_x_in_all_worlds: 'Sử dụng vùng hoang dã đã biến %s 
 msg_regenerations_use_x_in_all_worlds: 'Quá trình tái sinh đã biến %s ở tất cả các thế giới.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Bạn không thể chạy lệnh đó vì bạn không sống ở %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' trong %s giờ.'
 msg_err_this_jail_has_no_cells: 'Nhà tù này không có phòng giam.'
 msg_err_no_cell_found_at_this_location: 'Không tìm thấy phòng giam nào ở địa điểm này.'
 msg_jail_cell_set: 'Tạo phòng giam.'
@@ -1415,7 +1412,6 @@ msg_you_have_paid_bail: 'Bạn đã nộp tiền bảo lãnh.'
 msg_you_have_been_freed_via_jailbreak: 'Đã có một cuộc vượt ngục, bạn được tự do!'
 msg_you_have_served_your_sentence_and_are_free: 'Bạn đã chấp hành xong án tù và được tự do.'
 msg_x_has_served_their_sentence_and_is_free: '%s đã chấp hành xong án tù và được tự do.'
-msg_you've_been_jailed_for_x_hours: 'Bạn đã bị giam giữ %s giờ.'
 msg_you_are_being_sent_to_jail: 'Bạn đang bị đưa vào tù.'
 msg_err_you_cannot_remove_the_last_cell: 'Bạn không thể xóa phòng giam cuối cùng trong nhà tù này cho đến khi một ô tù khác được thêm vào'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Không được đăng xuất trước khi bị dịch chuyển đến nhà tù, điều này sẽ gây tử vong.'
@@ -1651,8 +1647,6 @@ msg_jailed_handbook_1: 'Có vẻ như bạn đã bị bỏ tù vì lý do %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Thật tệ phải không. Vậy bạn có thể làm gì về điều đó? Sau đây là một số mẹo hữu ích dành cho bạn trong khi bạn thụ án.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Bạn đã bị giam giữ trong %s giờ. Khi chấp hành xong bản án, bạn sẽ được tự do.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Bạn có thể trốn thoát khỏi nhà tù bằng cách rời khỏi thị trấn bằng lệnh ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Khi bị giam giữ, bạn sẽ không thể rời khỏi thị trấn để trốn thoát.'
@@ -1847,8 +1841,6 @@ msg_spawn_cost_free: 'Miễn phí'
 msg_plot_already_of_type: 'Lô đất này hiện đã là loại %s.'
 msg_town_board_reset: '&bThiết lập lại bảng thị trấn.'
 msg_town_has_no_jailslots: 'Nhà tù thị trấn đã đầy.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s đã được gửi đến %s vào ô số %s trong %s giờ với lệnh bảo lãnh %s của %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s đã được gửi đến %s vào số nhà giam %s trong %s giờ bởi %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'Bạn đã bị bỏ tù, số tiền bảo lãnh của bạn là %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Số tiền bảo lãnh của bạn cao hơn mức tối đa là %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Số giờ bạn đặt cao hơn mức tối đa là %s.'

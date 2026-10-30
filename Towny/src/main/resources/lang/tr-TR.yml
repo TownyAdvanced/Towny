@@ -1306,8 +1306,6 @@ msg_wilderness_use_x_in_all_worlds: 'Vahşi doğa kullanımı tüm dünyalarda %
 msg_regenerations_use_x_in_all_worlds: 'Yenilenmeler tüm dünyalarda %s oldu.'
 #Added in 0.106
 msg_command_outsider_blocked: '%s''de yaşamadığınız için bu komutu çalıştıramazsınız.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' %s saat için:'
 msg_err_this_jail_has_no_cells: 'Bu hapishanede hücre yok.'
 msg_err_no_cell_found_at_this_location: 'Bu konumda hiçbir hapishane hücresi bulunamadı.'
 msg_jail_cell_set: 'Hapishane hücresi seti.'
@@ -1324,7 +1322,6 @@ msg_you_have_paid_bail: 'Kefalet ödedin.'
 msg_you_have_been_freed_via_jailbreak: 'Artık özgürsün!'
 msg_you_have_served_your_sentence_and_are_free: 'Hapis cezanı çektin artık özgürsün.'
 msg_x_has_served_their_sentence_and_is_free: '%s hapis cezasını çekti. O artık özgür!'
-msg_you've_been_jailed_for_x_hours: '%s saattir hapistesiniz.'
 msg_you_are_being_sent_to_jail: 'Hapse gönderiliyorsun...'
 msg_err_you_cannot_remove_the_last_cell: 'Başka bir hücre eklenene kadar bu hapishanedeki son hapishane hücresini kaldıramazsınız'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Hapse ışınlanmadan önce çıkış yapmayın, bu ölümcül olur.'
@@ -1552,8 +1549,6 @@ msg_jailed_handbook_1: '%s nedeniyle hapse atılmışsınız gibi görünüyor'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Bu çok kötü ha. Peki bu konuda ne yapabilirsin? İşte cezanı çekerken sana yardımcı olacak bazı ipuçları.'
 #Jail handbook messages
-msg_jailed_handbook_3: '%s saattir hapistesiniz. Cezanı çekerek özgür olacaksın.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: '/town leave komutunu kullanarak şehrinizden ayrılıp, hapisten kaçabilirsiniz.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Hapisteyken hapishaneden kaçmak için kasabanı terk edemeyeceksin.'
@@ -1744,8 +1739,6 @@ msg_spawn_cost_free: 'Ücretsiz'
 msg_plot_already_of_type: 'Bu arsa çoktan %s tipinde.'
 msg_town_board_reset: '&bKasaba tahtası temizlendi.'
 msg_town_has_no_jailslots: 'Kasaba hapishanesi dolu.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s, %s hapishanesine %s. hücreye %s saatliğine ve %s ila %s kefaletiyle gönderildi.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s tarafından %s saat boyunca %s hücre numarasına %s için gönderildi.'
 msg_you_have_been_jailed_your_bail_is_x: 'Hapse düştün, kefaret bedelin %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Belirlenmiş kefaletin maksimum değerden fazla. (%s)'
 msg_err_higher_than_max_allowed_hours_x: 'Belirlenmiş saatin maksimum değerden fazla. (%s)'

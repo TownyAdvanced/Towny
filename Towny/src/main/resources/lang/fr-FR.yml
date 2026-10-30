@@ -1375,8 +1375,6 @@ msg_wilderness_use_x_in_all_worlds: '%s est utilisé(e) dans le nature au sein d
 msg_regenerations_use_x_in_all_worlds: 'La régénération est %s dans tout les mondes.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Vous ne pouvez pas exécuter cette commande car vous ne résider pas dans %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' pendant %s heures.'
 msg_err_this_jail_has_no_cells: 'Cette prison n''a pas de cellule.'
 msg_err_no_cell_found_at_this_location: 'Aucune cellule de prison trouvée à cet endroit.'
 msg_jail_cell_set: 'Cellule de prison définie.'
@@ -1393,7 +1391,6 @@ msg_you_have_paid_bail: 'Vous avez payé la caution.'
 msg_you_have_been_freed_via_jailbreak: 'Il y a eu une évasion, vous êtes libre!'
 msg_you_have_served_your_sentence_and_are_free: 'Vous avez purgé votre peine de prison et êtes libre.'
 msg_x_has_served_their_sentence_and_is_free: '%s a purgé sa peine de prison et est libre.'
-msg_you've_been_jailed_for_x_hours: 'Vous avez été emprisonné pour %s heures.'
 msg_you_are_being_sent_to_jail: 'Vous êtes envoyé en prison.'
 msg_err_you_cannot_remove_the_last_cell: 'Vous ne pouvez pas retirer la dernière cellule de cette prison, tant qu''une autre cellule n''est pas ajoutée'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Ne déconnectez pas avant d''être téléporté en prison, si vous ne voulez pas mourir.'
@@ -1624,8 +1621,6 @@ msg_jailed_handbook_1: 'Il semblerait que vous ayez été emprisonné, pour la r
 #Jail handbook messages
 msg_jailed_handbook_2: 'C''est dommage, hein. Eh bien que peux-tu y faire ? Voici quelques conseils utiles pour vous pendant que vous purgez votre peine.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Vous avez été emprisonné pendant %s heures. En purgeant votre peine, vous deviendrez libre.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Vous pouvez vous échapper de la prison en quittant votre ville en utilisant ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Tant que vous serez en prison, vous ne pourrez pas quitter votre ville pour vous échapper.'
@@ -1808,8 +1803,6 @@ msg_spawn_cost_free: 'Gratuit'
 msg_plot_already_of_type: 'Ce plot est déjà du type %s.'
 msg_town_board_reset: '&bAffiche de ville réinitialisée.'
 msg_town_has_no_jailslots: 'La prison de ville est pleine.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s a été envoyé vers %s dans la cellule numéro %s pour %s heures avec une caution de %s par %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s a été envoyé à %s dans la cellule %s pendant %s heures par %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'Vous avez été emprisonné, votre caution est de %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Votre caution est plus haute que le maximum qui est de %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Le nombre d''heures est plus haut que le maximum qui est de %s.'

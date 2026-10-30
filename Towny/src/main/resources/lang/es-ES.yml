@@ -242,7 +242,7 @@ admin_panel_8: "Comandos para controlar estos objetos"
 admin_panel_9: "Teletransportar a la parcela especificada"
 admin_panel_10: "Comprueba si el jugador tiene un nodo de permiso"
 admin_panel_11: "Restablecer tu configuración"
-admin_panel_12: "Hacer una copia de seguridad de los datos de tu ciudad"
+admin_panel_12: "Hacer una copia de seguridad de los datos de Towny"
 admin_panel_13: "Vuelca tu base de datos MySQL a archivo plano"
 admin_panel_14: "Forzar guardar o cargar su base de datos"
 admin_panel_15: "Ejecutar el código newhour"
@@ -283,8 +283,6 @@ townyadmin_nation_help_5: "Eliminar una ciudad."
 townyadmin_nation_help_6: "Revise las ciudades de la nación para asegurarse de que están lo suficientemente cerca de la capital."
 townyadmin_nation_help_7: "Combinar la 2ª nación con la primera."
 townyadmin_nation_help_8: "Combinar la 2ª nación con la primera nación, ignorando cualquier regla."
-townyadmin_nation_help_9: "Usa el comando de activación de una nación."
-townyadmin_nation_help_10: "Usa el comando de configuración de una nación."
 townyadmin_nation_help_11: "Ponga dinero en el banco nacional."
 townyadmin_nation_help_12: "Tome dinero del banco nacional."
 townyadmin_nation_help_13: "Abrir la cartera de historial bancaria de la nación."
@@ -330,7 +328,7 @@ ta_nationmeta_help_1: "Ver los metadatos almacenados en la nación que especifiq
 ta_nationmeta_help_2: "Establecer clave y valor de metadatos de la nación."
 ta_nationmeta_help_3: "Agrega o elimina un metadata por clave de la nación."
 ta_reload_help_0: "Recargar la base de datos."
-ta_reload_help_1: "Rcargar config."
+ta_reload_help_1: "Recargar configuración."
 ta_reload_help_2: "Recargar archivos de idioma."
 ta_reload_help_3: "Recargar los permisos de Towny."
 ta_reload_help_4: "Recarga todos los componentes de Towny."
@@ -571,7 +569,6 @@ msg_new_mayor: '&b%s es ahora el alcalde!'
 msg_new_nation: '&b%s creó un nuevo país llamado %s'
 msg_new_town: '&b%s creó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b%s puso la parcela (%s) a la venta!'
-msg_plot_for_sale_amount: '&b%s pon la parcela (%s) a la venta por %s!'
 msg_plot_set_type: '&bTipo de parcela cambiado a %s'
 msg_cache_block_error: '&cNo fuiste registrado en Towny. Prueba a entrar nuevamente.'
 msg_cache_block_error_wild: '&cEn salvaje no tenes permiso para: %s'
@@ -713,7 +710,6 @@ msg_you_have_undeclared_an_outlaw: '%s ya no es un bandido en %s.'
 msg_err_player_not_an_outlaw: 'Este jugador no estaba marcado como un bandido.'
 msg_err_outlaw_in_open_town: 'No puedes entrar a una ciudad abierta que te ha declarado como bandido.'
 msg_you_are_an_outlaw_in_this_town: '&4Se cuidadoso %s te considera un bandido, morir aquí te enviará a la carcel.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Los forajidos están encarcelados por %s horas.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Tu fianza costaría %s.'
 msg_err_town_not_close_enough_to_nation: 'El spawn de %s no está lo suficientemente cerca del spawn de tu capital para unirse a tu país.'
 msg_nation_town_moved_their_homeblock_too_far: 'El spawn de %s fue movido demasiado lejos del spawn te tu capital y fue eliminado de tu nación.'
@@ -880,7 +876,7 @@ owner_of_x_plots: 'Propietario de %s lotes.'
 status_bank: 'Banco:'
 status_town: 'Población:'
 status_no_town: 'Ninguna'
-status_town_ranks: 'Ranking de Poblaciones:'
+status_town_ranks: 'Ranking de Ciudades:'
 status_nation_ranks: 'Ranking de Naciones:'
 jailed_in_town: ' en la Población: %s'
 status_friends: 'Amigos'
@@ -891,7 +887,6 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Abierto)'
 status_town_board: 'Anuncios:'
 status_founded: 'Fundado:'
-status_founded_by: 'Encontrado por:'
 status_town_size: 'Tamaño de la Población:'
 status_town_size_bought: 'Comprado:'
 status_town_size_bonus: 'Bonificación:'
@@ -1395,8 +1390,6 @@ msg_wilderness_use_x_in_all_worlds: 'Uso en el campo %s en todos los mundos.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneracion %s en todos los mundos.'
 #Added in 0.106
 msg_command_outsider_blocked: 'No puedes usar este comando porque no vives en %s.'
-#Added in 0.107
-msg_jailed_for_x_hours: ' por %s horas.'
 msg_err_this_jail_has_no_cells: 'Esta carcel no tiene celdas.'
 msg_err_no_cell_found_at_this_location: 'No se encontraron celdas aqui.'
 msg_jail_cell_set: 'Celda establecida.'
@@ -1413,7 +1406,6 @@ msg_you_have_paid_bail: 'Pagaste tu fianza.'
 msg_you_have_been_freed_via_jailbreak: 'Hubo una fuga, eres libre!'
 msg_you_have_served_your_sentence_and_are_free: 'Completaste tu sentencia, eres libre.'
 msg_x_has_served_their_sentence_and_is_free: '%s termino su sentencia y esta ahora libre.'
-msg_you've_been_jailed_for_x_hours: 'Fuiste encarcelado por %s horas.'
 msg_you_are_being_sent_to_jail: 'Estas siendo enviado a la carcel.'
 msg_err_you_cannot_remove_the_last_cell: 'No puedes remover la ultima celda hasta que se añada una nueva'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'No te desconectes hasta estar en la carcel, seria fatal.'
@@ -1650,8 +1642,6 @@ msg_jailed_handbook_1: 'Parece que has sido encarcelado, la razon es &s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Esto es muy malo heh. Bueno. ¿Qué puedes hacer al respecto? Aquí tienes una lista de consejos utiles para que te ayuden con tu sentencia.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Has sido encarcelado por %s horas. Si cumples tu sentencia serás libre.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Puedes escapar de la cárcel seliendo de tu ciudad usando /town leave'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Mientras estás encarcelado no puedes salir de la ciudad para escapar de la carcel.'
@@ -1846,8 +1836,6 @@ msg_spawn_cost_free: 'Gratis'
 msg_plot_already_of_type: 'Esta parcela ya es un tipo %s.'
 msg_town_board_reset: '&bTablero de ciudad reiniciado.'
 msg_town_has_no_jailslots: 'La cárcel de la ciudad está llena.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s ha sido enviado a %s al número de celda %s durante %s horas con una fianza de %s por %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s fue enviado a la %s a la celda %s durante %s horas por %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'Has sido encarcelado, tu fianza es %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Tu fianza establecida fue más alta que la máxima, que es %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Las horas fijadas fueron más altas que el máximo %s.'

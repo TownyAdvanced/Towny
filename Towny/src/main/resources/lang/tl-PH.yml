@@ -783,8 +783,6 @@ msg_jailed_handbook_1: 'Mukhang nakulong ka, sa kadahilanang %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Grabe naman yun. Ano ang maaari mong gawin tungkol dito? Narito ang ilang kapaki-pakinabang na tip para sa iyo habang nagsisilbi ka sa iyong sentensiya.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Nakulong ka ng %s oras. Sa pamamagitan ng paglilingkod sa iyong sentensiya ikaw ay magiging malaya.'
-#Jail handbook messages
 msg_jailed_handbook_4_can: 'Maaari kang makatakas mula sa kulungan sa pamamagitan ng pag-alis sa iyong bayan gamit ng ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'Habang ikaw ay nakakulong, hindi ka makakalabas sa iyong bayan upang makatakas sa kulungan.'

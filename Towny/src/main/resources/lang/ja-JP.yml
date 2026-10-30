@@ -713,7 +713,6 @@ msg_you_have_undeclared_an_outlaw: '%s はもう %s での無法者ではあり�
 msg_err_player_not_an_outlaw: 'そのプレーヤーは無法者としてリストされていませんでした。'
 msg_err_outlaw_in_open_town: 'あなたは無法者とみなされたオープンな町に入ることはできません。'
 msg_you_are_an_outlaw_in_this_town: '&4 %s はあなたを無法者と見なし、ここで死ぬことは投獄を意味する可能性があります。'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4無法者は%s時間の間投獄されます。'
 msg_you_are_an_outlaw_in_this_town_bail_amount: '保釈には%sかかります。'
 msg_err_town_not_close_enough_to_nation: '%sのホームブロックは、あなたの国に参加するためのあなたの首都のホームブロックに近くありません。'
 msg_nation_town_moved_their_homeblock_too_far: '%sのホームブロックは、あなたの国の首都から遠すぎるため、あなたの国から削除されました。'
@@ -1393,8 +1392,6 @@ msg_wilderness_use_x_in_all_worlds: '荒野が%sになりました。'
 msg_regenerations_use_x_in_all_worlds: '再生はすべてのワールドで%sとなっています。'
 #Added in 0.106
 msg_command_outsider_blocked: '%sに住んでいないため、そのコマンドを実行することはできません。'
-#Added in 0.107
-msg_jailed_for_x_hours: ' %s時間'
 msg_err_this_jail_has_no_cells: 'この牢獄には牢屋がありません。'
 msg_err_no_cell_found_at_this_location: 'この場所に牢屋はありません。'
 msg_jail_cell_set: '牢屋のセルを設定しました。'
@@ -1411,7 +1408,6 @@ msg_you_have_paid_bail: '保釈金を払いました。'
 msg_you_have_been_freed_via_jailbreak: '脱獄が発生しました。あなたは自由です！'
 msg_you_have_served_your_sentence_and_are_free: 'あなたの刑期が終わりました。'
 msg_x_has_served_their_sentence_and_is_free: '%sは牢獄での刑期を終え自由の身となりました。'
-msg_you've_been_jailed_for_x_hours: 'あなたは%s時間投獄されています。'
 msg_you_are_being_sent_to_jail: 'あなたは牢獄に投獄されました。'
 msg_err_you_cannot_remove_the_last_cell: '牢獄の最後の監房を取り除くことは、新たな官房を作らない限りできません。'
 msg_do_not_log_out_while_waiting_to_be_teleported: '牢獄にテレポートする前にログアウトしないでください。'
@@ -1653,8 +1649,6 @@ msg_jailed_handbook_1: 'あなたは投獄されました。理由: %s'
 #Jail handbook messages
 msg_jailed_handbook_2: "え、今からでもどうにかできる方法があるんですか！？\nそうですよ？刑期中に役に立つ知恵を与えましょう..."
 #Jail handbook messages
-msg_jailed_handbook_3: 'あなたは%s時間の間投獄されました。刑期を終えれば自由の身です。'
-#Jail handbook messages
 msg_jailed_handbook_4_can: '/town leaveで町から抜けることで牢屋から出ることができます。'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: '投獄されている間は町を抜けて脱獄することはできません。'
@@ -1849,8 +1843,6 @@ msg_spawn_cost_free: '無料'
 msg_plot_already_of_type: 'この土地は既に%sタイプです。'
 msg_town_board_reset: '&b掲示板のリセットをする。'
 msg_town_has_no_jailslots: '町の刑務所はいっぱいです。'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s は牢獄 %s、牢屋番号#%sに%s時間の間捕らえられました。保釈金は%sで%sによるものです。'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s は牢獄 %s、監獄番号#%sに%s時間の間%sの元で捕らえられました。'
 msg_you_have_been_jailed_your_bail_is_x: 'あなたは投獄されました。保釈金は%sです。'
 msg_err_higher_than_max_allowed_bail_x: 'あなたの保釈金は上限の%s以上に設定されました。'
 msg_err_higher_than_max_allowed_hours_x: 'あなたの刑期は上限の%s以上に設定されました。'
