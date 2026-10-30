@@ -379,15 +379,15 @@ msg_plot_fs: '˙uoᴉʇɔnɐ ɹoɟ dn ɐǝɹɐ sᴉɥʇ ʇnԀ'
 msg_plot_fs_radius: '˙ǝꞁɐs ɹoɟ sʇoꞁd ɟo snᴉpɐɹ ɐ dn ʇnԀ'
 msg_bankrupt_town: '˙uʍoʇ ɐ uᴉɐɯǝɹ oʇ pɹoɟɟɐ ʇ,upꞁnoɔ '
 msg_bankrupt_nation: '˙uoᴉʇɐu ɐ uᴉɐɯǝɹ oʇ pɹoɟɟɐ ʇ,upꞁnoɔ '
-msg_raised_ass: '˙sʇuɐʇsᴉssɐ %s oʇ %s pǝsᴉɐɹ %s&b'
-msg_lowered_to_res_by: '˙%s ʎq ʇuǝpᴉsǝɹ ɹɐꞁnᵷǝɹ ɐ oʇ pǝʇoɯǝp ǝɹǝʍ no⅄&b'
+msg_raised_ass: '˙sʇuɐʇsᴉssɐ %s oʇ %s pǝsᴉɐɹ %s<aqua>'
+msg_lowered_to_res_by: '˙%s ʎq ʇuǝpᴉsǝɹ ɹɐꞁnᵷǝɹ ɐ oʇ pǝʇoɯǝp ǝɹǝʍ no⅄<aqua>'
 msg_town_online: 'uʍo⟘ uᴉ ǝuᴉꞁuO'
 msg_nation_online: 'uoᴉʇɐN uᴉ ǝuᴉꞁuO'
 msg_the_plot_group: 'dnoɹ⅁ ʇoꞁԀ ǝɥʇ'
 msg_toggle_open_on_warning: '˙,ʇǝsǝɹ ɯɹǝd ʇǝs uʍoʇ/, ʎq pǝʍoꞁꞁoɟ ,ɟɟo ɯɹǝd ʇǝs uʍoʇ/, ǝdʎ⟘ ˙uǝdo ʇǝs sᴉ uʍoʇ ɟᴉ ɟɟo pǝuɹnʇ ǝq pꞁnoɥs sɯɹǝduʍo⟘ :ᵷuᴉuɹɐM'
 msg_err_withdraw_disabled: '¡pǝꞁqɐsᴉp sᴉ ʞuɐq sᴉɥʇ ɯoɹɟ ᵷuᴉʍɐɹpɥʇᴉM'
 msg_err_deposit_capped: '˙%s ʇɐ pǝddɐɔ sᴉ ʞuɐq sᴉɥ⟘ ˙ʎǝuoɯ ʇᴉsodsǝp oʇ ǝꞁqɐu∩'
-msg_set_town_tag: '[%s] oʇ ᵷɐʇ uʍoʇ ǝɥʇ ʇǝs sɐɥ &b%s'
+msg_set_town_tag: '[%s] oʇ ᵷɐʇ uʍoʇ ǝɥʇ ʇǝs sɐɥ <aqua>%s'
 #Added in 0.30
 #Added in 0.31
 msg_err_tax_minimum_not_met: '˙%s ʍoꞁǝq xɐʇ uʍoʇ ɹnoʎ ʇǝs ʇouuɐɔ no⅄'
@@ -447,7 +447,7 @@ msg_err_not_enough_residents: '˙ʇɐɥʇ op oʇ uʍoʇ sᴉɥʇ uᴉ sʇuǝpᴉ
 #Added in 0.37
 msg_err_friendly_fire_disable: '¡pǝꞁqɐsᴉp sᴉ ǝɹᴉɟ ʎꞁpuǝᴉɹℲ'
 #Added in 0.38
-msg_claim_error: '&c˙uoᴉʇɐɹǝdo ǝɥʇ ǝʇǝꞁdɯoɔ ʇou pꞁnoɔ ''sʞɔoꞁq uʍoʇ (%s)/(%s) ɟo ɯᴉɐꞁɔ ǝɥʇ pǝddoʇs uᴉᵷnꞁd ɹǝɥʇouⱯ'
+msg_claim_error: '<red>˙uoᴉʇɐɹǝdo ǝɥʇ ǝʇǝꞁdɯoɔ ʇou pꞁnoɔ ''sʞɔoꞁq uʍoʇ (%s)/(%s) ɟo ɯᴉɐꞁɔ ǝɥʇ pǝddoʇs uᴉᵷnꞁd ɹǝɥʇouⱯ'
 #Added in 0.40
 mayor_help_9: 'ʇsodʇno uɐ ɯᴉɐꞁɔun oʇ ʇdɯǝʇʇⱯ'
 #Added in 0.41 (Invite-Update)
@@ -479,8 +479,8 @@ tc_channel_list_in: 'uI'
 tc_channel_list_out: 'ʇnO'
 tc_err_you_dont_have_perm_mute_list: 'ʇsᴉꞁ ǝʇnɯ ǝǝs oʇ suoᴉssᴉɯɹǝd ǝʌɐɥ ʇ,uop no⅄'
 tc_err_you_dont_have_unmute_perm: 'suoᴉssᴉɯɹǝd ǝʇnɯun ǝʌɐɥ ʇ,uop no⅄'
-tc_err_no_channel_called_channel: '%s&f pǝꞁꞁɐɔ ꞁǝuuɐɥɔ ou sᴉ ǝɹǝɥ⟘'
-tc_err_no_muted_players_in_channel_players: '%s&f uᴉ sɹǝʎɐꞁd pǝʇnɯ ou ǝɹɐ ǝɹǝɥ⟘'
+tc_err_no_channel_called_channel: '%s<white> pǝꞁꞁɐɔ ꞁǝuuɐɥɔ ou sᴉ ǝɹǝɥ⟘'
+tc_err_no_muted_players_in_channel_players: '%s<white> uᴉ sɹǝʎɐꞁd pǝʇnɯ ou ǝɹɐ ǝɹǝɥ⟘'
 tc_err_you_dont_have_mute_perms: 'suoᴉssᴉɯɹǝd ǝʇnɯ ǝʌɐɥ ʇ,uop no⅄'
 tc_err_you_cant_mute_admin: '˙ɹoʇɐɹʇsᴉuᴉɯpɐ ʎuʍo⟘ ɐ ǝʇnɯ ʇ,uɐɔ no⅄'
 tc_err_you_cant_mute_chat_mod: '˙ɹoʇɐɹǝpoɯ ʇɐɥɔ ɐ ǝʇnɯ ʇ,uɐɔ no⅄'
@@ -497,4 +497,4 @@ msg_err_over_outposts_limit: '%s/%s ʇᴉɯᴉꞁ ɹnoʎ ɹǝʌo ǝɹɐ noʎ ''�
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: ':sʍɐꞁʇnO'
-online: '&a(ǝuᴉꞁuO)'
+online: '<green>(ǝuᴉꞁuO)'
