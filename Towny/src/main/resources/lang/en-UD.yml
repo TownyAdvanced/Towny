@@ -379,17 +379,12 @@ msg_plot_fs: '˙uoᴉʇɔnɐ ɹoɟ dn ɐǝɹɐ sᴉɥʇ ʇnԀ'
 msg_plot_fs_radius: '˙ǝꞁɐs ɹoɟ sʇoꞁd ɟo snᴉpɐɹ ɐ dn ʇnԀ'
 msg_bankrupt_town: '˙uʍoʇ ɐ uᴉɐɯǝɹ oʇ pɹoɟɟɐ ʇ,upꞁnoɔ '
 msg_bankrupt_nation: '˙uoᴉʇɐu ɐ uᴉɐɯǝɹ oʇ pɹoɟɟɐ ʇ,upꞁnoɔ '
-msg_raised_ass: '˙sʇuɐʇsᴉssɐ %s oʇ %s pǝsᴉɐɹ %s<aqua>'
-msg_lowered_to_res_by: '˙%s ʎq ʇuǝpᴉsǝɹ ɹɐꞁnᵷǝɹ ɐ oʇ pǝʇoɯǝp ǝɹǝʍ no⅄<aqua>'
 msg_town_online: 'uʍo⟘ uᴉ ǝuᴉꞁuO'
 msg_nation_online: 'uoᴉʇɐN uᴉ ǝuᴉꞁuO'
 msg_the_plot_group: 'dnoɹ⅁ ʇoꞁԀ ǝɥʇ'
 msg_toggle_open_on_warning: '˙,ʇǝsǝɹ ɯɹǝd ʇǝs uʍoʇ/, ʎq pǝʍoꞁꞁoɟ ,ɟɟo ɯɹǝd ʇǝs uʍoʇ/, ǝdʎ⟘ ˙uǝdo ʇǝs sᴉ uʍoʇ ɟᴉ ɟɟo pǝuɹnʇ ǝq pꞁnoɥs sɯɹǝduʍo⟘ :ᵷuᴉuɹɐM'
 msg_err_withdraw_disabled: '¡pǝꞁqɐsᴉp sᴉ ʞuɐq sᴉɥʇ ɯoɹɟ ᵷuᴉʍɐɹpɥʇᴉM'
 msg_err_deposit_capped: '˙%s ʇɐ pǝddɐɔ sᴉ ʞuɐq sᴉɥ⟘ ˙ʎǝuoɯ ʇᴉsodsǝp oʇ ǝꞁqɐu∩'
-msg_set_town_tag: '[%s] oʇ ᵷɐʇ uʍoʇ ǝɥʇ ʇǝs sɐɥ <aqua>%s'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: '˙%s ʍoꞁǝq xɐʇ uʍoʇ ɹnoʎ ʇǝs ʇouuɐɔ no⅄'
 msg_unknown_rank_available_ranks: '˙%s ǝɹɐ sʞuɐɹ ǝꞁqᴉssᴉɯɹǝԀ ˙%s ʞuɐɹ uʍouʞu∩'
 msg_no_permission_to_give_rank: '˙ʞuɐɹ sᴉɥʇ ʇuɐɹᵷ oʇ uoᴉssᴉɯɹǝd ǝʌɐɥ ʇou op no⅄'
@@ -408,7 +403,6 @@ msg_cannot_spawn_while_jailed: '˙pǝꞁᴉɐՐ ǝꞁᴉɥʍ uʍɐds ʇou uɐƆ'
 msg_cannot_abandon_town_while_jailed: '˙pǝꞁᴉɐɾ ǝɹɐ noʎ uǝɥʍ pǝʍoꞁꞁɐ ʇou sᴉ uʍoʇ ɹnoʎ ᵷuᴉuopuɐqⱯ'
 msg_player_escaped_jail_by_leaving_town: '˙pɐɯou ɐ ᵷuᴉɯoɔǝq ʎq ꞁᴉɐɾ pǝdɐɔsǝ sɐɥ %s'
 msg_set_jail_spawn: '˙uʍɐds s,ʇoꞁd ꞁᴉɐɾ ʇǝs ʎꞁꞁnɟssǝɔɔnS'
-msg_killed_attempting_to_escape_jail: '˙ꞁᴉɐɾ ǝdɐɔsǝ oʇ ᵷuᴉʇdɯǝʇʇɐ pǝꞁꞁᴉʞ sɐʍ %s4&'
 msg_err_invalid_string_board_not_set: '˙ʇǝs ʇou pɹɐoᗺ uʍo⟘ ''ᵷuᴉɹʇs pᴉꞁɐʌuI'
 msg_plot_name_removed: '˙pǝʌoɯǝɹ ǝɯɐu ʇoꞁԀ'
 msg_plot_name_set_to: '˙[%s] oʇ ʇǝs ǝɯɐu ʇoꞁԀ'
@@ -427,7 +421,6 @@ msg_err_couldnt_take_nation_deathfunds: '˙spunɟ ɥʇɐǝp uoᴉʇɐu ǝʞɐʇ 
 msg_you_gained_money_for_killing: '˙%s ᵷuᴉꞁꞁᴉʞ ɹoɟ %s pǝuᴉɐᵷ no⅄'
 msg_town_set_perm_syntax_error: '˙xɐʇuʎs puɐɯɯoɔ ɹǝdoɹd ɹoℲ ,¿ ɯɹǝd ʇǝs uʍoʇ/, ǝǝS ˙puɐɯɯoɔ sᴉɥʇ ɹoɟ uoᴉʇɐuᴉqɯoɔ pɹoʍ pᴉꞁɐʌuI'
 msg_plot_set_perm_syntax_error: '˙xɐʇuʎs puɐɯɯoɔ ɹǝdoɹd ɹoℲ ,¿ ɯɹǝd ʇǝs ʇoꞁd/, ǝǝS ˙puɐɯɯoɔ sᴉɥʇ ɹoɟ uoᴉʇɐuᴉqɯoɔ pɹoʍ pᴉꞁɐʌuI'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: '˙uʍoʇ ʇɐɥʇ oʇ ᵷuoꞁǝq ʇ,usǝop ʇuǝpᴉsǝɹ ʇɐɥ⟘'
 msg_err_resident_already_an_outlaw: '˙uʍoʇ ɹnoʎ ʎq ʍɐꞁʇno uɐ pǝɹǝpᴉsuoɔ ʎpɐǝɹꞁɐ sᴉ ɹǝʎɐꞁd ʇɐɥ⟘'
 msg_err_not_outlaw_in_your_town: '˙ʍɐꞁʇno uɐ sɐ ɹǝqɯǝɯ uʍoʇ ɐ ʇǝs ʇouuɐɔ no⅄'
@@ -442,15 +435,9 @@ msg_nation_town_moved_their_homeblock_too_far: '˙uoᴉʇɐu ɹnoʎ ɯoɹɟ pǝ�
 msg_cant_toggle_pvp_outsider_in_town: '¡snʇɐʇs dʌd ɹnoʎ ǝᵷuɐɥɔ ʇ,uɐɔ noʎ ''uʍoʇ ɹnoʎ uᴉ ɹǝpᴉsʇno uɐ sᴉ ǝɹǝɥ⟘'
 msg_err_unclaim_not_outpost: '¡ʇsodʇno uɐ ʇou sᴉ ʇoꞁd sᴉɥʇ ''ɯᴉɐꞁɔun oʇ ǝꞁqɐu∩'
 outpost_plu: 'sʇsodʇnO'
-#Added in 0.36
 msg_err_not_enough_residents: '˙ʇɐɥʇ op oʇ uʍoʇ sᴉɥʇ uᴉ sʇuǝpᴉsǝɹ ɥᵷnouǝ ʇou ǝɹɐ ǝɹǝɥ⟘'
-#Added in 0.37
 msg_err_friendly_fire_disable: '¡pǝꞁqɐsᴉp sᴉ ǝɹᴉɟ ʎꞁpuǝᴉɹℲ'
-#Added in 0.38
-msg_claim_error: '<red>˙uoᴉʇɐɹǝdo ǝɥʇ ǝʇǝꞁdɯoɔ ʇou pꞁnoɔ ''sʞɔoꞁq uʍoʇ (%s)/(%s) ɟo ɯᴉɐꞁɔ ǝɥʇ pǝddoʇs uᴉᵷnꞁd ɹǝɥʇouⱯ'
-#Added in 0.40
 mayor_help_9: 'ʇsodʇno uɐ ɯᴉɐꞁɔun oʇ ʇdɯǝʇʇⱯ'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'sǝʇᴉʌuI'
 invite_sent_by: 'ʎᗺ ʇuǝS ǝʇᴉʌuI'
 invite_help_1: 'uʍoʇ ɐ uᴉoɾ oʇ ǝʇᴉʌuᴉ uɐ ʇdǝɔɔⱯ'
@@ -479,8 +466,6 @@ tc_channel_list_in: 'uI'
 tc_channel_list_out: 'ʇnO'
 tc_err_you_dont_have_perm_mute_list: 'ʇsᴉꞁ ǝʇnɯ ǝǝs oʇ suoᴉssᴉɯɹǝd ǝʌɐɥ ʇ,uop no⅄'
 tc_err_you_dont_have_unmute_perm: 'suoᴉssᴉɯɹǝd ǝʇnɯun ǝʌɐɥ ʇ,uop no⅄'
-tc_err_no_channel_called_channel: '%s<white> pǝꞁꞁɐɔ ꞁǝuuɐɥɔ ou sᴉ ǝɹǝɥ⟘'
-tc_err_no_muted_players_in_channel_players: '%s<white> uᴉ sɹǝʎɐꞁd pǝʇnɯ ou ǝɹɐ ǝɹǝɥ⟘'
 tc_err_you_dont_have_mute_perms: 'suoᴉssᴉɯɹǝd ǝʇnɯ ǝʌɐɥ ʇ,uop no⅄'
 tc_err_you_cant_mute_admin: '˙ɹoʇɐɹʇsᴉuᴉɯpɐ ʎuʍo⟘ ɐ ǝʇnɯ ʇ,uɐɔ no⅄'
 tc_err_you_cant_mute_chat_mod: '˙ɹoʇɐɹǝpoɯ ʇɐɥɔ ɐ ǝʇnɯ ʇ,uɐɔ no⅄'
@@ -497,4 +482,3 @@ msg_err_over_outposts_limit: '%s/%s ʇᴉɯᴉꞁ ɹnoʎ ɹǝʌo ǝɹɐ noʎ ''�
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: ':sʍɐꞁʇnO'
-online: '<green>(ǝuᴉꞁuO)'
