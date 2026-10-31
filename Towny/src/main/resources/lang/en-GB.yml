@@ -76,6 +76,14 @@ msg_plot_nfs: 'Take down a plot for sale'
 msg_plot_fs: 'Put this area up for auction.'
 msg_bankrupt_town: ' couldn''t afford to remain a town.'
 msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
+msg_nation_not_peaceful: '<aqua>Nation couldn''t afford its peaceful state.'
 msg_town_online: 'Online in Town'
 msg_nation_online: 'Online in Nation'
+msg_enemy_to_neutral: '<aqua>%s has changed its status to peaceful towards %s.'
+msg_removed_ally: '<aqua>%s cancelled the alliance with your nation.'
+msg_unable_ally_offline: "<red>Unable to request an alliance because the king of the target nation is offline."
+msg_unable_ally_npc: "<red>Unable to request an alliance because the king of the target nation is an NPC."
+msg_err_invalid_nation_map_color: '<red>Unknown map colour. Allowed colours are %s.'
+msg_nation_map_color_changed: '<aqua>The nation map colour was changed to %s.'
+msg_town_map_color_changed: '<aqua>The town map colour was changed to %s.'
 msg_err_mode_does_not_exist: "The mode %s is not recognised."
