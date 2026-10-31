@@ -395,273 +395,17 @@ msg_block_claim: 'Claim-ujte ovaj gradski blok'
 msg_block_claim_radius: 'Prisvoji neki poluprečnik parcela koji te okružuju.'
 msg_plot_nfs: 'Povuci parcelu sa prodaje'
 msg_plot_nfs_radius: 'Sruši neki poluprečnik parcela na prodaju.'
-msg_nfs_abr: '&e"fs" i "nfs" su prihvaćene skraćenice za "forsale" - "na prodaju" i "notforsale" - "nije na prodaju".'
 msg_plot_fs: 'Stavite ovu oblast na aukciju.'
 msg_plot_fs_radius: 'Stavi neki poluprečnik parcela na prodaju.'
-############################################################
-#+------------------------------------------------------+ #
-#|   Messages                                           | #
-#+------------------------------------------------------+ #
-############################################################
-msg_buy: '&bKupili ste %d %s za %s.'
-msg_buy_resident_plot: '&b%s je kupio/la plot igrača %s za %s!'
-msg_buy_resident_plot_group: '<aqua>%s je kupio/la grupu parcela igrača %s za %s!'
-msg_couldnt_pay_taxes: '&b%s je izbačen/a iz %s zbog nemogućnosti da plati poreze.'
-msg_couldnt_pay_plot_taxes: '&b%s je izgubio/la vlasništvo nad plotom zbog nemogućnosti da plati poreze.'
-msg_you_couldnt_pay_plot_tax: '<aqua>Nisi mogao/la da platiš porez na parcelu od %s i izgubio/la si vlasništvo nad parcelom na %s.'
-msg_you_couldnt_pay_town_tax: '<aqua>Nisi mogao/la da platiš gradski porez od %s i uklonjen(a) si iz %s.'
-msg_you_paid_town_tax: '<aqua>Platio/la si gradsku taksu u iznosu od %s.'
-msg_you_paid_plottax_to_town: '<aqua>Platio/la si plot takse u iznosu od %s gradu %s.'
 msg_bankrupt_town: ' nije mogao priuštiti da ostane grad.'
 msg_bankrupt_nation: ' nije mogla priuštiti da ostane nacija.'
-msg_nation_not_peaceful: '&bNacija nije mogla da priušti svoje stanje mira.'
-msg_nation_cant_peaceful: '<aqua>Nacija nije mogla da priušti da postane mirna nacija. Moraš da si u mogućnosti da dnevno plaćaš %s.'
-msg_peaceful_disabled: '&bNacijski mir je onemogućen na globalnom nivou.'
-msg_you_paid: '&bPlatili ste %s za postavljanje statusa mira.'
-msg_nation_set_peace: '&bStanje nacije uspešno promenjeno.'
-msg_nation_allow_peaceful: '<aqua>Dozvole nacije da ostane mirna su sada: %s'
-msg_mobremoval_world: '&bBlokiranje stvaranja mobova u svetu: %s'
-msg_mobremoval_town: '&bDozvolite blokiranje stvaranja mobova u gradu: %s'
-msg_nation_peaceful: '&bVaša nacija je sada'
-msg_tax_exempt: '<aqua>Gradsko osoblje je pošteđeno poreza.'
-msg_del_nation: '<aqua>Nacija %s je raspuštena!'
-msg_del_resident: '&b%s je izgubio/la sve svoje Towny podatke!'
-msg_join_nation: '&bGrad %s se pridružio naciji!'
-msg_join_town: '&b%s se pridružio/la gradu!'
-msg_friend_add: '&b%s Vas je dodao/la za prijatelja.'
-msg_friend_remove: '<aqua>%s te je uklonio/la sa spiska prijatelja.'
-msg_left_town: '&b%s je napustio/la grad'
-msg_you_left: '&bNapustili ste %s.'
-msg_not_mayor: '&bNiste gradonačelnik.'
-msg_not_king: '<aqua>Nisi vođa nacije.'
-msg_not_mayor_ass: '&bNiste gradonačelnik niti asistent.'
-msg_not_king_ass: '<aqua>Nisi vođa nacije niti saradnik.'
-msg_own_nation_disallow: '<aqua>Ne možeš to uraditi sopstvenoj naciji.'
-msg_no_perms_claim: '<aqua>Nemaš dozvolu da širiš svoj grad.'
-msg_outpost_disable: '<aqua>Ispostave nisu dostupne.'
-msg_kicked_by: '&bIzbačeni ste iz grada od strane %s.'
-msg_kicked: '&b%s je izbacio/la %s iz grada.'
-msg_nation_kicked_by: '&bVaš grad je izbačen iz nacije od strane %s.'
-msg_town_left_nation: '&bVaš grad je napustio naciju %s.'
-msg_nation_town_left: '&bGrad %s je napustio Vašu naciju.'
-msg_nation_kicked: '<aqua>%s je izbacio/la igrača %s iz nacije.'
-msg_nation_you_kicked: 'Izbacio/la si igrača %s iz nacije.'
-msg_raised_ass: '<aqua>%s je uzdigao/la igrača %s u %s saradnike.'
-msg_lowered_to_res_by: '&bČin Vam je smanjen u običnog stanovnika od strane %s.'
-msg_lowered_to_res: '&b%s je smanjio/la čin igrača %s u običnog stanovnika.'
-msg_invalid_name: '&bNijedno od navedenih imena nije važeće.'
-msg_invited_join_town: '<aqua>%s je pozvao/la %s u grad.'
-msg_invited_join_nation: '<aqua>%s je pozvao/la %s u naciju.'
-msg_deny_invite: '&b%s je odbio/la Vaš poziv.'
-msg_invited: '&bPozvani ste da se pridružite %s.'
 msg_town_online: 'Online u gradu'
 msg_nation_online: 'Online u naciji'
-msg_allied_nations: '<aqua>%s je u savezu sa nacijama %s.'
-msg_enemy_nations: '&b%s je razvio/la mržnju prema nacijama %s.'
-msg_enemy_to_neutral: '<aqua>%s je promenio/la status u miroljubiv prema %s.'
-msg_added_ally: '<aqua>%s je u savezu sa tvojom nacijom.'
-msg_removed_ally: '&b%s je obustavio/la udruženje sa Vašom nacijom.'
-msg_added_enemy: '&b%s je razvio/la mržnju prema Vašoj naciji.'
-msg_removed_enemy: '<aqua>%s je postao/la miroljubiv/a prema tvojoj naciji.'
-msg_unable_ally_enemy: '<red>Nije moguće sklopiti savez sa %s jer smo im protivnici.'
-msg_deny_ally: '<aqua>%s je odbio/la tvoj zahtev za savezništvo.'
-msg_accept_ally: '<aqua>Nacija %s je prihvatila tvoj zahtev za savezništvo.'
-msg_ally_req_sent: '<aqua>Zahtev za savezništvo je poslat naciji %s.'
-msg_ally_request: '<aqua>Nacija %s bi da sklopi savez.'
-msg_unable_ally_offline: "<red>Nije moguće zatražiti savezništvo jer je gradonačelnik odabrane nacije offline."
-msg_unable_ally_npc: "<red>Nije moguće zatražiti savezništvo jer je gradonačelnik odabrane nacije NPC."
-msg_claimed: '&2Uspešno claim-ovano'
-msg_unclaimed: '&2Uspešno unclaim-ovano'
-msg_not_claimable: '&cOvaj svet se ne može claim-ovati.'
-msg_abandoned_area: '&bOblast %s napuštena'
-msg_admin_unclaim_area: '&cOblast %s prisilno unclaim-ovana'
-msg_abandoned_area_1: '&bVaš grad je napustio oblast'
-msg_no_money_purchase_plot: '<red>Nemaš dovoljno novca da kupiš ovu parcelu.'
-msg_town_no_money_purchase_plot: '<red>Grad nema dovoljno novca da otkupi ovaj plot.'
-msg_no_funds_new_town: '<red>%s ne može da priušti da podigne novi grad ovde.'
-msg_no_funds_claim: '&cGrad ne može priuštiti da claim-uje %s gradskih blokova što košta %s. Dodajte još novca u gradsku banku.'
-msg_no_funds_to_buy: '&cGrad ne može priuštiti da kupi %s %s što košta %s. Dodajte još novca u gradsku banku.'
-msg_annexed_area: '&2Pripojena oblast %s'
-msg_max_plot_own: '&cNe možete posedovati više od %s plotova.'
-msg_max_outposts_own: '&cNe možete posedovati više od %s periferija.'
-msg_no_funds_new_nation: '<red>Grad ne može da priušti da osnuje novu naciju.'
-msg_already_claimed: '&cOva oblast je već claim-ovana od strane: %s'
-msg_already_claimed_1: '&cOva oblast (%s) već nekom pripada.'
-msg_already_claimed_2: '&cOva oblast je već claim-ovana.'
-msg_too_close: '&cOva oblast je preblizu drugom gradu.'
-msg_too_far: '&cOva oblast je predalako od drugih gradova.'
-msg_not_claimed: '&bOva oblast (%s) nije claim-ovana.'
-msg_not_claimed_1: '&bOva oblast nije claim-ovana.'
-msg_not_own_area: '&cNe posedujete odabranu oblast.'
-msg_not_own_place: '&bNiko ne poseduje ovo mesto.'
-msg_area_not_own: '<red>Ova oblast ne pripada tebi.'
-msg_area_not_recog: '&cTowny ne prepoznaje ovu oblast.'
-msg_specify_name: '&bNavedite ime grada'
-msg_specify_nation_name: '&bNavedite ime nacije'
-msg_peasant_right: '<aqua>Seljanin nema pravo da natera svoje vođe na presto.'
-msg_cost_spawn: '<aqua>Naplaćeno Vam je %s za teleportaciju do spawn-a grada.'
-msg_cost_spawn_refund: '&bDobili ste povraćaj novca za korišćenje spawn-a grada.'
-msg_town_spawn_warmup: '<aqua>Čekanje na teleportaciju...'
-msg_town_rename_disabled: '<aqua>Preimenovanje gradova isključeno'
-msg_town_set_name: '&b%s je preimenovao/la grad u %s.'
-msg_nation_set_name: '&b%s je preimenovao/la naciju u %s.'
-msg_changed_pvp: '<red>%s PvP je %s.'
-msg_changed_public: '&cJavni status grada je sada %s.'
-msg_changed_expl: '&cEksplozije u %s su sada %s.'
-msg_changed_fire: '&cŠirenje vatre u %s je sada %s.'
-msg_changed_mobs: '&cStvaranje mobova u %s je sada %s.'
 msg_the_plot_group: 'grupa plotova'
-msg_changed_taxpercent: '&cProcentualni porezi su sada %s.'
-msg_changed_open: '&cPridruženje bez poziva je sada %s.'
 msg_toggle_open_on_warning: 'Upozorenje: Gradozvole treba da budu isključene ako je grad postavljen na otvoren. Ukucaj ''/town set perm off'' praćeno sa ''/town set perm reset''.'
-msg_changed_world_setting: '<red>%s za %s je: %s.'
-msg_world_pvp: '<red>Ovaj svet je isključivo PvP.'
-msg_world_mobs: '<red>Na ovom svetu je stvaranje mobova prisilno uključeno.'
-msg_world_expl: '<red>Na ovom svetu su Eksplozije prisilno uključene.'
-msg_world_fire: '<red>Na ovom svetu je širenje Vatre prisilno uključeno.'
-msg_town_mobs: '<red>U ovom gradu je stvaranje čudovišta prisilno uključeno.'
-msg_plot_pvp: '<red>PvP se ne može uključiti/isključiti u Plotu Arene.'
-msg_plot_regen_wrong_size: '<red>Regeneracija se može izvesti isključivo kad je podrazumevana veličina parcele (16) upotrebljena.'
-msg_reloaded: '<dark_green>Towny podešavanja ponovo učitana.'
-msg_undo_complete: '<dark_green>Poništavanje gotovo.'
-msg_give_total: '<aqua>Dao/la si bonus od %s. (Ukupno: %s)'
-mag_backup_success: '<dark_green>Pravljenje rezervne kopije uspešno.'
-msg_xx_withdrew_xx: '&b%s podigao/la %s iz %s banke.'
-msg_xx_deposited_xx: '&b%s uplatio/la %s u %s banku.'
-msg_insuf_funds: '&cNemate toliko.'
 msg_err_withdraw_disabled: 'Podizanje iz ove banke je onemogućeno!'
 msg_err_deposit_capped: 'Nije moguće uplatiti novac. Ova banka je ograničena na %s.'
-msg_set_town_home: '<aqua>Gradski blok doma uspešno promenjen na %s'
-msg_set_town_spawn: '&bUspešno promenjen spawn grada.'
-msg_set_outpost_spawn: '&bUspešno promenjen spawn periferije.'
-msg_set_title: '<aqua>%s je dobio/la titulu ''%s<aqua>''.'
-msg_set_surname: '<aqua>%s je dobio/la prezime ''%s<aqua>''.'
-msg_clear_title_surname: '<aqua>%s je očišćeno za ''%s''.'
-msg_clear_plot_material: '<aqua>Plot očišćen od sledećih tipova blokova: %s.'
-msg_set_perms: '<aqua>Dozvole uspešno promenjene na:'
-msg_set_claim: '<aqua>Uspešno promenjena mogućnost prisvajanja %s na %s'
-msg_set_perms_reset: '<aqua>Uspešno resetovane dozvole na svih %s parcelama.'
-msg_usedefault: '<aqua>Ovaj svet (%s) sada koristi globalne podrazumevane postavke.'
-msg_set_wild_perms: '<aqua>Uspešno promenjene %s wild dozvole %s'
-msg_set_wild_ignore: '<aqua>Uspešno promenjeni %s-ove divlji blokovi zanemarivanja na %s'
-msg_set_wild_name: '<aqua>Uspešno promenjeno %s-ovo divlje ime na %s'
-msg_set_wild_regen: '<aqua>Uspešno promenjena %s-ova divlja regeneracija na ''%s'''
-msg_set_use_towny_on: '<aqua>Ovaj svet sada koristi towny pravila.'
-msg_set_use_towny_off: '<red>Ovaj svet je uskraćen svih towny interakcija.'
-msg_error_must_be_int: '<aqua>Količina mora biti ceo broj.'
-msg_error_input_must_be_int: '<red>%s mora biti ceo broj'
-msg_error_must_be_num: '<aqua>Količina mora biti broj.'
-msg_error_input_must_be_num: '<red>%s mora biti broj'
-msg_must_specify_amnt: '<aqua>Morate navesti količinu. Pr: %s 54'
-msg_town_set_tax: '&b%s je postavio/la dnevni stanovnički porez na %s'
-msg_town_set_plottax: '<aqua>%s je postavio/la dnevni porez plotova na %s'
-msg_town_set_plotprice: '<aqua>%s je postavio/la cenu plotova na %s'
-msg_town_set_alttax: '<aqua>%s je postavio/la dnevni porez %s plotova na %s'
-msg_town_set_altprice: '<aqua>%s je postavio/la cenu %s plotova na %s'
-msg_town_set_nation_tax: '<aqua>%s je postavio/la nacionalni porez na %s'
-msg_set_nation_tag: '<aqua>%s je postavio/la [%s] za oznaku nacije'
-msg_set_town_tag: '<aqua>%s je postavio/la [%s] za oznaku grada'
-msg_reset_nation_tag: '<aqua>%s je očistio/la oznaku nacije.'
-msg_reset_town_tag: '<aqua>%s je očistio/la oznaku grada.'
-msg_mayor_abandon: '<aqua>Napusto/la bi svoje ljude? Izaberi drugog gradonačelnika sa ''/town set mayor'' ako si siguran.'
-msg_new_day_tax: '<aqua>Svanuo je novi dan! Porezi i kirija su sakupljeni'
-msg_new_day: '<aqua>Svanuo je novi dan!'
-msg_new_king: '<aqua>%s je sada vođa nacije %s!'
-msg_err_new_king_notmayor: '<red>Novi vođa nacije nije gradonačelnik.'
-msg_err_king_not_in_nation: '<red>Novi vođa nacije ne pripada ovoj naciji.'
-msg_err_fight_like_king: '<red>Mir nije opcija! Bori se kao vođa!'
-msg_no_access_nation_bank: '&cNemate pristup banci nacije.'
-msg_err_no_money: '&cNema dovoljno novca u banci.'
-msg_new_mayor: '&b%s je sada gradonačelnik!'
-msg_new_nation: '<aqua>%s je osnovao/la novu naciju zvanu %s'
-msg_new_town: '<aqua>%s je osnovao/la novi grad zvani %s'
-msg_plot_for_sale: '<aqua>%s je stavio/la parcelu (%s) na prodaju!'
-msg_plot_for_sale_amount: '<aqua>%s je stavio parcelu (%s) na prodaju za %s!'
-msg_plot_set_type: '<aqua>Tip parcele postavljen na %s'
-msg_cache_block_error: '<red>Nisi se registrovao Towny-jem. Probaj da se prijaviš ponovo.'
-msg_cache_block_error_wild: '<red>Nemaš dozvolu da %s u divljini.'
-msg_cache_block_error_plot: '<red>Vlasnik ne dopušta da %s %s ovde.'
-msg_cache_block_error_town_resident: '<red>Stanovnicima nije dozvoljeno da %s ovde.'
-msg_cache_block_error_town_allies: '<red>Saveznici ne smeju da %s.'
-msg_cache_block_error_town_outsider: '<red>Nestanovnici ne smeju da %s.'
-msg_err_cant_afford_tp_town: '<red>Ne možeš priuštiti da se teleportuješ na %s.'
-msg_err_not_public: '<red>Taj grad nije javan.'
-msg_err_not_open: '<red>Vrata grada %s nisu za svakoga otvorena. Zamoli gradonačelnika ili saradnika da se priključiš.'
-msg_err_town_spawn_forbidden: '<red>Putovanje do gradskog spawn-a je zabranjeno.'
-msg_err_town_spawn_nation_forbidden: '<red>Putovanje do spawn-ova drugih gradova tvoje nacije je zabranjeno.'
-msg_err_town_spawn_ally_forbidden: '<red>Putovanje do spawn-ova gradova saveznika vaše nacije je zabranjeno.'
-msg_err_public_spawn_forbidden: '<red>Putovanje do javnih spawn-ova drugih gradova je zabranjeno.'
-msg_err_public_spawn_enemy: '<red>Putovanje do javnih spawn-ova je zabranjeno za neprijatelje.'
-msg_err_town_spawn_disallowed_from: '<red>Spawn grada nije dozvoljen iz %s.'
-msg_err_outpost_spawn: '<red>Nema spawn-ova kampova postavljenih za ovaj grad.'
-msg_err_cant_afford_tp: '<aqua>Ne možeš priuštiti da se teleportuješ do mesta stvaranja vašeg grada.'
-msg_err_plot_nfs: '<red>Ova parcela nije na prodaju.'
-msg_err_not_part_town: '<red>Odabrana oblast nije deo tvog grada.'
-msg_err_not_attached_edge: '<red>Odabrana oblast nije priljubljena uz ivicu.'
-msg_err_empty_area_selection: '<red>Odabrana oblast ne sadrži važeće parcele.'
-msg_err_not_enough_blocks: '&cNema dovoljno gradskih blokova dostupnih da claim-ujete ovu selekciju.'
-msg_err_cant_afford_blocks: '<red>Grad ne može priuštiti da claim-uje %s gradskih blokova što košta %s'
-msg_err_not_in_town_claim: '<red>Moraš pripadati nekom gradu kako bi prisvojio parcele.'
-msg_err_must_belong_town: '<red>Moraš pripadati nekom gradu.'
-msg_err_dont_belong_town: '<red>Ne pripadaš nijednom gradu.'
-msg_err_dont_belong_nation: '<aqua>Ne pripadaš nijednoj naciji.'
-msg_err_already_belong_nation: '<aqua>Već pripadaš naciji.'
-msg_err_town_already_belong_nation: '<aqua>%s već pripada naciji: %s.'
-msg_err_not_same_nation: '<aqua>%s ne pripada Vašoj naciji.'
-msg_err_rect_auto: '<red>Samo gradovi i stanovnici mogu da koriste ''auto''.'
-msg_err_invalid_radius: '<red>Nevažeći poluprečnik. Koristite ceo broj ili ''auto''.'
-msg_err_not_configured: '<red>Ovaj svet Towny nije konfigurisao.'
-msg_err_updating_item_perms: '<red>Greška pri ažuriranju keša dozvola korišćenja predmeta.'
-msg_err_updating_switch_perms: '&cGreška pri ažuriranju keša dozvola prekidača.'
-msg_err_updating_destroy_perms: '<red>Greška pri ažuriranju keša dozvola za uništavanje.'
-msg_err_updating_build_perms: '<red>Greška pri ažuriranju keša dozvola za gradnju.'
-msg_err_admin_only: '&cSamo admin može koristiti ovu komandu.'
-msg_err_admin_only_delete: '<red>Samo admin može brisati ostale podatke o stanovnicima.'
-msg_err_admin_only_delete_town: '<red>Samo admin može da briše ostale podatke o gradu.'
-msg_err_admin_only_delete_nation: '<red>Samo admin može brisati druge podatke nacija.'
-msg_err_online_or_npc: '<red>%s je Online ili je NPC.'
-msg_err_not_registered: '&cNiste registrovani'
-msg_err_not_registered_1: '<red>%s nije registrovan/a'
-msg_err_invalid_name: '<red>%s je nevažeće ime.'
-msg_err_already_res: '<red>%s već pripada jednom gradu.'
-msg_err_already_in_town: '&c%s je već deo %s.'
-msg_err_already_nation: '<red>Ciljani grad već pripada jednoj naciji.'
-msg_err_invalid_property: '<red>Pogrešna ''%s'' osobina.'
-msg_err_not_supported: '&cJoš nije podržano.'
-msg_err_invalid_input: '<red>Nevažeći unos. Koristite %s'
-msg_err_negative: '&cUnos ne može biti negativan.'
-msg_err_input_too_long: '<red>Unos je predugačak.'
-msg_err_invalid_choice: '<red>Nevažeći izbor'
-msg_err_invalid_sub: '<red>Nevažeća potkomanda.'
-msg_err_command_disable: '<red>Nemate dozvole potrebne za tu komandu.'
-msg_err_plot_preclaim_disable: "<red>Trenuto ne možeš prisvojiti parcelu %s."
-msg_err_plot_preunclaim_disable: "<red>Stanovnik se trenutno ne može odreći parcele %s."
 msg_err_you_dont_have_permission_to_use_colours: "Nemaš dopuštenje da koristiš kodove boja u zvanjima i prezimenima."
-msg_err_universe_limit: '<red>Nema uopšte mesta za još gradova.'
-msg_err_too_many_npc: '<red>Previše registrovanih npc-eva.'
-msg_err_negative_money: '&cNe možete biti u minusu.'
-msg_err_not_percentage: '&cProcenti moraju biti ispod 100.'
-msg_err_no_economy: '&cEkonomija nije uključena.'
-msg_err_not_block_type: '<red>To nije važeći tip plota!'
-msg_not_allowed_join: '<red>Igraču %s nije dozvoljeno da se pridruži gradu.'
-msg_err_cannot_perform_action: '<red>Nije moguće izvršiti ovu komandu u %s.'
-msg_npc_flag: '<aqua>NPC flag je sada %s za %s.'
-msg_warning_delete: '<dark_red>***UPOZORENJE, %s ĆE BITI OBRISAN SLEDEĆEG DANA ZBOG NEDOSTATKA NOVCA***'
-#these messages are only used if town/nation creation is set to admins only
-msg_admin_only_create_nation: '<red>Samo admini mogu napraviti nacije.'
-msg_admin_only_create_town: '<red>Samo admini mogu napraviti gradove.'
-#Required residents to be part of a nation
-msg_err_not_enough_residents_new_nation: '<red>Vaš grad nema dovoljno stanovnika za pravljenje nacije.'
-msg_err_not_enough_residents_join_nation: '<red>Vaš grad %s nema dovoljno stanovnika da uđe u naciju.'
-msg_not_enough_residents_no_longer_capital: '<aqua>Stari glavni grad nacije više nema dovoljno stanovnika da bude glavni grad nacije. Novi glavni grad nacije je %s.'
-msg_town_not_enough_residents_left_nation: '<aqua>Grad %s više nema dovoljno stanovnika da bude član nacije i uklonjen je iz nje.'
-msg_nation_disbanded_town_not_enough_residents: '<aqua>Grad %s više nema dovoljno stanovnika da upravlja nacijom i zato se nacija raspala.'
-msg_not_enough_residents_refunded: '<aqua>Povraćeno ti je %s zbog rasturanja vaše nacije usled nedovoljno stanovnika.'
-msg_not_enough_residents_capital: '<aqua>Grad %s nema dovoljno stanovnika da bude glavni grad nacije.'
-list_page: '<aqua>Strana %s od %s'
-list_err_not_enough_pages: '<red>Samo %s strana je dostupno'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Ne možeš staviti gradski porez ispod %s.'
 msg_unknown_rank_available_ranks: 'Nepoznat čin %s. Dozvoljeni činovi su %s.'
 msg_no_permission_to_give_rank: 'Nemaš dozvolu da daš ovaj čin.'
@@ -681,9 +425,6 @@ msg_cannot_spawn_while_jailed: 'Nije moguće spawn-ovati se dok ste u zatvoru.'
 msg_cannot_abandon_town_while_jailed: 'Napuštanje grada nije dozvoljeno kada ste u zatvoru.'
 msg_player_escaped_jail_by_leaving_town: '%s je pobegao/la iz zatvora postavši nomad.'
 msg_set_jail_spawn: 'Uspešno postavljen spawn zatvorskog plota.'
-msg_killed_attempting_to_escape_jail: '<dark_red>%s je ubijen u pokušaju da umakne robiji.'
-msg_err_jailed_players_no_teleport: '<dark_red>Odmetnici se ne mogu teleportovati!'
-msg_player_escaped_jail_into_wilderness: '<dark_red>%s je umakao robiji utrčavši u %s'
 msg_err_invalid_string_board_not_set: 'Nevažeća nit, gradski Odbor nije određen.'
 msg_plot_name_removed: 'Ime plota uklonjeno.'
 msg_plot_name_set_to: 'Ime plota postavljeno na [%s].'
@@ -700,13 +441,8 @@ msg_err_couldnt_take_deathfunds: 'Sredstva od životnog osiguranja se nisu mogla
 msg_err_couldnt_take_town_deathfunds: 'Sredstva od gradskog životnog osiguranja se nisu mogla uzeti.'
 msg_err_couldnt_take_nation_deathfunds: 'Sredstva od nacionalnog životnog osiguranja se nisu mogla uzeti.'
 msg_you_gained_money_for_killing: 'Dobili ste %s za ubijanje %s.'
-msg_err_ender_pearls_disabled: '<dark_red>Biseri Bespuća su onemogućeni!'
-msg_err_no_sleep_in_enemy_inn: '<dark_red>Ne možeš spavati u gostionici neprijatelja.'
-msg_err_cant_use_bed: '<dark_red>Ne poseduješ zemljište koje ovaj krevet zauzima i ono nije gostionički plot.'
-msg_town_plots_revenue_disclaimer: '<green>Prikazana zarada je procenjena i zavisi od toga da li vlasnik plota može da plati.'
 msg_town_set_perm_syntax_error: 'Nevažeća kombinacija reči za ovu naredbu. Vidi ''/town set perm ?'' za ispravan pravopis naredbe.'
 msg_plot_set_perm_syntax_error: 'Nevažeća kombinacija reči za ovu naredbu. Vidi ''/plot set perm ?'' za ispravan pravopis naredbi.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Taj stanovnik ne pripada tom gradu.'
 msg_err_resident_already_an_outlaw: 'Taj igrač se već smatra za razbojnika od strane Vašeg grada.'
 msg_err_not_outlaw_in_your_town: 'Ne možeš odrediti člana grada za odmetnika.'
@@ -716,37 +452,15 @@ msg_you_have_been_undeclared_outlaw: 'Više niste razbojnik u %s.'
 msg_you_have_undeclared_an_outlaw: '%s više nije razbojnik u %s.'
 msg_err_player_not_an_outlaw: 'Taj igrač nije naveden kao razbojnik.'
 msg_err_outlaw_in_open_town: 'Ne možete ući u otvoren grad koji Vas je proglasio za razbojnika.'
-msg_you_are_an_outlaw_in_this_town: '<dark_red>Budite oprezni, %s smatra da ste odmetnik, umiranje ovde bi moglo da znači robija.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Tvoja bi kaucija koštala %s.'
 msg_err_town_not_close_enough_to_nation: '%s nema blok doma dovoljno blizu bloka doma vašeg glavnog grada da se pridruži vašoj naciji.'
 msg_nation_town_moved_their_homeblock_too_far: '%s ima blok doma pomeren predaleko od bloka doma glavnog grada vaše nacije i uklonjen je iz vaše nacije.'
-#Added in 0.33
-msg_err_invalid_radius_number: '&cNevažeća količina za poluprečnik. Koristite %s ili manje.'
-#Added in 0.34
-msg_err_max_residents_per_town_reached: '&cMaksimalan broj stanovnika (%s) već dostignut.'
-#Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&cIgrač %s nije bio na serveru dovoljno dugo da biste ga pozvali u grad, molimo sačekajte.'
 msg_cant_toggle_pvp_outsider_in_town: 'Stranac je u Vašem gradu, ne možete promeniti PvP status!'
 msg_err_unclaim_not_outpost: 'Unclaim nije moguć, ovaj plot nije periferija!'
 outpost_plu: 'Periferije'
-#Added in 0.36
 msg_err_not_enough_residents: 'Nema dovoljno stanovnika u gradu da biste to uradili.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Prijateljska borba je onemogućena!'
-#Added in 0.38
-msg_claim_error: '<red>Drugi priključak je zaustavio claim od (%s)/(%s) gradskih blokova, operacija nije mogla biti obavljena.'
-#Added in 0.39
-msg_err_town_spawn_forbidden_war: '<red>Putovanje do gradskog spawn-a je dozvoljeno samo za vreme rata.'
-msg_err_town_spawn_forbidden_peace: '<red>Putovanje do gradskog spawn-a je zabranjeno za vreme rata.'
-msg_err_town_spawn_nation_forbidden_war: '<red>Putovanje do spawn-ova drugih gradova tvoje nacije je dozvoljeno samo tokom rata.'
-msg_err_town_spawn_nation_forbidden_peace: '<red>Putovanje do spawn-ova drugih gradova tvoje nacije je zabranjeno tokom rata.'
-msg_err_town_spawn_ally_forbidden_war: '<red>Putovanje do spawn-ova drugih gradova saveznika tvoje nacije je dozvoljeno samo tokom rata.'
-msg_err_town_spawn_ally_forbidden_false: '<red>Putovanje do spawn-ova gradova saveznika tvoje nacije je zabranjeno tokom rata.'
-msg_err_public_spawn_forbidden_war: '<red>Putovanje do javnoih spawn-ova drugih gradova je dozvoljeno samo tokom rata.'
-msg_err_public_spawn_forbidden_peace: '<red>Putovanje do javnih spawn-ova drugih gradova je zabranjeno tokom rata.'
-#Added in 0.40
 mayor_help_9: 'Pokušaj da unclaim-uješ periferiju'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Pozivi'
 invite_sent_by: 'Poziv Poslat Od'
 invite_help_1: 'Prihvati poziv za ulazak u grad'
@@ -771,39 +485,7 @@ nation_ally_help_5: 'Prihvati jedan zahtev za savezništvo sa jednom nacijom'
 nation_ally_help_6: 'Odbij neki zahtev za savezništvo sa nekom nacijom'
 nation_ally_help_7: 'Povuci zahtev za savezništvo'
 msg_player_denied_all_invites: "Svi tvoji primljeni pozivi su odbijeni."
-msg_err_player_no_invites: '<red>Nemaš poziva!'
-msg_err_player_has_multiple_invites: '&cImate više poziva, molimo budite specifični!'
 msg_err_player_has_too_many_invites: '%s ima previše poziva, pitajte ih da odbiju neke pre nego što ponovo pozovete.'
-msg_err_player_already_invited: '<aqua>Već si pozvao %s da se pridruži tvom gradu!'
-msg_err_town_no_invites: '<aqua>Grad nema poziva!'
-msg_err_town_specify_invite: '&cMolimo navedite poziv!'
-msg_err_town_has_too_many_invites: '&bGrad %s ima previše poziva, pitajte ih da odbiju neke pre nego što ponovo pozovete.'
-msg_err_town_sent_too_many_invites: '&bGrad je poslao previše poziva, povucite neke pre nego što probate opet!'
-msg_err_town_already_invited: '<aqua>Već si pozvao/la %s da uđe u tvoju naciju!'
-msg_err_nation_specify_invite: '&cMolimo navedite zahtev!'
-msg_err_nation_no_requests: '<aqua>Nacija nema zahteva za savezništvo!'
-msg_err_nation_sent_too_many_invites: '&bNacija je poslala previše poziva, povucite neke pre nego što probate opet!'
-msg_err_nation_sent_too_many_requests: '&bNacija je poslala previše zahteva, povucite neke pre nego što probate opet!'
-msg_err_nation_has_too_many_requests: '<aqua>Nacija %s ima previše zahteva, pitaj ih da odbiju neke pre nego što ponovo zatražiš.'
-player_received_invites: '&bPrimili ste %a/%m poziva.'
-town_revoke_invite: '<aqua>Grad %s je povukao poziv da mu se pridružiš.'
-town_revoke_invite_successful: '<aqua>Uspešno si opozvao/la poziv za pridruživanje tvom gradu poslate igraču %s.'
-town_received_invites: '&bGrad je primio %a/%m poziva.'
-town_sent_invites: '<aqua>Grad je poslao %a/%m poziva.'
-nation_revoke_invite: '&bNacija %s je povukla poziv da im se pridružite.'
-nation_revoke_invite_successful: '<aqua>Uspešno si povukao/la poziv za pridruženje tvojoj naciji.'
-nation_revoke_ally: '&bNacija %s je povukla zahtev za savezništvo.'
-nation_revoke_ally_successful: '&bUspešno ste povukli zahtev za savezništvo.'
-nation_received_requests: '&bNacija je primila %a/%m zahteva za savezništvo.'
-nation_sent_invites: '<aqua>Nacija je poslala %a/%m poziva.'
-nation_sent_ally_requests: '&bNacija je poslala %a/%m zahteva za savezništvo.'
-no_confirmations_open: '&cNemate šta da potvrdite!'
-successful_cancel: '&cAkcija otkazana!'
-successful_deny: '<aqua>Poziv uspešno odbijen.'
-successful_deny_request: '<aqua>Saveznički zahtev je uspešno odbijen.'
-msg_ally_removed_successfully: '&bSaveznik je uspešno uklonjen.'
-town_deleted_by_admin: '&bGrad %s uspešno obrisan'
-nation_deleted_by_admin: '&bNacija %s uspešno obrisana'
 are_you_sure_you_want_to_continue: 'Da li ste sigurni da želite da nastavite?'
 you_have_been_invited_to_join: 'Pozvan/na si da se pridružiš '
 you_have_been_requested_to_ally: 'Zatraženo ti je savezništvo '
@@ -813,16 +495,12 @@ nation_zone_this_area_under_protection_of: 'Ovaj deo %s je pod zaštitom %s'
 nation_zone_conquered_status_denies_use: "Status osvojenosti tvog grada te sprečava da koristiš ovu zonu nacije."
 nation_zone_conquered_status_denies_use_2: "Nisi u mogućnosti da koristiš zonu nacije ovog osvojenog grada."
 nation_spawn_not_allowed_for_conquered_towns: "Status osvojenosti tvog grada te sprečava da se stvoriš u tački stvaranja svoje nacije."
-#Added in 0.42
 you_have_been_invited_to_join2: 'Pozvan si da se pridružiš %s'
 you_have_been_requested_to_ally2: 'Zatraženo ti je savezništvo sa %s'
-#Added in 0.43
 town_help_11: 'Osnuj novi grad. Koristi ''_'', a ne razmake.'
-changed_plot_town: '<aqua>Uspešno si promenio/la grad parcele u %s!'
 not_standing_in_plot: 'Ne stojiš u važećoj parceli!'
 msg_err_homeblock_has_not_been_set: 'Domni Blok još nije postavljen, prvo iskoristi ''/town set homeblock''.'
 msg_err_spawn_not_within_homeblock: 'Spawn nije obuhvaćen Blokom Doma, prvo iskoristi ''/town set homeblock''.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Greška: Nevažeća komanda!'
 tc_settings_reloaded: '[TownyChat] Postavke ponovo učitane!'
@@ -832,25 +510,9 @@ tc_channel_list_in: 'U'
 tc_channel_list_out: 'Van'
 tc_err_you_dont_have_perm_mute_list: 'Nemaš dozvole da vidiš mute spisak'
 tc_err_you_dont_have_unmute_perm: 'Nemaš dozvolu za unmute'
-tc_err_no_channel_called_channel: 'Nema kanala koji se zove &f%s'
-tc_err_no_muted_players_in_channel_players: 'Nema mute-ovanih igrača u <white>%s'
-tc_players_muted_in_channel: '[TownyChat] <white>%n <dark_green>mute-ovanih igrača u <white>%s<dark_green>: <white>%s'
-tc_err_no_online_players_with_name: 'Nema online igrača sa imenom <white>%s'
 tc_err_you_dont_have_mute_perms: 'Nemaš dozvolu za mute'
 tc_err_you_cant_mute_admin: 'Ne možeš mute-ovati Towny administratora.'
 tc_err_you_cant_mute_chat_mod: 'Ne možeš mute-ovati chat moderatora.'
-tc_player_already_muted_in_channel: '[TownyChat] Igrač je već ućutkan u <white>%s'
-tc_player_is_now_muted_in_channel: '[TownyChat] <white>%s <dark_green>je sada mute-ovan/a u <white>%s'
-tc_player_is_not_muted_in_channel: '[TownyChat] Igrač nije mute-ovan u <white>%s'
-tc_player_is_now_unmuted_in_channel: '[TownyChat] <white>%s <dark_green>je unmute-ovan/a u <white>%s'
-tc_err_you_are_currently_muted_in_channel: 'Trenutno si mute-ovan/na u <white>%s<red>!'
-tc_err_you_cannot_leave_channel: 'Ne možeš napustiti <white>%s'
-tc_you_already_left_channel: '[TownyChat] Već si napustio/la <white>%s'
-tc_you_left_channel: '[TownyChat] Napustio si <white>%s'
-tc_you_are_now_talking_in_channel: '[TownyChat] Sada pričaš u <white>%s'
-tc_err_you_cannot_join_channel: 'Ne možeš ući u <white>%s'
-tc_you_are_already_in_channel: '[TownyChat] Već si u <white>%s'
-tc_you_joined_channel: '[TownyChat] Ušao/la si u <white>%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'Već razgovaraš u podrazumevanom kanalu. Da pređete na drugi kanal koristite naredbu tog kanala.'
 tc_err_unable_to_talk_essentials_mute: 'Ne možeš pričati... Trenutno si Mute-ovan/na si!'
 tc_err_unable_to_talk_you_are_spamming: 'Ne možete pričati... Spamujete!'
@@ -864,17 +526,8 @@ msg_err_over_outposts_limit: 'Ne možeš se teleportovati do svoje periferije, n
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: 'Odmetnici:'
-online: '<green>(Online)'
-#Used in mayor hover text in /town status screen.
-registered_last_online: '&2Registrovan: &a%s &8| &2Poslednji Put Online: &a%s'
 #Used on /plot perm, /res
 status_perm: 'Dozv:'
-status_on: '&4UKLJUČENO'
-status_off: '&aISKLJUČENO'
-status_on_good: '&aUKLJUČENO'
-status_off_bad: '&4ISKLJUČENO'
-status_forced: '&cForsirano'
-status_adjustable: '&aPromenljivo'
 status_pvp: 'PvP:'
 explosions: 'Eksplozije:'
 firespread: 'Širenje vatre:'
@@ -889,9 +542,6 @@ jailed_in_town: ' u Gradu: %s'
 status_friends: 'Prijatelji'
 rank_list_title: '%s Lista Činova'
 rank_list_mayor: 'Gradonačelnik:'
-status_title_capital: '<aqua>(Glavni grad)'
-status_title_pvp: '&4(PvP)'
-status_title_open: '<aqua>(Otvoren)'
 status_town_board: 'Tabla:'
 status_founded: 'Nastao:'
 status_founded_by: 'Osnovan od strane:'
@@ -911,8 +561,6 @@ status_nation_towns: 'Gradovi'
 status_nation_allies: 'Saveznici'
 status_nation_enemies: 'Neprijatelji'
 status_nation_enemied_by: 'Nacije koje smatraju tvoj naciju neprijateljem'
-status_world_claimable: '<green>Claim-ljiv'
-status_world_noclaims: '&cBez Claim-ova'
 status_world_forcepvp: 'Forsiranje PvP-a:'
 status_world_fire: 'Vatra:'
 status_world_forcefire: 'Forsiranje Vatre:'
@@ -931,7 +579,6 @@ status_townblock_untaxed: 'Neoporezovani'
 status_townblock_max_and_minjoindays: 'Članstvo grada od između %s i %s dana potrebno za kupovinu parcele.'
 status_townblock_minjoindays: 'Članstvo grada od preko %s dana potrebno za kupovinu parcele.'
 status_townblock_maxjoindays: 'Članstvo grada manje od %s dana potrebno za kupovinu parcele.'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Ne možete koristiti banku nacije van prestonice nacije.'
 msg_err_unable_to_use_bank_outside_your_town: 'Ne možeš koristiti svoju gradsku banku van svog grada.'
 msg_time_until_a_new_day: 'Vreme do Novog Dana: '
@@ -941,38 +588,10 @@ msg_seconds: ' sekundi'
 msg_err_invalid_string_nationboard_not_set: 'Nevažeća nit, nacionalni Odbor nije određen.'
 msg_plot_evict: 'Plot uspešno iseljen.'
 msg_no_one_to_evict: 'Nikog za iseliti sa ovog plota.'
-#Added in 0.46
 nation_help_10: 'Teleportujte se do spawn-a nacije.'
-msg_nation_spawn_warmup: '<aqua>Čekanje na teleportaciju...'
-msg_set_nation_spawn: '&bSpawn nacije uspešno promenjen.'
-msg_err_cant_afford_tp_nation: '<red>Ne možeš priuštiti teleportaciju do %s.'
-msg_err_nationspawn_has_not_been_set: '<red>Spawn nacije nije postavljen.'
-msg_err_spawn_not_within_nationtowns: '&cSpawn nacije mora biti u gradu koji je deo nacije.'
-msg_err_spawn_not_within_capital: '&cSpawn nacije mora biti u glavnom gradu.'
-msg_err_nation_spawn_war: '&cSpawn-ovi nacije nisu dozvoljeni za vreme rata.'
-msg_err_nation_not_public: '&cTa nacija nije javna.'
-msg_nation_toggle_public: '&aUspešno promenjeno podešavanje za javnost nacije.'
-status_yes: '&aDA'
-status_no: '&cNE'
 msg_err_unable_to_use_bank_outside_bank_plot: 'Ne možeš koristiti tu naredbu izvan parcele sa bankom ili domne parcele. Parcele sa bankom se stvaraju koristeći /plot set bank.'
-msg_err_nation_spawn_forbidden: '<red>Putovanje do spawn-a nacije je zabranjeno.'
-msg_err_nation_spawn_forbidden_war: '&cPutovanje do spawn-a nacije je dozvoljeno samo za vreme rata.'
-msg_err_nation_spawn_forbidden_peace: '&cPutovanje do spawn-a nacije je zabranjeno za vreme rata.'
-msg_err_nation_spawn_ally_forbidden: '&cPutovanje do spawn-a savezničkih nacija je zabranjeno.'
-msg_err_nation_spawn_nation_forbidden_war: '&cPutovanje do spawn-a savezničkih nacija je dozvoljeno samo za vreme rata.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cPutovanje do spawn-a savezničkih nacija je zabranjeno za vreme rata.'
-msg_err_public_nation_spawn_forbidden: '<red>Putovanje do javnih spawn-ova drugih nacija je zabranjeno.'
-msg_err_public_nation_spawn_forbidden_war: '<red>Putovanje do javnih spawn-ova drugih nacija je dozvoljeno samo tokom rata.'
-msg_err_public_nation_spawn_forbidden_peace: '<red>Putovanje do javnih spawn-ova drugih nacija je zabranjeno tokom rata.'
-msg_spawn_cost_set_to: '<aqua>%s je postavio cenu korišćenja /%s spawn na %s'
-msg_spawn_fail_safe_teleport: '<red>Teleportacija nije uspela, lokacija nije bezbedna, pitaj gradonačelnika svog grada da promeni lokaciju teleporta.'
-msg_err_cannot_set_spawn_cost_more_than: '<red>Ne možeš odrediti cenu spawn-a veću od %s'
-msg_err_ally_isnt_public: '<red>Tvoj saveznik, %s, nema javno stvaranje omogućeno. Teleport odbijen.'
-msg_nation_changed_public: '<red>Javni status nacije je sada %s.'
-#Added in 0.47:
 status_plot_type: 'Tip plota:'
 msg_no_self_jailing: 'Ne možeš sam/sama sebe staviti na robiju.'
-online2: ' <green>(Online)'
 build: 'Gradi'
 destroy: 'Uništavaju'
 switch: 'Prekidač'
@@ -990,48 +609,17 @@ enabled: 'Omogućeno'
 disabled: 'Onemogućeno'
 forced: 'Forsirano'
 adjustable: 'Podesivo'
-#Added in 0.48:
-msg_no_funds_new_town2: '<red>%s ne može priuštiti da naseli novi grad ovde, što košta %s.'
-msg_no_funds_new_nation2: '<red>Grad ne može priuštiti da osnuje novu naciju, što košta %s.'
-msg_no_funds_claim2: '<red>Grad ne može priuštit da claim-uje %s gradskih blokova što košta %s. Dodajte %s banci grada koristeći /g uplati %s'
-msg_err_cant_afford_blocks2: '<red>Grad ne može priuštit da claim-uje %s gradskih blokova što košta %s. Dodajte %s banci grada koristeći /g uplati %s'
-msg_err_not_enough_variables: '<red>Nema dovoljno promenjivih: '
-nation_rechecked_by_admin: '<aqua>Razdaljine gradova nacije %s su ponovo uspešno proverene.'
-msg_err_nation_over_town_limit: '<red>Tvoja nacija je dostigla maksimalni dozvoljeni broj za broj gradovi-po-naciji: %s.'
-#Added in 0.49
 msg_process_claim: 'Obrađivanje Plot Claim-a...'
 msg_process_unclaim: 'Obrađivanje Plot Unclaim-a...'
 msg_total_townblocks: 'Ukupno gradskih blokova: '
-#Added in 0.50
 friend_list: 'Spisak Prijatelja'
 not_registered: 'Nisi registrovan/na.'
-msg_error_missing_comparator: '<aqua>Moraš navesti po čemu sortirati.'
-msg_error_invalid_comparator: '<aqua>Nevažeći upoređivač.'
-msg_error_multiple_comparators: '<aqua>Previše upoređivača. Navedi samo jedan.'
-msg_error_comparator_failed: '<aqua>Upoređivač nije uspeo. Probaj neki drugi.'
 number_of_residents: '(Broj Stanovnika)'
 number_of_towns: '(Broj Gradova)'
 town_name: 'Ime Grada'
 nation_name: 'Ime Nacije'
-refund_message: '<green>Povraćeno %s za unclaim-ovanje %s gradskih blokova.'
-msg_bankrupt_town_multiple: '<aqua>Sledeći gradovi nisu mogli priuštiti da se održe i raspušteni su: '
-msg_bankrupt_nation_multiple: '<aqua>Sledeće nacije nisu mogle priuštiti da se održe i raspuštene su: '
-msg_couldnt_pay_tax: '<aqua>%s je izbačen/a iz %s zbog nemogućnosti da isplati porez.'
-msg_couldnt_pay_nation_tax_multiple: '<aqua>Sledeći gradovi nisu mogli priuštiti nacionalni porez i napustili su naciju: '
-msg_couldnt_pay_town_tax_multiple: '<aqua>Sledeći stanovnici nisu mogli priuštiti gradski porez i prognani su: '
-msg_couldnt_pay_plot_taxes_multiple: '<aqua>Sledeći stanovnici nisu mogli priuštiti porez na nekim ili svim svojim plotovima: '
-msg_bankrupt_town2: '<aqua>%s nije mogao priuštiti da ostane grad.'
-msg_bankrupt_nation2: '<aqua>%s nije mogao priuštiti da ostane nacija.'
 status_embassy_town: 'Predstavništva u'
-#Added in 0.51:
-msg_error_invalid_comparator_nation: '<aqua>Nevažeći upoređivač. Pokušaj %s.'
-msg_error_invalid_comparator_town: '<aqua>Nevažeći upoređivač. Pokušaj %s.'
-msg_err_merging_for_kings_only: '<red>Spajanje može da bude izvršeno samo od strane Vođe Nacije.'
-msg_err_king_of_that_nation_is_not_online: '<aqua>Vođa Nacije %s, %s, nije online. Spajanje nije uspelo.'
-nation1_has_merged_with_nation2: '<gold>Nacija %s je pristala da bude pripojena preovladavajućoj naciji %s.'
-msg_would_you_merge_your_nation_into_other_nation: '<gold>Da li bi pristao/la da vaša nacija %s izgubi autonomiju u korist pripadnosti naciji %s? Ovo će prebaciti sve gradove i novac nacionalne banke u naciju %s.'
 no_open_towns: 'Nema otvorenih gradova za navođenje.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Nacija nema saveznika za navođenje.'
 msg_error_nation_has_no_enemies: 'Nacija nema neprijatelja za navođenje.'
 msg_error_ta_plot_claim: 'Ime igrača nedostaje, pr: /ta plot claim ImeIgračaOvde'
@@ -1040,24 +628,9 @@ msg_admin_has_given_you_a_plot: 'Admin je claim-ovao plot za Vas na: %s'
 msg_town_forcemobs_setting_set_to: 'Gradu %s beše podešavanje mobova usiljeno na %s'
 msg_town_forcepvp_setting_set_to: 'Grad %s je forsirao PvP podešavanje na %s'
 msg_town_forcedisabledpvp_setting_set_to: 'Gradu %s beše adminjeonemogućiopvp podešavanje usiljeno na %s'
-msg_nation_changed_open: '&cOtvoreni status nacije je sada %s.'
 msg_err_already_in_a_nation: 'Vaš grad je već u naciji.'
-msg_err_nation_not_open: '<red>Vrata nacije %s nisu za svakoga otvorena. Zamolite vođu nacije ili saradnika da biste se pridružili.'
-msg_err_nation_homeblock_in_another_world: '%cBlok doma tvog grada nije u istom svetu kao blok doma glavnog grada nacije.'
 status_bank_town_penalty_upkeep: 'Porez održavanja pre-claim-a:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Ne možete se spawn-ovati u %s, tamo ste označeni kao razbojnik.'
-#Added in 0.55:
-msg_you_cannot_use_that_command_while_jailed: '<dark_red>Ne možeš koristiti tu komandu dok si na robiji.'
-#Added in 0.56:
-msg_cache_block_error_town_nation: '<red>Članovi nacije ne smeju da %s.'
-#Added in 0.57:
-msg_err_already_res2: '<red>%s već pripada nekom gradu.'
-msg_err_cannot_afford_plot_set_type_cost: '<red>Ne možeš priuštiti da postaviš parcelu na %s tip, što košta %s'
-msg_plot_set_cost: '<aqua>Naplaćeno ti je %s za postavljanje parcele na tip: %s'
-msg_err_townspawn_has_not_been_set: '<red>Spawn grada nije određen.'
-msg_err_player_too_far_from_town_spawn: '<red>%s je predaleko od spawn-a tvog grada da primi poziv u grad. Maksimalna razdaljina: %s blokova.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Kaucija stanovnika košta: '
 msg_mayor_bail_amount: 'Kaucija gradonačelnika košta: '
 msg_king_bail_amount: 'Kaucija za Vođu Nacije košta: '
@@ -1077,8 +650,6 @@ msg_too_close2: 'Ova oblast je preblizu %s drugoga grada.'
 homeblock: 'blok doma'
 townblock: 'gradski blok'
 outpost: 'kamp'
-msg_err_not_same_town: '<aqua>%s ne pripada tvom gradu.'
-#Added in 0.59:
 msg_modes_set: 'Režimi postavljeni: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Sa ovom parcelom nisu povezani nikakvi meta podaci.'
 msg_err_the_metadata_for_key_is_not_registered: 'Meta podaci za %s nisu registrovani!'
@@ -1111,28 +682,17 @@ msg_err_tag_too_long: 'Oznaka predugačka.'
 msg_err_nation_has_not_set_a_spawn_location: 'Nacija nije postavila spawn lokaciju.'
 msg_err_resident_doesnt_belong_to_any_town: 'Stanovnik ne pripada ni jednom gradu'
 msg_err_could_not_set_default_modes_for: 'Nije moguće staviti podrazumevane modove za '
-#Added in 0.60
 msg_set_war_allowed_on: 'Rat će biti dozvoljen u ovom svetu.'
 msg_set_war_allowed_off: 'Rat neće obuzeti ovaj svet.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Ne možete isključiti/uključiti PvP, %s sekundi preostalo.'
 msg_err_cannot_spawn_x_seconds_remaining: 'Ne možete se spawn-ovati još %s sekundi.'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Plot više nije na prodaju.'
-msg_err_x_spawn_disallowed_from_x: '&c%s spawn nije dozvoljen iz %s.'
 msg_the_wilderness: 'Divljina'
 msg_enemy_areas: 'Protivničke oblasti'
 msg_neutral_towns: 'Neutralni gradovi'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Nacija sa imenom %s nije nađena'
 msg_err_cannot_unclaim_homeblock: 'Ne možeš unclaim-ovati Vaš domni blok, iskoristi ''/towny set homeblock'' da premestiš domni blok.'
-#Added in 0.65
 msg_err_rename_cancelled: 'Promena imena je otkazana drugim priključkom.'
-#Added in 0.66
-#Added in 0.67
-msg_conquered: '&4(Okupirano)'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Ovaj plot je deo grupe od %s plot(ov) a. Potvrdom claim-a kupićeš ih sve.'
 msg_plot_group_unclaim_confirmation: 'Ovaj plot je deo grupe od %s plot(ov) a. Potvrdom ćeš ih sve unclaim-ovati.'
 msg_plot_group_toggle_confirmation: 'Ovaj plot je deo grupe od %s plot(ov) a. Potvrdom ćeš podesiti imanje na svakom od njih.'
@@ -1143,9 +703,7 @@ msg_err_plot_belongs_to_group_set: 'Plot pripada jednoj grupi, iskoristi /plot g
 msg_plot_group_set_for_sale: 'Grupa %s je stavljena na prodaju!'
 msg_err_plot_already_belongs_to_a_group: 'Ovaj plot već pripada jednoj grupi: %s, molimo ukloni blok grada iz te grupe pre dodavanja drugoj.'
 msg_err_you_must_specify_a_group_name: 'Moraš navesti ime za grupu parcela.'
-msg_plot_was_put_into_group_x: 'Parcela <blue>(%s,%s) <dark_green>je stavljena u grupu %s'
 msg_err_plot_not_associated_with_a_group: 'Ova parcela nije povezana ni sa jednom grupom.'
-msg_plot_was_removed_from_group_x: 'Parcela <blue>(%s,%s) <dark_green>je uklonjena iz grupe %s'
 msg_plot_renamed_from_x_to_y: 'Parcela %s je preimenovana na %s.'
 msg_err_plot_group_specify_price: 'Molimo navedi cenu, pr: /plot group fs [cena]'
 msg_player_put_group_up_for_sale_amount: '%s je stavio/la grupu %s na prodaju za %s!'
@@ -1155,44 +713,25 @@ msg_set_group_type_to_x: 'Tip grupe plota promenjen na %s'
 msg_player_successfully_bought_group_x: '%s je uspešno kupio/la grupu plotova %s'
 status_plot_group_name_and_size: 'Gradski blok je deo grupe: %s. Grupa ima ukupno %s Gradskih blokova.'
 msg_player_made_group_not_for_sale: '%s je sklonio grupu %s od prodaje.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Grupe plotova se ne mogu postaviti na tipove zatvora.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Moraš navesti ime grupe plotova, tj /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'Klikni %s ili ukucaj %s'
 msg_confirmation_spigot_click_cancel: 'Klikći %s ili kucaj %s'
 msg_you_cannot_kick_yourself: 'Ne možeš izbaciti samog/samu sebe.'
 msg_you_cannot_kick_this_resident: 'Ne možeš izbaciti %s, ima čin gradonačelnika ili saradnika.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Parcela: %s pripada jednoj grupi, iskoristi /plot group fs [količina]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Parcela: %s pripada jednoj grupi, iskoristi /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Postavka %s koju kontrolišu Admini te sprečava da preinačite PvP na %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Trenutno nisi na robiji.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Nije ti dozvoljeno pravljenje druge strane ovog portala na ovoj lokaciji.'
-#Added in 0.75
 msg_already_ally: 'Tvoja nacija je već u savezništvu sa %s.'
-#Added in 0.76
 msg_you: 'Ti'
-msg_click_spawn: '<green>Klikni da se stvoriš do: <yellow>%s'
-msg_spawn_cost: '<green>Cena Stvaranja = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Bilo je greške pri ponovnom učitavanju Towny-a.'
-msg_reloaded_config: '<dark_green>Konfiguracija ponovo uspešno učitana.'
-msg_reloaded_perms: '<dark_green>Dozvole ponovo uspešno učitane.'
-msg_reloaded_db: '<dark_green>Baza podataka ponovo uspešno učitana'
-msg_reloaded_lang: '<dark_green>Datoteka jezika ponovo uspešno učitana'
-msg_reset_config: '<dark_green>Konfiguracija je resetovana'
 msg_err_teleport_cancelled: 'Mrdanje je otkazalo tvoju teleportaciju.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'prijatelji'
 msg_cache_block_error_plot_allies: 'saveznici'
 msg_cache_block_error_plot_outsiders: 'nestanovnici'
 msg_cache_block_error_plot_town_members: 'članovi grada'
-msg_err_invalid_nation_map_color: '<red>Nepoznata boja mape. Dozvoljene boje su %s.'
-msg_nation_map_color_changed: '<aqua>Boja mape nacije je promenjena u %s.'
 msg_err_unable_to_add_more_residents_without_nation: 'Tvoj grad ne može pozvati više od %s stanovnika bez prethodnog pridruženja ili osnivanja nacije.'
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Sledeći gradovi su izbrisani za nemanje claim-ova: %s'
 msg_spawn_warn: 'Stvaranje košta %s. Nastavi? Predlog: dodaj -ignore da preskočite ove potvrde.'
@@ -1202,87 +741,41 @@ msg_ta_deposit_all_success: 'Uspešno uplaćeno %s bankama svih nacija i gradova
 msg_ta_deposit_all_towns_success: 'Uspešno uplaćeno %s bankama svih gradova.'
 msg_ta_deposit_all_nations_success: 'Uspešno uplaćeno %s bankama svih nacija.'
 bonus_townblocks: 'bonus gradskih blokova'
-#Added in 0.80
 nomad_sing: 'Nomad'
 msg_new_town_advice: 'Čestitamo na pravljenju grada! Vaš grad će svaki dan plaćati porez održavanja koji trenutno iznosi %s. Možete uplatiti novac u banku Vašeg grada koristeći ''/t deposit #''. Bez novca za plaćanje poreza održavanja grad će biti obrisan. Možete proveriti Vaše troškove koristeći /towny prices. Sledeći porez održavanja biće uzet za %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Šteta je otkazala tvoju teleportaciju.'
-#Added in 0.82
-invitation_prefix: "&8[&7Poziv&8] &9"
-confirmation_prefix: "&8[&7Potvrda&8] &9"
-this_message_will_expire2: '&9Ovo će automatski isteći za %s sekundi'
 msg_hover_next_page: 'Sledeća Strana'
 msg_hover_previous_page: 'Prethodna Strana'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Maksimalna količina poreza može biti postavljena samo za gradove sa porezom u procentima."
 msg_town_set_tax_max_percent_amount: "%s je stavio/la maksimalan procenat poreza na %s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Plot pripada grupi, koristi /plot group toggle'
-#Added in 0.85
-msg_set_perms_reset_single: '&bUspešno resetovane dozvole na ovom plotu.'
-#Added in 0.86
 status_bank_bankrupt: '(BANKROT)'
-msg_warning_bankrupt: '&4***UPOZORENJE, %s ĆE BANKROTIRATI SLEDEĆEG DANA ZBOG NEDOSTATKA NOVCA***'
-msg_town_bankrupt_by_upkeep: '&b%s nije mogao da priušti porez održavanja i bankrotirao je.'
-msg_town_bankrupt_by_upkeep_multiple: '&bSledeći gradovi nisu mogli da priušte porez održavanja i bankrotirali su: '
-msg_town_bankrupt_by_nation_tax: '&b%s nije mogao da plaća %s porez i bankrotirao je.'
-msg_town_bankrupt_by_nation_tax_multiple: '<aqua>Sledeći gradovi nisu mogli da priušte nacionakni porez i bankrotirali su: '
 msg_town_debts_cleared: '%s je očistio sve dugove i više nije u bankrotu.'
 msg_err_bankrupt_town_cannot_claim: 'Bankrotirani grad ne može claim-ovati plotove.'
 msg_err_bankrupt_town_cannot_build: 'Nije dozvoljeno graditi u bankrotiranom gradu.'
 msg_err_bankrupt_town_cannot_toggle_open: 'Ne možeš uključiti otvaranje u bankrotiranom gradu.'
 msg_err_bankrupt_town_cannot_invite: 'Nije dozvoljeno zvati igrače u bankrotiran grad.'
-msg_payed_nation_tax: '<aqua>Tvoj grad je platio nacionalni porez od %s.'
-msg_your_town_couldnt_pay_the_nation_tax_of: '<aqua>Tvoj grad nije mogao da priušti nacionalni porez od %s i izbačen je iz nacije.'
-msg_your_town_payed_upkeep: '&bVaš grad je platio dnevni porez održavanja od %s.'
-msg_your_nation_payed_upkeep: '&bVaša nacija je platila dnevni porez održavanja od %s.'
-msg_your_town_couldnt_pay_upkeep: '&bVaš grad nije mogao da plati dnevni porez održavanja od %s i raspušten je.'
-msg_your_nation_couldnt_pay_upkeep: '&bVaša nacija nije mogla da plati dnevni porez održavanja od %s i raspuštena je.'
-#Added in 0.87
-msg_town_reached_debtcap_and_is_disbanded: '&b%s nije mogao/la da plati porez održavanja, dostigao/la ograničenje duga i raspušten/a je.'
-msg_town_reached_debtcap_and_is_disbanded_multiple: '&bSledeći gradovi nisu mogli da plate porez održavanja, dostigli ograničenje duga i raspušteni su: '
 msg_unable_to_deposit_x: 'Nije moguće uplatiti %s u banku tog grada.'
 msg_unable_to_withdraw_x: 'Nije moguće podići %s iz banke tog grada.'
 status_debtcap: 'Ograničenje Duga:'
 status_world_explrevert_entity: 'Povraćaj Eksplozije Entiteta:'
 status_world_explrevert_block: 'Povraćaj Eksplozije Bloka:'
-#Added in 0.88
-msg_nation_already_peaceful: '&cNacija je već mirna.'
-msg_nation_already_not_peaceful: '<aqua>Nacija već nije mirna.'
-#Added in 0.89
 status_world_friendlyfire: 'Prijateljska Borba:'
 status_world_wildernessmobs: 'Mobovi iz Divljine:'
-msg_outlaw_kick_cooldown: '<red>Smatran/na si za odmetnika u %s. Imaš %s da napustiš grad, u suprotnom ćeš biti teleportovan/na na svoj spawnpoint.'
-msg_outlaw_kicked: '&4Niste dobrodošli u %s. Teleportovani ste van.'
-msg_outlaw_town_notify: '&cRazbojnik, %s, je ušao na teritoriju Vašeg grada.'
-msg_your_town_payed_upkeep_with_debt: '<red>Tvoj grad je platio dnevni porez održavanja od %s sa dugom.'
-msg_payed_nation_tax_with_debt: '<red>Tvoj grad je platio nacionalni porez od %s sa dugom.'
-#Added in 0.90
 status_plot_clear_deletion: 'PlotOčistiBlokObriši:'
 msg_err_plot_clear_disabled_in_this_world: 'Na ovom svetu je onemogućena komanda /plot clear.'
-#Added in 0.91
 msg_universe_attribution: 'Autori: '
 msg_universe_contributors: ' I oni koji doprinose poput tebe. '
 townblock_plu: 'Gradski Blokovi'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'newhour komanda izvršena uspešno'
 town_help_12: 'Reclaim-uj svoj grad iz urušenog stanja.'
 msg_warning_town_ruined_if_deleted: "UPOZORENJE!!!: Ako obrišeš svoj grad ući će u urušeno stanje za %d sati. Nakon ovog vremena će nastupiti potpuno brisanje. U urušenom stanju, sve dozvove su omogućene i grad može biti grief-ovan."
 msg_warning_town_ruined_if_deleted2: "Ovaj grad može biti reclaim-ovan od strane bilo kog stanovnika grada koristeći /t reclaim nakon %d sati."
-msg_err_cannot_reclaim_town_unless_ruined: '<red>Ne možeš reclaim-ovati svoj grad jer nije urušen.'
-msg_err_cannot_reclaim_town_yet: '<red>Ne možeš reclaim-ovat svoj grad narednih %d sati.'
-msg_town_reclaimed: '<aqua>%s je reclaim-ovao/la grad %s.'
-msg_err_cannot_use_command_because_town_ruined: "<red>Ne možeš koristiti ovu komandu jer je tvoj grad urušen. Da nastaviš sa normalnim korišćenjem komandi, ili reclaim-uj grad koristeći /town reclaim, ili napusti grad koristeći /town leave."
-msg_warning_your_town_is_ruined_for_x_more_hours: '<red>Tvoj grad leži u urušenom stanju još %d sati. Iskoristi ''/town reclaim'' da spaseš grad i postaneš gradonačelnik.'
 msg_time_remaining_before_full_removal: 'Vreme preostalo do potpunog uklanjanja: %d sati.'
 msg_time_until_reclaim_available: 'Vreme do dostupnosti reclaim-a: %d sati.'
 msg_reclaim_available: 'Reclaim dostupan.'
 msg_ruined_town_being_deleted: "%s je ruiniran već %s sati i briše se."
-#Added in 0.93
-msg_changed_peaceful: '<red>Neutralnost/mirnoća grada je sada %s.'
-msg_err_town_unclaim_canceled: '<red>Unclaim otkazan. Ne možeš se odreći ove oblasti u ovo vreme.'
-#Added in 0.94
 msg_comptype_residents: 'Broj Stanovnika'
 msg_comptype_townblocks: 'Broj Claim-ovanih Gradskih blokova'
 msg_comptype_balance: 'Stanje u banci'
@@ -1290,55 +783,17 @@ msg_comptype_online: 'Online igrači'
 msg_comptype_towns: 'Broj Gradova'
 msg_comptype_name: 'Abecedni red'
 msg_comptype_open: 'Otvoreni Status'
-msg_status_npc: '<red>%s nije stvarni igrač, i ograničen je samo na Towny.'
 npc_created: 'Kreirano:'
-msg_no_funds_claim_plot: '<red>Ne možeš priuštiti da claim-uješ plot cene %s.'
-msg_no_funds_claim_plot_group: '<red>Ne možeš priuštiti da claim-uješ %s plotova što košta %s.'
-status_town_title_peaceful: '<aqua>(Mirno)'
-#Added in 0.95
-status_public: '<aqua>(Javno)'
 msg_days: ' dana'
 msg_comptype_public: 'Javni Status'
 towny_prices_title: 'Cene'
-towny_prices_town_nation: '<yellow>[Nov] <dark_green>Grad: <green>%s <dark_gray>| <dark_green>Nacija: <green>%s'
-towny_prices_reclaim: '<yellow>[Reclaim] <dark_green>Grad: <green>%s'
-towny_prices_upkeep: '<yellow>[Održavanje] <dark_green>Grad: <green>%s <dark_gray>| <dark_green>Nacija: <green>%s'
-towny_prices_overclaimed_upkeep: '<yellow>[Pre-claim-ovano Održanje] <dark_green>Grad: <green>%s'
-towny_prices_claiming_townblock: '<yellow>[Claim-ovanje] <dark_green>Gradski Blok: <green>%s'
-towny_prices_claiming_townblock_increase: ' <dark_gray>| <dark_green>Povećaj po gradskom bloku: <green>+%s'
-towny_prices_claiming_outposts: '<yellow>[Claim-ovanje] <dark_green>Kampovi: <green>%s'
-towny_prices_outposts_upkeept: '<gray>Ispostave imaju dodatnu cenu održanja na dan po ispostavi: <green>%s'
-towny_prices_upkeep_based_on: '<gray>Održanje grada je bazirano na <green>the %s'
 towny_prices_upkeep_num_plots: 'broj plotova.'
 towny_prices_upkeep_town_level: 'nivo grada (br. stanovnici.)'
 towny_prices_overclaimed_num_plots: 'broj pre-claim-ovanih plotova *'
 towny_prices_overclaimed_flat_cost: 'cena parcele od'
-towny_prices_townname: '<red>Grad: <aqua>%s'
-towny_prices_price_plot: '<red>    [Cena] <dark_green>Plot: <green>%s <dark_gray>| <dark_green>Kamp: <green>%s'
-towny_prices_price_shop: '<red>            <dark_green>Prodavnica: <green>%s <dark_gray>| <dark_green>Predstavništvo: <green>%s'
-towny_prices_taxes_plot: '<red>    [Porezi]    <dark_green>Stanovnik: <green>%s <dark_gray>| <dark_green>Plot: <green>%s'
-towny_prices_taxes_shop: '<red>            <dark_green>Prodavnica: <green>%s <dark_gray>| <dark_green>Predstavništvo: <green>%s'
-towny_prices_town_neutral_tax: '<red>            <dark_green>Mir: <green>%s'
-towny_prices_plots: '<red>    [Postavljanje plotova]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
-towny_prices_nationname: '<red>Nacija: <gold>%s'
-towny_prices_nation_tax: '<red>    [Porezi] <dark_green>Grad: <green>%s <dark_gray>| <dark_green>Mir: <green>%s'
-#Added in 0.96
-msg_town_destroyed_by_nation_tax: '<aqua>Osvojeni grad %s nije mogao da plati nacionalni porez i pao je.'
-msg_town_destroyed_by_nation_tax_multiple: '<aqua>Sledeći osvojeni gradovi nisu mogli da plate nacionalni porez i pali su: '
-msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Tvoj grad je pošteđen nacionalnog poreza.'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Status Urušenosti'
 msg_comptype_forsale: 'Status NaProdaju'
 msg_comptype_bankrupt: 'Status Bankrotstva'
-msg_ruined: '<red>(Urušen)'
-msg_bankrupt: '<red>(Bankrotirao)'
-#Added in 0.98
-msg_del_town2: '&Grad %s je obrisan!'
-msg_ruin_town: '<aqua>Grad %s je postao gomila ruševina!'
 gui_title_select_plot_type: 'Odaberi Tip Parcele'
 gui_title_no_restrictions: 'Nema ograničenja za ovaj tip plota.'
 gui_title_towny_allowedblocks: '%s DozvoljeniBlokovi Spisak'
@@ -1352,52 +807,14 @@ flatfile_err_exception_reading_district_file_at_line: 'Greška pri učutavanju: 
 flatfile_dbg_loading_district_list: 'Učitavanje spiska Distrikata...'
 msg_ta_removed_all_titles_and_surnames_removed: 'Svim stanovnicima behu uklonjeni titule i prezimena.'
 msg_err_homeblock_already_set_here: 'Ovo mesto je već domni blok tvog grada.'
-#Added in 0.100
-msg_town_merge_err_mayor_only: '<aqua>Spajanje može da bude izvršeno samo od strane gradonačelnika.'
-msg_town_merge_err_not_close: '<red>Grad %s je predaleko od tvog grada. Njihov domni blok treba da bude %d gradskih blokova od tvog domnog bloka.'
-msg_town_merge_request_sent: '<aqua>Zahtev za spajanje poslat gradonačelniku %s.'
-msg_town_merge_request_received: '<aqua>Gradonačelnik %s, %s, je zatražio spajanje sa tvojim gradom. Ovo će prebaciti sve gradske blokove, stanovnike i novac gradske banke u %s.'
-msg_town_merge_request_denied: '<red>Zahtev za spajanje odbijen.'
-msg_town_merge_other_offline: '<aqua>Gradonačelnik %s, %s, je trenutno offline. Spajanje nije uspelo.'
-msg_town_merge_err_too_many_residents: '<red>Spajanje nije uspelo: Nova količina stanovnika premašuje ograničenje (%d)'
-msg_town_merge_err_too_many_townblocks: '<red>Spajanje nije uspelo: Nova veličina grada premašuje ograničenje (%d)'
-msg_town_merge_err_too_many_outposts: '<red>Spajanje nije uspelo: Nova količina kampova premašuje ograničenje (%d)'
-msg_town_merge_err_not_enough_money: '<red>Spajanje nije uspelo: Nema dovoljno novca. (%s/%s)'
-msg_town_merge_err_too_many_purchased_townblocks: '<red>Spajanje nije uspelo: Previše kupljnih gradskih blokova (%d)'
-msg_town_merge_warning: '<red>Upozorenje: Ako bude prihvaćeno, spajanje sa %s će koštati %s.'
-msg_town_merge_debt_warning: '<red>Upozorenje: %s trenutno duguje, moraćete da platite njihov dug u slučaju prihvatanja.'
-msg_town_merge_cost_breakdown: '<aqua>Razlaganje cene: Osnovna cena: %s, Cena blokova grada: %s, Cena bankrotstva: %s, Cena bonus blokova: %s'
-msg_town_merge_failed: '&cSpajanje neuspešno.'
-msg_town_merge_cancelled: '&cSpajanje otkazano.'
-msg_town_merge_success: '&bGrad %s, vlasništvo od %s, uspešno spojen sa gradom %s.'
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: 'Cene Spajanja Grada'
 msg_town_merge_transaction_reason: 'Spajanje Grada'
-towny_prices_town_merge: '<yellow>[Merging] <dark_green>Osnovna Cena: <green>%s <dark_gray>| <dark_green>Po Plotu: <green>%s'
-#Added in 0.101
-msg_err_nation_not_allied_with: '&cVaša nacija nije u savezu sa %s.'
-msg_err_nation_not_enemies_with: '&cVaša nacija nije neprijatelj sa %s.'
-msg_err_nation_already_enemies_with: '&cVaša nacija je već protivnik sa %s.'
-msg_err_ally_already_requested: '&cVeć ste poslali zahtev za savezništvo %s.'
-msg_err_nation_not_allied_with_2: '<red>%s nije u savezu sa %s.'
-msg_err_nation_not_enemies_with_2: '<red>%s nije neprijatelj sa %s.'
-msg_err_nation_already_allied_with_2: '&c%s je već u savezu sa %s.'
-msg_err_nation_already_enemies_with_2: '<red>%s je već neprijatelj sa %s.'
-msg_ta_allies_enemies_updated: '<aqua>Saveznici/Neprijatelji ažurirani za %s.'
-#Added in 0.102
-towny_map_detailed_information: '<dark_green>Klikni za detaljne informacije o parceli.'
-msg_err_nation_capital_too_many_residents: '&cTrenutna prestonica ima previše stanovnika da bi bila zamenjena sa %s.'
-msg_deleting_nation_will_result_in_losing_residents: '<red>Upozorenje: Brisanje tvoje nacije bi značilo da će grad preći ograničenje stanovništva od %d, što bi dovelo do ukljanjanja %d stanovnika.'
-#Added in 0.103
-msg_command_blocked_inside_towns: '<red>Ne možeš koristiti tu naredbu unutar gradova.'
 msg_command_limited: 'Tu naredbu možeš koristiti samo unutar sopstvenih parcela.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claim-ovano na:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Korišćenje divljine je postalo %s u svim svetovima.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneracije stavljene %s u svim svetovima.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Ne možete izvršiti tu komandu jer ne živite u %s.'
 msg_err_this_jail_has_no_cells: 'Ovaj zatvor nema ćelije.'
 msg_err_no_cell_found_at_this_location: 'Ni jedna ćelija nije nađena na ovoj lokaciji.'
@@ -1421,24 +838,8 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Ne odjavljuj se pre bivanja 
 jail_plu: 'Zatvori'
 jail_sing: 'Zatvor'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s nije igrao/la dovoljno dugo da bude stavljen na robiju, sačekaj još %s'
-#Added in 0.108
-msg_town_not_peaceful: '<aqua>Grad nije mogao da priušti svoje stanje mira.'
-msg_town_already_peaceful: '<aqua>Grad je već miran.'
-msg_town_already_not_peaceful: '<aqua>Grad već nije miran.'
-msg_town_cant_peaceful: '<aqua>Grad nije mogao priuštiti da postane miran grad. Potrebno je da budeš u mogućnosti da dnevno plaćaš %s.'
-msg_town_paid_for_neutral_status: '<aqua>Tvoja grad je platio %s da zadrži tvoj status mira.'
-msg_nation_paid_for_neutral_status: '<aqua>Tvoja nacija je platila %s da zadrži status mira.'
 your_town_has_been_invited_to_join_nation: 'Tvoj grad je pozvan da se priključi naciji: %s'
-#Added in 0.109
-msg_err_no_one_to_purge: '<aqua>Nema neaktivnih članova za očistiti.'
-msg_purging_will_remove_the_following_residents: '<aqua>Molimo potvrdi da želitš da očistiš sledeće stanovnike: %s'
-msg_purge_complete_x_removed: '<aqua>Čišćenje gotovo, %s stanovnika uklonjeno.'
-msg_purge_complete_x_removed_from_towns: '<aqua>Čišćenje gotovo, %s neaktivnih stanovnika ukonjeno je iz gradova.'
-msg_purge_reached_50_residents: '<aqua>Čišćenje je dostiglo 50, dalja brisanja stanovnika neće biti zapisana radi smanjivanja spama.'
 msg_err_days_must_be_greater_than_0: 'Dani moraju biti veći od nule.'
-msg_err_outlawed_players_no_teleport: '&4Razbojnik ste u gradu u kome se trenutno nalazite i ne možete se teleportovati!'
-msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Ne možete koristiti tu komandu dok ste u gradu u kome ste razbojnik.'
-#Added in 0.110
 msg_safe_mode: "[Greška] Zaključano u sigurnom modu!"
 msg_safe_mode_base: '[Greška] Towny je zaključan u Sigurnom Modu zbog greške! '
 msg_safe_mode_player: 'Reci nekom adminu da proveri konzolu servera.'
@@ -1448,7 +849,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Nemoguće claim-ovati kamp,
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Pomerio/la si domni blok baš nedavno! Sačekaj još %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Ne možeš pomeriti svoj blok doma za toliko gradskih blokova, ograničenje je %s, ovaj prostor je udaljen %s gradskih blokova.'
 msg_err_usingtowny_disabled: 'Ovaj svet je lišen svih Towny interakcija. Prvo iskoristi /townysvet toggle koristeći towny.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Ovaj gradski blok je već deo %s grupe plotova. Da li si siguran/na da ga želiš prebaciti u %s grupu plotova?'
 msg_townblock_transferred_from_x_to_x_group: 'Gradski blok prebačen iz %s u %s grupu plotova.'
 msg_plotgroup_deleted: 'Grupa plotova %s je obrisana.'
@@ -1459,44 +859,18 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Ovaj gradski blok je ve�
 map_hover_plot_group: 'Grupa plotova: '
 map_hover_plot_group_size: ' Veličina: '
 map_hover_plots: '%s plotovi'
-#Added in 0.112
 msg_checking_for_updates: 'Proveravanje ima li ažuriranja...'
 msg_no_new_updates: 'Nema novih ažuriranja.'
-msg_new_update_available: '&bNova ažuriranja dostupna: %s | Trenutna verzija: %s'
 msg_download_here: 'Preuzmite je ovde: %s'
-msg_click_to_download: '<aqua>Klikni ovde da je preuzmeš.'
-msg_latest_version: '<dark_green>Towny verzija: <green>%s <dark_green>| Najnovija verzija: <green>%s'
-msg_up_to_date: '&aKoristite najnoviju verziju.'
 msg_click_purchase: 'Kliknite da kupite'
 msg_you_must_join_this_town_to_claim_this_plot: 'Moraš ući u ovaj grad: %s, kako bi claim-ovao/la ovu parcelu. Da li želiš da se pridružiš gradu i nastaviš sa claim-ovanjem?'
-msg_legacy_economy_detected: "<aqua>Tvoje Towny-jevo uvođenje ekonomije je određeno na Nasleđe, preporučuje se da pustiš Towny da ažurira sam sebe na korišćenje Savremenog uvođenja. Ovo će poboljšati kompatibilnost sa više priključaka za ekonomiju."
-msg_click_to_convert_to_modern_economy: "<aqua>Klikni ovde da promeniš svoje Towny-jevo uvođenje ekonomije od nasleđa na savremenu."
-#Added in 0.113
 status_trustedlist: 'Pouzdano'
-msg_click_to_edit: '&6Kliknite da menjate.'
 permission_gui_header: 'Towny GUI Dozvola'
-msg_last_edited: '&7&oPoslednji put promenjeno na %s od %s.'
-#Last %s is either town or townblock
-msg_trusted_added: '&bDodat %s kao pouzdan u ovom %s.'
-msg_already_trusted: '&b%s je već trust-ovan/a u ovom %s.'
-msg_cannot_trust_your_own_town: '<aqua>Ne možeš verovati sopstvenom gradu.'
-#Last %s is the town name or worldcoord.
-msg_trusted_added_2: '&b%s Vas je trust-ovao u %s:%s.'
-msg_not_trusted: '&b%s nije trust-ovan u ovom %s.'
-msg_trusted_removed: '&bUklonjen/a %s kao trust-ovan u ovom %s.'
-msg_trusted_removed_2: '&b%s Vas je uklonio/la kao trust-ovanog u %s: %s.'
-msg_overrides_removed: '&bUklonjene preklapane dozvole za %s.'
-msg_overrides_added: '<aqua>Dodate podrazumevane preklapane dozvole za %s.'
-msg_no_overrides_set: '&b%s nema ni jedne preklope postavljene za ovaj %s.'
-msg_overrides_already_set: '&b%s već ima preklope postavljene za ovaj %s.'
-msg_cache_block_err: '<red>Ne smeš %s ovde.'
-msg_err_plot_belongs_to_group: '&cPlot pripada grupi, koristite %s.'
 plotgroup_sing: 'Grupa plotova'
 msg_err_ally_limit_reached: 'Tvoja nacija je dostigla ograničenje saveznika, nije moguće prihvatiti.'
 msg_err_ally_limit_reached_cannot_accept: 'Nacija %s je dostigla svoje ograničenje saveznika, nije moguće prihvatiti.'
 msg_err_ally_limit_reached_cannot_send: 'Tvoja nacija je dostigla svoje ograničenje saveznika, nije moguće pozvati igrača %s da postane vaš saveznik.'
 msg_err_ally_limit_reached_cannot_send_targetNation: 'Nacija %s je dostigla svoje ograničenje saveznika, nije moguće pozvati igrača %s da postane vaš saveznik.'
-#Added in 0.114
 msg_err_group_not_found: 'Grupa %s nije nađena.'
 msg_err_expected_command_format: 'Neispravan pravopis, očekuje se: %s'
 msg_err_group_already_has_node: 'Grupa %s već ima node %s.'
@@ -1521,23 +895,14 @@ help_ta_perms_nationrankadd: 'Dodaje čin nacije u townyperms datoteku.'
 help_ta_perms_nationrankremove: 'Uklanja čin nacije iz townyperms datoteke.'
 help_ta_perms_nationrankrename: 'Preimenuje nacionalni čin u townyperms datoteci'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Taj stanovnik ne pripada toj naciji.'
-#Added in 0.115
 msg_comptype_founded: 'Datum Osnivanja'
 msg_err_must_be_greater_than_or_equal_to: 'Količina mora biti veća od %s ili jednaka %s'
 err_invalid_yaml: 'Greška pri učitavanju: Nije moguće učitati datoteku %s (da li prolazi yaml parser?).'
-#Added in 0.116
-msg_town_map_color_changed: '<aqua>Boja mape grada je promenjena u %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Ovaj gradski blok se ne može dodati grupi jer nije tipa: %s'
-#Added in 0.118
-status_title_nopvp: '<green>(Nema PVP-a)'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Ne možete staviti stanovnika u zatvor, jer se trenutno nalaze na teritoriji u kojoj su razbojnik.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Ne možeš staviti stanovnika na robiju, jer se trenutno nalazi na mestu na kome se smatra neprijateljem.'
-#Added in 0.120
 msg_resident_prompt: 'Unesi ime igrača u ćaskanju, ili q da izađeš. Ovo će automatski isteći za 30 sekundi.'
 msg_prompt_cancel: 'Prompt otkazan ili istekao.'
-status_home_element: ' <gray>[Dom: %s]'
 status_about: "O:"
 status_registered: 'Registrovan:'
 status_lastonline: 'Poslednji put Online:'
@@ -1545,18 +910,11 @@ status_fractions: '%s/%s'
 status_rank_list: 'Spisak Činova'
 status_hover_click_for_more: 'Klikni za više informacija.'
 status_jailed: 'Na robiji:'
-status_bad_yes: '<red>DA'
-status_good_no: '<green>NE'
 status_resident_tax_title: 'Porez %s'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Zbog toga što nisu dovoljno blizu glavnog grada tvoje nacije, sledeći gradovi će biti uklonjeni ako je spajanje izvršeno: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "%s nije važeći towny svet."
 msg_err_enter_world_name_first: 'Molimo prvo unesi ime sveta.'
-msg_wilderness_use_set_to: '<aqua>Korišćenje divljine je postavljeno na %s u %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Nevažeći odgovor! Unesi q za izlazak ili nazad za povratak na prethodno pitanje.'
-msg_setup_full_guide_link: '<aqua>Za link do potpunog vodiča za istaliranje, kliknite ovde.'
 msg_setup_wildernessuse: 'Da li bi voleo/la da omogićiš korišćenje divljine? To će dozvoliti igračima da lome/grade u divljini.'
 msg_setup_revertunclaim: 'Da li bi voleo/la da iskoristiš vraćanje na unclaim-u? Ovo će učiniti da se gradski blokovi polako regenerišu kada se unclaim-uju.'
 msg_setup_town_block_ratio: 'Na šta bi voleo/la da postavite odnos gradskih blokova u svom gradu? Podrazumevana vrednost je 8 gradskih blokova po stanovniku. Veće svote će dozvoliti gradovima da claim-uju više za svakog stanovnika koga imaju. Postavljanje ovoga na 0 će učiniti da se koriste vrednosti iz town_levels.'
@@ -1564,14 +922,12 @@ msg_setup_town_cost: 'Koliko treba da košta da se napravi novi grad? Podrazumev
 msg_setup_nation_cost: 'Koliko treba da košta da se napravi nova nacija? Podrazumevana vrednost je 1000.'
 msg_setup_townblock_cost: 'Koliko treba da košta da se claim-uje gradski blok? Podrazumevana vrednost je 25. Jedan blok grada je iste veličine kao komad (podrazumevana podešavanja)'
 msg_setup_success: 'Uspešno promenjen vrednosti konfiguracije na tvoje nove vrednosti.'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s se nedavno stvorio/la i ne može biti povređen.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Izgubio/la si svoju zaštitu aktivnu po ponovnom stvaranju.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'Ne možeš da pokupljaš predmete dok si pod zaštitom aktivnom po ponovnom stvaranju.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Glavni grad:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1584,7 +940,6 @@ status_unknown: 'nepoznato'
 msg_nationzone_override_set_to: '%s beše imao/la svoj preklop zone nacije podešen na %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s beše imao/la svoj preklop zone nacije uklonjen.'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Veličina Zone Nacije:'
 #Shown when a player adds people to their friends list.
@@ -1611,13 +966,6 @@ msg_err_nothing_to_unclaim: 'Ništa za unclaim-ovati!'
 msg_perm_true: 'Dozvola Tačno.'
 #Given as feedback when /ta checkperm is used.
 msg_err_perm_false: 'Dozvola Netačno.'
-#Shown at the bottom of the /towny map
-#First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Grad: &a%s &7| &2Vlasnik: &a%s'
-#Shown on /towny version
-msg_towny_version: '&2Towny Verzija: &a%s'
-#Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '<dark_green>Igrač sa IP adresom <red>%s <dark_green>je pokušao da se prijavi sa imenom naloga %s što bi moglo oštetiti ekonomiju Vašeg servera, ali je sprečen od strane Towny-ja. Razmislite o ban-ovanju ove IP adrese!'
 #Shown during resident purge
 msg_scanning_for_old_residents: 'Skeniranje za stare stanovnike...'
 #Shown during resident purge
@@ -1628,21 +976,16 @@ msg_purge_complete: 'Iščišćavanje stanovnika gotovo: %s obrisano.'
 msg_you_have_been_given_bonus_blocks: 'Dato Vam je %s bonus gradskih blokova.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Vaš grad ne može kupiti više bonus blokova. Maksimalna količina dostignuta.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Glavni gradovi ne mogu promeniti status mirnoće.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Zona Nacije koja okružuje grad je sad %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Tvoj grad nema Zonu Nacije za upaliti!'
-#Added in 0.129
-#Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '<gray>Porez održavanja nacije je baziran na <green>%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'broju gradova.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'nivou nacije (br. stanovnika)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Uhapšen od gradonačelnika.'
 #Jail causes
@@ -1673,89 +1016,62 @@ msg_jailed_war_prisoner: 'Kao ratni zatvorenik, bićete oslobođeni ako Vaši lj
 msg_jailed_title: 'Zatvoreni ste :('
 #Jail handbook author
 msg_jailed_author: 'Stefi Vilorp.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Grad nema saveznike za navesti.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Grad nema neprijatelje za navesti.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s. | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Vreme potvrde isteklo.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Zvuk kanala je ućutkan'
 tc_player_channel_sound_unmuted: 'Zvuk kanala više nije ućutkan'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Nestanovnik je u tvojoj parceli, ne možeš promeniti svoj pvp status!'
-#Added in 0.136
-msg_view_on_web: '<gray>Klikni za pregled na mreži.'
-#Added in 0.137
-#Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '<gold>Grad %s je prihvatio spajanje sa preovlađujućim gradom %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Cena Neutralnosti:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Ako si platio/la pravi novac za ove gradske blokove, molimo razumej: server na kome igraš krši Minecraft EULA-u i Towny licencu.'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: 'Towny tim nikad nije nameravao da se gradski blokovi mogu kupiti za pravi novac.'
 #Line 3 of the givebonus warning.
 msg_ptw_warning_3: 'Ako si platio/la pravi novac, uzmi u obzir igranje na Towny serveru koji poštuje želje Towny Team-a.'
-#Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: 'Pozvan/na si da se pridružiš %s<blue> (Nacija: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Vaš grad ne može priuštiti novac za unclaim-ovanje ove zemlje. %s potrebno.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Tvoj grad je platio %s za unclaim-ovanje zemljišta.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Unclaim-ovanje ovog zemljišta će koštati %s, da li želiš da nastaviš?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Moraš sačekati %s sekundi pre nego što ponovo budeš mogao/la da promeniš ime grada.'
-#Added in 1.141
 msg_newday_already_running: 'Zadatak za novi dan je veću toku.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Ne možeš paliti/gasiti neutralnost, %s sekundi preostalo.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Ova komanda ne može biti korišćena iz konzole.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Grad %s ima unlimitedclaims postavku podešenu na %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Nemaš dovoljno gradskih blokova da claim-uješ, da li želitš da uključiš beskonačno claim-ovanje za grad %s'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ne možetš napustiti naciju, tvoj grad je osvojen.'
 msg_err_console_only: 'Ovu naredbu može koristiti samo konzola.'
 msg_err_player_only: 'Ovu naredbu može koristiti samo igrač.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Naslovna poruka kada se pređu granice je %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Primena ove naredbe resetuje tvoju konfiguracija.yml datoteku na onu podrazumevanu. Da li želiš da nastaviš?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Radeći ovo, zamenjuješ ograničenja stanovnika određena u konfiguraciji servera. Da li svejedno želiš da nastaviš?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Ukljonjeno %d nevažećih mesta stvaranja u ispostavama.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Tvoj grad je bankrotirao, dodaj novac u banku koristeći /town deposit {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Nisi u mogućnosti da iskoristiš ovu naredbu, zato što si već član jednog grada. Ako hoćeš da nastaviš, moraćeš da iskoristiš "/t leave".'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
 msg_a_town_you_are_outlawed_in: 'grad u kome si odmetnik.'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: 'Nije se mogao naći nijedan otvoren, javni grad sa parcelama na prodaju (koji možeš da priuštiš) da se rtp-uješ do njega.'
-#Message showing payment for RTP.
-msg_cost_spawn_rtp: '<aqua>Naplaćena su ti/naplaćeno ti je %s za teleportaciju na nasumičnu parcelu koja je na prodaju.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Uskoro ćeš biti teleportovan/na na jednu parcelu koja je na prodaju u gradu %s koji će te pustiti da se pridružiš. Iskoristi "plot claim" da prisvojiš svoju parcelu kad pristigneš.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
@@ -1770,12 +1086,10 @@ status_plot_hover: '%s:'
 msg_usage: 'Upotreba: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Nema strana za prikazati!'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'Ta nacija nije tvoja partnerska nacija.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Taj grad nije tvoj partnerski grad.'
-#Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'Ta lokacija već ima zatvorsku ćeliju.'
 #Title line of the /plot perm hud.
@@ -1824,7 +1138,6 @@ msg_perm_hud_plot_for_sale: 'Na prodaju: '
 msg_perm_hud_no: 'Ne'
 #Seen in /plot perm hud:
 msg_perm_hud_yes: 'Da'
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Gradu %s postavljen nivo grada na %s.'
 #Message shown when unsetting a manual town level.
@@ -1835,18 +1148,14 @@ msg_err_town_not_allowed_purchased_blocks: 'Grad %s ne može kupovati townblokov
 msg_purchased_blocks_unset: 'Gradu %s behu ukljonjeni njegovi kupljeni gradski blokovi.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'Gradu %s su data/je dato %s kupljenih gradskih blokova, trenutno imaju %s kupljena gradska bloka/kupljenih gradskih blokova.'
-#Added in 0.154
 msg_comptype_upkeep: 'Održanje'
-#Added in 0.155
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'Grad %s beše imao podešavanje održanja podešeno na %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Tvoj grad je dostigao ograničenje od %d %s parcela.'
-#Added in 0.156
 msg_spawn_cost_free: 'Besplatno'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Ova parcela već jeste tipa %s.'
-msg_town_board_reset: '<aqua>Gradski odbor određeno.'
 msg_town_has_no_jailslots: 'Gradski zatvor je pun.'
 msg_you_have_been_jailed_your_bail_is_x: 'Zatvoren/a si, tvoja kaucija je %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Određena kaucija ti je bila iznad maksimalne koja je %s.'
@@ -1861,12 +1170,6 @@ msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s povučen/no iz banke Gra
 msg_err_x_in_unjailable_world: '%s je u svetu iz kog ne može biti stavljen/na u zatvor.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Da li si siguran/na da želiš resetovati sve gradske i nacionalne banke na %s?'
-#Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '<red>Tvoja nacija je dostigla maksimalni dozvoljeni broj za broj stanovnici-po-naciji, %s, i ne može dodati igrača %s.'
-#Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '<red>Ne možeš se pridružiti ovoj naciji jer bi to bilo preko stanovnici-po-naciji ograničenja od %s.'
-#Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '<red>Ne možeš se pridružiti ovoj naciji, ona je dostigla maksimalni dozvoljeni broj za broj gradovi-po-naciji: %s.'
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Da li si siguran/na na želiš resetovati sve postavke ovog sveta na one koje se određene u konfiguraciji?'
 #Part of the /town plots output.
@@ -1981,10 +1284,6 @@ msg_err_your_town_is_not_old_enough_to_overclaim: "Tvoj grad nije dovoljno star 
 msg_err_your_cannot_overclaim_for_another: "Ne možeš opet da prisvojiš preko još %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>Svet nije učitan."
-#Message shown when a mayor toggles a plots taxed status.
-msg_changed_plot_taxed: '<red>Ovoj parceli status oporezovanosti beše određen na %s.'
-msg_changed_plotgroup_taxed: '<red>Ovoj grupi parcela status oporezovanosti beše određen na %s.'
-status_forsale: "<green>(Na Prodaju: %s)"
 msg_town_forsale: "%s je stavljen na prodaju i košta %s."
 msg_town_notforsale: "%s više nije na prodaju."
 msg_town_sell_confirmation: "Ovo bi stavilo tvoj grad na prodaju i koštao bi %s. Da li si siguran/na da želiš da nastaviš?"
@@ -1992,7 +1291,6 @@ msg_town_buytown_already_mayor: "Već si gradonačelnik grada %s."
 msg_town_buytown_confirmation: "Kupovina %s će koštati %s i ukloniti te iz bilo kog grada čiji bi mogao/la biti deo. Da li si siguran/na da želiš da nastaviš?"
 msg_town_buytown_not_forsale: "Odabrani grad nije na prodaju."
 msg_town_buytown_ruined: "Ruinirani gradovi ne mogu biti kupljeni."
-msg_resident_about_reset: "<aqua>O stanovniku resetovano."
 msg_err_invalid_string_about_not_set: "Nevažeća nit, o stanovniku nije određeno."
 msg_set_about: "O stanovniku %s je određeno na %s."
 msg_clear_about: "O stanovniku %s je očišćeno."
@@ -2051,8 +1349,6 @@ msg_town_being_deleted_because_no_residents: "%s se briše jer je izgubio svog p
 outlawed_in: "Odmetnut/ta u"
 msg_warning_town_deposit_hint: "Da položiš novac u svoj gradsku banku iskoristi /town deposit [količina]."
 msg_warning_nation_deposit_hint: "Da položiš novac u svoj nacionalnu banku iskoristi /nation deposit [količina]."
-teleport_warmup_title_dont_move: "<gold>Ne pomeraj se!"
-teleport_warmup_subtitle_seconds_remaining: "<red>%s <gray>sekunde/i ostalo do teleporta."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Zato što tvoj grad ima status ruiniranog, %s reda/redova dopuštenja na parceli beše/behu promenjena/i da ne obezbeđuju zaštite."
 console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Zbog svog statusa ruiniranog, %s-u behu promenjena/beše promenjeno %s reda/redova dopuštenja na parceli da ne obezbeđuje zaštite: %s."
 msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "Ne možeš ustupiti neku parcelu sopstvenom gradu."
