@@ -1,33 +1,6 @@
 ---
 language: Chinese
 website: 'https://townyadvanced.github.io/'
-#A note on editing this file.
-#----------------------------
-#Do not alter this file if it is in the reference folder.
-#Before you edit this file, read about how Towny handles
-#language files:
-#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny status_title_pvpinserts words.)
-#----------------------------------------------------
-#You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that
-#way.
-#%s = data to be supplied by the plugin.
-#If you find that a line has multiple %s variables which would
-#be in a different order in your language, you can change them
-#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
-#will always use the 4th variable, no matter where it is
-#placed on the line.
-#A note on text colouring and formatting.
-#----------------------------------------
-#Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
-#Purple = &5, Gold = &6, LightGray = &7, Gray = &8
-#DarkPurple = &9, LightGreen = &a, LightBlue = &b
-#Rose = &c, LightPurple = &d, Yellow = &e, White = &f
-#This language file also supports using MiniMessage for colours
-#and formatting. Learn about MiniMessage formatting here:
-#https://docs.adventure.kyori.net/minimessage/format.html
-default_towny_prefix: '&6[Towny] &b'
 unclaimed_plot_name: '无主之地'
 unclaimed_zone_name: '荒郊野地'
 ############################################################
@@ -428,273 +401,17 @@ msg_block_claim: '声明这个城镇区块'
 msg_block_claim_radius: '声明在你周围一定半径的区块。'
 msg_plot_nfs: '关闭这块土地的出售状态'
 msg_plot_nfs_radius: '停止出售你输入的半径的地皮。'
-msg_nfs_abr: '<yellow>“fs”和“nfs”分别是“forsale”（出售）和“notforsale”（不出售）的缩写。'
 msg_plot_fs: '出售这块土地.'
 msg_plot_fs_radius: '出售你输入的半径的地皮'
-############################################################
-#+------------------------------------------------------+ #
-#|   Messages                                           | #
-#+------------------------------------------------------+ #
-############################################################
-msg_buy: '<aqua>你花费%3$s购买了%1$d个%2$s。'
-msg_buy_resident_plot: '<aqua>%1$s花费%3$s购买了%2$s的土地！'
-msg_buy_resident_plot_group: '<aqua>%1$s花费%3$s购买了%2$s的地皮组！'
-msg_couldnt_pay_taxes: '<aqua>%s 因为交不起税而被踢出了 %s.'
-msg_couldnt_pay_plot_taxes: '<aqua>%s 交不起税而失去了他的土地所有权.'
-msg_you_couldnt_pay_plot_tax: '<aqua>你无法支付 %s 的地块税所以失去了对%s地块的所有权。'
-msg_you_couldnt_pay_town_tax: '<aqua>你无法支付 %s 的市政税，所以已经从 %s 中移除。'
-msg_you_paid_town_tax: '<aqua>你向你的城镇支付了%s的税款。'
-msg_you_paid_plottax_to_town: '<aqua>你向 %2$s 支付了总计%1$s的地皮税。'
 msg_bankrupt_town: ' 银行资金不足以维持城镇的日常开销.'
 msg_bankrupt_nation: ' 银行资金不足以维持国家的日常开销.'
-msg_nation_not_peaceful: '<aqua>国家的和平已被打破.'
-msg_nation_cant_peaceful: '<aqua>国家支付不起转变为和平国家的费用。你必须能够每天支付%s的费用。'
-msg_peaceful_disabled: '<aqua>全局国家和平已禁用。'
-msg_you_paid: '<aqua>你花费了%s来设置和平状态。'
-msg_nation_set_peace: '<aqua>成功改变国家状态.'
-msg_nation_allow_peaceful: '<aqua>现在国家保持和平的权限为：%s'
-msg_mobremoval_world: '<aqua>阻止世界怪物生成: %s'
-msg_mobremoval_town: '<aqua>阻止城镇怪物生成: %s'
-msg_nation_peaceful: '<aqua>你的国家现在'
-msg_tax_exempt: '<aqua>城镇工作人员免税.'
-msg_del_nation: '<aqua>国家 %s 已分崩离析！'
-msg_del_resident: '<aqua>%s 失去了所有的Towny数据！'
-msg_join_nation: '<aqua>城镇 %s 加入了国家！'
-msg_join_town: '<aqua>%s 加入了城镇!'
-msg_friend_add: '<aqua>%s 已将你添加为好友。'
-msg_friend_remove: '<aqua>%s 已将你从好友中移除。'
-msg_left_town: '<aqua>%s 离开了城镇'
-msg_you_left: '<aqua>你离开了 %s.'
-msg_not_mayor: '<aqua>你不是城主.'
-msg_not_king: '<aqua>你不是国家领导者。'
-msg_not_mayor_ass: '<aqua>你不是城主或助手.'
-msg_not_king_ass: '<aqua>你不是国家的领导者或助手。'
-msg_own_nation_disallow: '<aqua>你不能对自己的国家这样做。'
-msg_no_perms_claim: '<aqua>你没有权限扩张你的城镇。'
-msg_outpost_disable: '<aqua>前哨现在不可用.'
-msg_kicked_by: '<aqua>你被%s踢出了城镇。'
-msg_kicked: '<aqua>%s 把 %s 踢出了城镇。'
-msg_nation_kicked_by: '<aqua>你的城镇被 %s 踢出了国家.'
-msg_town_left_nation: '<aqua>你的城镇脱离了 %s.'
-msg_nation_town_left: '<aqua>城镇 %s 离开了你的国家.'
-msg_nation_kicked: '<aqua>%s 把 %s 踢出了国家。'
-msg_nation_you_kicked: '<aqua>你把 %s 踢出了国家。'
-msg_raised_ass: '<aqua>%s 把 %s 提升为 %s 助手.'
-msg_lowered_to_res_by: '<aqua>你被 %s 降职了.'
-msg_lowered_to_res: '<aqua>%s 将 %s 降级为普通居民。'
-msg_invalid_name: '<aqua>以上名称无效。'
-msg_invited_join_town: '<aqua>%s 邀请 %s 加入城镇.'
-msg_invited_join_nation: '<aqua>%s 邀请 %s 加入国家.'
-msg_deny_invite: '<aqua>%s 拒绝了你的邀请.'
-msg_invited: '<aqua>你被邀请加入 %s.'
 msg_town_online: '城镇在线玩家'
 msg_nation_online: '国家在线玩家'
-msg_allied_nations: '<aqua>%s 与 %s 结盟了。'
-msg_enemy_nations: '<aqua>%s 将 %s 视为敌国 .'
-msg_enemy_to_neutral: '<aqua>%s 把 %s 调整为和平状态.'
-msg_added_ally: '<aqua>%s 与你的国家结盟了。'
-msg_removed_ally: '<aqua>%s 取消了与你的国家的结盟。'
-msg_added_enemy: '<aqua>%s 把你的国家列为了敌国。'
-msg_removed_enemy: '<aqua>%s 不再把你的国家列为敌国。'
-msg_unable_ally_enemy: '<red>无法与 %s 结盟，因为他们已经将你列为敌国。'
-msg_deny_ally: '<aqua>%s 拒绝了你的结盟请求。'
-msg_accept_ally: '<aqua>国家%s接受了你的邀请，你们成为了盟国。'
-msg_ally_req_sent: '<aqua>结盟的邀请已发送给 %s。'
-msg_ally_request: '<aqua>%s 想要与你的国家结盟。'
-msg_unable_ally_offline: "<red>无法邀请该国家结盟，因为该国的国王不在线。"
-msg_unable_ally_npc: "<red>无法邀请该国家结盟，因为该国的国王是NPC。"
-msg_claimed: '<dark_green>成功声明'
-msg_unclaimed: '<dark_green>成功放弃声明'
-msg_not_claimable: '<red>这个世界不能声明城镇区块.'
-msg_abandoned_area: '<aqua>放弃区域 %s'
-msg_admin_unclaim_area: '<red>强制放弃区域  %s'
-msg_abandoned_area_1: '<aqua>你的城镇放弃了这片区域'
-msg_no_money_purchase_plot: '<red>你没有足够的钱来购买这块土地.'
-msg_town_no_money_purchase_plot: '<red>城镇没有足够的钱来买回这块土地.'
-msg_no_funds_new_town: '<red>%s 没有足够的建城资金.'
-msg_no_funds_claim: '<red>城镇现在没有足够的资金来声明%s个城镇区块，因为这需要%s。捐些钱到城镇银行吧。'
-msg_no_funds_to_buy: '<red>城镇现在没有足够的资金来购买%s %s，因为这需要花费%s。捐些钱到城镇银行吧。'
-msg_annexed_area: '<dark_green>被吞并的区域 %s'
-msg_max_plot_own: '<red>你不能拥有多于 %s 块的土地.'
-msg_max_outposts_own: '<red>你不能声明多余 %s 个的前哨.'
-msg_no_funds_new_nation: '<red>城镇没有足够的资金来建国.'
-msg_already_claimed: '<red>这片区域已被%s声明'
-msg_already_claimed_1: '<red>这块区域 (%s)已经隶属于某人.'
-msg_already_claimed_2: '<red>这块区域已被声明.'
-msg_too_close: '<red>这个区块离其他城镇太近了.'
-msg_too_far: '<red>这片区域离其他城镇太远了.'
-msg_not_claimed: '<aqua>这片区域 (%s) 还未被声明.'
-msg_not_claimed_1: '<aqua>这片区域还未被声明.'
-msg_not_own_area: '<red>你选择的区域不属于你.'
-msg_not_own_place: '<aqua>这块地方不属于任何人.'
-msg_area_not_own: '<red>这片区域不属于你.'
-msg_area_not_recog: '<red>这片区域未被Towny识别。'
-msg_specify_name: '<aqua>请指定城镇名'
-msg_specify_nation_name: '<aqua>请指定国家名'
-msg_peasant_right: '<aqua>贱民没有权利强迫他的领导者让出宝座.'
-msg_cost_spawn: '<aqua>你花费了 %s 来传送到城镇传送点.'
-msg_cost_spawn_refund: '<aqua>你获得了被退回的城镇传送费用.'
-msg_town_spawn_warmup: '<aqua>等待传送...'
-msg_town_rename_disabled: '<aqua>城镇重命名已禁用'
-msg_town_set_name: '<aqua>%s 将城镇重命名为 %s。'
-msg_nation_set_name: '<aqua>%s 将国家重命名为 %s。'
-msg_changed_pvp: '<red>%s PVP状态变更为 %s.'
-msg_changed_public: '<red>城镇的公开状态变更为 %s.'
-msg_changed_expl: '<red>%s 中的允许爆炸变更为 %s.'
-msg_changed_fire: '<red>%s 中的火势蔓延变更为 %s.'
-msg_changed_mobs: '<red>%s 中的怪物生成变更为 %s.'
 msg_the_plot_group: '地皮组'
-msg_changed_taxpercent: '<red>按比例收税模式变更为 %s.'
-msg_changed_open: '<red>免邀请加入变更为 %s.'
 msg_toggle_open_on_warning: '警告: 如果城镇设为开放那么城镇权限最好关闭. 输入 /town set perm off 关闭,  /town set perm reset重置.'
-msg_changed_world_setting: '<red>世界%2$s的%1$s状态已变更为：%3$s。'
-msg_world_pvp: '<red>这个世界仅限PvP。'
-msg_world_mobs: '<red>这个世界强制开启怪物生成。'
-msg_world_expl: '<red>这个世界强制开启爆炸。'
-msg_world_fire: '<red>这个世界强制开启火焰蔓延。'
-msg_town_mobs: '<red>这个城镇强制开启怪物生成。'
-msg_plot_pvp: '<red>竞技场（Arena）区块中不能切换PVP。'
-msg_plot_regen_wrong_size: '<red>回溯只支持默认的区块大小(16).'
-msg_reloaded: '<dark_green>Towny配置已重载。'
-msg_undo_complete: '<dark_green>成功撤销操作.'
-msg_give_total: '<aqua>给予 %s 奖励区块上限. (总共: %s)'
-mag_backup_success: '<dark_green>备份成功。'
-msg_xx_withdrew_xx: '<aqua>%1$s从%3$s银行取出了%2$s。'
-msg_xx_deposited_xx: '<aqua>%1$s 向 %3$s 银行存入了%2$s。'
-msg_insuf_funds: '<red>你没有这么多钱.'
 msg_err_withdraw_disabled: '取款功能已关闭!'
 msg_err_deposit_capped: '无法存款。银行资金上限为 %s。'
-msg_set_town_home: '<aqua>成功把城镇中心区块的位置变更为 %s'
-msg_set_town_spawn: '<aqua>城镇传送点已成功更改。'
-msg_set_outpost_spawn: '<aqua>成功改变前哨传送点.'
-msg_set_title: '<aqua>%s获得了头衔“%s<aqua>”。'
-msg_set_surname: '<aqua>%s获得了后缀“%s<aqua>”。'
-msg_clear_title_surname: '<aqua>%2$s的%1$s被清除了。'
-msg_clear_plot_material: '<aqua>这块地皮已经被清除了 %s 的区块类型。'
-msg_set_perms: '<aqua>成功将权限设置为:'
-msg_set_claim: '<aqua>成功改变 %s 的可声明状态为 %s'
-msg_set_perms_reset: '<aqua>成功重置 %s 的所有土地的权限.'
-msg_usedefault: '<aqua>世界 (%s) 现在将使用默认全局设置.'
-msg_set_wild_perms: '<aqua>成功地改变了 %s 的野外权限 %s'
-msg_set_wild_ignore: '<aqua>成功地将 %s 的野外忽略方块设置为 %s'
-msg_set_wild_name: '<aqua>成功地将 %s 的野外命名为 %s'
-msg_set_wild_regen: '<aqua>成功地将 %s 的野外复原为 %s'
-msg_set_use_towny_on: '<aqua>这个世界被Towny纳入管辖范围.'
-msg_set_use_towny_off: '<red>这个世界不再被Towny管辖.'
-msg_error_must_be_int: '<aqua>数量必须是一个整数.'
-msg_error_input_must_be_int: '<red>%s必须是一个整数'
-msg_error_must_be_num: '<aqua>数量必须是一个数字.'
-msg_error_input_must_be_num: '<red>%s必须是一个数字'
-msg_must_specify_amnt: '<aqua>你需要给定一个数量. 比如: %s 54'
-msg_town_set_tax: '<aqua>%s 将居民的每日税款设置为 %s'
-msg_town_set_plottax: '<aqua>%s 将区块的每日税款设置为 %s'
-msg_town_set_plotprice: '<aqua>%s 将区块的价格设置为 %s'
-msg_town_set_alttax: '<aqua>%s 将 %s 区块的每日税款设置为 %s'
-msg_town_set_altprice: '<aqua>%s 将 %s 区块的价格设置为 %s'
-msg_town_set_nation_tax: '<aqua>%s 将国家税率设置为 %s'
-msg_set_nation_tag: '<aqua>%s 将国家简称设置为 [%s]'
-msg_set_town_tag: '<aqua>%s 将城镇简称设置为 [%s]'
-msg_reset_nation_tag: '<aqua>%s 清除了国家简称.'
-msg_reset_town_tag: '<aqua>%s 清除了城镇简称.'
-msg_mayor_abandon: '<aqua>你真的要舍弃你的人民吗? 如果你真的想这么做,用 /town set mayor 来将城主之位让给其他人吧.'
-msg_new_day_tax: '<aqua>美好的一天又开始了! 税款租金收缴完毕'
-msg_new_day: '<aqua>美好的一天又开始了!'
-msg_new_king: '<aqua>%s 现在是 %s 的国家领导者！'
-msg_err_new_king_notmayor: '<red>新的国家领导者不是市长。'
-msg_err_king_not_in_nation: '<red>新的国家领导者不属于这个国家。'
-msg_err_fight_like_king: '<red>和平？不，和平不是选择！像个真正的领导者一样战斗！！'
-msg_no_access_nation_bank: '<red>你没有使用国家银行的权限.'
-msg_err_no_money: '<red>银行里没有足够的钱.'
-msg_new_mayor: '<aqua>%s 成为了新一届的城主!'
-msg_new_nation: '<aqua>%s 建立了一个名为 %s 的国家'
-msg_new_town: '<aqua>%s 建立了一个名为 %s 的城镇'
-msg_plot_for_sale: '<aqua>%s将土地（%s）挂牌出售！'
-msg_plot_for_sale_amount: '<aqua>%s将土地（%s）挂牌出售，售价为%s！'
-msg_plot_set_type: '<aqua>设置土地类型为 %s'
-msg_cache_block_error: '<red>你尚未在Towny中注册。请尝试重新登录。'
-msg_cache_block_error_wild: '<red>你不能在野地%s。'
-msg_cache_block_error_plot: '<red>所有者不允许%s在此%s。'
-msg_cache_block_error_town_resident: '<red>居民不能在这里%s。'
-msg_cache_block_error_town_allies: '<red>盟友不能%s。'
-msg_cache_block_error_town_outsider: '<red>外来者不能%s。'
-msg_err_cant_afford_tp_town: '<red>你没有足够的资金传送至 %s。'
-msg_err_not_public: '<red>那个城镇不对外公开.'
-msg_err_not_open: '<red>城镇 %s 的大门并不是对所有人敞开的。如需加入，请询问城主或其助手。'
-msg_err_town_spawn_forbidden: '<red>禁止城镇传送.'
-msg_err_town_spawn_nation_forbidden: '<red>你的国家禁止你传送到其他城镇.'
-msg_err_town_spawn_ally_forbidden: '<red>你的国家禁止你传送到其他同盟的城镇.'
-msg_err_public_spawn_forbidden: '<red>禁止传送到其他城镇.'
-msg_err_public_spawn_enemy: '<red>敌人无法传送到公开城镇.'
-msg_err_town_spawn_disallowed_from: '<red>不允许从 %s 传送至城镇。'
-msg_err_outpost_spawn: '<red>这个城镇没有设置前哨传送点.'
-msg_err_cant_afford_tp: '<aqua>无法支付传送到你的城镇传送点的费用.'
-msg_err_plot_nfs: '<red>这块土地不供出售.'
-msg_err_not_part_town: '<red>已选区域不属于你的城镇.'
-msg_err_not_attached_edge: '<red>选择的区域不与你的城镇接壤.'
-msg_err_empty_area_selection: '<red>选定区域无有效地皮。'
-msg_err_not_enough_blocks: '<red>没有足够的可用城镇块来声明这片区域.'
-msg_err_cant_afford_blocks: '<red>城镇支付不起声明 %s 城镇区块的钱: %s'
-msg_err_not_in_town_claim: '&你必须加入城镇才能声明这块土地.'
-msg_err_must_belong_town: '<red>你必须是一个城镇居民.'
-msg_err_dont_belong_town: '<red>你不属于一个城镇.'
-msg_err_dont_belong_nation: '<aqua>你不属于任何一个国家。'
-msg_err_already_belong_nation: '<aqua>你已经属于一个国家了。'
-msg_err_town_already_belong_nation: '<aqua>%s 已经属于国家 %s 了。'
-msg_err_not_same_nation: '<aqua>%s不属于你的国家.'
-msg_err_rect_auto: '<red>只有城镇及其居民才能使用 auto.'
-msg_err_invalid_radius: '<red>半径无效。请使用整数或“auto”。'
-msg_err_not_configured: '<red>这个世界尚未被Towny配置。'
-msg_err_updating_item_perms: '<red>更新物品使用权限缓存时出错.'
-msg_err_updating_switch_perms: '<red>更新交互权限缓存时出错.'
-msg_err_updating_destroy_perms: '<red>更新破坏权限缓存时出错.'
-msg_err_updating_build_perms: '<red>更新建筑权限缓存时出错.'
-msg_err_admin_only: '<red>只有管理员才可以使用这个指令.'
-msg_err_admin_only_delete: '<red>只有管理员才可以删除其他居民的数据.'
-msg_err_admin_only_delete_town: '<red>只有管理员才可以删除其他城镇的数据.'
-msg_err_admin_only_delete_nation: '<red>只有管理员才可以删除其他国家的数据.'
-msg_err_online_or_npc: '<red>%s 已在线或是个 NPC.'
-msg_err_not_registered: '<red>你还没有注册'
-msg_err_not_registered_1: '<red>%s 未被注册'
-msg_err_invalid_name: '<red>名称“%s”无效。'
-msg_err_already_res: '<red>%s 已经属于一个城镇了.'
-msg_err_already_in_town: '<red>%s 已经是 %s 的一员了.'
-msg_err_already_nation: '<red>目标城镇已经有一个国家了.'
-msg_err_invalid_property: '<red>无效的 %s 属性.'
-msg_err_not_supported: '<red>暂不支持.'
-msg_err_invalid_input: '<red>无效的输入。请使用 %s'
-msg_err_negative: '<red>输入数值不能为负.'
-msg_err_input_too_long: '<red>你输入的内容太长了.'
-msg_err_invalid_choice: '<red>无效的选择'
-msg_err_invalid_sub: '<red>无效的子命令.'
-msg_err_command_disable: '<red>你没有足够的权限使用这个指令.'
-msg_err_plot_preclaim_disable: "<red>你现在不能声明地皮 %s。"
-msg_err_plot_preunclaim_disable: "<red>居民现在不能放弃声明地皮 %s。"
 msg_err_you_dont_have_permission_to_use_colours: "你没有权限在头衔和后缀中使用颜色代码。"
-msg_err_universe_limit: '<red>这个世界不能再有更多的城镇了.'
-msg_err_too_many_npc: '<red>已注册的NPC太多了.'
-msg_err_negative_money: '<red>你不能拥有负数的钱.'
-msg_err_not_percentage: '<red>税率必须小于100.'
-msg_err_no_economy: '<red>无经济插件支持.'
-msg_err_not_block_type: '<red>这不是一个有效的土地类型!'
-msg_not_allowed_join: '<red>%s 不允许加入城镇.'
-msg_err_cannot_perform_action: '<red>你无法在 %s 执行这个操作.'
-msg_npc_flag: '<aqua>NPC flag 现在 %s for %s.'
-msg_warning_delete: '<dark_red>*** 警告,由于资金不足, %s 这个城镇将在明天倒闭! ***'
-#these messages are only used if town/nation creation is set to admins only
-msg_admin_only_create_nation: '<red>只有管理员能够创建国家!'
-msg_admin_only_create_town: '<red>只有管理员能够创建城镇!'
-#Required residents to be part of a nation
-msg_err_not_enough_residents_new_nation: '<red>你的城镇居民数不足以建国.'
-msg_err_not_enough_residents_join_nation: '<aqua>城镇 %s 没有足够的居民数所以无法加入国家.'
-msg_not_enough_residents_no_longer_capital: '<aqua>因旧首都的居民不够，它不再是首都。新的首都是：%s。'
-msg_town_not_enough_residents_left_nation: '<aqua>城镇%s被赶出了国家，因为它不再有足够的居民来成为国家的一员。'
-msg_nation_disbanded_town_not_enough_residents: '<aqua>城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
-msg_not_enough_residents_refunded: '<aqua>你的国家由于居民数不足而灭亡了,因此你获得了 $%s。'
-msg_not_enough_residents_capital: '<aqua>城镇 %s 没有足够的居民来作为首都.'
-list_page: '<aqua>第%s页，共%s页'
-list_err_not_enough_pages: '<red>仅%s页可用'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: '你设置的城镇税不能低于 %s.'
 msg_unknown_rank_available_ranks: '未知头衔 %s. 可用的头衔有 %s.'
 msg_no_permission_to_give_rank: '你没有足够的权限来授予这个头衔.'
@@ -715,9 +432,6 @@ msg_cannot_spawn_while_jailed: '你无法在被监禁时传送.'
 msg_cannot_abandon_town_while_jailed: '你无法在被监禁时离开城镇.'
 msg_player_escaped_jail_by_leaving_town: '%s 越狱了.'
 msg_set_jail_spawn: '成功设置监狱传送点.'
-msg_killed_attempting_to_escape_jail: '<dark_red>%s 在尝试越狱时被杀.'
-msg_err_jailed_players_no_teleport: '<dark_red>监禁中的玩家无法传送!'
-msg_player_escaped_jail_into_wilderness: '<dark_red>%s 通过逃到%s而越狱'
 msg_err_invalid_string_board_not_set: '无效的字符串, 设置城镇公告板失败.'
 msg_plot_name_removed: '删除土地名.'
 msg_plot_name_set_to: '土地名设置为 [%s].'
@@ -738,13 +452,8 @@ msg_err_couldnt_take_deathfunds: '你支付不起死亡费用.'
 msg_err_couldnt_take_town_deathfunds: '你支付不起城镇死亡费用.'
 msg_err_couldnt_take_nation_deathfunds: '你支付不起国家死亡费用.'
 msg_you_gained_money_for_killing: '你获得了 %s 元,因为你杀死了 %s.'
-msg_err_ender_pearls_disabled: '<dark_red>末影珍珠已禁用！'
-msg_err_no_sleep_in_enemy_inn: '<dark_red>你不能在敌国的旅馆内休息.'
-msg_err_cant_use_bed: '<dark_red>这张床所在的土地不属于你，并且这块土地不是旅馆（Inn）。'
-msg_town_plots_revenue_disclaimer: '<green>显示的收入是预计的，并且地皮的所有者是否可以支付是一个因素'
 msg_town_set_perm_syntax_error: '此命令使用了无效的词语组合。请查看“/town set perm ?”来了解正确的命令语法。'
 msg_plot_set_perm_syntax_error: '此命令使用了无效的词语组合。请查看“/plot set perm ?”来了解正确的命令语法。'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: '那个居民不属于这个城镇.'
 msg_err_resident_already_an_outlaw: '那个玩家已经被你的城镇放逐了.'
 msg_err_not_outlaw_in_your_town: '你无法放逐你的城镇居民.'
@@ -754,37 +463,15 @@ msg_you_have_been_undeclared_outlaw: '你不再被 %s 放逐.'
 msg_you_have_undeclared_an_outlaw: '%s 不再被 %s 放逐.'
 msg_err_player_not_an_outlaw: '那个玩家不再被视为被放逐者.'
 msg_err_outlaw_in_open_town: '你无法加入一个已经将你放逐的公开城镇.'
-msg_you_are_an_outlaw_in_this_town: '<dark_red>小心, %s 放逐了你,死在这你将会被监禁.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: '你的保释金需要%s'
 msg_err_town_not_close_enough_to_nation: '%s的中心区块距你首都的中心区块过远，所以它无法加入你的国家。'
 msg_nation_town_moved_their_homeblock_too_far: '%s的中心区块距你首都的中心区块过远，所以它不再属于你的国家。'
-#Added in 0.33
-msg_err_invalid_radius_number: '<red>半径无效。请使用%s或更小的值。'
-#Added in 0.34
-msg_err_max_residents_per_town_reached: '<red>已达到最大居民数量上限:(%s) .'
-#Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '<red>玩家%s在服务器上的时间还不够长，因此无法被邀请，请稍等。'
 msg_cant_toggle_pvp_outsider_in_town: '现在有外来者在你的城镇里，你不能改变你城镇的PVP状态！'
 msg_err_unclaim_not_outpost: '无法放弃声明, 这块土地不是前哨!'
 outpost_plu: '城镇前哨'
-#Added in 0.36
 msg_err_not_enough_residents: '城镇居民数不足,你不能这么做.'
-#Added in 0.37
 msg_err_friendly_fire_disable: '好友的战斗状态已被禁用!'
-#Added in 0.38
-msg_claim_error: '<red>另一个插件阻止了 (%s)/(%s) 城镇区块声明, 无法完成操作.'
-#Added in 0.39
-msg_err_town_spawn_forbidden_war: '<red>只能在战争期间传送到城镇传送点.'
-msg_err_town_spawn_forbidden_peace: '<red>战争期间禁止传送到城镇传送点.'
-msg_err_town_spawn_nation_forbidden_war: '<red>战争期间你只能传送到国内其他城镇的传送点.'
-msg_err_town_spawn_nation_forbidden_peace: '<red>战争期间禁止传送到国内其他城镇的传送点.'
-msg_err_town_spawn_ally_forbidden_war: '<red>只有在战争期间才能传送到盟国的城镇的传送点.'
-msg_err_town_spawn_ally_forbidden_false: '<red>在战争期间禁止传送到盟国的城镇的传送点.'
-msg_err_public_spawn_forbidden_war: '<red>只有在战争期间才能传送到其他城镇的传送点.'
-msg_err_public_spawn_forbidden_peace: '<red>战争期间禁止传送到其他城镇的传送点.'
-#Added in 0.40
 mayor_help_9: '试图放弃前哨'
-#Added in 0.41 (Invite-Update)
 invite_plu: '邀请'
 invite_sent_by: '邀请来自：'
 invite_help_1: '接受邀请并加入城镇'
@@ -809,39 +496,7 @@ nation_ally_help_5: '接受与盟国结盟的请求'
 nation_ally_help_6: '拒绝成为盟国的请求'
 nation_ally_help_7: '撤销结盟请求'
 msg_player_denied_all_invites: "已拒绝你收到的所有邀请。"
-msg_err_player_no_invites: '<red>你没有任何邀请!'
-msg_err_player_has_multiple_invites: '<red>你有多个邀请, 请注明!'
 msg_err_player_has_too_many_invites: '%s 有太多邀请, 请他拒绝一些邀请，然后再进行邀请.'
-msg_err_player_already_invited: '<aqua>你已经邀请过 %s 加入你的城镇了!'
-msg_err_town_no_invites: '<aqua>城镇没有任何邀请！'
-msg_err_town_specify_invite: '<red>请指定邀请!'
-msg_err_town_has_too_many_invites: '<aqua>城镇 %s 有太多邀请, 需要他们拒绝一些请求, 然后再进行邀请.'
-msg_err_town_sent_too_many_invites: '<aqua>城镇已经发出太多邀请, 再次尝试之前撤销了一些邀请!'
-msg_err_town_already_invited: '<aqua>你已经邀请过 %s 加入你的国家了!'
-msg_err_nation_specify_invite: '<red>请说明请求!'
-msg_err_nation_no_requests: '<aqua>国家没有任何盟国请求!'
-msg_err_nation_sent_too_many_invites: '<aqua>国家派出了太多的邀请，请撤销一些后重试!'
-msg_err_nation_sent_too_many_requests: '<aqua>国家已经发出了太多的要求，请撤销一些再尝试!'
-msg_err_nation_has_too_many_requests: '<aqua>国家 %s 有太多的邀请, 需要他们拒绝一些请求, 然后再进行邀请.'
-player_received_invites: '<aqua>你已经收到 %a/%m 邀请.'
-town_revoke_invite: '<aqua>城镇 %s, 撤销了你的邀请加入.'
-town_revoke_invite_successful: '<aqua>你成功撤销了一个对 %s 发出的城镇邀请。'
-town_received_invites: '<aqua>城镇已收到 %a/%m 邀请.'
-town_sent_invites: '<aqua>城镇已发送 %a/%m 邀请.'
-nation_revoke_invite: '<aqua>国家 %s, 撤销了您的邀请以加入.'
-nation_revoke_invite_successful: '<aqua>你已成功撤销邀请你加入的国家.'
-nation_revoke_ally: '<aqua>国家 %s, 撤销他们的盟国请求.'
-nation_revoke_ally_successful: '<aqua>您已经成功撤销了结盟请求.'
-nation_received_requests: '<aqua>国家已经收到了 %a/%m 结盟请求.'
-nation_sent_invites: '<aqua>国家已发出 %a/%m 邀请.'
-nation_sent_ally_requests: '<aqua>国家已经派出 %a/%m 结盟请求.'
-no_confirmations_open: '<red>你现在没有什么需要确认！'
-successful_cancel: '<red>操作已取消！'
-successful_deny: '<aqua>邀请已被拒绝.'
-successful_deny_request: '<aqua>已拒绝结盟请求.'
-msg_ally_removed_successfully: '<aqua>已成功删除联盟.'
-town_deleted_by_admin: '<aqua>已成功删除城镇 %s '
-nation_deleted_by_admin: '<aqua>国家 %s 已成功删除'
 are_you_sure_you_want_to_continue: '你确定你要继续操作吗?'
 you_have_been_invited_to_join: '你被邀请加入 '
 you_have_been_requested_to_ally: '你被要求结盟 '
@@ -852,16 +507,12 @@ nation_zone_conquered_status_denies_use: "你城镇的被占领状态使你无�
 nation_zone_conquered_status_denies_use_2: "你无法使用这块被占领城镇的国域。"
 nation_spawn_not_allowed_for_conquered_towns: "您城镇的被占领状态使您无法传送到你国家的传送点。"
 nation_outpost_not_allowed_for_conquered_towns: "您城镇的被占领状态使您无法传送到你国家的传送点。"
-#Added in 0.42
 you_have_been_invited_to_join2: '你被邀请加入 %s'
 you_have_been_requested_to_ally2: '你被要求和 %s 结盟'
-#Added in 0.43
 town_help_11: '建立一个新的城镇. 请使用 ''_'' 而不是空格.'
-changed_plot_town: '<aqua>你已经成功地改变了城镇 %s 的土地!'
 not_standing_in_plot: '你没有站在一个有效的地皮内!'
 msg_err_homeblock_has_not_been_set: '尚未设置城镇之家, 使用 ''/town set homeblock'' 设置.'
 msg_err_spawn_not_within_homeblock: '传送点不在 homeBlock, 使用 ''/town set homeblock'' 设置.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: '错误: 无效的命令!'
 tc_settings_reloaded: '[TownyChat] 配置已重载！'
@@ -871,25 +522,9 @@ tc_channel_list_in: '加入'
 tc_channel_list_out: '退出'
 tc_err_you_dont_have_perm_mute_list: '您没有权限查看禁言列表'
 tc_err_you_dont_have_unmute_perm: '您没有解除禁言的权限'
-tc_err_no_channel_called_channel: '没有频道名为<white>%s'
-tc_err_no_muted_players_in_channel_players: '<dark_red>在 <white>%s <dark_red>中没有玩家被禁言'
-tc_players_muted_in_channel: '[TownyChat] <white>%n<dark_green>名玩家在<white> %s <dark_green>频道中被禁言，为：<white>%s'
-tc_err_no_online_players_with_name: '没有在线玩家名为<white>%s'
 tc_err_you_dont_have_mute_perms: '您没有禁言权限'
 tc_err_you_cant_mute_admin: '你不能禁言一个Towny管理员。'
 tc_err_you_cant_mute_chat_mod: '你不能禁言聊天管理者.'
-tc_player_already_muted_in_channel: '[TownyChat] <white>玩家已在 <white>%s <white>频道内被禁言'
-tc_player_is_now_muted_in_channel: '[TownyChat] <white>%s <dark_green>已在 <white>%s <dark_green>中被禁言'
-tc_player_is_not_muted_in_channel: '[TownyChat] <white>玩家在 <white>%s <white>频道内未被禁言'
-tc_player_is_now_unmuted_in_channel: '[TownyChat] <white>%s <dark_green>已在 <white>%s <dark_green>中解除禁言'
-tc_err_you_are_currently_muted_in_channel: '你目前处于禁言状态 <white>%s<red>!'
-tc_err_you_cannot_leave_channel: '你不能离开 <white>%s'
-tc_you_already_left_channel: '[TownyChat] 你已经离开了 <white>%s'
-tc_you_left_channel: '[TownyChat] 你离开了 <white>%s'
-tc_you_are_now_talking_in_channel: '[TownyChat] <white>你正在 <white>%s <white>频道中说话'
-tc_err_you_cannot_join_channel: '你不能加入 <white>%s'
-tc_you_are_already_in_channel: '[TownyChat] 你已经在 <white>%s'
-tc_you_joined_channel: '[TownyChat] 你加入了 <white>%s'
 tc_err_you_are_already_talking_in_default_channel_help: '你已经在默认频道聊天 使用该频道的命令切换到另一个频道.'
 tc_err_unable_to_talk_essentials_mute: '你不能说话...因为你被禁言了！'
 tc_err_unable_to_talk_you_are_spamming: '住口...你刷屏了!'
@@ -903,17 +538,8 @@ msg_err_over_outposts_limit: '你无法传送到城镇前哨, 已经超过你的
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: '被放逐者：'
-online: '<green>（在线）'
-#Used in mayor hover text in /town status screen.
-registered_last_online: '<dark_green>注册时间: <green>%s <dark_gray>| <dark_green>最后在线: <green>%s'
 #Used on /plot perm, /res
 status_perm: '权限：'
-status_on: '<dark_red>开'
-status_off: '<green>关'
-status_on_good: '<green>开'
-status_off_bad: '<dark_red>关'
-status_forced: '<red>强制'
-status_adjustable: '<green>可调整'
 status_pvp: 'PvP：'
 explosions: '爆炸：'
 firespread: '火焰蔓延：'
@@ -928,9 +554,6 @@ jailed_in_town: ' 在城镇：%s'
 status_friends: '好友'
 rank_list_title: '%s的头衔列表'
 rank_list_mayor: '市长：'
-status_title_capital: '<aqua>（首都）'
-status_title_pvp: '<dark_red>（PvP）'
-status_title_open: '<aqua>（开放）'
 status_town_board: '公告栏：'
 status_founded: '成立于：'
 status_founded_by: '建立者：'
@@ -950,8 +573,6 @@ status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌国'
 status_nation_enemied_by: '和此国敌对的国家'
-status_world_claimable: '<green>可宣称'
-status_world_noclaims: '<green>不可宣称'
 status_world_forcepvp: '强制PVP：'
 status_world_fire: '火焰蔓延：'
 status_world_forcefire: '强制火焰蔓延：'
@@ -970,7 +591,6 @@ status_townblock_untaxed: '免税'
 status_townblock_max_and_minjoindays: '购买地皮需要 %s 和 %s 天的城镇成员资格。'
 status_townblock_minjoindays: '购买地皮需要超过 %s 天的城镇成员资格。'
 status_townblock_maxjoindays: '购买地皮需要城镇成员资格少于%s天。'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
 msg_time_until_a_new_day: '到新的一天还剩: '
@@ -980,38 +600,10 @@ msg_seconds: ' 秒'
 msg_err_invalid_string_nationboard_not_set: '字符无效, 国家公告栏设置失败.'
 msg_plot_evict: '已依法收回土地.'
 msg_no_one_to_evict: '没有人放弃这片土地.'
-#Added in 0.46
 nation_help_10: '传送到国家传送点.'
-msg_nation_spawn_warmup: '<aqua>等待传送...'
-msg_set_nation_spawn: '<aqua>已重新设置国家传送点.'
-msg_err_cant_afford_tp_nation: '<red>无法传送到 %s.'
-msg_err_nationspawn_has_not_been_set: '<red>国家传送点尚未设置.'
-msg_err_spawn_not_within_nationtowns: '<red>国家传送点必须设置在本国的一个城镇内.'
-msg_err_spawn_not_within_capital: '<red>国家传送点必须设置在国都.'
-msg_err_nation_spawn_war: '<red>战争期间不允许在国家首都间传送。'
-msg_err_nation_not_public: '<red>这个国家不是公开的.'
-msg_nation_toggle_public: '<green>成功开放国家.'
-status_yes: '<green>是'
-status_no: '<red>否'
 msg_err_unable_to_use_bank_outside_bank_plot: '你不能在银行（bank）或中心区块以外使用这个命令。可以使用/plot set bank设置银行（bank）区块。'
-msg_err_nation_spawn_forbidden: '<red>国家传送已关闭.'
-msg_err_nation_spawn_forbidden_war: '<red>国家传送点只在战争时期开放.'
-msg_err_nation_spawn_forbidden_peace: '<red>战争期间禁止国家传送.'
-msg_err_nation_spawn_ally_forbidden: '<red>国家禁止向盟国传送游行.'
-msg_err_nation_spawn_nation_forbidden_war: '<red>战争期间,只允许传送到其他盟国.'
-msg_err_nation_spawn_nation_forbidden_peace: '<red>战争期间禁止传送到其他盟国.'
-msg_err_public_nation_spawn_forbidden: '<red>公开传送到其他国家是禁止的。'
-msg_err_public_nation_spawn_forbidden_war: '<red>只有在战争期间才能禁止传送到开放的国家.'
-msg_err_public_nation_spawn_forbidden_peace: '<red>在战争期间禁止传送到开放的国家.'
-msg_spawn_cost_set_to: '<aqua>%s 将使用 /%s spawn 的价格设置为 %s.'
-msg_spawn_fail_safe_teleport: '<red>传送失败，位置不安全，请联系您城镇的市长更改传送地点。'
-msg_err_cannot_set_spawn_cost_more_than: '<red>你不能把传送费用设置到%s以上'
-msg_err_ally_isnt_public: '<red>你的盟国, %s, 没有启用公共传送点. 传送已被取消.'
-msg_nation_changed_public: '<red>国家公开状态变更为 %s.'
-#Added in 0.47:
 status_plot_type: '地皮类型：'
 msg_no_self_jailing: '你不能监禁自己.'
-online2: ' <green>（在线）'
 build: '建筑'
 destroy: '破坏'
 switch: '交互'
@@ -1029,48 +621,17 @@ enabled: '启用'
 disabled: '禁用'
 forced: '强制'
 adjustable: '可调整'
-#Added in 0.48:
-msg_no_funds_new_town2: '<red>%s不能在这里建立一个新城镇，因为这需要花费%s。'
-msg_no_funds_new_nation2: '<red>这个城镇的国库不足够强大到足以建立一个新的国家, 建国需要花费 %s.'
-msg_no_funds_claim2: '<red>城镇需要花费%2$s来声明这%1$s个城镇区块。请使用/t deposit %4$s向你的城镇银行存入%3$s'
-msg_err_cant_afford_blocks2: '<red>城镇需要花费%2$s来声明这%1$s个城镇区块。请使用/t deposit %4$s向你的城镇银行存入%3$s'
-msg_err_not_enough_variables: '<red>变量不足: '
-nation_rechecked_by_admin: '<aqua>成功重新检测国家 %s 的城镇距离.'
-msg_err_nation_over_town_limit: '<red>你的国家内的城镇已满，上限为: %s.'
-#Added in 0.49
 msg_process_claim: '声明土地中...'
 msg_process_unclaim: '放弃声明土地中...'
 msg_total_townblocks: '共有城镇区块: '
-#Added in 0.50
 friend_list: '好友列表'
 not_registered: '未注册.'
-msg_error_missing_comparator: '<aqua>必须指定排序依据.'
-msg_error_invalid_comparator: '<aqua>无效的比较器.'
-msg_error_multiple_comparators: '<aqua>比较器过多.请指定一个.'
-msg_error_comparator_failed: '<aqua>比较失败。请尝试换一个.'
 number_of_residents: '(居民数)'
 number_of_towns: '(城镇数)'
 town_name: '城镇名'
 nation_name: '国家名'
-refund_message: '<green>放弃声明 %2$s 城镇区块，获得 %1$s 的退款。'
-msg_bankrupt_town_multiple: '<aqua>以下城镇因支付不起每日维护费用而倒闭: '
-msg_bankrupt_nation_multiple: '<aqua>以下国家因支付不起每日维护费用而破灭: '
-msg_couldnt_pay_tax: '<aqua>%s 因支付不起税收而被踢出了 %s.'
-msg_couldnt_pay_nation_tax_multiple: '<aqua>以下城镇因支付不起国税而离开了国家的怀抱: '
-msg_couldnt_pay_town_tax_multiple: '<aqua>以下居民因支付不起城镇税而被流放: '
-msg_couldnt_pay_plot_taxes_multiple: '<aqua>以下居民因支付不起土地税而失去了土地所有权: '
-msg_bankrupt_town2: '<aqua>%s 城镇因资金不足而倒闭.'
-msg_bankrupt_nation2: '<aqua>%s 因国库已空而灭亡.'
 status_embassy_town: '驻有大使馆于'
-#Added in 0.51:
-msg_error_invalid_comparator_nation: '<aqua>你不能比较这个！你可以尝试这些：%s。'
-msg_error_invalid_comparator_town: '<aqua>你不能比较这个！你可以尝试这些：%s。'
-msg_err_merging_for_kings_only: '<aqua>只有国家领导者能合并。'
-msg_err_king_of_that_nation_is_not_online: '<aqua>国家%s的领导者%s目前不在线，合并失败。'
-nation1_has_merged_with_nation2: '<gold>国家 %s 已同意与主导方 %s 合并。'
-msg_would_you_merge_your_nation_into_other_nation: '<gold>你想要将你的国家 %s 并入 %s 吗? 这会将城镇和国家银行内的钱存入 %s.'
 no_open_towns: '没有开放的城镇。'
-#Added in 0.52:
 msg_error_nation_has_no_allies: '没有可以成为盟国的国家.'
 msg_error_nation_has_no_enemies: '没有可以成为敌国的国家.'
 msg_error_ta_plot_claim: '缺少玩家名, 示例: /ta plot claim 玩家名'
@@ -1079,24 +640,9 @@ msg_admin_has_given_you_a_plot: '管理员为你声明了一块土地: %s'
 msg_town_forcemobs_setting_set_to: '城镇%s将强制生物生成设为了%s'
 msg_town_forcepvp_setting_set_to: '城镇 %s 的强制PVP设置为 %s'
 msg_town_forcedisabledpvp_setting_set_to: '城镇 %s 的强制管理员禁用PVP设置为 %s'
-msg_nation_changed_open: '<red>国家的公开状态为 %s.'
 msg_err_already_in_a_nation: '你的城镇已经加入了一个国家.'
-msg_err_nation_not_open: '<red>国家 %s 的大门并不是对所有人敞开的。如需加入，请询问国家领导者或其助手。'
-msg_err_nation_homeblock_in_another_world: '<red>你的城镇之家与国都不在同一个世界.'
 status_bank_town_penalty_upkeep: '额外领地维护费'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '你无法传送到 %s, 你被该城镇视为了放逐者.'
-#Added in 0.55:
-msg_you_cannot_use_that_command_while_jailed: '<dark_red>你不能在监禁时使用这个指令.'
-#Added in 0.56:
-msg_cache_block_error_town_nation: '<red>国家成员不能%s。'
-#Added in 0.57:
-msg_err_already_res2: '<red>%s 已经属于一个城镇了.'
-msg_err_cannot_afford_plot_set_type_cost: '<red>你支付不起将土地设置为 %s 类型的价格： %s'
-msg_plot_set_cost: '<aqua>你支付了 %s 来将土地类型设置为: %s'
-msg_err_townspawn_has_not_been_set: '<red>未设置城镇传送点.'
-msg_err_player_too_far_from_town_spawn: '<red>%s 离你的城镇太远了，收不到邀请。 最大距离: %s 格方块.'
-#Added in 0.58:
 msg_resident_bail_amount: '居民保释金: '
 msg_mayor_bail_amount: '城主保释金: '
 msg_king_bail_amount: '国家领导赎金： '
@@ -1116,8 +662,6 @@ msg_too_close2: '这片区域离  %s 太近了.'
 homeblock: '城镇之家'
 townblock: '城镇区块'
 outpost: '前哨'
-msg_err_not_same_town: '<aqua>%s 不是你的城镇的一员.'
-#Added in 0.59:
 msg_modes_set: '模式设置为: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: '这块土地没有相关的元数据.'
 msg_err_the_metadata_for_key_is_not_registered: ' ''%s'' 的元数据未注册!'
@@ -1150,28 +694,17 @@ msg_err_tag_too_long: '标签过长.'
 msg_err_nation_has_not_set_a_spawn_location: '国家没有设置传送点.'
 msg_err_resident_doesnt_belong_to_any_town: '该居民不属于任何城镇'
 msg_err_could_not_set_default_modes_for: '无法设置默认模式： '
-#Added in 0.60
 msg_set_war_allowed_on: '这个世界内将可以发动战争。'
 msg_set_war_allowed_off: '这个世界不受战争的侵扰.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: '你在 %s 秒内无法无法切换PVP状态.'
 msg_err_cannot_spawn_x_seconds_remaining: '你还需要等待%s秒才能传送。'
-#Added in 0.63
 msg_plot_set_to_nfs: '该土地不再出售.'
-msg_err_x_spawn_disallowed_from_x: '<red>%s 的传送点禁止 %s.'
 msg_the_wilderness: '荒野'
 msg_enemy_areas: '敌对区域'
 msg_neutral_towns: '中立城镇'
-#Added in 0.64
 msg_err_no_nation_with_that_name: '找不到名为 %s 的国家'
 msg_err_cannot_unclaim_homeblock: '你无法放弃声明城镇之家, 请使用 ''/town set homeblock'' 来搬家.'
-#Added in 0.65
 msg_err_rename_cancelled: '重命名被其他插件取消了.'
-#Added in 0.66
-#Added in 0.67
-msg_conquered: '<dark_red>（占领中）'
-#Added in 0.68
 msg_plot_group_claim_confirmation: '这块土地是 %s 组内的一部分，如果你声明这块土地，你将购买一整组土地.'
 msg_plot_group_unclaim_confirmation: '这块土地是 %s 组内的一部分，如果你放弃声明这块土地，你将失去一整组土地.'
 msg_plot_group_toggle_confirmation: '这块土地是 %s 组内的一部分，你将修改这一整组土地的属性.'
@@ -1182,9 +715,7 @@ msg_err_plot_belongs_to_group_set: '这片属于一个土地组，请使用/plot
 msg_plot_group_set_for_sale: '土地组 %s 出售中!'
 msg_err_plot_already_belongs_to_a_group: '这片土地已属于一个土地组: %s, 请先移除组内的城镇区块再进行操作.'
 msg_err_you_must_specify_a_group_name: '你必须指定一个土地组名.'
-msg_plot_was_put_into_group_x: '土地 <blue>(%s,%s) <dark_green>被放入了土地组 %s 内'
 msg_err_plot_not_associated_with_a_group: '这片土地不属于任何一个土地组.'
-msg_plot_was_removed_from_group_x: '土地 <blue>(%s,%s) <dark_green>被移出了 %s 土地组'
 msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
 msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
 msg_player_put_group_up_for_sale_amount: '<aqua>%s将土地组%s挂牌出售，售价为%s！'
@@ -1194,48 +725,28 @@ msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
 status_plot_group_name_and_size: '这个城镇区块是地皮组“%s”的一部分，这个地皮组共包含%s个城镇区块。'
 msg_player_made_group_not_for_sale: '%s 停止出售 %s .'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
-#Added in 0.70
 msg_err_plot_group_name_required: '你必须设置土地组名, 指令为/plot group add {名称}'
 msg_confirmation_spigot_click_accept: '点击%s或输入%s'
 msg_confirmation_spigot_click_cancel: '点击%s或输入%s'
 msg_you_cannot_kick_yourself: '你不能踢出自己.'
 msg_you_cannot_kick_this_resident: '你不能踢出 %s, 他是城主或助手.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: '土地: %s属于土地组, 请使用 /plot group fs [价格] 设置土地价格'
 msg_err_plot_belongs_to_group_plot_nfs: '土地: %s属于土地组, 请使用 /plot group nfs 停售'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '管理员控制的%s设置阻止你将pvp状态改为%s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: '你未被监禁。'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '你不能在这里创建传送门的另一端.'
-#Added in 0.75
 msg_already_ally: '你的国家已与%s结盟.'
-#Added in 0.76
 msg_you: '你'
-#Added in 0.77
 msg_click_town_info: '<green>点击查看城镇状态屏幕。'
 msg_click_nation_info: '<green>点击查看国家状态屏幕。'
-msg_click_spawn: '<green>点击传送到:<yellow>%s'
 msg_click_spawn_brief: '<green>[传送]'
-msg_spawn_cost: '<green>传送价格=<yellow>%s'
-#Added in 0.78
 msg_reload_error: '重载Towny时出错.'
-msg_reloaded_config: '<dark_green>成功重载配置.'
-msg_reloaded_perms: '<dark_green>成功重载权限.'
-msg_reloaded_db: '<dark_green>成功重载数据库'
-msg_reloaded_lang: '<dark_green>成功重载语言文件'
-msg_reset_config: '<dark_green>成功重置配置'
 msg_err_teleport_cancelled: '传送因进行了移动而取消。'
-#Added in 0.79
 msg_cache_block_error_plot_friends: '好友'
 msg_cache_block_error_plot_allies: '盟友'
 msg_cache_block_error_plot_outsiders: '外来者'
 msg_cache_block_error_plot_town_members: '城镇居民'
-msg_err_invalid_nation_map_color: '<red>未知的地图颜色. 可用颜色有%s.'
-msg_nation_map_color_changed: '<aqua>国家地图颜色已更改为%s.'
 msg_err_unable_to_add_more_residents_without_nation: '在加入其他国家或建国前，你的城镇无法邀请多于%s位居民。'
 msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除，因为这些城镇没有声明任何土地。'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
@@ -1245,87 +756,41 @@ msg_ta_deposit_all_success: '已成功将%s存入所有国家和城镇的银行�
 msg_ta_deposit_all_towns_success: '成功向所有城镇的银行存入%s。'
 msg_ta_deposit_all_nations_success: '成功向所有国家的银行存入%s。'
 bonus_townblocks: '奖励城镇区块'
-#Added in 0.80
 nomad_sing: '流浪者'
 msg_new_town_advice: '恭喜你创建了自己的城镇！你的城镇将需要支付每日维护费，目前的费用是%s。你可以使用“/t deposit #”将钱存入城镇银行。如果没有钱来支付维护费用，你的城镇则将被删除。你随时可以使用/towny prices查看所需的费用。下次的每日维护费将在%s后收取。'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: '传送因受到了伤害而取消。'
-#Added in 0.82
-invitation_prefix: "<dark_gray>[<gray>邀请<dark_gray>] <blue>"
-confirmation_prefix: "<dark_gray>[<gray>确认<dark_gray>] <blue>"
-this_message_will_expire2: '<blue>这将会在%s秒后过期。'
 msg_hover_next_page: '下一页'
 msg_hover_previous_page: '上一页'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "只能在征收税率的城镇内设置最大税率."
 msg_town_set_tax_max_percent_amount: "%s将税率上限设置为%s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: '这片土地属于一个组，请使用/plot group toggle'
-#Added in 0.85
-msg_set_perms_reset_single: '<aqua>成功地重置了这片土地的权限设置。'
-#Added in 0.86
 status_bank_bankrupt: '（破产）'
-msg_warning_bankrupt: '<dark_red>*** 警告，由于 %s 的资金不足，这个城镇将在下一天破产！ ***'
-msg_town_bankrupt_by_upkeep: '<aqua>城镇%s因为不能维持日常开支而破产了。'
-msg_town_bankrupt_by_upkeep_multiple: '<aqua>以下城镇因无力维持开支而破产： '
-msg_town_bankrupt_by_nation_tax: '<aqua>城镇%s因无力付清%s税而破产了。'
-msg_town_bankrupt_by_nation_tax_multiple: '<aqua>以下城镇因无力上缴国税而破产： '
 msg_town_debts_cleared: '城镇%s付清了所有债务，不再处于破产状态。'
 msg_err_bankrupt_town_cannot_claim: '已破产的城镇不能圈地。'
 msg_err_bankrupt_town_cannot_build: '已破产的城镇不能进行建筑。'
 msg_err_bankrupt_town_cannot_toggle_open: '已破产的城镇不能开放。'
 msg_err_bankrupt_town_cannot_invite: '已破产的城镇不能邀请玩家加入。'
-msg_payed_nation_tax: '<aqua>你的城镇上缴了%s的国税。'
-msg_your_town_couldnt_pay_the_nation_tax_of: '<aqua>你的城镇因无力给国家上缴%s税而被踢出国家。'
-msg_your_town_payed_upkeep: '你的城镇支付了%s的日常开支。'
-msg_your_nation_payed_upkeep: '你的国家支付了%s的日常开支。'
-msg_your_town_couldnt_pay_upkeep: '你的城镇无力维护%s的日常开支而被解散了。'
-msg_your_nation_couldnt_pay_upkeep: '你的国家无力维护%s的日常开支而被解散了。'
-#Added in 0.87
-msg_town_reached_debtcap_and_is_disbanded: '<aqua>城镇%s因无力维护开支并达到了负债上限而解散。'
-msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>以下城镇因无力维护开支并达到了负债上限而解散： '
 msg_unable_to_deposit_x: '无法将%s存入城镇银行。'
 msg_unable_to_withdraw_x: '无法从城镇银行中取出%s。'
 status_debtcap: '负债上限：'
 status_world_explrevert_entity: '生物爆炸回溯：'
 status_world_explrevert_block: '方块爆炸回溯：'
-#Added in 0.88
-msg_nation_already_peaceful: '<red>国家已处于和平状态。'
-msg_nation_already_not_peaceful: '<red>国家已不再和平。'
-#Added in 0.89
 status_world_friendlyfire: '友伤：'
 status_world_wildernessmobs: '荒地生成生物：'
-msg_outlaw_kick_cooldown: '<red>你在城镇 %s 中被列为被放逐者。你还有%s来离开该城镇，否则你将被传送回出生点。'
-msg_outlaw_kicked: '<dark_red>你不被城镇%s所欢迎，因此你被传送走了。'
-msg_outlaw_town_notify: '<red>被放逐者%s进入了你的城镇。'
-msg_your_town_payed_upkeep_with_debt: '<red>你的城镇连带债务支付了%s的日常开支。'
-msg_payed_nation_tax_with_debt: '<red>你的城镇连带债务上缴了%s的国税。'
-#Added in 0.90
 status_plot_clear_deletion: '已清除地皮：'
 msg_err_plot_clear_disabled_in_this_world: '/plot clear指令在此世界已禁用。'
-#Added in 0.91
 msg_universe_attribution: '作者： '
 msg_universe_contributors: ' 以及像你这样的贡献者。 '
 townblock_plu: '城镇区块'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: '下一小时命令执行成功'
 town_help_12: '重新声明你的城镇来从倒闭之中挽回它。'
 msg_warning_town_ruined_if_deleted: "警告！！！如果你删除你的城镇，它将进入持续%d小时的倒闭状态。 之后，它将被完全删除。在倒闭的状态下，所有保护都将失效，城镇也将能被其他人破坏。"
 msg_warning_town_ruined_if_deleted2: "%d小时后城镇中的任何居民都可以使用/t reclaim来重新声明此城镇。"
-msg_err_cannot_reclaim_town_unless_ruined: '<red>你不能重新声明你的城镇，因为其并未倒闭。'
-msg_err_cannot_reclaim_town_yet: '<red>%d小时后才可以重新声明你的城镇。'
-msg_town_reclaimed: '<aqua>%s 重新声明了城镇 %s。'
-msg_err_cannot_use_command_because_town_ruined: "<red>你不能使用此命令，因为你的城镇已经沦为废墟。要继续使用，请使用/town reclaim重新声明城镇，或使用/town leave离开此城镇。"
-msg_warning_your_town_is_ruined_for_x_more_hours: '<red>你的城镇已倒闭%d小时以上，使用/town reclaim来救回城镇并成为城主。'
 msg_time_remaining_before_full_removal: '距离完全删除：%d小时。'
 msg_time_until_reclaim_available: '距离可收复时间：%d小时。'
 msg_reclaim_available: '可收复。'
 msg_ruined_town_being_deleted: "%s已沦为废墟%s小时，正在被删除。"
-#Added in 0.93
-msg_changed_peaceful: '<red>城镇中立/和平的状态现在是%s。'
-msg_err_town_unclaim_canceled: '<red>放弃圈地已取消，你不能在这个时候放弃这片区域。'
-#Added in 0.94
 msg_comptype_residents: '居民数'
 msg_comptype_townblocks: '城镇区块已圈数量'
 msg_comptype_balance: '银行余额'
@@ -1333,55 +798,17 @@ msg_comptype_online: '在线玩家'
 msg_comptype_towns: '城镇数量'
 msg_comptype_name: '按字母顺序'
 msg_comptype_open: '开放状态'
-msg_status_npc: '<red>%s不是一个真正的玩家，它是Towny内置的。'
 npc_created: '创建于：'
-msg_no_funds_claim_plot: '<red>你没有足够的资金来圈这块价格为%s的地。'
-msg_no_funds_claim_plot_group: '<red>你没有足够的资金来圈这%s块总价为%s的地。'
-status_town_title_peaceful: '<aqua>（和平）'
-#Added in 0.95
-status_public: '<aqua>（公开）'
 msg_days: '天'
 msg_comptype_public: '公开状态'
 towny_prices_title: '价格'
-towny_prices_town_nation: '<yellow>[建立新的] <dark_green>城镇：<green>%s <dark_gray>| <dark_green>国家：<green>%s'
-towny_prices_reclaim: '<yellow>[收复] <dark_green>城镇：<green>%s'
-towny_prices_upkeep: '<yellow>[维护] <dark_green>城镇：<green>%s <dark_gray>| <dark_green>国家：<green>%s'
-towny_prices_overclaimed_upkeep: '<yellow>[过度圈地维护] <dark_green>城镇：<green>%s'
-towny_prices_claiming_townblock: '<yellow>[扩张] <dark_green>城镇区块：<green>%s'
-towny_prices_claiming_townblock_increase: ' <dark_gray>| <dark_green>每城镇区块增加：<green>+%s'
-towny_prices_claiming_outposts: '<yellow>[扩张] <dark_green>前哨：<green>%s'
-towny_prices_outposts_upkeept: '<gray>前哨每天都有一个额外的站岗位，每个前哨的维护费用：<green>%s'
-towny_prices_upkeep_based_on: '<gray>城镇的日常开支基于<green>%s'
 towny_prices_upkeep_num_plots: '地皮数量。'
 towny_prices_upkeep_town_level: '城镇等级（居民人数）。'
 towny_prices_overclaimed_num_plots: '超出的圈地数量*'
 towny_prices_overclaimed_flat_cost: '固定费用'
-towny_prices_townname: '<red>城镇：<aqua>%s'
-towny_prices_price_plot: '<red>    [Price] <dark_green>块地皮：<green>%s <dark_gray>| <dark_green>座前哨：<green>%s'
-towny_prices_price_shop: '<red>            <dark_green>商店：<green>%s <dark_gray>| <dark_green>大使馆：<green>%s'
-towny_prices_taxes_plot: '<red>    [税收]    <dark_green>居民：<green>%s <dark_gray>| <dark_green>土地：<green>%s'
-towny_prices_taxes_shop: '<red>            <dark_green>商店：<green>%s <dark_gray>| <dark_green>大使馆：<green>%s'
-towny_prices_town_neutral_tax: '<red>            <dark_green>和平：<green>%s'
-towny_prices_plots: '<red>    [设置地皮]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
-towny_prices_nationname: '<red>国家：<gold>%s'
-towny_prices_nation_tax: '<red>    [Taxes] <dark_green>城镇：<green>%s <dark_gray>| <dark_green>和平：<green>%s'
-#Added in 0.96
-msg_town_destroyed_by_nation_tax: '<aqua>被占领的城镇%s因无力上缴国税而倒闭。'
-msg_town_destroyed_by_nation_tax_multiple: '<aqua>以下被占领城镇因无力上缴国税而倒闭： '
-msg_your_town_was_exempt_from_the_nation_tax: '<aqua>你的城镇被免除了国税。'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: '废墟状态'
 msg_comptype_forsale: '出售状态'
 msg_comptype_bankrupt: '破产状态'
-msg_ruined: '<red>（废墟）'
-msg_bankrupt: '<red>（已破产）'
-#Added in 0.98
-msg_del_town2: '<aqua>城镇 %s 已删除！'
-msg_ruin_town: '<aqua>城镇%s沦为废墟！'
 gui_title_select_plot_type: '选择地皮类型'
 gui_title_no_restrictions: '此地皮类型没有限制。'
 gui_title_towny_allowedblocks: '%s 允许方块列表'
@@ -1395,52 +822,14 @@ flatfile_err_exception_reading_district_file_at_line: '加载错误：在线读�
 flatfile_dbg_loading_district_list: '正在加载选区列表...'
 msg_ta_removed_all_titles_and_surnames_removed: '所有居民的头衔与称谓已被移除。'
 msg_err_homeblock_already_set_here: '这个位置已经在你的城镇中心区块内了。'
-#Added in 0.100
-msg_town_merge_err_mayor_only: '<red>只有城主才能进行合并操作。'
-msg_town_merge_err_not_close: '<red>城镇%s的中心区块离你的城镇中心区块太远了，需要在%d个城镇区块以内。'
-msg_town_merge_request_sent: '<aqua>合并请求已发送给城镇%s的城主。'
-msg_town_merge_request_received: '<aqua>城镇%s的城主%s请求与你的城镇合并。这将转移所有城镇区块、居民和城镇银行储蓄至%s。'
-msg_town_merge_request_denied: '<red>合并请求被拒绝。'
-msg_town_merge_other_offline: '<red>城镇%s的城主%s目前不在线，合并失败。'
-msg_town_merge_err_too_many_residents: '<red>合并失败：合并后居民数量超过限制 (%d)'
-msg_town_merge_err_too_many_townblocks: '<red>合并失败：合并后的城镇大小超过限制(%d)'
-msg_town_merge_err_too_many_outposts: '<red>合并失败：合并后前哨数量超过限制 (%d)'
-msg_town_merge_err_not_enough_money: '<red>合并失败：金额不足。(%s/%s)'
-msg_town_merge_err_too_many_purchased_townblocks: '<red>合并失败：城镇区块太多(%d)'
-msg_town_merge_warning: '<red>警告：如果接受与城镇%s合并将花费%s。'
-msg_town_merge_debt_warning: '<red>警告：城镇%s目前正负债，在接受后债务也将会继承。'
-msg_town_merge_cost_breakdown: '<aqua>费用明细：基础费用：%s，城镇区块费用：%s，破产花费：%s，加成区块费用：%s'
-msg_town_merge_failed: '<red>合并失败。'
-msg_town_merge_cancelled: '<red>合并已取消。'
-msg_town_merge_success: '<aqua>%2$s拥有的城镇%1$s已成功地与城镇%3$s合并。'
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: '城镇合并金额'
 msg_town_merge_transaction_reason: '城镇合并'
-towny_prices_town_merge: '<yellow>[Merging] <dark_green>基础价格：<green>%s <dark_gray>| <dark_green>每块土地价格：<green>%s<dark_green>'
-#Added in 0.101
-msg_err_nation_not_allied_with: '<red>你的国家未与%s结盟。'
-msg_err_nation_not_enemies_with: '<red>你的国家不是%s的敌人。'
-msg_err_nation_already_enemies_with: '<red>你的国家已与%s是敌人。'
-msg_err_ally_already_requested: '<red>你已经向%s发出过了结盟邀请。'
-msg_err_nation_not_allied_with_2: '<red>%s未与%s结盟。'
-msg_err_nation_not_enemies_with_2: '<red>%s和%s不是敌人。'
-msg_err_nation_already_allied_with_2: '<red>%s已经与%s结盟了。'
-msg_err_nation_already_enemies_with_2: '<red>%s已是%s的敌人。'
-msg_ta_allies_enemies_updated: '<aqua>已更新%s的敌友状态。'
-#Added in 0.102
-towny_map_detailed_information: '<dark_green>点击查看土地详细信息。'
-msg_err_nation_capital_too_many_residents: '<red>当前首都居民过多，无法迁至%s。'
-msg_deleting_nation_will_result_in_losing_residents: '<red>警告：删除你的国家将会导致你的城镇超过居民上限%d，导致移除%d名居民。'
-#Added in 0.103
-msg_command_blocked_inside_towns: '<red>你不能在城镇中使用此命令。'
 msg_command_limited: '你只能在自己的土地中使用此命令。'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: '声明于：'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: '所有世界的野地建设已调至%s。'
 msg_regenerations_use_x_in_all_worlds: '所有世界的野地回溯已调至：%s。'
-#Added in 0.106
 msg_command_outsider_blocked: '你不能使用此命令，因为你不是%s中的一员。'
 msg_err_this_jail_has_no_cells: '这座监狱没有牢房。'
 msg_err_no_cell_found_at_this_location: '此处没有找到牢房。'
@@ -1465,24 +854,8 @@ msg_do_not_log_out_while_waiting_to_be_teleported: '传送至监狱前请不要�
 jail_plu: '监狱'
 jail_sing: '监狱'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s游玩的时间太短，无法被监禁，请再等待%s'
-#Added in 0.108
-msg_town_not_peaceful: '<aqua>城镇的和平已被打破。'
-msg_town_already_peaceful: '<aqua>城镇已处于和平状态。'
-msg_town_already_not_peaceful: '<aqua>城镇已不再和平。'
-msg_town_cant_peaceful: '<aqua>城镇支付不起转变为和平城镇的费用。你必须能够每天支付%s的费用。'
-msg_town_paid_for_neutral_status: '<aqua>你的城镇支付了%s以保持中立。'
-msg_nation_paid_for_neutral_status: '<aqua>你的国家支付了%s以保持中立。'
 your_town_has_been_invited_to_join_nation: '你的城镇被邀请加入国家：%s'
-#Added in 0.109
-msg_err_no_one_to_purge: '<aqua>没有不活跃成员可清理。'
-msg_purging_will_remove_the_following_residents: '<aqua>请确定你要清理以下居民：%s'
-msg_purge_complete_x_removed: '<aqua>清理完毕，已移除%s名居民。'
-msg_purge_complete_x_removed_from_towns: '<aqua>清理完成，已从城镇中移除 %s 名不活跃的居民。'
-msg_purge_reached_50_residents: '<aqua>已清理50次，为减少刷屏，后续居民清理记录将不再显示。'
 msg_err_days_must_be_greater_than_0: '天数必须大于0。'
-msg_err_outlawed_players_no_teleport: '<dark_red>你被你所在的城镇列为被放逐者了！你现在不能传送了。'
-msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>你不能在把你列为被放逐者的城镇里使用此命令。'
-#Added in 0.110
 msg_safe_mode: "[Error] 已锁定安全模式！"
 msg_safe_mode_base: '[Error] 由于错误，Towny被锁定在安全模式下！ '
 msg_safe_mode_player: '告诉管理员去检查服务器后台。'
@@ -1492,7 +865,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: '无法声明前哨：你离
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: '你移动中心区块太频繁了！请再等待%s。'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: '你中心区块移动得太远了，最大距离%s个城镇区块，这里离原中心区块%s个城镇区块。'
 msg_err_usingtowny_disabled: '此世界已禁用Towny，使用/townyworld来开启Towny的使用。'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: '该城镇区块已属于地皮组“%s”。你确定要将其划归至地皮组“%s”吗？'
 msg_townblock_transferred_from_x_to_x_group: '城镇区块已从土地组%s转移至%s中。'
 msg_plotgroup_deleted: '地皮组“%s”已删除。'
@@ -1503,44 +875,18 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: '这个城镇区块已经
 map_hover_plot_group: '地皮组： '
 map_hover_plot_group_size: ' 大小： '
 map_hover_plots: '%s块地皮'
-#Added in 0.112
 msg_checking_for_updates: '检查更新中......'
 msg_no_new_updates: '已经为最新版本。'
-msg_new_update_available: '<aqua>新版本可用：%s | 目前版本：%s'
 msg_download_here: '在这里下载：%s'
-msg_click_to_download: '<aqua>点此下载。'
-msg_latest_version: '<dark_green>Towny版本：<green>%s <dark_green>| 最新版本：<green>%s'
-msg_up_to_date: '<green>当前已是最新版本。'
 msg_click_purchase: '点击购买'
 msg_you_must_join_this_town_to_claim_this_plot: '要购买此土地，你必须加入城镇%s。你想要加入并继续吗？'
-msg_legacy_economy_detected: "<aqua>Your 城镇的经济实现设置为兼容模式，建议您让城镇更新自己使用现代实现方法。 这将提高与更多经济插件的兼容性。"
-msg_click_to_convert_to_modern_economy: "<aqua>点击此处将您的城镇经济实现从旧版转换为现代版。"
-#Added in 0.113
 status_trustedlist: '已信任'
-msg_click_to_edit: '<aqua>点击编辑。'
 permission_gui_header: 'Towny权限面板'
-msg_last_edited: '<gray><italic>上一次更改于%s，由%s更改。'
-#Last %s is either town or townblock
-msg_trusted_added: '<aqua>成功在此%2$s中信任%1$s。'
-msg_already_trusted: '<aqua>%s 已被此%s信任。'
-msg_cannot_trust_your_own_town: '<aqua>你不能信任你自己的城镇'
-#Last %s is the town name or worldcoord.
-msg_trusted_added_2: '<aqua>%s将你列入了%s%s的信任列表中。'
-msg_not_trusted: '<aqua>%s未受此%s的信任。'
-msg_trusted_removed: '<aqua>%s不再受此%s的信任。'
-msg_trusted_removed_2: '<aqua>%s取消了你在%s%s的信任。'
-msg_overrides_removed: '<aqua>取消了覆盖在%s上的权限。'
-msg_overrides_added: '<aqua>添加了覆盖在%s上的默认权限。'
-msg_no_overrides_set: '<aqua>%s并未在%s上被覆盖过设置。'
-msg_overrides_already_set: '<aqua>%s已在%s上有覆盖设置。'
-msg_cache_block_err: '<red>你没有权限在这里%s。'
-msg_err_plot_belongs_to_group: '<red>这片土地属于一个土地组，请使用%s。'
 plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_accept: '国家%s的盟友数量已经达到了上限，无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_send: '你的国家的盟友数量已达到上限，因此无法邀请%s成为你的盟友。'
 msg_err_ally_limit_reached_cannot_send_targetNation: '国家%s的盟友已达到上限，因此无法邀请%s成为你的盟友。'
-#Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
 msg_err_expected_command_format: '语法错误，预期传入%s'
 msg_err_group_already_has_node: '组%s已经有%s的权限节点了。'
@@ -1565,24 +911,15 @@ help_ta_perms_nationrankadd: '向Towny权限配置加入了一个新的国家头
 help_ta_perms_nationrankremove: '从Towny权限配置中移除了一个国家头衔。'
 help_ta_perms_nationrankrename: '在townyperms文件中重命名一个国家头衔'
 msg_err_that_resident_doesnt_belong_to_that_nation: '此居民不属于那个国家。'
-#Added in 0.115
 msg_comptype_founded: '创建日期'
 msg_err_must_be_greater_than_or_equal_to: '数量必须大于或等于%s'
 msg_err_must_be_less_than_or_equal_to: '数量必须小于或等于%s'
 err_invalid_yaml: '加载错误：加载文件%s失败，请检查其yaml语法是否正确。'
-#Added in 0.116
-msg_town_map_color_changed: '<aqua>城镇在地图上的颜色已更改为%s。'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: '无法添加城镇区块至组内，因为它不是类型：%s'
-#Added in 0.118
-status_title_nopvp: '<green>（无PVP）'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: '你不能监禁你的居民，因为其目前处于一个被宣布为被放逐者的地方。'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: '你不能监禁你的居民，因为其目前处于一个被宣布为敌人的地方。'
-#Added in 0.120
 msg_resident_prompt: '在聊天栏里输入玩家名，或输入q退出。30秒内不输入将自动取消。'
 msg_prompt_cancel: '请求已取消或超时。'
-status_home_element: ' <gray>[中心区块：%s]'
 status_about: "关于:"
 status_registered: '注册于：'
 status_lastonline: '最后在线时间：'
@@ -1590,22 +927,15 @@ status_fractions: '%s/%s'
 status_rank_list: '头衔列表'
 status_hover_click_for_more: '点击查看更多信息。'
 status_jailed: '监禁于：'
-status_bad_yes: '<red>是'
-status_good_no: '<green>否'
 status_resident_tax_title: '%s的税'
 help_menu_command: '<blue>'
 help_menu_subcommand: '<aqua>'
 help_menu_explanation: '<gray>'
 help_menu_requirement: '<red>'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: '城镇 %s 会因国家合并后离首都太远而脱离国家。'
-#Added in 0.123
 msg_err_invalid_townyworld: "\"%s\"不是一个有效的Towny世界。"
 msg_err_enter_world_name_first: '请先输入世界名。'
-msg_wilderness_use_set_to: '在%2$s中的野地使用已设置为%1$s。'
-#Added in 0.124
 msg_err_invalid_response: '无效的回应！输入q退出或返回到上一个问题。'
-msg_setup_full_guide_link: '<aqua>完整的安装指南请点击此处。'
 msg_setup_wildernessuse: '您想要允许野地建设吗？这将允许玩家在野地中放置或破坏方块。'
 msg_setup_revertunclaim: '你想让未声明的区域回溯吗？这将使未声明的城镇区块缓慢恢复为初始状态。'
 msg_setup_town_block_ratio: '你想将你的城镇区块比率设置为多少？默认每个居民8个城镇区块。较高的数字将使城镇能够为其每个居民获得更多的城镇区块上限。将其设置为0将使用城镇等级来作为此数值。'
@@ -1613,14 +943,12 @@ msg_setup_town_cost: '你想要将创建一个城镇的价格设置为多少？�
 msg_setup_nation_cost: '你想要将创建一个国家的价格设置为多少？默认为1000。'
 msg_setup_townblock_cost: '你想要将城镇扩张一个城镇区块（默认为一个区块）的价格设置为多少？默认为25。'
 msg_setup_success: '配置修改成功。'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s处于重生保护中，无法伤害。'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: '你失去了你的重生保护。'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: '你在受到重生保护时不能拾起物品。'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: '首都：'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1633,7 +961,6 @@ status_unknown: '未知'
 msg_nationzone_override_set_to: '%s的国域被设置成了%s。'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s的国域被取消了。'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: '国域大小：'
 #Shown when a player adds people to their friends list.
@@ -1660,13 +987,6 @@ msg_err_nothing_to_unclaim: '没有可以取消圈地的地方。'
 msg_perm_true: '权限为开启。'
 #Given as feedback when /ta checkperm is used.
 msg_err_perm_false: '权限为关闭。'
-#Shown at the bottom of the /towny map
-#First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '<dark_green>城镇：<green>%s <gray>| <dark_green>所有者：<green>%s'
-#Shown on /towny version
-msg_towny_version: '<dark_green>Towny版本：<green>%s'
-#Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '<dark_green>有玩家试图从IP：<red>%s<dark_green>使用玩家名%s登录，这可能会破坏服务器的经济系统。 此次登录已被Towny阻止。建议封禁此IP！'
 #Shown during resident purge
 msg_scanning_for_old_residents: '寻找旧居民中......'
 #Shown during resident purge
@@ -1677,21 +997,16 @@ msg_purge_complete: '清理完成，共删除了%s个居民。'
 msg_you_have_been_given_bonus_blocks: '你获得了%s个额外的城镇区块上限。'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: '你城镇的额外城镇区块上限已达到最大值，不能再购买了。'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: '首都不能调为和平状态。'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: '城镇的国域现在是%s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: '你的城镇没有国域可以设置！'
-#Added in 0.129
-#Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '<gray>国家维持费用基于<green>%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: '城镇数量。'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: '国家等级（居民数量）。'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: '被市长监禁。'
 #Jail causes
@@ -1722,89 +1037,62 @@ msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP�
 msg_jailed_title: '所以，你被监禁了:('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: '此城镇没有同盟。'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: '此城镇没有敌人。'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: '请求确认已超时。'
-#Added in 0.134
 tc_player_channel_sound_muted: '频道已静音'
 tc_player_channel_sound_unmuted: '频道已解除静音'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '有外来者在你的领地上，你不能切换PVP状态！'
-#Added in 0.136
-msg_view_on_web: '<gray>点击前往网页查看。'
-#Added in 0.137
-#Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '<gold>城镇%s同意与主城镇%s合并。'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: '中立成本：'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: '若您为这些城镇区块支付了任何现实货币，请知悉：您所在的服务器违反了 Minecraft EULA 和 Towny 许可协议。'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: 'Towny团队从未打算用真钱购买城镇区块。'
 #Line 3 of the givebonus warning.
 msg_ptw_warning_3: '如果您确实支付了现实货币，您应该考虑在一个尊重 Towny 团队意愿的 Towny 服务器上玩游戏。'
-#Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: '您已被邀请加入 %s<blue> (国家: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: '你的城镇没有钱来取消这块土地。这需要%s的资金。'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: '你的城镇已支付 %s 来取消对土地的所有权。'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: '取消这片土地将消耗 %s，你想要继续吗？'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
-#Added in 1.141
 msg_newday_already_running: '正在执行一个新的日程'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: '你必须等待%s秒后才可以再次调整中立性。'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: '此指令不能在控制台中使用。'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: '城镇%s已%s无限制圈地。'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: '你没有足够的圈地额度，你想要打开城镇%s的无限制圈地吗？'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: '你不能离开你的国家，你的城镇已被占领'
 msg_err_console_only: '此指令仅供控制台使用。'
 msg_err_player_only: '此指令仅供玩家使用。'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: '跨越边界时标题信息显示的是 %s'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: '这条指令会将你的 config.yml 恢复成初始状态，你确定要这么做吗？'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: '这样做会覆盖服务器的城镇居民上限配置，你确定要继续吗？'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: '删除了%d个无效的前哨出生点。'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: '你的城镇破产了，使用 /town deposit {amount} 存入资金。'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: '您已是一个城镇的成员，所以您不能使用这个命令。 您若要继续，必须先使用命令“/t leave”。'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
 msg_a_town_you_are_outlawed_in: '你在这个城镇是放逐者。'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: '找不到任何拥有可出售地块的开放、公开城镇来随机传送。'
-#Message showing payment for RTP.
-msg_cost_spawn_rtp: '<aqua>你被收取了%s来随机传送到一个出售的城镇地皮。'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: '您将被传送到%s中出售的地块，这会让您加入它。到达后，可使用"/plot claim "声明您的地块。'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
@@ -1819,12 +1107,10 @@ status_plot_hover: '%s:'
 msg_usage: '用法: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: '无可显示的页面。'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: '这个国家未与你的所在国结盟。'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: '这个城镇不隶属于你。'
-#Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: '这个位置已经有一个监狱了。'
 #Title line of the /plot perm hud.
@@ -1873,7 +1159,6 @@ msg_perm_hud_plot_for_sale: '出售中: '
 msg_perm_hud_no: '否'
 #Seen in /plot perm hud:
 msg_perm_hud_yes: '是'
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: '城镇 %s 已将其城镇级别设置为 %s。'
 #Message shown when unsetting a manual town level.
@@ -1884,19 +1169,14 @@ msg_err_town_not_allowed_purchased_blocks: '根据配置规则，城镇 %s 无�
 msg_purchased_blocks_unset: '城镇 %s 已将他们购买的城镇区块移除。'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: '城镇 %s 获得了 %s 个购买的城镇区块，他们目前有 %s 个购买的城镇区块。'
-#Added in 0.154
 msg_comptype_upkeep: '维护费'
-#Added in 0.155
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: '城镇 %s 已将其维护费设置为 %s。'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: '你的城镇已达到%d个的 %s 地皮的上限。'
-#Added in 0.156
 msg_spawn_cost_free: '免费'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: '此地皮已经是%s类型。'
-msg_town_board_reset: '<aqua>城镇公告栏已被重置。'
-msg_nation_board_reset: '<aqua>国家公告栏已被重置。'
 msg_town_has_no_jailslots: '城镇监狱已经满员。'
 msg_you_have_been_jailed_your_bail_is_x: '你已被监禁，你的保释金是%s。'
 msg_err_higher_than_max_allowed_bail_x: '您设定的保释金高于上限，上限为 %s。'
@@ -1911,12 +1191,6 @@ msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '城镇银行支出了 %s �
 msg_err_x_in_unjailable_world: '%s 处于一个不可被监禁的世界中。'
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: '您确定要将所有城镇和国家的银行重置为 %s 吗？'
-#Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '<red>你的国家内的居民已满，上限为: %s，因此无法添加%s。'
-#Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '<red>你不能加入这个国家，因为这样将使它超过国家居民人数限制 %s。'
-#Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '<red>你不能加入这个国家，因为它已经达到了每个国家允许的最大城镇数目： %s。'
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: '您确定你想将这个世界的所有设置重置为配置文件中所设定的那样吗？'
 #Part of the /town plots output.
@@ -2035,10 +1309,6 @@ msg_err_your_cannot_overclaim_for_another: "你还需要等待%s秒才能进行�
 msg_err_world_not_loaded: "<red>世界未加载。"
 #Message shown when denying a cross world teleport
 msg_err_world_not_same_cant_teleport: "<red>您不能使用此命令传送到不同的世界。"
-#Message shown when a mayor toggles a plots taxed status.
-msg_changed_plot_taxed: '<red>此区块已将其税收状态设置为 %s'
-msg_changed_plotgroup_taxed: '<red>此区块组已将其税收状态设置为 %s'
-status_forsale: "<green>(出售中: %s)"
 msg_town_forsale: "%s 已被设置为在 %s 出售"
 msg_town_notforsale: "%s不再出售."
 msg_town_sell_confirmation: "这将把你的城镇以%s的价格出售 ，你确定要继续吗？"
@@ -2046,7 +1316,6 @@ msg_town_buytown_already_mayor: "您已经是 %s的市长了"
 msg_town_buytown_confirmation: "购买 %s 将消耗 %s 并将您从您目前可能属于的任何城镇中移除。您确定要继续吗？"
 msg_town_buytown_not_forsale: "指定城镇没有出售"
 msg_town_buytown_ruined: "已沦为废墟的城镇无法被购买。"
-msg_resident_about_reset: "<aqua>重置居民简介"
 msg_err_invalid_string_about_not_set: "无效字符串，居民公告栏设置失败"
 msg_set_about: "%s的内容被设置为 %s"
 msg_clear_about: "%s的内容已被清除"
@@ -2108,8 +1377,6 @@ outlawed_in: "放逐于"
 trusted_in: "信任于"
 msg_warning_town_deposit_hint: "使用/town deposit [amount]把钱存入城镇银行。"
 msg_warning_nation_deposit_hint: "使用/nation deposit [amount]把钱存入国家银行。"
-teleport_warmup_title_dont_move: "<gold>不要移动！"
-teleport_warmup_subtitle_seconds_remaining: "<gray>离开始传送还有<red>%s<gray>秒。"
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为废墟状态，%s 的地皮权限行已被修改，不再提供保护。"
 console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为废墟状态，%s 的%s个地皮权限行已被修改，不再提供保护：%s。"
 msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "你不能把一块地割让给自己的城镇。"
