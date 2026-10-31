@@ -664,8 +664,6 @@ msg_not_enough_residents_refunded: '<aqua>Вам було повернено %s 
 msg_not_enough_residents_capital: '<aqua> В місті %s не вистачає жителів, щоб приєднатися до нації.'
 list_page: '<aqua> Сторінка %s з %s'
 list_err_not_enough_pages: '<red> Тільки %s сторінок доступно'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Ви не можете встановити податок на місто нижче %s.'
 msg_unknown_rank_available_ranks: 'Невідомий ранг %s. Допустимі ранги - %s.'
 msg_no_permission_to_give_rank: 'У вас немає дозволу на надання цього рангу.'
@@ -710,7 +708,6 @@ msg_err_cant_use_bed: '<dark_red>Ви не можете це зробити. Ш�
 msg_town_plots_revenue_disclaimer: '<green>Дохід показує оцінку та можливість платоспроможності власника ділянки.'
 msg_town_set_perm_syntax_error: 'Неправильна команда. Напишіть ''/town set perm ?''.'
 msg_plot_set_perm_syntax_error: 'Неправильна команда. Напишіть ''/plot set perm?'' щоб переглянути приклади.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Цей городянин не належить до цього міста.'
 msg_err_resident_already_an_outlaw: 'Цей гравець вважається злочинцем у вашому місті.'
 msg_err_not_outlaw_in_your_town: 'Ви не можете це зробити.'
@@ -724,22 +721,15 @@ msg_you_are_an_outlaw_in_this_town: '<dark_red>Будьте обережні, м
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Ваша застава коштуватиме %s.'
 msg_err_town_not_close_enough_to_nation: 'Міський блок %s недостатньо близький до міських блоків вашої столиці, щоб увійти в націю.'
 msg_nation_town_moved_their_homeblock_too_far: '%s міські блоки були надто далеко від столичних і вони були вилучені з нації.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Неприпустимий радіус. Використовуйте %s або менше.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Макс. кількість городян (%s) вже досягнуто.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>Гравець %s не був на сервері достатньо довго, щоб бути запрошеним до міста. Будь ласка зачекайте.'
 msg_cant_toggle_pvp_outsider_in_town: 'У вашому місті знаходиться чужинець. Ви не можете змінити свій статус PvP!'
 msg_err_unclaim_not_outpost: 'Неможливо розпривати. Ця ділянка не є аванпостом!'
 outpost_plu: 'Форпости'
-#Added in 0.36
 msg_err_not_enough_residents: 'У цьому місті недостатньо мешканців, щоб зробити це.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Вогонь по своїх відключено!'
-#Added in 0.38
 msg_claim_error: '<red>Інший плагін зупинив приват (%s)/(%s) чанків міста. Не вдалося завершити операцію.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Спавн у місто дозволено лише під час війни.'
 msg_err_town_spawn_forbidden_peace: '<red>Співн у місто заборонено під час війни.'
 msg_err_town_spawn_nation_forbidden_war: 'Спавн в інші міста у вашій нації дозволено лише під час війни.'
@@ -748,9 +738,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Співн у міста, пов''�
 msg_err_town_spawn_ally_forbidden_false: '<red>Спавн в міста, пов''язані з вашою нацією, заборонено під час війни.'
 msg_err_public_spawn_forbidden_war: '<red>Спавн в інші міста дозволено лише під час війни.'
 msg_err_public_spawn_forbidden_peace: '<red>Спавн в інші міста заборонено під час війни.'
-#Added in 0.40
 mayor_help_9: 'Спроба розпривати аванпост'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Запрошення'
 invite_sent_by: 'Запрошення надіслано гравцем'
 invite_help_1: 'Прийняти запрошення до міста'
@@ -817,16 +805,13 @@ nation_zone_this_area_under_protection_of: 'Ця частина %s знаход�
 nation_zone_conquered_status_denies_use: "Статус вашого міста як завойованого не дозволяє вам використовувати цю національну зону."
 nation_zone_conquered_status_denies_use_2: "Ви не можете використовувати національну зону цього завойованого міста."
 nation_spawn_not_allowed_for_conquered_towns: "Статус вашого міста як завойованого не дозволяє вам відродитися у точці відродження вашої нації."
-#Added in 0.42
 you_have_been_invited_to_join2: 'Ви запрошені вступити у %s'
 you_have_been_requested_to_ally2: 'Ви запрошені стати союзником %s'
-#Added in 0.43
 town_help_11: 'Створіть нове місто. Використовуйте "_", але не пробіли.'
 changed_plot_town: '<aqua>Ви успішно змінили місто ділянки на %s!'
 not_standing_in_plot: 'Ви не стоїте на правильній ділянці!'
 msg_err_homeblock_has_not_been_set: 'Домашній блок не встановлено, спершу використайте "/town set homeblock".'
 msg_err_spawn_not_within_homeblock: 'Спавн не знаходиться в межах домашнього блоку, спершу використайте "/town set homeblock".'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Помилка: Неправильна команда!'
 tc_settings_reloaded: '[TownyChat] Налаштування перезавантажено!'
@@ -894,7 +879,6 @@ status_friends: 'Друзі'
 rank_list_title: '%s Рейтинговий список'
 rank_list_mayor: 'Мер:'
 status_title_capital: '<aqua>(Столиця)'
-status_title_pvp: '<dark_red>(PVP)'
 status_title_open: '<aqua>(Відкр.)'
 status_town_board: 'Дошка оголошень:'
 status_founded: 'Заснований:'
@@ -935,7 +919,6 @@ status_townblock_untaxed: 'Без податку'
 status_townblock_max_and_minjoindays: 'Для придбання ділянки необхідно проживати в місті від %s до %s днів.'
 status_townblock_minjoindays: 'Для придбання ділянки необхідно проживати в місті більше %s днів.'
 status_townblock_maxjoindays: 'Для придбання ділянки необхідно проживати в місті менше %s днів.'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Ви не можете користуватись національним банком поза столицею.'
 msg_err_unable_to_use_bank_outside_your_town: 'Ви не можете користуватись міським банком поза вашим містом.'
 msg_time_until_a_new_day: 'Час до нового дня: '
@@ -945,7 +928,6 @@ msg_seconds: ' секунд'
 msg_err_invalid_string_nationboard_not_set: 'Неправильний рядок, дошку міста не встановлено.'
 msg_plot_evict: 'Виселення з ділянки успішне.'
 msg_no_one_to_evict: 'Нікого виселяти з цієї ділянки.'
-#Added in 0.46
 nation_help_10: 'Телепорт на спавн нації.'
 msg_nation_spawn_warmup: '<aqua>Очікування телепортації...'
 msg_set_nation_spawn: '<aqua>Успішно змінено спавн нації.'
@@ -973,7 +955,6 @@ msg_spawn_fail_safe_teleport: '<red>Телепортація не вдалася
 msg_err_cannot_set_spawn_cost_more_than: '<red>Ви не можете встановити вартість спавну більшою ніж %s'
 msg_err_ally_isnt_public: '<red>Ваш союзник, %s не увімкнув публічний спавн. В телепортації відмовлено.'
 msg_nation_changed_public: '<red>Публічний статус нації тепер %s.'
-#Added in 0.47:
 status_plot_type: 'Тип ділянки:'
 msg_no_self_jailing: 'Ви не можете ув''язнити себе.'
 online2: ' <green>(Онлайн)'
@@ -994,7 +975,6 @@ enabled: 'Увімкнено'
 disabled: 'Вимкнено'
 forced: 'Примусово'
 adjustable: 'Регулюється'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s не може дозволити собі започаткувати нове місто тут, що коштує %s.'
 msg_no_funds_new_nation2: '<red>Ваше місто не може дозволити собі започаткувати нову націю, що коштує %s.'
 msg_no_funds_claim2: '<red>Місто не може дозволити собі зайняти %s блоків, загальною вартістю %s. Покладіть %s на рахунок міста, використовуючи /t deposit %s'
@@ -1002,11 +982,9 @@ msg_err_cant_afford_blocks2: '<red>Місто не може дозволити �
 msg_err_not_enough_variables: '<red>Недостатньо змінних: '
 nation_rechecked_by_admin: '<aqua>Відстань між містами нації %s була успішно повторно перевірена.'
 msg_err_nation_over_town_limit: '<red>Ваша нація досягла максимальну кількість дозволених міст на націю: %s.'
-#Added in 0.49
 msg_process_claim: 'Ділянка привласнюється...'
 msg_process_unclaim: 'Відмовляємося від ділянки...'
 msg_total_townblocks: 'Всього міських блоків: '
-#Added in 0.50
 friend_list: 'Список друзів'
 not_registered: 'Не зареєстровано.'
 msg_error_missing_comparator: '<aqua>Необхдіно вказати яким чином сортувати.'
@@ -1027,7 +1005,6 @@ msg_couldnt_pay_plot_taxes_multiple: '<aqua>Наступні мешканці н
 msg_bankrupt_town2: '<aqua>Місто %s не змогло сплатити за утримання і розформувалось.'
 msg_bankrupt_nation2: '<aqua>Нація %s не змогла сплатити за утримання і розформувалась.'
 status_embassy_town: 'Посольства у'
-#Added in 0.51:
 msg_error_invalid_comparator_nation: '<aqua>Невірний компаратор. Спробуйте %s.'
 msg_error_invalid_comparator_town: '<aqua>Невірний компаратор. Спробуйте %s.'
 msg_err_merging_for_kings_only: '<aqua>Злиття може бути зроблено тільки лідером нації.'
@@ -1035,7 +1012,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>Лідер нації %s, %s, 
 nation1_has_merged_with_nation2: '<gold>Нація %s погодилася злитися разом з домінуючою нацією %s.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>Чи погоджуєтесь ви розформувати свою націю %s в націю %s. Всі міста та гроші національного банку перейдуть до %s.'
 no_open_towns: 'Немає відкритих міст.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Нація не має союзників.'
 msg_error_nation_has_no_enemies: 'Нація не має ворогів.'
 msg_error_ta_plot_claim: 'Не вказано ім''я гравця, до прикладу: /ta plot claim Ім''яГравцяТут'
@@ -1049,19 +1025,14 @@ msg_err_already_in_a_nation: 'Ваше місто вже в нації.'
 msg_err_nation_not_open: '<red>Нація %s не відкриває усім свої двері. Попросіть у лідера або помічника запрошення.'
 msg_err_nation_homeblock_in_another_world: '<red>Домашній блок вашого міста не в тому ж світі, що і домашній блок столиці нації.'
 status_bank_town_penalty_upkeep: 'Податок на утримання перевищення ліміту учасників:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Ви не можете заспавнитися в %s, оскільки вас позначено як злочинця.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Ви не можете використовувати цю команду, коли ви у в''язниці.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Члени нації не мають дозволу на %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s уже належить до міста.'
 msg_err_cannot_afford_plot_set_type_cost: 'Ви не можете дозволити собі встановити ділянок типом %s вартістю %s'
 msg_plot_set_cost: '<aqua>Вам пред''явлено звинувачення %s за налаштування типу ділянки на: %s'
 msg_err_townspawn_has_not_been_set: '<red>Спавн міста не установлено.'
 msg_err_player_too_far_from_town_spawn: '<red>%s є занадто далеко від вашого спавну міста, щоб отримати запрошення до міста. Максимальна дистанція: %s блоків.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Застава мешканця: '
 msg_mayor_bail_amount: 'Застава мера: '
 msg_king_bail_amount: 'Застава лідера нації: '
@@ -1082,7 +1053,6 @@ homeblock: 'домашній блок'
 townblock: 'ділянка'
 outpost: 'аванпост'
 msg_err_not_same_town: '<aqua>%s не належить вашому місту.'
-#Added in 0.59:
 msg_modes_set: 'Вибрані режими: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Ця ділянка не має пов''язаних метаданих.'
 msg_err_the_metadata_for_key_is_not_registered: 'Метадані для ''%s'' не зареєстровані!'
@@ -1115,28 +1085,19 @@ msg_err_tag_too_long: 'Занадто довгий тег.'
 msg_err_nation_has_not_set_a_spawn_location: 'Нація не встановила місце спавну.'
 msg_err_resident_doesnt_belong_to_any_town: 'Громадянин не належить до жодного міста'
 msg_err_could_not_set_default_modes_for: 'Не вдається встановити стандартні режими для '
-#Added in 0.60
 msg_set_war_allowed_on: 'Війна може відбутися в цьому світі.'
 msg_set_war_allowed_off: 'Війна не може відбутися в цьому світі.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Ви не можете перемкнути PVP, залишилось %s секунд.'
 msg_err_cannot_spawn_x_seconds_remaining: 'Ви не можете використовувати спавн ще %s секунд.'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Ділянка більше не продається.'
 msg_err_x_spawn_disallowed_from_x: '<red>%s спавн не дозволено з %s.'
 msg_the_wilderness: 'Дика місцевість'
 msg_enemy_areas: 'Ворожі території'
 msg_neutral_towns: 'Нейтральні міста'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Не знайдено жодної нації з ім''ям %s'
 msg_err_cannot_unclaim_homeblock: 'Ви не можете розприватити вашу ділянку, використайте "/town set homeblock", щоб перемістити її.'
-#Added in 0.65
 msg_err_rename_cancelled: 'Перейменування було скасовано іншим плагіном.'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '<dark_red>(Зайнято)'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Ця ділянка є частиною групи %s ділянки(ок), підтвердивши, ви купуєте всі з них.'
 msg_plot_group_unclaim_confirmation: 'Ця ділянка є частиною групи %s ділянки(ок), підтвердивши, ви відмовитеся від них.'
 msg_plot_group_toggle_confirmation: 'Ця ділянка є частиною групи %s ділянки(ок), підтвердивши, ви передаєте власність на них всіх.'
@@ -1159,34 +1120,24 @@ msg_set_group_type_to_x: 'Змінено тип групи ділянок на %
 msg_player_successfully_bought_group_x: '%s успішно купив групу ділянок %s'
 status_plot_group_name_and_size: 'Квартал є частиною групи: %s. Група має загалом %s кварталів.'
 msg_player_made_group_not_for_sale: '%s створив групу %s не для продажу.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Ділянки групи не можуть бути налаштовані на в''язничний тип.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Ви повинні вказати назву групи ділянок: /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'Натисніть %s або введіть %s'
 msg_confirmation_spigot_click_cancel: 'Натисніть %s або введіть %s'
 msg_you_cannot_kick_yourself: 'Ви не можете вигнати себе.'
 msg_you_cannot_kick_this_resident: 'Ви не можете вигнати %s, він мер або заступник.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Ділянка: %s належить групі. Використовуйте /plot group fs [кількість]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Ділянка: %s належить групі, використовуйте /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Налаштування %s, керовані адміністратором, запобігають перемиканню з pvp на %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Ви наразі не ув''язненні.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Вам не дозволено створювати іншу сторону порталу у цьому місці.'
-#Added in 0.75
 msg_already_ally: 'Ваша нація вже в союзі з %s.'
-#Added in 0.76
 msg_you: 'Ви'
-#Added in 0.77
 msg_click_town_info: '<green>Натисніть для перегляду екрану статусу міста.'
 msg_click_nation_info: '<green>Натисніть для перегляду екрану статусу нації.'
 msg_click_spawn: '&аНатисніть для спавну у <yellow>%s'
 msg_click_spawn_brief: '<green>[Спавн]'
 msg_spawn_cost: '<green>Ціна спавну = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Сталася помилка під час перезавантаження Towny.'
 msg_reloaded_config: '<dark_green>Конфігурацію успішно перезавантажено.'
 msg_reloaded_perms: '<dark_green>Дозволи успішно перезавантажено.'
@@ -1194,7 +1145,6 @@ msg_reloaded_db: '<dark_green>Базу даних успішно перезав�
 msg_reloaded_lang: '<dark_green>Мовний файл успішно перезавантажено'
 msg_reset_config: '<dark_green>Конфіг було скинуто'
 msg_err_teleport_cancelled: 'Через пересування телепортація скасована.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'друзі'
 msg_cache_block_error_plot_allies: 'союзи'
 msg_cache_block_error_plot_outsiders: 'аутсайдери'
@@ -1210,25 +1160,18 @@ msg_ta_deposit_all_success: 'Успішно переказано %s на рах�
 msg_ta_deposit_all_towns_success: 'Успішно переказано %s на рахунки всіх банків міст.'
 msg_ta_deposit_all_nations_success: 'Успішно переказано %s на рахунки всіх національних банків.'
 bonus_townblocks: 'бонусні квартали'
-#Added in 0.80
 nomad_sing: 'Кочівник'
 msg_new_town_advice: 'Вітаємо зі створенням свого міста! Ваше місто платитиме податок за щоденне обслуговування, який зараз оцінюється в %s. Ви можете внести гроші в банк вашого міста, використовуючи ''/t deposit #''. Без грошей на утримання міста ваше місто може бути вилучено. Ви можете подивитися свої витрати в будь-який час, використовуючи /towny prices. Наступний щоденний податок буде списано через %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Через пошкодження вашу телепортацію скасовано.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Запрошення<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Підтвердження<dark_gray>] <blue>"
 this_message_will_expire2: '<blue>Це питання зникне через %s секунд'
 msg_hover_next_page: 'Наступна сторінка'
 msg_hover_previous_page: 'Попередня сторінка'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Максимальна сума податку може бути встановлена лише для міст з відсотковими ставками."
 msg_town_set_tax_max_percent_amount: "%s встановив %s як максимальний розмір податків."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Ділянка належить групі, використовуйте /plot group toggle'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>Дозволи на цій ділянці скинуто успішно.'
-#Added in 0.86
 status_bank_bankrupt: '(БАНКРУТ)'
 msg_warning_bankrupt: '<dark_red>*** УВАГА, %s СТАНЕ БАНКРУТОМ НАСТУПНОГО ДНЯ ЧЕРЕЗ НЕДОСТАЧУ КОШТІВ ***'
 msg_town_bankrupt_by_upkeep: '<aqua>%s не змогло сплатити за своє утримання і збанкрутувало.'
@@ -1246,7 +1189,6 @@ msg_your_town_payed_upkeep: '<aqua>Ваше місто сплатило денн
 msg_your_nation_payed_upkeep: '<aqua>Ваша нація сплатила денне утримання розміром %s.'
 msg_your_town_couldnt_pay_upkeep: '<aqua>Ваше місто не змогло сплатити денне утримання розміром %s і було розформоване.'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>Ваша нація не змогла сплатити денне утримання розміром %s і було розформоване.'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s не змогло сплатити за своє утримання, досягнуло боргового ліміту і було розформоване.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>Наступні міста не змогли сплатити за своє утримання, досягнули боргового ліміту і були розформованими: '
 msg_unable_to_deposit_x: 'Неможливо покласти %s на рахунок міста.'
@@ -1254,10 +1196,8 @@ msg_unable_to_withdraw_x: 'Неможливо зняти %s з рахунку м
 status_debtcap: 'Ліміт боргу:'
 status_world_explrevert_entity: 'Відновлення вибухів мобів:'
 status_world_explrevert_block: 'Відновлення вибухів блоків:'
-#Added in 0.88
 msg_nation_already_peaceful: '<red>Нація вже мирна.'
 msg_nation_already_not_peaceful: '<red>Нація вже не є мирною.'
-#Added in 0.89
 status_world_friendlyfire: 'ДружнійВогонь:'
 status_world_wildernessmobs: 'Дика природа:'
 msg_outlaw_kick_cooldown: '<red>Ви оголошені поза законом у %s. Ви маєте %s секунд, щоб покинути місто, інакше ви будете телепортовані на вашу точку спавну.'
@@ -1265,14 +1205,11 @@ msg_outlaw_kicked: '<dark_red>Вас не чекають в %s. Вас теле�
 msg_outlaw_town_notify: '<red>На територію вашого міста увійшов %s, особа поза законом.'
 msg_your_town_payed_upkeep_with_debt: '<red>Ваше місто оплатило щоденне утримання розміром %s з боргом.'
 msg_payed_nation_tax_with_debt: '<red>Ваша нація оплатила щоденне утримання розміром %s з боргом.'
-#Added in 0.90
 status_plot_clear_deletion: 'ВидаленняБлоківПриPlotClear:'
 msg_err_plot_clear_disabled_in_this_world: 'Команда /plot clear вимкнена в цьому світі.'
-#Added in 0.91
 msg_universe_attribution: 'Автори: '
 msg_universe_contributors: ' І контрибутори як ви. '
 townblock_plu: 'Квартали'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'Команда newhour виконана успішно'
 town_help_12: 'Відновити місто зі стану руїни.'
@@ -1287,10 +1224,8 @@ msg_time_remaining_before_full_removal: 'Залишилось часу пере�
 msg_time_until_reclaim_available: 'Залишилось часу перед можливістю відновлення: %d годин.'
 msg_reclaim_available: 'Відновлення доступне.'
 msg_ruined_town_being_deleted: "%s було зруйновано протягом %s годин і зараз видаляється."
-#Added in 0.93
 msg_changed_peaceful: '<red>Нейтралітет/мирність міста зараз %s.'
 msg_err_town_unclaim_canceled: '<red>Розприват скасований. Ви не можете розприватити цю територію зараз.'
-#Added in 0.94
 msg_comptype_residents: 'Кількість містян'
 msg_comptype_townblocks: 'Кількість кварталів у власності'
 msg_comptype_balance: 'Банківський рахунок'
@@ -1303,7 +1238,6 @@ npc_created: 'Створено:'
 msg_no_funds_claim_plot: '<red>Ви не можете дозволити собі купити ділянку вартістю %s.'
 msg_no_funds_claim_plot_group: '<red>Ви не можете дозволити собі купити %s ділянок вартістю %s.'
 status_town_title_peaceful: '<aqua>(Мирне)'
-#Added in 0.95
 status_public: '<aqua>(Публічне)'
 msg_days: ' днів'
 msg_comptype_public: 'Публічний статус'
@@ -1328,23 +1262,16 @@ towny_prices_taxes_plot: '<red>    [Податки]    <dark_green>Гравец�
 towny_prices_taxes_shop: '<red>            <dark_green>Магазин: <green>%s <dark_gray>| <dark_green>Посольство: <green>%s'
 towny_prices_town_neutral_tax: '<red>            <dark_green>Нейтралітет: <green>%s'
 towny_prices_plots: '<red>    [Налаштування ділянок]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
 towny_prices_nationname: '<red>Нація: <gold>%s'
 towny_prices_nation_tax: '<red>    [Податки] <dark_green>Місто: <green>%s <dark_gray>| <dark_green>Нейтралітет: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>Захоплене місто %s не змогло заплатити податок нації і перетворилося на руїни.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>Ці міста не змогли оплатити податок нації і тому перетворилися на руїни: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Ваше місто звільнено від податків нації.'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Статус руїни'
 msg_comptype_forsale: 'Статус На продаж'
 msg_comptype_bankrupt: 'Статус банкрута'
 msg_ruined: '<red>(Руїни)'
 msg_bankrupt: '<red>(Банкрут)'
-#Added in 0.98
 msg_del_town2: '<aqua>Місто %s було видалене!'
 msg_ruin_town: '<aqua>Місто %s стало руїнами!'
 gui_title_select_plot_type: 'Виберіть тип ділянки'
@@ -1360,7 +1287,6 @@ flatfile_err_exception_reading_district_file_at_line: 'Помилка заван
 flatfile_dbg_loading_district_list: 'Завантаження списку районів...'
 msg_ta_removed_all_titles_and_surnames_removed: 'Імена і прізвища всіх жителів було очищено.'
 msg_err_homeblock_already_set_here: 'Ця локація уже є homeblock-ом вашого міста.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>Об''єднання може бути проведено тільки мером.'
 msg_town_merge_err_not_close: '<red>Місто %s знаходиться занадто далеко від вашого. Їхній домашній блок має бути в межах %d кварталів від вашого домашнього блоку.'
 msg_town_merge_request_sent: '<aqua>Запит на злуку надісланий меру %s.'
@@ -1382,7 +1308,6 @@ msg_town_merge_success: '<aqua>Місто %s, належить %s, успішн�
 msg_town_merge_cost_withdraw: 'Витрати на злуку міст'
 msg_town_merge_transaction_reason: 'Злука Міста'
 towny_prices_town_merge: '<yellow>[Злука] <dark_green>Базова вартість: <green>%s <dark_gray>| <dark_green>За ділянку: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Ваша нація не в союзі з %s.'
 msg_err_nation_not_enemies_with: '<red>Ваша нація і %s не ворогують.'
 msg_err_nation_already_enemies_with: '&сВаша нація і %s уже вороги.'
@@ -1392,20 +1317,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s і %s не ворогують.'
 msg_err_nation_already_allied_with_2: '<red>%s уже в союзі з %s.'
 msg_err_nation_already_enemies_with_2: '<red>%s і %s вороги.'
 msg_ta_allies_enemies_updated: '<aqua>Союзники/Вороги %s оновлені.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>Натисніть, щоб побачити детальнішу інформацію.'
 msg_err_nation_capital_too_many_residents: '&сУ сьогоднішній столиці занадто багато жителів, щоб бути заміненою на %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&сПопередження: Вилучення вашої нації означатиме, що ваше місто перевищує ліміт населення %d, що призведе до вилучення %d жителів.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '&сВи не можете використовувати цю команду в містах.'
 msg_command_limited: 'Ви можете використовувати цю команду лише на своїх ділянках.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Запривачений на:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Дикі терени посідають статус %s у всіх світах.'
 msg_regenerations_use_x_in_all_worlds: 'Регенерація %s у всіх світах.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Ви не можете запустити цю команду, оскільки ви не живете у %s.'
 msg_err_this_jail_has_no_cells: 'У цій в''язниці нема камер.'
 msg_err_no_cell_found_at_this_location: 'На цій території нема камер для в''язниці.'
@@ -1429,7 +1349,6 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Не виходьте з с�
 jail_plu: 'В''язниці'
 jail_sing: 'В''язниця'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s не грав достатньо довго, щоб бути ув''язненим, очікуйте ще %s'
-#Added in 0.108
 msg_town_not_peaceful: '<aqua>Місто не може дозволити собі мирний статус.'
 msg_town_already_peaceful: '<aqua>Місто вже мирне.'
 msg_town_already_not_peaceful: '<aqua>Місто уже не мирне.'
@@ -1437,7 +1356,6 @@ msg_town_cant_peaceful: '<aqua>Місто не змогло дозволити �
 msg_town_paid_for_neutral_status: '<aqua>Ваше місто заплатило %s щоб продовжити мирний статус.'
 msg_nation_paid_for_neutral_status: '<aqua>Ваша нація заплатила %s щоб продовжити мирний статус.'
 your_town_has_been_invited_to_join_nation: 'Ваше місто запрошено до нації: %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>Нема неактивних учасників для чистки.'
 msg_purging_will_remove_the_following_residents: '<aqua>Будь ласка, підтвердіть, що ви хочете вилучити наступних жителів: %s'
 msg_purge_complete_x_removed: '<aqua>Чистку завершено, %s жителів вилучено.'
@@ -1446,7 +1364,6 @@ msg_purge_reached_50_residents: '<aqua>Чистка досягла 50, пода�
 msg_err_days_must_be_greater_than_0: 'Дні повинні бути більшими за 0.'
 msg_err_outlawed_players_no_teleport: '<dark_red>Ви поза законом у місті, у якому ви зараз перебуваєте і тому не можете телепортуватися!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>Ви не можете використовувати цю команду, якщо ви у місті, яке оголосило вас поза законом.'
-#Added in 0.110
 msg_safe_mode: "[Error] Увімкнено безпечний режим!"
 msg_safe_mode_base: '[Error] Towny перейшов у безпечний режим через помилку! '
 msg_safe_mode_player: 'Попросіть адміністратора перевірити консоль сервера.'
@@ -1456,7 +1373,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Створити аванп
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Ви переміщали свою ділянку недавно! Зачекайте ще %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Ви не можете перемістити ваш домашній блок на стільки кварталів, ліміт %s, це місце у %s кварталів звідси.'
 msg_err_usingtowny_disabled: 'Цей світ вільний від усього, пов''язаного з Towny. Використовуйте /townyworld toggle usingtowny.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Цей квартал уже є частиною групи %s. Ви впевнені, що хочете передати його групі %s?'
 msg_townblock_transferred_from_x_to_x_group: 'Квартал перенесено від %s до %s групи ділянок.'
 msg_plotgroup_deleted: 'Групу ділянок %s вилучено.'
@@ -1467,7 +1383,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Цей квартал у
 map_hover_plot_group: 'Група ділянок: '
 map_hover_plot_group_size: ' Розмір: '
 map_hover_plots: '%s ділянок'
-#Added in 0.112
 msg_checking_for_updates: 'Перевірка наявності оновлень...'
 msg_no_new_updates: 'Оновлень не знайдено.'
 msg_new_update_available: '<aqua>Нове оновлення доступне: %s | Поточна версія: %s'
@@ -1479,7 +1394,6 @@ msg_click_purchase: 'Клацніть, щоб придбати'
 msg_you_must_join_this_town_to_claim_this_plot: 'Ви повинні приєднатися до міста %s щоб купити цю ділянку. Чи хотіли б ви продовжити?'
 msg_legacy_economy_detected: "<aqua>Ваша економічна реалізація Towny встановлена на Legacy, рекомендується дозволити Towny оновити себе до використання сучасної реалізації. Це покращить сумісність з більшою кількістю економічних плагінів."
 msg_click_to_convert_to_modern_economy: "<aqua>Натисніть тут, щоб конвертувати економічну систему Towny з застарілої на сучасну."
-#Added in 0.113
 status_trustedlist: 'Довірені'
 msg_click_to_edit: '<gold>Клацніть, щоб редагувати.'
 permission_gui_header: 'Інтерфейс прав Towny'
@@ -1504,7 +1418,6 @@ msg_err_ally_limit_reached: 'Ваша нація досягнула ліміту
 msg_err_ally_limit_reached_cannot_accept: 'Нація %s досягла межі кількості союзників і не може прийняти нових.'
 msg_err_ally_limit_reached_cannot_send: 'Ваша нація досягла межі союзників і не може запросити %s стати вашим союзником.'
 msg_err_ally_limit_reached_cannot_send_targetNation: 'Нація %s досягла межі кількості союзників і не може запросити %s стати вашим союзником.'
-#Added in 0.114
 msg_err_group_not_found: 'Групу %s не знайдено.'
 msg_err_expected_command_format: 'Неправильний синтаксис, очікувалось: %s'
 msg_err_group_already_has_node: 'Група %s уже має пункт %s.'
@@ -1529,20 +1442,14 @@ help_ta_perms_nationrankadd: 'Додає звання нації до файлу
 help_ta_perms_nationrankremove: 'Вилучає звання нації з файлу townyperms.'
 help_ta_perms_nationrankrename: 'Перейменовує національний рейтинг у файлі townyperms'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Цей громадянин не належить нації.'
-#Added in 0.115
 msg_comptype_founded: 'Дата заснування'
 msg_err_must_be_greater_than_or_equal_to: 'Кількість повинна бути більшою або рівною %s'
 err_invalid_yaml: 'Помилка завантаження: Не вдалося завантажити файл %s (чи проходить він через парсер yaml?).'
-#Added in 0.116
 msg_town_map_color_changed: '<aqua>Колір міста на карті змінено на %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Цей квартал не можна додати до групи, оскільки він не типу: %s'
-#Added in 0.118
 status_title_nopvp: '<green>(Без PVP)'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Ви не можете посадити громадянина у в''язницю, оскільки він перебуває в зоні, у якій він оголошений поза законом.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Ви не можете посадити громадянина у в''язницю, оскільки він перебуває в зоні, де він оголошений ворогом.'
-#Added in 0.120
 msg_resident_prompt: 'Уведіть ім''я гравця в чаті або q, щоб вийти. Цей запит зникне через 30 секунд.'
 msg_prompt_cancel: 'Запит скасовано або час на прийняття минув.'
 status_home_element: ' <gray>[Дім: %s]'
@@ -1560,13 +1467,10 @@ help_menu_command: '<blue>'
 help_menu_subcommand: '<aqua>'
 help_menu_explanation: '<gray>'
 help_menu_requirement: '<red>'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Міста %s покинуть вашу націю, оскільки після злуки вони не будуть достатньо близько до нової столиці.'
-#Added in 0.123
 msg_err_invalid_townyworld: "'%s' не є світом Towny."
 msg_err_enter_world_name_first: 'Будь ласка, уведіть спочатку назву світу.'
 msg_wilderness_use_set_to: '<aqua>Використання дикої природи встановлено %s в %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Неправильна відповідь! Уведіть q, щоб вийти або повернутися до попереднього запитання.'
 msg_setup_full_guide_link: '<aqua>Натисніть сюди для переходу до інструкції з встановлення.'
 msg_setup_wildernessuse: 'Чи хотіли б ви увімкнути use у диких землях? Ця дія дозволить гравцям ламати/будувати блоки на диких землях.'
@@ -1576,14 +1480,12 @@ msg_setup_town_cost: 'Якою повинна бути вартість для �
 msg_setup_nation_cost: 'Скільки повинно коштувати створення нації? За замовчуванням 1000.'
 msg_setup_townblock_cost: 'Скільки має коштувати приватизація кварталу? За замовчуванням 25. Квартал має однаковий розмір з чанком (за замовчуванням)'
 msg_setup_success: 'Дані конфігурації успішно змінено на нові.'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s заспаввнився недавно і має тимчасовий захист.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Ви втратили ваш респавн-захист.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'Ви не можете підіймати речі під час респавн-захисту.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Столиця:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1596,7 +1498,6 @@ status_unknown: 'невідомо'
 msg_nationzone_override_set_to: '%s установив зону нації на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: 'Національну зону %s вилучено.'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Розмір національної зони:'
 #Shown when a player adds people to their friends list.
@@ -1640,21 +1541,18 @@ msg_purge_complete: 'Очистку гравців завершено: %s вил
 msg_you_have_been_given_bonus_blocks: 'Вам надано %s бонусних кварталів.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Ваше місто не може придбати бонусні ділянки. Ліміт досягнуто.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Столиці міст не може змінити мирний статус.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Зона нації навколо міста тепер %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Ваше місто не має національних зон для перемикання!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Ціна утримання нації заснована на <green>%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'кількість міст.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'рівень нації (кількість жителів)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Ув''язнений мером.'
 #Jail causes
@@ -1685,30 +1583,22 @@ msg_jailed_war_prisoner: 'Якщо ви в''язень війни, вас буд
 msg_jailed_title: 'Що ж, вас ув''язнено :('
 #Jail handbook author
 msg_jailed_author: 'В''язниця Towny.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Місто не має союзників згідно зі списком.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Місто не має ворогів згідно зі списком.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Час на підтвердження минув.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Звук каналу вимкнено'
 tc_player_channel_sound_unmuted: 'Звук каналу увімкнено'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'На вашій ділянці знаходиться чужинець. Ви не можете змінити свій статус PvP!'
-#Added in 0.136
 msg_view_on_web: '<gray>Натисніть для перегляду на сайті.'
-#Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>Місто %s погодилося на злуку з містом, яке переважає %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Вартість нейтралітету:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Якщо ви заплатили реальні гроші за ці квартали, будь ласка, розумійте: сервер, на якому ви граєте порушує Minecraft EULA і ліцензію Towny.'
 #Line 2 of the givebonus warning.
@@ -1717,49 +1607,37 @@ msg_ptw_warning_2: 'Команда Towny ніколи не планувала, �
 msg_ptw_warning_3: 'Якщо ви все-таки заплатили реальні гроші, вам варто розглянути гру на серверах, які поважають рішення команди Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Вас запросили приєднатися до міста %s<blue> (Нація: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Вашому місту недостатньо грошей, щоб розприватити цю ділянку: %s вимагається.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Ваше місто заплатило %s, щоб розприватити цю ділянку.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Зняття привату з цієї ділянки коштуватиме %s, чи хочете ви продовжити?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Зачекайте %s секунд перед тим, як ви зможете змінити ім''я вашого міста знову.'
-#Added in 1.141
 msg_newday_already_running: 'Нове завдання дня вже виконується.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Ви зможете перемкнути нейтралітет через %s секунд.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Цю команду не можна використовувати в консолі.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Параметр unlimitedclaims у місті %s тепер %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Ви не маєте доступних для приватизації кварталів, чи хочете ви увімкнути безлімітний приват для %s'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ви не можете покинути свою націю: ваше місто завойоване.'
 msg_err_console_only: 'Ця команда може бути використана лише за допомогою консолі.'
 msg_err_player_only: 'Цю команду може використати лише гравець.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Титульні сповіщення, які буде показано під час перетину кордонів є %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Виконання цієї команди призведе до скидання файлу config.yml. Чи бажаєте продовжити?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Роблячи це, ви перевизначаєте установлені обмеження для мешканців у конфігурації сервера. Ви все одно хочете продовжити?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Вилучено %d недопустимі пункти спаунів на аутпості.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Ваше місто збанкрутувало, додайте грошей до вашого банку, використовуючи команду /town deposit {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Ви не можете використовувати цю команду, тому що ви вже є членом міста. Якщо ви хочете продовжити, вам необхідно буде покинути його, використовуючи команду ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
@@ -1782,12 +1660,10 @@ status_plot_hover: '%s:'
 msg_usage: 'Використання: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Нема чого зображати!'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'Ця нація не пов''язана з вами.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Це місто не пов''язане з вами.'
-#Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'Це місце вже має тюремну камеру.'
 #Title line of the /plot perm hud.
@@ -1836,7 +1712,6 @@ msg_perm_hud_plot_for_sale: 'На продаж: '
 msg_perm_hud_no: 'Ні'
 #Seen in /plot perm hud:
 msg_perm_hud_yes: 'Так'
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Місто %s установило свій рівень %s.'
 #Message shown when unsetting a manual town level.
@@ -1847,14 +1722,11 @@ msg_err_town_not_allowed_purchased_blocks: 'Місто %s не може прид
 msg_purchased_blocks_unset: 'Місто %s позбулося придбаних кварталів.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'Місто %s отримало %s кварталів, на цей час усього %s кварталів.'
-#Added in 0.154
 msg_comptype_upkeep: 'Утримання'
-#Added in 0.155
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'Податок на утримання в міста %s тепер %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Ваше місто досягнуло ліміту %d %s ділянок.'
-#Added in 0.156
 msg_spawn_cost_free: 'Безкоштовно'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Ця ділянка уже належить до типу %s.'

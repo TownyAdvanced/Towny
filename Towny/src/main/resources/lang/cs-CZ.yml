@@ -494,8 +494,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>The town %s již nemá do
 msg_not_enough_residents_capital: 'Město %s nemá dostatek obyvatel, aby bylo hlavním městem frakce.'
 list_page: 'Strana %s z %s'
 list_err_not_enough_pages: '<red>Pouze %s stránek k dispozici'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Nelze nastavit městskou daň pod %s.'
 msg_unknown_rank_available_ranks: 'Neznámá hodnost %s. Povolené hodnosti jsou %s.'
 msg_no_permission_to_give_rank: 'Nemáš dostatečné oprávnění k udělení této hodnosti.'
@@ -539,7 +537,6 @@ msg_err_cant_use_bed: '<dark_red>Nevlastníš parcelu, na které postel stojí, 
 msg_town_plots_revenue_disclaimer: '<green>Zobrazený zisk je odhad a roli hraje, zda dokáže vlastník parcely platit.'
 msg_town_set_perm_syntax_error: 'Neplatná kombinace slov pro tento příkaz. Zkus ''/town set perm ?'' Pro správnou syntaxi příkazu.'
 msg_plot_set_perm_syntax_error: 'Neplatná kombinace argumentů pro tento příkaz. Pro správný syntax zadejte ''/plot set perm ?''.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Tento obyvatel nepatří do tohoto města.'
 msg_err_resident_already_an_outlaw: 'Tento hráč je již vaším městem považován vyhoštěnce.'
 msg_err_not_outlaw_in_your_town: 'Nemůžete nastavit člena města jako vyhoštěnce.'
@@ -552,22 +549,15 @@ msg_err_outlaw_in_open_town: 'Nelze se připojit k otevřenému městu, které v
 msg_you_are_an_outlaw_in_this_town: '<dark_red>Měj se na pozoru %s tě považuje za vyhoštěnce, smrt zde může znamenat vězení.'
 msg_err_town_not_close_enough_to_nation: 'Blok domovu %s není dost blízko hlavního bloku domovu pro připojení tvé frakce.'
 msg_nation_town_moved_their_homeblock_too_far: 'Blok domovu %sbyl přesunut příliš daleko od bloku domova hlavního města vaší frakce a byl odstraněn z vaší frakce.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Neplatný radius. Použijte %s nebo méně.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Maximální počet obyvatel (%s) je již dosažen.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>Hráč %s nebyl na serveru dostatečně dlouho, aby mohl být pozván do města, počkejte prosím.'
 msg_cant_toggle_pvp_outsider_in_town: 'Ve vašem městě je cizinec a nemůžete změnit stav PVP!'
 msg_err_unclaim_not_outpost: 'Nelze zrušit nárok, tento pozemek není základna!'
 outpost_plu: 'Základny'
-#Added in 0.36
 msg_err_not_enough_residents: 'Pro tuto akci není ve městě dostatek obyvatel.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Poškození vlastních je zakázáno!'
-#Added in 0.38
 msg_claim_error: 'Jiný plugin zastavil nárokování (%s)/(%s) městských ploků, nelze dokončit operaci.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Cestování městských spawnů je povoleno pouze během války.'
 msg_err_town_spawn_forbidden_peace: '<red>Cestování pomocí městské teleportace je zakázáno během války.'
 msg_err_town_spawn_nation_forbidden_war: '<red>Teleportace do ostatních měst v rámci frakce je povolena pouze během války.'
@@ -576,9 +566,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Teleportace do měst spojenců tvé
 msg_err_town_spawn_ally_forbidden_false: '<red>Teleportace do měst spojenců tvé frakce je během války zakázaná.'
 msg_err_public_spawn_forbidden_war: '<red>Teleportace do ostatních měst v rámci frakce je povolena pouze během války.'
 msg_err_public_spawn_forbidden_peace: '<red>Teleportace do ostatních měst je během války zakázána.'
-#Added in 0.40
 mayor_help_9: 'Pokus se vzdát se výspy'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Pozvánky'
 invite_sent_by: 'Pozvánku odeslal'
 invite_help_1: 'Přijme pozvánku pro připojení se do města'
@@ -640,16 +628,13 @@ you_have_been_requested_to_ally: 'Byli jste požádáni o spojenectví '
 this_message_will_expire: 'Toto automaticky vyprší za 20 sekund'
 player_sing: 'Hráč'
 nation_zone_this_area_under_protection_of: 'Tato část %s je pod ochranou %s'
-#Added in 0.42
 you_have_been_invited_to_join2: 'Byl jsi pozvaný do %s'
 you_have_been_requested_to_ally2: 'Dostal jsi žádost o spojenectví od %s'
-#Added in 0.43
 town_help_11: 'Vytvoří nové město. Používej ''_'' místo mezer.'
 changed_plot_town: '<aqua>Úspěšně jsi převedl parcelu na město%s!'
 not_standing_in_plot: 'Nejsi v platném pozemku!'
 msg_err_homeblock_has_not_been_set: 'Nebyl nastaven blok domova použij /town se homeblock.'
 msg_err_spawn_not_within_homeblock: 'Spawn není v bloku domova použij /town set homeblock.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Chyba: Neplatný příkaz!'
 tc_settings_reloaded: '[TownyChat] Nastavení znovu načteno!'
@@ -691,7 +676,6 @@ msg_err_over_outposts_limit: 'Nemůžete se teleportovat k vaší základnu, jst
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: 'Psanci:'
-online: '<green>(Online)'
 #Used in mayor hover text in /town status screen.
 registered_last_online: '<dark_green>Registrován: <green>%s <dark_gray>| <dark_green>Naposledy online: <green>%s'
 #Used on /plot perm, /res
@@ -717,7 +701,6 @@ status_friends: 'Přátelé'
 rank_list_title: '%sSeznam hodností'
 rank_list_mayor: 'Starosta:'
 status_title_capital: '<aqua>(Hlavní město)'
-status_title_pvp: '<dark_red>(PVP)'
 status_title_open: '<aqua>(Otevřeno)'
 status_town_board: 'Tabule:'
 status_founded: 'Založeno:'
@@ -755,7 +738,6 @@ status_res_plottax: 'Celkové daně pozemku:'
 status_res_totaltax: 'Celkem k zaplacení:'
 status_townblock_plottax: 'Daň za pozemek: '
 status_townblock_untaxed: 'Nezdaněno'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Nemůžete využít svou frakční banku mimo hlavní město frakce.'
 msg_err_unable_to_use_bank_outside_your_town: 'Nemůžete využít své městské banky mimo vaše město.'
 msg_time_until_a_new_day: 'Čas do nového dne: '
@@ -765,7 +747,6 @@ msg_seconds: ' vteřiny'
 msg_err_invalid_string_nationboard_not_set: 'Neplatný řetězec, frakční tabule není nastavena.'
 msg_plot_evict: 'Pozemek úspěšně vystěhován.'
 msg_no_one_to_evict: 'Nikdo k vystěhování z tohoto pozemku.'
-#Added in 0.46
 nation_help_10: 'Telepot na spawn frakce.'
 msg_nation_spawn_warmup: '<aqua>Čekám na teleport...'
 msg_set_nation_spawn: '<aqua>Úspěšně změněn spawn frakce.'
@@ -791,10 +772,8 @@ msg_spawn_cost_set_to: '<aqua>%s nastavil cenu použití /%s spawn na %s'
 msg_err_cannot_set_spawn_cost_more_than: '<red>Nelze nastavit náklady pro teleport na spawn vyšší než %s'
 msg_err_ally_isnt_public: '<red>Váš spojenec %snemá povolené veřejné spawování. Teleportování bylo odepřeno.'
 msg_nation_changed_public: '<red>Veřejný status frakce je nyní %s.'
-#Added in 0.47:
 status_plot_type: 'Typ pozemku:'
 msg_no_self_jailing: 'Nemůžeš uvěznit sám sebe.'
-online2: ' <green>(Online)'
 build: 'Stavění'
 destroy: 'Ničení'
 switch: 'Přepínání'
@@ -812,17 +791,14 @@ enabled: 'Povoleno'
 disabled: 'Zakázáno'
 forced: 'Vynuceno'
 adjustable: 'Nastavitelné'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s si nemůže si dovolit zalošit nové město, které stojí %s.'
 msg_no_funds_new_nation2: '<red>Město si nemůže dovolit založit nový národ, který stojí %s.'
 msg_no_funds_claim2: '<red>Město si nemůže dovolit získat pozemek %s městských bloků za cenu %s. Přidejte %s do městské pokladnice pomocí /t deposit %s'
 msg_err_cant_afford_blocks2: '<red>Město si nemůže dovolit získat pozemek %s městských bloků za cenu %s. Přidejte %sDo městské pokladnice pomocí /t deposit %s'
 msg_err_not_enough_variables: '<red>Nedostatek proměnných: '
-#Added in 0.49
 msg_process_claim: 'Zpracovávám zabrání parcely...'
 msg_process_unclaim: 'Zpracovávám uvolnění parcely...'
 msg_total_townblocks: 'Celkem parcel: '
-#Added in 0.50
 friend_list: 'Seznam přátel'
 not_registered: 'Neregistrován.'
 number_of_residents: '(Počet obyvatel)'
@@ -832,12 +808,10 @@ nation_name: 'Název národa'
 msg_bankrupt_town2: '<aqua>%s si nemohl dovolit zůstat městem.'
 msg_bankrupt_nation2: '<aqua>%s si nemohl dovolit zůstat národem.'
 status_embassy_town: 'Ambasády v'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Národ nemá žádné spojence.'
 msg_error_nation_has_no_enemies: 'Stát nemá žádné nepřátele.'
 msg_error_ta_plot_claim: 'Chybí jméno hráče, např.: /ta plot claim [jméno hráče]'
 msg_error_no_player_with_that_name: 'Nebyl nalezen žádný hráč se jménem %s'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s již patří do města.'
 msg_err_unable_to_pay_bail: 'Nemůžeš si dovolit kauci.'
 msg_player_is_not_online: '%s není online.'
@@ -852,15 +826,11 @@ msg_err_town_doesnt_belong_to_any_nation: 'Město nepatří do žádného národ
 msg_err_mayor_doesnt_belong_to_town: 'Starosta nepatří do města.'
 msg_err_tag_too_long: 'Tag je příliš dlouhý.'
 msg_err_resident_doesnt_belong_to_any_town: 'Hráč nepatří do žádného města'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Parcela již není na prodej.'
 msg_the_wilderness: 'Divočina'
 msg_enemy_areas: 'Nepřátelské oblasti'
 msg_neutral_towns: 'Neutrální města'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Nenalezen žádný národ s názvem %s'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '<dark_red>(Obsazeno)'
 msg_plot_group_set_for_sale: 'Skupina %s je na prodej!'
 msg_plot_renamed_from_x_to_y: 'Parcela %s přejmenována na %s.'
@@ -868,7 +838,6 @@ msg_err_plot_group_specify_price: 'Specifikujte, prosím, cenu - /plot group fs 
 msg_confirmation_spigot_click_accept: 'Klikni na %s nebo napiš %s'
 msg_confirmation_spigot_click_cancel: 'Klikni na %s nebo napiš %s'
 msg_you_cannot_kick_yourself: 'Nemůžeš vyhodit sám sebe.'
-#Added in 0.76
 msg_you: 'Ty'
 msg_spawn_cost: '<green>Cena za teleport: <yellow>%s'
 msg_reloaded_config: '<dark_green>Konfigurace úspěšně znovu načtena.'
@@ -877,33 +846,26 @@ msg_reloaded_db: '<dark_green>Databáze úspěšně znovu načtena'
 msg_reloaded_lang: '<green>Jazykový soubor úspěšně znovu načten'
 msg_reset_config: '<dark_green>Konfigurace byla obnovena'
 msg_err_teleport_cancelled: 'Teleport zrušen kvůli tvému pohybu.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'přátelé'
 msg_cache_block_error_plot_allies: 'spojenci'
 msg_cache_block_error_plot_outsiders: 'cizinci'
 msg_cache_block_error_plot_town_members: 'členové města'
 msg_confirm_purchase: 'Bude tě to stát %s. Pokračovat?'
 bonus_townblocks: 'bonusové parcely'
-#Added in 0.80
 nomad_sing: 'Nomád'
 msg_new_town_advice: 'Gratulujeme k založení vlastního města! Město musí platit denní poplatek, který je aktuálně %s. Na účet města lze finance vložit pomocí ''/t deposit #''. Pokud město nebude mít na zaplacení poplatku, bude zrušeno. Veškeré ceny a poplatky lze zobrazit pomocí ''/towny prices''. Denní poplatek bude vybírán za %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Teleport zrušen kvůli tvému zranění.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Pozvánka<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Potvrzení<dark_gray>] <blue>"
 this_message_will_expire2: '<blue>Toto automaticky vyprší za %s vteřin'
 msg_hover_next_page: 'Další strana'
 msg_hover_previous_page: 'Předchozí strana'
-#Added in 0.86
 status_bank_bankrupt: '(BANKROT)'
 msg_warning_bankrupt: '<dark_red>*** VAROVÁNÍ, %s ZÍTRA ZBANKROTUJE Z DŮVODU NEDOSTATKU FINANCÍ ***'
 msg_your_town_payed_upkeep: '<aqua>Tvoje město zaplatilo denní poplatek %s.'
 msg_your_nation_payed_upkeep: '<aqua>Tvůj národ zaplatil denní poplatek %s.'
 status_debtcap: 'Limit dluhu:'
-#Added in 0.91
 msg_universe_attribution: 'Autoři: '
-#Added in 0.94
 msg_comptype_residents: 'Počet obyvatel'
 msg_comptype_balance: 'Stav účtu'
 msg_comptype_online: 'Online hráči'
@@ -915,7 +877,6 @@ npc_created: 'Vytvořeno:'
 msg_no_funds_claim_plot: '<red>Nemůžeš si dovolit zabrat parcelu stojící %s.'
 msg_no_funds_claim_plot_group: '<red>Nemůžeš si dovolit zabrat celkem %s parcel stojících %s.'
 status_town_title_peaceful: '<aqua>(Mírumilovný)'
-#Added in 0.95
 status_public: '<aqua>(Veřejné)'
 msg_days: ' dnů'
 msg_comptype_public: 'Stav přístupnosti'
@@ -941,7 +902,6 @@ msg_ruined: '<red>(Ruiny)'
 msg_bankrupt: '<red>(Bankrot)'
 msg_town_merge_failed: '<red>Sloučení selhalo.'
 msg_town_merge_cancelled: '<red>Sloučení zrušeno.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Zabrano:'
 msg_jail_cell_set: 'Vězeňská cena nastavena.'
@@ -957,7 +917,6 @@ msg_town_already_not_peaceful: '<aqua>Město již není mírumilovné.'
 msg_safe_mode_player: 'Řekněte správci, aby zkontroloval konzoli serveru.'
 map_hover_plot_group_size: ' Velikost: '
 map_hover_plots: '%s pozemky'
-#Added in 0.112
 msg_checking_for_updates: 'Kontrola aktualizací...'
 msg_no_new_updates: 'Nenalezeny žádné aktualizace.'
 msg_new_update_available: '<aqua>K dispozici nová aktualizace: %s | Současná verze: %s'
@@ -967,15 +926,12 @@ msg_latest_version: '<dark_green>Verze Towny na serveru: <green>%s <dark_green>|
 msg_up_to_date: '<green>Máte aktualizováno.'
 msg_click_purchase: 'Klikni pro zakoupení'
 msg_you_must_join_this_town_to_claim_this_plot: 'Abys mohl/a zabrat tuto parcelu, musíš se připojit k městu %s. Chceš se k němu připojit a pokračovat v zabírání?'
-#Added in 0.113
 status_trustedlist: 'Důvěryhodný'
 msg_click_to_edit: '<gold>Klikni pro úpravu.'
 msg_err_there_is_no_town_or_nationrank_called_x: 'Neexistuje %s s názvem %s.'
 msg_title_group_permissions: '%s oprávnění'
 help_ta_perms_listgroups: 'Seznam skupin.'
-#Added in 0.115
 msg_comptype_founded: 'Datum založení'
-#Added in 0.118
 status_title_nopvp: '<green>(Bez PVP)'
 status_home_element: ' <gray>[Domov: %s]'
 status_registered: 'Registrováno:'
@@ -987,7 +943,6 @@ status_jailed: 'Uvěznění:'
 status_bad_yes: '<red>ANO'
 status_good_no: '<green>NE'
 status_resident_tax_title: 'Daň od %s'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Hlavní město:'
 msg_err_console_only: 'Tento příkaz lze použít pouze přímo z ovládacího panelu.'

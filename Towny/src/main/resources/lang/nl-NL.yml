@@ -338,8 +338,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>De stad %s heeft niet lan
 msg_not_enough_residents_capital: '<aqua>De stad %s heeft niet genoeg inwoners om de hoofdstad van de natie te zijn.'
 list_page: '<aqua>Pagina %s van %s'
 list_err_not_enough_pages: '<red>Alleen %s pagina''s beschikbaar'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'U kunt uw stad belasting niet onder %s instellen.'
 msg_unknown_rank_available_ranks: 'Onbekende rang %s. Beschikbare rangen zijn %s.'
 msg_no_permission_to_give_rank: 'Je hebt geen toestemming om deze rank te geven.'
@@ -383,7 +381,6 @@ msg_err_cant_use_bed: '<dark_red>Je bent niet de eigenaar van het land dat dit b
 msg_town_plots_revenue_disclaimer: '<green>Getoonde opbrengsten is geschat en of de eigenaar van de plot kan betalen is een factor.'
 msg_town_set_perm_syntax_error: 'Ongeldige woordcombinatie voor dit commando. Zie ''/town set perm ?'' voor juiste commando syntax.'
 msg_plot_set_perm_syntax_error: 'Ongeldige woordcombinatie voor dit commando. Zie ''/plot set perm ?'' voor juiste commando syntax.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Die inwoner behoort niet tot die stad.'
 msg_err_resident_already_an_outlaw: 'Die speler wordt door uw stad al als een outlaw beschouwd.'
 msg_err_not_outlaw_in_your_town: 'Je kunt een stedelid niet als outlaw instellen.'
@@ -396,22 +393,15 @@ msg_err_outlaw_in_open_town: 'Je kunt je niet aansluiten bij een open stad die j
 msg_you_are_an_outlaw_in_this_town: '<dark_red>Wees voorzichtig %s beschouwt je als een outlaw, hier sterven kan gevangenisstraf betekenen.'
 msg_err_town_not_close_enough_to_nation: 'Het thuisblok van %s is te ver van het thuisblok van uw hoofdstad om zich bij uw natie aan te sluiten.'
 msg_nation_town_moved_their_homeblock_too_far: 'Het thuisblok van %s werd te ver van het thuisblok van uw hoofdstad verplaatst en is uit uw natie verwijderd.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Ongeldige straal hoeveelheid. Gebruik een %s of minder.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Maximum aantal inwoners (%s) al bereikt.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>De speler %s is nog niet lang genoeg op de server om uitgenodigd te worden voor een stad, even geduld alstublieft.'
 msg_cant_toggle_pvp_outsider_in_town: 'Er is een buitenstaander in je stad, je kunt je pvp status niet veranderen!'
 msg_err_unclaim_not_outpost: 'Kon niet unclaimen, dit plot is niet een outpost!'
 outpost_plu: 'Outposts'
-#Added in 0.36
 msg_err_not_enough_residents: 'Er zijn niet genoeg inwoners in deze stad om dat te doen.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Vriendelijk vuur is uitgeschakeld!'
-#Added in 0.38
 msg_claim_error: '<red>Een andere plugin heeft de claim van (%s)/(%s) townblocks gestopt, waardoor de bewerking niet kon worden voltooid.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Naar de Stadspawn reizen is alleen toegestaan tijdens oorlogen.'
 msg_err_town_spawn_forbidden_peace: '<red>Naar de Stadspawn reizen is verboden tijdens oorlogen.'
 msg_err_town_spawn_nation_forbidden_war: 'Stad spawnen naar andere steden in jouw land is alleen toegestaan tijdens oorlog.'
@@ -420,9 +410,7 @@ msg_err_town_spawn_ally_forbidden_war: 'Stad spawnen naar andere steden gealliee
 msg_err_town_spawn_ally_forbidden_false: 'Stad spawnen naar andere steden geallieerd met jouw land is alleen toegestaan tijdens oorlog.'
 msg_err_public_spawn_forbidden_war: 'Publieke stad spawnen naar andere steden is alleen toegestaan tijdens oorlog.'
 msg_err_public_spawn_forbidden_peace: 'Publieke stad spawnen naar andere steden is alleen toegestaan tijdens oorlog.'
-#Added in 0.40
 mayor_help_9: 'Probeer een outpost te unclaimen.'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Uitnodigingen'
 invite_sent_by: 'Uitnodiging verstuurd door'
 invite_help_1: 'Accepteer een uitnodiging om toe te treden tot een stad'
@@ -457,9 +445,7 @@ successful_cancel: '<red>Actie geannuleerd!'
 successful_deny: '<aqua>Uitnodiging is met succes geweigerd.'
 this_message_will_expire: 'Dit vervalt automatisch over 20 seconden'
 player_sing: 'Speler'
-#Added in 0.43
 town_help_11: 'Maak een nieuwe stad. Gebruik ''_'' en niet spaties.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Fout: ongeldige commando!'
 tc_settings_reloaded: '[TownyChat] Instellingen herladen!'
@@ -499,7 +485,6 @@ msg_err_not_enough_outposts_free_to_claim: 'Niet genoeg outposts beschikbaar om 
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: 'Outlaws:'
-online: '<green>(Online)'
 #Used in mayor hover text in /town status screen.
 registered_last_online: '<dark_green>Geregistreerd: <green>%s <dark_gray>| <dark_green>Laatst Online: <green>%s'
 #Used on /plot perm, /res
@@ -524,8 +509,6 @@ jailed_in_town: ' in Stad: %s'
 status_friends: 'Vrienden'
 rank_list_title: '%s Rang Lijst'
 rank_list_mayor: 'Burgemeester:'
-status_title_pvp: '<dark_red>(PVP)'
-status_title_open: '<aqua>(Open)'
 status_town_board: 'Bord:'
 status_founded: 'Opgericht:'
 status_town_size: 'Stad Grootte:'
@@ -557,7 +540,6 @@ status_res_taxexempt: 'Staff is vrijgesteld van stadsbelastingen te betalen.'
 status_res_tax: 'Stad Belasting:'
 status_res_plottax: 'Totale Plot Belasting:'
 status_res_totaltax: 'Totaal te betalen belasting:'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Je kunt geen gebruik maken van de nationale bank buiten de hoofdstad van je natie.'
 msg_err_unable_to_use_bank_outside_your_town: 'Je kunt geen gebruik maken van je stadsbank buiten je stad.'
 msg_time_until_a_new_day: 'Tijd tot een Nieuwe Dag: '
@@ -567,7 +549,6 @@ msg_seconds: ' seconden'
 msg_err_invalid_string_nationboard_not_set: 'Ongeldige string, natie boord niet ingesteld.'
 msg_plot_evict: 'Plot succesvol uitgezet.'
 msg_no_one_to_evict: 'Niemand om dit plot uit te zetten.'
-#Added in 0.46
 nation_help_10: 'Teleporteer naar de spawnplaats van de natie.'
 msg_nation_spawn_warmup: '<aqua>Wachten om te teleporteren...'
 msg_set_nation_spawn: '<aqua>Succesvol de spawn van de natie veranderd.'
@@ -580,10 +561,8 @@ msg_err_nation_not_public: '<red>Dat land is niet openbaar.'
 status_yes: '<green>JA'
 status_no: '<red>NEE'
 msg_err_nation_spawn_nation_forbidden_peace: '<red>Natie spawn reizen naar andere geallieerde naties is niet toegestaan tijdens oorlog.'
-#Added in 0.47:
 status_plot_type: 'Plot Type:'
 msg_no_self_jailing: 'Je kunt jezelf niet in de gevangenis zetten.'
-online2: ' <green>(Online)'
 build: 'Bouwen'
 destroy: 'Vernietigen'
 switch: 'Schakelen'
@@ -602,7 +581,6 @@ disabled: 'Uitgeschakeld'
 forced: 'Geforceerd'
 adjustable: 'Verstelbaar'
 msg_err_not_enough_variables: '<red>Niet genoeg variabelen: '
-#Added in 0.50
 friend_list: 'Vrienden Lijst'
 not_registered: 'Niet geregistreerd.'
 msg_error_invalid_comparator: '<aqua>Ongeldige comparator.'
@@ -613,11 +591,8 @@ number_of_towns: '(Aantal steden)'
 town_name: 'Stad Naam'
 nation_name: 'Natie Naam'
 status_embassy_town: 'Ambassades in'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Je kunt die commando niet gebruiken terwijl je gevangen gezet bent.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Natie leden zijn niet toegestaan te %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s behoort al tot een stad.'
 msg_player_is_not_online: '%s is niet online.'
 msg_mysql_dump_success: 'MySQL database dump voltooid.'
@@ -630,7 +605,6 @@ homeblock: 'homeblock'
 townblock: 'townblock'
 outpost: 'outpost'
 msg_err_not_same_town: '<aqua>%s behoort niet tot jouw stad.'
-#Added in 0.59:
 msg_modes_set: 'Modes ingesteld: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Deze plot heeft geen geassocieerde metadata.'
 msg_err_the_metadata_for_key_is_not_registered: 'De metadata voor ''%s'' is niet geregistreerd!'
@@ -644,18 +618,13 @@ msg_err_tag_too_long: 'Tag te lang.'
 msg_err_nation_has_not_set_a_spawn_location: 'Natie heeft geen spawnlocatie ingesteld.'
 msg_err_resident_doesnt_belong_to_any_town: 'Inwoner behoort niet tot een stad'
 msg_err_could_not_set_default_modes_for: 'Kan standaardmodus niet instellen voor '
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '<dark_red>(Bezet)'
 msg_confirmation_spigot_click_accept: 'Klik %s of typ %s'
 msg_confirmation_spigot_click_cancel: 'Klik %s of typ %s'
-#Added in 0.75
 msg_already_ally: 'Jouw natie is al bondgenoten met %s.'
-#Added in 0.76
 msg_you: 'Jij'
 msg_click_spawn: '<green>Click om te spawnen naar: <yellow>%s'
 msg_spawn_cost: '<green>Spawn Kosten = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Er is een fout opgetreden bij het herladen van Towny.'
 msg_reloaded_config: '<dark_green>Configuratie succesvol herladen.'
 msg_reloaded_perms: '<dark_green>Permissies succesvol herladen.'
@@ -663,7 +632,6 @@ msg_reloaded_db: '<dark_green>Database succesvol herladen'
 msg_reloaded_lang: '<dark_green>Taalbestand succesvol herladen'
 msg_reset_config: '<dark_green>Configuratie is gereset'
 msg_err_teleport_cancelled: 'Beweging heeft je teleport geannuleerd.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'vrienden'
 msg_cache_block_error_plot_allies: 'bondgenoten'
 msg_cache_block_error_plot_outsiders: 'buitenstaanders'
@@ -671,31 +639,22 @@ msg_cache_block_error_plot_town_members: 'stadsleden'
 msg_err_invalid_nation_map_color: '<red>Onbekende kaart kleur. Toegestane kleuren zijn %s.'
 msg_nation_map_color_changed: '<aqua>De natie kaart kleur is veranderd naar %s.'
 bonus_townblocks: 'bonus townblocks'
-#Added in 0.80
 nomad_sing: 'Nomade'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Schade heeft uw teleport geannuleerd.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Uitnodiging<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Bevestiging<dark_gray>] <blue>"
 msg_hover_next_page: 'Volgende Pagina'
 msg_hover_previous_page: 'Vorige Pagina'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Max belasting hoeveelheden kunnen alleen worden ingesteld voor steden met belasting percentages."
 msg_town_set_tax_max_percent_amount: "%s heeft het maximale belastingpercentage ingesteld op %s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Plot behoort tot een groep, gebruik /plot group toggle'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>Succesvol permissies gereset voor dit plot.'
-#Added in 0.91
 msg_universe_attribution: 'Auteurs: '
 msg_universe_contributors: ' En bijdragers zoals jij. '
 msg_universe_heart: '<3'
 townblock_plu: 'TownBlocks'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'newhour commando succesvol uitgevoerd'
-#Added in 0.94
 msg_comptype_residents: 'Aantal Inwoners'
 msg_comptype_balance: 'Bank Balans'
 msg_comptype_online: 'Online Spelers'
@@ -704,7 +663,6 @@ msg_comptype_name: 'Alfabetische Volgorde'
 msg_comptype_open: 'Open Status'
 msg_status_npc: '<red>%s is geen echte speler, en is beperkt tot alleen Towny.'
 status_town_title_peaceful: '<aqua>(Vreedzaam)'
-#Added in 0.95
 status_public: '<aqua>(Publiek)'
 msg_days: ' dagen'
 msg_comptype_public: 'Publieke Status'
@@ -712,13 +670,9 @@ towny_prices_title: 'Prijzen'
 towny_prices_upkeep_num_plots: 'aantal plots.'
 towny_prices_upkeep_town_level: 'stad niveau (aantal bewoners)'
 towny_prices_overclaimed_flat_cost: 'een vlakke prijs van'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Geruïneerde Status'
 msg_ruined: '<red>(Ruïne)'
 msg_bankrupt: '<red>(Failliet)'
-#Added in 0.98
 msg_del_town2: '<aqua>De stad %s is verwijderd!'
 msg_ruin_town: '<aqua>De stad van %s is geruïneerd!'
 gui_title_towny_wildsblocks: 'Towny WildsBlocks Lijst'
@@ -727,7 +681,6 @@ gui_title_towny_switch: 'Towny Switch Lijst'
 gui_title_towny_plotclear: 'Towny Plot Clear Delete Lijst'
 msg_ta_removed_all_titles_and_surnames_removed: 'Alle inwoners hebben hun titels en achternamen verwijderd.'
 msg_err_homeblock_already_set_here: 'Deze locatie is al het homeblock van je stad.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>Mergen kan alleen gedaan worden door een burgemeester.'
 msg_town_merge_err_not_close: '<red>De stad %s is te ver weg van je stad. Hun homeblock moet zich binnen %d townblocks van je homeblock bevinden.'
 msg_town_merge_request_sent: '<aqua>Merge verzoek gestuurd naar de burgemeester van %s.'
@@ -748,7 +701,6 @@ msg_town_merge_success: '<aqua>De stad %s, eigendom van %s, is succesvol samenge
 msg_town_merge_cost_withdraw: 'Stad Merge Kosten'
 msg_town_merge_transaction_reason: 'Stad Merge'
 towny_prices_town_merge: '<yellow>[Merging] <dark_green>Basis Kosten: <green>%s <dark_gray>| <dark_green>Per Plot: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Jouw natie is niet geallieerd met %s.'
 msg_err_nation_not_enemies_with: '<red>Jouw natie is niet vijanden met %s.'
 msg_err_nation_already_enemies_with: '<red>Jouw natie is al vijanden met %s.'
@@ -758,20 +710,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s is niet vijanden met %s.'
 msg_err_nation_already_allied_with_2: '<red>%s is al geallieerd met %s.'
 msg_err_nation_already_enemies_with_2: '<red>%s is al vijanden met %s.'
 msg_ta_allies_enemies_updated: '<aqua>Allies/Vijanden bijgewerkt voor %s.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>Klik om gedetailleerde plot informatie te zien.'
 msg_err_nation_capital_too_many_residents: '<red>De huidige hoofdstad heeft te veel inwoners om te vervangen met %s.'
 msg_deleting_nation_will_result_in_losing_residents: '<red>Waarschuwing: Het verwijderen van je natie betekent dat je stad de bevolkingslimiet van %d overschrijdt, wat resulteert in het verwijderen van %d inwoners.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '<red>Je kunt die commando niet gebruiken in steden.'
 msg_command_limited: 'Je kan die commando alleen gebruiken binnen je eigen plots.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claimed op:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Wildernis gebruik veranderd naar %s in alle werelden.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneraties veranderd naar %s in alle werelden.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Je kan die commando niet uitvoeren omdat je niet in %s woont.'
 msg_err_this_jail_has_no_cells: 'Deze gevangenis heeft geen cellen.'
 msg_err_no_cell_found_at_this_location: 'Geen gevangenis cel gevonden op deze locatie.'
@@ -800,7 +747,6 @@ msg_town_already_not_peaceful: '<aqua>Stad is al niet vreedzaam.'
 msg_town_paid_for_neutral_status: '<aqua>Jouw stad heeft %s betaald om je vreedzame status te behouden.'
 msg_nation_paid_for_neutral_status: '<aqua>Je natie heeft %s betaald om je vreedzame status te behouden.'
 your_town_has_been_invited_to_join_nation: 'Uw stad is uitgenodigd om lid te worden van de natie: %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>Er zijn geen inactieve leden om te purgen.'
 msg_purging_will_remove_the_following_residents: '<aqua>Bevestig dat je de volgende inwoners wilt verwijderen: %s'
 msg_purge_complete_x_removed: '<aqua>Purge voltooid, %s bewoners verwijderd.'
@@ -815,7 +761,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Je kan deze outpost niet cl
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Je hebt je homeblock te recent verplaatst! Wacht nog een %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Je kunt je homeblock niet met zo veel townblocks verplaatsen, limiet is %s, deze ruimte is %s townblocks weg.'
 msg_err_usingtowny_disabled: 'Deze wereld is uitgezonderd van alle Towny-interacties. Gebruik eerst /townyworld toggle usingtowny.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Deze townblock is al onderdeel van de %s plotgroep. Weet u zeker dat u deze wilt overbrengen naar de %s plotgroep.'
 msg_townblock_transferred_from_x_to_x_group: 'Townblock overgedragen van %s naar %s plot groep.'
 msg_plotgroup_deleted: 'De plotgroep %s is verwijderd.'
@@ -826,7 +771,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Dit townblock is al deel
 map_hover_plot_group: 'Plot Groep: '
 map_hover_plot_group_size: ' Grootte: '
 map_hover_plots: '%s plots'
-#Added in 0.112
 msg_checking_for_updates: 'Controleren op updates...'
 msg_no_new_updates: 'Geen nieuwe updates gevonden.'
 msg_new_update_available: '<aqua>Nieuwe update beschikbaar: %s | Huidige versie: %s'
@@ -836,7 +780,6 @@ msg_latest_version: '<dark_green>Towny versie: <green>%s <dark_green>| Laatste v
 msg_up_to_date: '<green>Je bent up to date.'
 msg_click_purchase: 'Klik om te kopen'
 msg_you_must_join_this_town_to_claim_this_plot: 'Je moet lid worden van deze stad: %s, om dit plot te claimen. Wil je lid worden van de stad en doorgaan met claimen?'
-#Added in 0.113
 status_trustedlist: 'Vertrouwd'
 msg_click_to_edit: 'Klik om te bewerken.'
 permission_gui_header: 'Towny Permissie GUI'
@@ -857,7 +800,6 @@ msg_cache_block_err: '<red>Je mag hier niet %s.'
 msg_err_plot_belongs_to_group: '<red>Plot behoort tot een groep, gebruik %s.'
 plotgroup_sing: 'Plot Groep'
 msg_err_ally_limit_reached: 'Jouw natie heeft het ally limit bereikt, kan niet accepteren.'
-#Added in 0.114
 msg_err_group_not_found: 'Groep %s niet gevonden.'
 msg_err_expected_command_format: 'Onjuiste syntaxis, verwacht: %s'
 msg_err_group_already_has_node: 'De groep %s heeft de %s node al.'
@@ -879,17 +821,12 @@ help_ta_perms_townrankremove: 'Verwijdert een townrank uit het townyperms-bestan
 help_ta_perms_nationrankadd: 'Voegt een natie rank toe aan het townyperms bestand.'
 help_ta_perms_nationrankremove: 'Verwijdert een natie rank uit het townyperms bestand.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Die inwoner behoort niet tot die natie.'
-#Added in 0.115
 msg_comptype_founded: 'Sticht Datum'
 msg_err_must_be_greater_than_or_equal_to: 'Hoeveelheid moet meer dan of gelijk zijn aan %s'
 err_invalid_yaml: 'Laad fout: Mislukt om bestand %s te laden (passeert het een yaml parser?).'
-#Added in 0.116
 msg_town_map_color_changed: '<aqua>De stad kaart kleur is veranderd naar %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Dit townblock kan niet worden toegevoegd aan de groep omdat het niet van type is: %s'
-#Added in 0.118
 status_title_nopvp: '<green>(Geen PVP)'
-status_home_element: ' <gray>[Home: %s]'
 status_registered: 'Geregistreerd:'
 status_lastonline: 'Laatst Online:'
 status_fractions: '%s/%s'
@@ -899,15 +836,11 @@ status_jailed: 'Gevangen:'
 status_bad_yes: '<red>JA'
 status_good_no: '<green>NEE'
 status_resident_tax_title: '%s''s Belasting'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Omdat ze niet dicht genoeg zijn bij de hoofdstad van uw land, worden de volgende steden verwijderd als de samenvoeging voltooid is: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "'%s' is niet een geldige towny wereld."
 msg_err_enter_world_name_first: 'Vul eerst de naam van de wereld in.'
 msg_wilderness_use_set_to: '<aqua>Het gebruik van de wildernis is ingesteld op %s in %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Ongeldig antwoord! Voer q in om af te sluiten of back om terug te gaan naar de vorige vraag.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Hoofdstad:'
 #Shown in status screen elements where a value is not known.
@@ -938,21 +871,18 @@ msg_purge_complete: 'Opschonen van inwoners: %s verwijderd.'
 msg_you_have_been_given_bonus_blocks: 'Je hebt %s bonus townblocks gekregen.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Je stad kan geen bonus blokken meer kopen. De maximale hoeveelheid is bereikt.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Hoofdsteden kunnen geen vreedzame status inschakelen.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Nation Zone rondom de stad is nu %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Je stad heeft geen NationZone om te schakelen!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Natie onderhoud is gebaseerd op <green>de %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'aantal steden.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'natie niveau (aantal inwoners.)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Gevangen door de burgemeester.'
 #Jail causes
@@ -983,19 +913,14 @@ msg_jailed_war_prisoner: 'Als krijgsgevangene word je vrijgelaten als je landgen
 msg_jailed_title: 'Je bent gevangen genomen :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Deze stad heeft geen bondgenoten om weer te geven.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Deze stad heeft geen vijanden om weer te geven.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Bevestiging verlopen.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Het kanaal geluid is uitgeschakeld'
 tc_player_channel_sound_unmuted: 'Het kanaal geluid is ingeschakeld'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Er is een buitenstaander op je plot, Je kunt je pvp status niet aanpassen!'

@@ -416,7 +416,6 @@ msg_you_paid_plottax_to_town: '<aqua>Bạn đã trả tổng số tiền thuế 
 msg_bankrupt_town: ' không đủ khả năng để duy trì một thị trấn.'
 msg_bankrupt_nation: ' không đủ khả năng để duy trì một quốc gia.'
 msg_nation_not_peaceful: '<aqua>Quốc gia không thể có được trạng thái yên bình.'
-msg_nation_cant_peaceful: '<aqua>Nation couldn''t afford to become a peaceful nation. You must be able to pay %s daily.'
 msg_peaceful_disabled: '<aqua>Chế độ yên bình bị vô hiệu hóa trên toàn cầu.'
 msg_you_paid: '<aqua>Bạn đã thanh toán %s để đặt trạng thái yên bình.'
 msg_nation_set_peace: '<aqua>Đã thay đổi thành công trạng thái của quốc gia.'
@@ -659,8 +658,6 @@ msg_not_enough_residents_refunded: '<aqua>Bạn đã được hoàn lại $%s v�
 msg_not_enough_residents_capital: 'Thị trấn %s không có đủ cư dân để trở thành thủ đô của quốc gia.'
 list_page: '<aqua>Trang %s của %s'
 list_err_not_enough_pages: '<red>Chỉ có %s trang có sẵn'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Bạn không thể đặt thuế thị trấn của mình dưới %s.'
 msg_unknown_rank_available_ranks: 'Hạng không xác định %s. Hạng được phép là %s.'
 msg_no_permission_to_give_rank: 'Bạn không có quyền cấp quyền cho cấp bậc này.'
@@ -705,7 +702,6 @@ msg_err_cant_use_bed: '<dark_red>Bạn không sở hữu mảnh đất này và 
 msg_town_plots_revenue_disclaimer: '<green>Doanh thu được hiển thị là ước tính và việc chủ sở hữu lô đất có khả năng chi trả hay không là một yếu tố.'
 msg_town_set_perm_syntax_error: 'Tổ hợp từ không hợp lệ cho lệnh này. Xem ''/town set perm ?'' để biết cú pháp lệnh phù hợp.'
 msg_plot_set_perm_syntax_error: 'Tổ hợp từ không hợp lệ cho lệnh này. Xem ''/plot set perm ?'' để biết cú pháp lệnh phù hợp.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Người dân này không thuộc về thị trấn đó.'
 msg_err_resident_already_an_outlaw: 'Người chơi đó đã bị thị trấn của bạn coi là kẻ sống ngoài vòng pháp luật.'
 msg_err_not_outlaw_in_your_town: 'Bạn không thể đặt một thành viên thị trấn vào vị trí kẻ ngoài vòng pháp luật.'
@@ -719,22 +715,15 @@ msg_you_are_an_outlaw_in_this_town: '<dark_red>Cẩn thận %s coi bạn là k�
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Tiền bảo lãnh của bạn sẽ tốn %s.'
 msg_err_town_not_close_enough_to_nation: 'Ô trung tâm của %s không đủ gần khu ô trung tâm của bạn để có thể gia nhập quốc gia của bạn.'
 msg_nation_town_moved_their_homeblock_too_far: 'Ô trung tâm của %s đã được di chuyển quá xa khỏi ô trung tâm quốc gia của bạn và đã bị xóa khỏi quốc gia của bạn.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Số lượng bán kính không hợp lệ. Sử dụng %s hoặc nhỏ hơn.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Đã đạt đến số lượng cư dân tối đa (%s).'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>Người chơi %s chưa ở trên máy chủ đủ lâu để được mời vào thị trấn, vui lòng đợi.'
 msg_cant_toggle_pvp_outsider_in_town: 'Có người ngoài vào thị trấn của bạn, bạn không thể thay đổi trạng thái PVP của mình!'
 msg_err_unclaim_not_outpost: 'Không thể hủy yêu cầu, lô đất này không phải là tiền đồn!'
 outpost_plu: 'Tiền đồn'
-#Added in 0.36
 msg_err_not_enough_residents: 'Không có đủ cư dân ở thị trấn này để làm điều đó.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Chế độ thân thiện đã bị vô hiệu hóa!'
-#Added in 0.38
 msg_claim_error: '<red>Một plugin khác đã dừng yêu cầu của (%s)/(%s) khối thị trấn, không thể hoàn tất hoạt động.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Chỉ được phép di chuyển đến thị trấn trong thời gian chiến tranh.'
 msg_err_town_spawn_forbidden_peace: '<red>Việc di chuyển đến thị trấn bị cấm trong thời gian chiến tranh.'
 msg_err_town_spawn_nation_forbidden_war: '<red>Việc di chuyển đến các thị trấn khác trong quốc gia của bạn chỉ được phép trong thời chiến.'
@@ -743,9 +732,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Việc di chuyển đến các th�
 msg_err_town_spawn_ally_forbidden_false: '<red>Việc di chuyển đến các thị trấn liên minh với quốc gia của bạn bị cấm trong thời chiến.'
 msg_err_public_spawn_forbidden_war: '<red>Việc di chuyển công cộng đến các thị trấn khác chỉ được phép trong thời gian chiến tranh.'
 msg_err_public_spawn_forbidden_peace: '<red>Việc di chuyển công khai đến các thị trấn khác bị cấm trong thời gian chiến tranh.'
-#Added in 0.40
 mayor_help_9: 'Cố gắng hủy bỏ một tiền đồn'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Lời mời'
 invite_sent_by: 'Lời mời được gửi bởi'
 invite_help_1: 'Chấp nhận lời mời tham gia thị trấn'
@@ -792,7 +779,6 @@ town_sent_invites: '<aqua>Thị trấn đã gửi %a/%m lời mời.'
 nation_revoke_invite: '<aqua>Quốc gia %s đã thu hồi lời mời tham gia của bạn.'
 nation_revoke_invite_successful: '<aqua>Bạn đã thu hồi thành công lời mời tham gia quốc gia của mình.'
 nation_revoke_ally: '<aqua>Quốc gia %s, đã hủy bỏ yêu cầu liên minh của họ.'
-nation_revoke_ally_successful: '<aqua>You have successfully revoked an ally request.'
 nation_received_requests: '<aqua>Quốc gia đã nhận được %a/%m yêu cầu đồng minh.'
 nation_sent_invites: '<aqua>Quốc gia đã gửi %a/%m lời mời.'
 nation_sent_ally_requests: '<aqua>Quốc gia đã gửi %a/%m yêu cầu liên minh.'
@@ -812,16 +798,13 @@ nation_zone_this_area_under_protection_of: 'Phần này của %s được bảo 
 nation_zone_conquered_status_denies_use: "Tình trạng thị trấn của bạn bị chinh phục không cho phép bạn sử dụng vùng quốc gia này."
 nation_zone_conquered_status_denies_use_2: "Bạn không thể sử dụng vùng quốc gia của thị trấn bị chinh phục này."
 nation_spawn_not_allowed_for_conquered_towns: "Trạng thái bị chinh phục của thị trấn của bạn ngăn cản bạn xuất hiện ở điểm xuất hiện của quốc gia mình."
-#Added in 0.42
 you_have_been_invited_to_join2: 'Bạn đã được mời tham gia %s'
 you_have_been_requested_to_ally2: 'Bạn đã được yêu cầu liên minh với %s'
-#Added in 0.43
 town_help_11: 'Tạo một thị trấn mới. Sử dụng ''_'' và không sử dụng khoảng trắng.'
 changed_plot_town: '<aqua>Bạn đã thay đổi thành công thị trấn trong cốt truyện thành %s!'
 not_standing_in_plot: 'Bạn không đứng trong một lô đất hợp lệ!'
 msg_err_homeblock_has_not_been_set: 'Ô trung tâm chưa được thiết lập, trước tiên hãy sử dụng ''/town set homeblock''.'
 msg_err_spawn_not_within_homeblock: 'Spawn không nằm trong ô trung tâm, trước tiên hãy sử dụng ''/town set homeblock''.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Lỗi: Lệnh không hợp lệ!'
 tc_settings_reloaded: '[TownyChat] Cài đặt đã được tải lại!'
@@ -889,7 +872,6 @@ status_friends: 'Bạn bè'
 rank_list_title: '%s Xếp hạng danh sách'
 rank_list_mayor: 'Thị Trưởng:'
 status_title_capital: '<aqua>(Thủ đô)'
-status_title_pvp: '<dark_red>(PVP)'
 status_title_open: '<aqua>(Mở)'
 status_town_board: 'Bảng:'
 status_founded: 'Được thành lập:'
@@ -930,7 +912,6 @@ status_townblock_untaxed: 'Miễn thuế'
 status_townblock_max_and_minjoindays: 'Cần phải là thành viên thị trấn từ %s đến %s ngày để có thể mua lô đất.'
 status_townblock_minjoindays: 'Cần phải là thành viên thị trấn hơn %s ngày để mua lô đất.'
 status_townblock_maxjoindays: 'Cần phải là thành viên thị trấn ít hơn %s ngày để mua lô đất.'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Bạn không thể sử dụng ngân hàng quốc gia của mình bên ngoài thủ đô.'
 msg_err_unable_to_use_bank_outside_your_town: 'Bạn không thể sử dụng ngân hàng của thị trấn bên ngoài thị trấn.'
 msg_time_until_a_new_day: 'Thời gian cho đến một ngày mới: '
@@ -940,7 +921,6 @@ msg_seconds: ' giây'
 msg_err_invalid_string_nationboard_not_set: 'Chuỗi không hợp lệ, Bảng quốc gia chưa được thiết lập.'
 msg_plot_evict: 'Lô đất đã được loại bỏ thành công.'
 msg_no_one_to_evict: 'Không ai có thể đuổi khỏi khu đất này.'
-#Added in 0.46
 nation_help_10: 'Dịch chuyển đến nơi xuất hiện của quốc gia.'
 msg_nation_spawn_warmup: '<aqua>Đang chờ dịch chuyển tức thời...'
 msg_set_nation_spawn: '<aqua>Đã thay đổi điểm dịch chuyển quốc gia thành công.'
@@ -968,7 +948,6 @@ msg_spawn_fail_safe_teleport: '<red>Dịch chuyển không thành công, vị tr
 msg_err_cannot_set_spawn_cost_more_than: '<red>Bạn không thể đặt chi phí điểm dịch chuyển cao hơn %s'
 msg_err_ally_isnt_public: '<red>Đồng minh của bạn, %s, không bật chức năng điểm dịch chuyển công khai. Từ chối dịch chuyển.'
 msg_nation_changed_public: '<red>Tình trạng công khai của quốc gia hiện nay là %s.'
-#Added in 0.47:
 status_plot_type: 'Loại lô đất:'
 msg_no_self_jailing: 'Bạn không thể tự giam mình được.'
 online2: ' <green>(Trực tuyến)'
@@ -989,7 +968,6 @@ enabled: 'Kích hoạt'
 disabled: 'Vô hiệu hóa'
 forced: 'Bắt buộc'
 adjustable: 'Có thể điều chỉnh'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s không đủ khả năng để xây dựng một thị trấn mới ở đây, điều này tốn kém %s.'
 msg_no_funds_new_nation2: '<red>Thị trấn không đủ khả năng để thành lập một quốc gia mới, điều này tốn kém %s.'
 msg_no_funds_claim2: '<red>Thị trấn không đủ khả năng để yêu cầu %s khối thị trấn có giá %s. Thêm %s vào ngân hàng thị trấn bằng cách sử dụng /t deposit %s'
@@ -997,11 +975,9 @@ msg_err_cant_afford_blocks2: '<red>Thị trấn không đủ khả năng để y
 msg_err_not_enough_variables: '<red>Không đủ biến: '
 nation_rechecked_by_admin: '<aqua>Khoảng cách thị trấn của quốc gia %s đã được kiểm tra lại thành công.'
 msg_err_nation_over_town_limit: '<red>Quốc gia của bạn đã đạt đến số lượng thị trấn tối đa được phép trên mỗi quốc gia: %s.'
-#Added in 0.49
 msg_process_claim: 'Đang xử lý yêu cầu về lô đất...'
 msg_process_unclaim: 'Đang xử lý yêu cầu hủy bỏ lô đất...'
 msg_total_townblocks: 'Tổng số mảnh đất: '
-#Added in 0.50
 friend_list: 'Danh sách bạn bè'
 not_registered: 'Không đăng ký.'
 msg_error_missing_comparator: '<aqua>Phải chỉ rõ mục đích sắp xếp.'
@@ -1022,7 +998,6 @@ msg_couldnt_pay_plot_taxes_multiple: '<aqua>Những cư dân sau đây không đ
 msg_bankrupt_town2: '<aqua>%s không thể tiếp tục duy trì là một thị trấn.'
 msg_bankrupt_nation2: '<aqua>%s không thể tiếp tục duy trì là một quốc gia.'
 status_embassy_town: 'Đại sứ quán tại'
-#Added in 0.51:
 msg_error_invalid_comparator_nation: '<aqua>Bộ so sánh không hợp lệ. Hãy thử %s.'
 msg_error_invalid_comparator_town: '<aqua>Bộ so sánh không hợp lệ. Hãy thử %s.'
 msg_err_merging_for_kings_only: '<aqua>Việc sáp nhập chỉ có thể được thực hiện bởi một Lãnh đạo quốc gia.'
@@ -1030,7 +1005,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>Lãnh đạo quốc gia của 
 nation1_has_merged_with_nation2: '<gold>Quốc gia %s đã đồng ý sáp nhập với quốc gia hiện hành là %s.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>Bạn có đồng ý giải thể quốc gia %s của bạn thành quốc gia %s không? Điều này sẽ chuyển tất cả tiền của thị trấn và ngân hàng quốc gia sang %s.'
 no_open_towns: 'Không có thị trấn nào mở để liệt kê.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Quốc gia không có đồng minh nào để liệt kê.'
 msg_error_nation_has_no_enemies: 'Quốc gia không có kẻ thù nào để liệt kê.'
 msg_error_ta_plot_claim: 'Thiếu tên người chơi, ví dụ: /ta plot claim Tên_Người_Chơi'
@@ -1044,19 +1018,14 @@ msg_err_already_in_a_nation: 'Thị trấn của bạn đã là một quốc gia
 msg_err_nation_not_open: '<red>Quốc gia %s không mở cửa cho tất cả mọi người. Hãy yêu cầu nhà lãnh đạo quốc gia hoặc trợ lý tham gia.'
 msg_err_nation_homeblock_in_another_world: '<red>Ô trung tâm thị trấn của bạn không cùng thế giới với ô trung tâm quốc gia.'
 status_bank_town_penalty_upkeep: 'Yêu cầu bảo trì quá mức:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Bạn không thể xuất hiện ở %s vì bạn sẽ bị đánh dấu là kẻ ngoài vòng pháp luật ở đó.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Bạn không thể sử dụng lệnh đó khi bị giam giữ.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Thành viên quốc gia không được phép %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s đã thuộc về một thị trấn.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>Bạn không thể thiết lập biểu đồ theo kiểu %s với chi phí %s'
 msg_plot_set_cost: '<aqua>Bạn đã bị tính phí %s để thiết lập lô đất thành loại: %s'
 msg_err_townspawn_has_not_been_set: '<red>Địa điểm xuất hiện của thị trấn chưa được thiết lập.'
 msg_err_player_too_far_from_town_spawn: '<red>%s quá xa thị trấn của bạn để nhận được lời mời vào thị trấn. Khoảng cách tối đa: %s khối.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Chi phí bảo lãnh cho cư dân: '
 msg_mayor_bail_amount: 'Chi phí bảo lãnh của thị trưởng: '
 msg_king_bail_amount: 'Chi phí bảo lãnh cho nhà lãnh đạo quốc gia: '
@@ -1077,7 +1046,6 @@ homeblock: 'ô trung tâm'
 townblock: 'diện-tích'
 outpost: 'tiền đồn'
 msg_err_not_same_town: '<aqua>%s không thuộc về thị trấn của bạn.'
-#Added in 0.59:
 msg_modes_set: 'Thiết lập chế độ: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Biểu đồ này không có bất kỳ siêu dữ liệu liên quan nào.'
 msg_err_the_metadata_for_key_is_not_registered: 'Siêu dữ liệu cho ''%s'' chưa được đăng ký!'
@@ -1110,28 +1078,19 @@ msg_err_tag_too_long: 'Thẻ tên quá dài.'
 msg_err_nation_has_not_set_a_spawn_location: 'Quốc gia chưa thiết lập địa điểm dịch chuyển.'
 msg_err_resident_doesnt_belong_to_any_town: 'Người cư trú không thuộc về bất kỳ thị trấn nào'
 msg_err_could_not_set_default_modes_for: 'Không thể thiết lập chế độ mặc định cho '
-#Added in 0.60
 msg_set_war_allowed_on: 'Chiến tranh sẽ được phép xảy ra trên thế giới này.'
 msg_set_war_allowed_off: 'Chiến tranh sẽ không ảnh hưởng tới thế giới này.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Bạn không thể chuyển đổi PVP vì còn %s giây.'
 msg_err_cannot_spawn_x_seconds_remaining: 'Bạn không thể xuất hiện trong %s giây nữa.'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Mảnh đất không còn được bán nữa.'
 msg_err_x_spawn_disallowed_from_x: '<red>%s không được phép dịch chuyển từ %s.'
 msg_the_wilderness: 'vùng hoang dã'
 msg_enemy_areas: 'Khu vực kẻ địch'
 msg_neutral_towns: 'Thị trấn trung lập'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Không tìm thấy quốc gia nào có tên %s'
 msg_err_cannot_unclaim_homeblock: 'Bạn không thể hủy yêu cầu về ô trung tâm của mình, hãy sử dụng ''/town set homeblock'' để di chuyển ô trung tâm của bạn.'
-#Added in 0.65
 msg_err_rename_cancelled: 'Việc đổi tên đã bị hủy bỏ bởi một plugin khác.'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '<dark_red>(Đã chiếm đóng)'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Lô đất này là một phần trong nhóm %s lô đất, khi xác nhận yêu cầu của bạn, bạn sẽ mua được tất cả chúng.'
 msg_plot_group_unclaim_confirmation: 'Lô đất này là một phần của nhóm %s lô đất bằng cách xác nhận rằng bạn sẽ hủy yêu cầu tất cả chúng.'
 msg_plot_group_toggle_confirmation: 'Lô đất này là một phần của nhóm %s lô đất bằng cách xác nhận rằng bạn sẽ chuyển đổi một thuộc tính trên tất cả các lô đất đó.'
@@ -1154,30 +1113,21 @@ msg_set_group_type_to_x: 'Đã thay đổi loại nhóm lô đất thành %s'
 msg_player_successfully_bought_group_x: '%s đã mua thành công nhóm lô đất %s'
 status_plot_group_name_and_size: 'Khối thị trấn là một phần của nhóm: %s. Nhóm có tổng cộng %s Khối thị trấn.'
 msg_player_made_group_not_for_sale: '%s đã tạo nhóm %s không để bán.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Không thể thiết lập nhóm lô đất thành nhà tù.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Bạn phải chỉ định tên nhóm lô đất, ví dụ: /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'Nhấp vào %s hoặc nhập %s'
 msg_confirmation_spigot_click_cancel: 'Nhấp vào %s hoặc nhập %s'
 msg_you_cannot_kick_yourself: 'Bạn không thể đuổi chính mình.'
 msg_you_cannot_kick_this_resident: 'Bạn không thể đuổi %s, họ là thị trưởng hoặc trợ lý.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Lô đất: %s thuộc về một nhóm, sử dụng /plot group fs [số lượng]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Lô đất: %s thuộc về một nhóm, sử dụng /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Cài đặt %s do Quản trị viên kiểm soát ngăn bạn chuyển đổi pvp sang %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Hiện tại bạn không bị bỏ tù.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Bạn không được phép tạo phía bên kia của cổng thông tin này ở vị trí này.'
-#Added in 0.75
 msg_already_ally: 'Quốc gia của bạn đã liên minh với %s.'
-#Added in 0.76
 msg_you: 'Bạn'
 msg_click_spawn: '<green>Click để đến: <yellow>%s'
 msg_spawn_cost: '<green>Chi phí dịch chuyển = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Đã xảy ra lỗi khi tải lại Towny.'
 msg_reloaded_config: '<dark_green>Đã tải lại cấu hình thành công.'
 msg_reloaded_perms: '<dark_green>Quyền đã được tải lại thành công.'
@@ -1185,7 +1135,6 @@ msg_reloaded_db: '<dark_green>Cơ sở dữ liệu đã được tải lại th�
 msg_reloaded_lang: '<dark_green>Tệp ngôn ngữ đã được tải lại thành công'
 msg_reset_config: '<dark_green>Config đã được thiết lập lại'
 msg_err_teleport_cancelled: 'Việc di chuyển đã hủy bỏ dịch chuyển tức thời của bạn.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'bạn bè'
 msg_cache_block_error_plot_allies: 'đồng minh'
 msg_cache_block_error_plot_outsiders: 'người ngoài cuộc'
@@ -1200,25 +1149,18 @@ msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Vì chúng khôn
 msg_ta_deposit_all_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia & thị trấn.'
 msg_ta_deposit_all_towns_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia & thị trấn.'
 bonus_townblocks: '+ Mảnh đất'
-#Added in 0.80
 nomad_sing: 'Dân du mục'
 msg_new_town_advice: 'Xin chúc mừng vì đã tạo thị trấn của bạn! Thị trấn của bạn sẽ phải trả phí duy trì hàng ngày hiện có giá trị là %s. Bạn có thể gửi tiền vào ngân hàng của thị trấn bằng cách sử dụng ''/t deposit 5000''. Nếu không có tiền để trả phí duy trì, thị trấn của bạn sẽ bị xóa. Bạn có thể xem chi phí của mình bất cứ lúc nào bằng cách sử dụng /t prices. Phí duy trì hàng ngày tiếp theo được tính bằng %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Dính sát thương nên đã hủy bỏ dịch chuyển tức thời của bạn.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Lời mời<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Xác nhận<dark_gray>] <blue>"
 this_message_will_expire2: '<blue>Điều này sẽ tự động hết hạn sau %s giây'
 msg_hover_next_page: 'Trang Tiếp Theo'
 msg_hover_previous_page: 'Trang Trước'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Số tiền thuế tối đa chỉ có thể được thiết lập cho các thị trấn có tỷ lệ thuế."
 msg_town_set_tax_max_percent_amount: "%s đã đặt mức thuế suất tối đa là %s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Plot thuộc về một nhóm, sử dụng /plot group toggle'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>Đã đặt lại quyền thành công trên ô đất này.'
-#Added in 0.86
 status_bank_bankrupt: '(PHÁ SẢN)'
 msg_warning_bankrupt: '<dark_red>*** CẢNH BÁO, %s SẼ PHÁ SẢN VÀO NGÀY MỚI TIẾP THEO DO THIẾU TIỀN ***'
 msg_town_bankrupt_by_upkeep: '<aqua>%s không đủ khả năng chi trả cho việc bảo trì và đã phá sản.'
@@ -1236,7 +1178,6 @@ msg_your_town_payed_upkeep: '<aqua>Thị trấn của bạn đã trả phí duy 
 msg_your_nation_payed_upkeep: '<aqua>Quốc gia của bạn đã trả phí duy trì hàng ngày là %s.'
 msg_your_town_couldnt_pay_upkeep: '<aqua>Thị trấn của bạn không đủ khả năng chi trả phí duy trì hằng ngày cho %s và đã giải thể.'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>Quốc gia của bạn không đủ khả năng chi trả phí duy trì hàng ngày cho %s và đã tan rã.'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s không thể trả tiền duy trì, đã đạt đến mức nợ tối đa và đã giải thể.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>Các thị trấn sau đây không thể trả tiền duy trì, đạt đến mức nợ tối đa và đã giải thể: '
 msg_unable_to_deposit_x: 'Không thể gửi %s vào ngân hàng của thị trấn đó.'
@@ -1244,10 +1185,8 @@ msg_unable_to_withdraw_x: 'Không thể rút %s từ ngân hàng của thị tr�
 status_debtcap: 'Mức nợ trần:'
 status_world_explrevert_entity: 'Hoàn nguyên vụ nổ thực thể:'
 status_world_explrevert_block: 'Hoàn nguyên vụ nổ khối:'
-#Added in 0.88
 msg_nation_already_peaceful: '<red>Quốc gia đã yên bình rồi.'
 msg_nation_already_not_peaceful: '<red>Quốc gia này vốn đã không còn yên bình.'
-#Added in 0.89
 status_world_friendlyfire: 'Thân Thiện:'
 status_world_wildernessmobs: 'Mobs hoang dã:'
 msg_outlaw_kick_cooldown: '<red>Bạn bị coi là kẻ ngoài vòng pháp luật ở %s. Bạn còn %s thời gian để rời khỏi thị trấn, nếu không, bạn sẽ bị dịch chuyển trở lại điểm xuất phát của mình.'
@@ -1255,14 +1194,11 @@ msg_outlaw_kicked: '<dark_red>Bạn không được chào đón ở %s. Bạn đ
 msg_outlaw_town_notify: '<red>Một kẻ ngoài vòng pháp luật, %s, đã xâm nhập vào lãnh thổ thị trấn của bạn.'
 msg_your_town_payed_upkeep_with_debt: '<red>Thị trấn của bạn đã trả tiền bảo trì hàng ngày cho %s bằng nợ.'
 msg_payed_nation_tax_with_debt: '<red>Thị trấn của bạn đã trả thuế quốc gia là %s bằng nợ.'
-#Added in 0.90
 status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'Lệnh /plot clear bị vô hiệu hóa trong thế giới này.'
-#Added in 0.91
 msg_universe_attribution: 'Tác giả: '
 msg_universe_contributors: ' Và những người đóng góp như bạn. '
 townblock_plu: 'Mảnh đất'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'lệnh newhour đã được thực hiện thành công'
 town_help_12: 'Giành lại thị trấn của bạn từ tình trạng đổ nát.'
@@ -1277,10 +1213,8 @@ msg_time_remaining_before_full_removal: 'Thời gian còn lại trước khi lo�
 msg_time_until_reclaim_available: 'Thời gian cho đến khi có thể lấy lại: %d giờ.'
 msg_reclaim_available: 'Có thể thu hồi.'
 msg_ruined_town_being_deleted: "%s đã bị hỏng trong %s giờ và đang bị xóa."
-#Added in 0.93
 msg_changed_peaceful: '<red>Mức độ trung lập/hòa bình của thị trấn hiện là %s.'
 msg_err_town_unclaim_canceled: '<red>Đã hủy yêu cầu. Bạn không thể hủy yêu cầu khu vực này vào lúc này.'
-#Added in 0.94
 msg_comptype_residents: 'Số lượng cư dân'
 msg_comptype_townblocks: 'Số lượng mảnh đất được yêu cầu'
 msg_comptype_balance: 'Số dư ngân hàng'
@@ -1293,7 +1227,6 @@ npc_created: 'Tạo bời:'
 msg_no_funds_claim_plot: '<red>Bạn không đủ khả năng để yêu cầu lô đất có giá %s.'
 msg_no_funds_claim_plot_group: '<red>Bạn không đủ khả năng để yêu cầu %s lô đất có giá %s.'
 status_town_title_peaceful: '<aqua>(Bình yên)'
-#Added in 0.95
 status_public: '<aqua>(Công cộng)'
 msg_days: ' ngày'
 msg_comptype_public: 'Tình trạng công khai'
@@ -1318,22 +1251,15 @@ towny_prices_taxes_plot: '<red>    [Thuế]    <dark_green>Cư dân: <green>%s <
 towny_prices_taxes_shop: '<red>            <dark_green>Cửa hàng: <green>%s <dark_gray>| <dark_green>Đại sứ quán: <green>%s'
 towny_prices_town_neutral_tax: '<red>            <dark_green>Hòa bình: & a%s'
 towny_prices_plots: '<red>    [Thiết lập ô đất]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
 towny_prices_nationname: '<red>Quốc gia: <gold>%s'
 towny_prices_nation_tax: '<red>    [Thuế] <dark_green>Thị trấn: <green>%s <dark_gray>| <dark_green>Hòa bình: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>Thị trấn bị chinh phục %s không thể nộp thuế cho quốc gia và đã sụp đổ.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>Các thị trấn bị chinh phục sau đây không đủ khả năng nộp thuế quốc gia và đã sụp đổ: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Thị trấn của bạn được miễn thuế quốc gia.'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Tình trạng đổ nát'
 msg_comptype_bankrupt: 'Tình trạng phá sản'
 msg_ruined: '<red>(Đổ nát)'
 msg_bankrupt: '<red>(Phá sản)'
-#Added in 0.98
 msg_del_town2: '<aqua>Thị trấn %s đã bị xóa!'
 msg_ruin_town: '<aqua>Thị trấn %s đã bị phá hủy!'
 gui_title_select_plot_type: 'Chọn PlotType'
@@ -1349,7 +1275,6 @@ flatfile_err_exception_reading_district_file_at_line: 'Lỗi tải: Ngoại lệ
 flatfile_dbg_loading_district_list: 'Đang tải danh sách Quận...'
 msg_ta_removed_all_titles_and_surnames_removed: 'Tất cả cư dân đều đã bị xóa tên và họ.'
 msg_err_homeblock_already_set_here: 'Vị trí này hiện đã là ô trung tâm của thị trấn bạn.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>Việc sáp nhập chỉ có thể được thực hiện bởi thị trưởng.'
 msg_town_merge_err_not_close: '<red>Thị trấn %s quá xa thị trấn của bạn. Ô trung tâm của họ phải nằm trong phạm vi %d mảnh đất của bạn.'
 msg_town_merge_request_sent: '<aqua>Yêu cầu hợp nhất đã được gửi tới thị trưởng của %s.'
@@ -1371,7 +1296,6 @@ msg_town_merge_success: '<aqua>Thị trấn %s, thuộc sở hữu của %s, đ�
 msg_town_merge_cost_withdraw: 'Chi phí sáp nhập thị trấn'
 msg_town_merge_transaction_reason: 'Sáp nhập thị trấn'
 towny_prices_town_merge: '<yellow>[Hợp nhất] <dark_green>Chi phí cơ bản: <green>%s <dark_gray>| <dark_green>Mỗi lô đất: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Quốc gia của bạn không liên minh với %s.'
 msg_err_nation_not_enemies_with: '<red>Quốc gia của bạn không phải là kẻ thù của %s.'
 msg_err_nation_already_enemies_with: '<red>Quốc gia của bạn hiện đang là kẻ thù của %s.'
@@ -1381,20 +1305,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s không phải là kẻ thù của %s
 msg_err_nation_already_allied_with_2: '<red>%s đã liên kết với %s.'
 msg_err_nation_already_enemies_with_2: '<red>%s hiện là kẻ thù của %s.'
 msg_ta_allies_enemies_updated: '<aqua>Đồng minh/Kẻ thù đã được cập nhật cho %s.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>Nhấp để xem thông tin chi tiết về lô đất.'
 msg_err_nation_capital_too_many_residents: '<red>Thủ đô hiện tại có quá nhiều cư dân để có thể thay thế bằng %s.'
 msg_deleting_nation_will_result_in_losing_residents: '<red>Cảnh báo: Việc xóa quốc gia của bạn sẽ có nghĩa là thị trấn của bạn vượt quá giới hạn dân số là %d, dẫn đến việc xóa %d cư dân.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '<red>Bạn không thể sử dụng lệnh đó bên trong thị trấn.'
 msg_command_limited: 'Bạn chỉ có thể sử dụng lệnh đó bên trong các ô đất của riêng bạn.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claim lúc:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Sử dụng vùng hoang dã đã biến %s thành tất cả các thế giới.'
 msg_regenerations_use_x_in_all_worlds: 'Quá trình tái sinh đã biến %s ở tất cả các thế giới.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Bạn không thể chạy lệnh đó vì bạn không sống ở %s.'
 msg_err_this_jail_has_no_cells: 'Nhà tù này không có phòng giam.'
 msg_err_no_cell_found_at_this_location: 'Không tìm thấy phòng giam nào ở địa điểm này.'
@@ -1418,7 +1337,6 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Không được đăng xuấ
 jail_plu: 'Nhà tù'
 jail_sing: 'Nhà tù'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s chưa chơi đủ lâu để bị bỏ tù, hãy đợi thêm %s nữa'
-#Added in 0.108
 msg_town_not_peaceful: '<aqua>Tthị trấn không thể duy trì được trạng thái yên bình của mình.'
 msg_town_already_peaceful: '<aqua>Thị trấn đã yên bình rồi.'
 msg_town_already_not_peaceful: '<aqua>Thị trấn hiện không còn yên bình nữa.'
@@ -1426,14 +1344,12 @@ msg_town_cant_peaceful: '<aqua>Town không đủ khả năng để trở thành 
 msg_town_paid_for_neutral_status: '<aqua>Thị trấn của bạn đã trả %s để duy trì trạng thái hòa bình của bạn.'
 msg_nation_paid_for_neutral_status: '<aqua>Quốc gia của bạn đã trả %s để duy trì tình trạng hòa bình của bạn.'
 your_town_has_been_invited_to_join_nation: 'Thị trấn của bạn đã được mời tham gia quốc gia: %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>Không có thành viên không hoạt động nào cần xóa.'
 msg_purging_will_remove_the_following_residents: '<aqua>Vui lòng xác nhận bạn muốn xóa những cư dân sau: %s'
 msg_purge_complete_x_removed: '<aqua>Đã hoàn tất quá trình xóa, %s cư dân đã bị xóa.'
 msg_err_days_must_be_greater_than_0: 'Số ngày phải lớn hơn 0.'
 msg_err_outlawed_players_no_teleport: '<dark_red>Bạn bị cấm ở thị trấn nơi bạn đang ở và không thể dịch chuyển tức thời!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>Bạn không thể sử dụng lệnh đó khi ở trong thị trấn mà bạn bị cấm.'
-#Added in 0.110
 msg_safe_mode: "[Lỗi] Đã khóa ở chế độ an toàn!"
 msg_safe_mode_base: 'Lỗi] Towny bị khóa ở Chế độ an toàn do lỗi! '
 msg_safe_mode_player: 'Yêu cầu người quản trị kiểm tra bảng điều khiển của máy chủ.'
@@ -1443,7 +1359,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Không thể yêu cầu ti�
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Gần đây bạn cũng đã di chuyển ô trung tâm của mình! Đợi thêm %s nữa.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Bạn không thể di chuyển ô trung tâm của mình qua nhiều mảnh đất, giới hạn là %s, không gian này cách xa %s mảnh đất.'
 msg_err_usingtowny_disabled: 'Thế giới này không có bất kỳ tương tác nào với Towny. Trước tiên, hãy sử dụng /townyworld để chuyển đổi usingtowny.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Mảnh đất này đã là một phần của nhóm lô đất %s. Bạn có chắc chắn muốn chuyển nó sang nhóm lô đất %s không?'
 msg_townblock_transferred_from_x_to_x_group: 'Mảnh đất được chuyển từ nhóm lô đất %s sang nhóm lô đất %s.'
 msg_plotgroup_deleted: 'Nhóm lô đất %s đã bị xóa.'
@@ -1454,7 +1369,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Mảnh đất này đã 
 map_hover_plot_group: 'Nhóm lô đất: '
 map_hover_plot_group_size: ' Kích cỡ: '
 map_hover_plots: '%s lô đất'
-#Added in 0.112
 msg_checking_for_updates: 'Đang kiểm tra cập nhật...'
 msg_no_new_updates: 'Không tìm thấy bản cập nhật mới.'
 msg_new_update_available: '<aqua>Bản cập nhật mới có sẵn: %s | Phiên bản hiện tại: %s'
@@ -1466,7 +1380,6 @@ msg_click_purchase: 'Nhấp để mua'
 msg_you_must_join_this_town_to_claim_this_plot: 'Bạn phải tham gia thị trấn này: %s, để có thể yêu cầu lô đất này. Bạn có muốn tham gia thị trấn và tiếp tục yêu cầu không?'
 msg_legacy_economy_detected: "<aqua>Triển khai kinh tế của Towny được thiết lập thành Legacy, bạn nên để Towny tự cập nhật để sử dụng triển khai Modern. Điều này sẽ cải thiện khả năng tương thích với nhiều plugin Kinh tế hơn."
 msg_click_to_convert_to_modern_economy: "<aqua>Nhấp vào đây để chuyển đổi triển khai nền kinh tế Towny của bạn từ cũ sang hiện đại."
-#Added in 0.113
 status_trustedlist: 'Tin cậy'
 msg_click_to_edit: '<gold>Nhấp để chỉnh sửa.'
 permission_gui_header: 'Giao diện cấp phép Towny'
@@ -1491,7 +1404,6 @@ msg_err_ally_limit_reached: 'Quốc gia của bạn đã đạt đến giới h�
 msg_err_ally_limit_reached_cannot_accept: 'Quốc gia %s đã đạt đến giới hạn đồng minh, không thể chấp nhận thêm.'
 msg_err_ally_limit_reached_cannot_send: 'Quốc gia của bạn đã đạt đến giới hạn đồng minh, không thể mời %s trở thành đồng minh của mình.'
 msg_err_ally_limit_reached_cannot_send_targetNation: 'Quốc gia %s đã đạt đến giới hạn đồng minh, không thể mời %s trở thành đồng minh của bạn.'
-#Added in 0.114
 msg_err_group_not_found: 'Không tìm thấy nhóm %s.'
 msg_err_expected_command_format: 'Cú pháp không đúng, hãy thử: %s'
 msg_err_group_already_has_node: 'Nhóm %s đã có node %s.'
@@ -1514,20 +1426,14 @@ help_ta_perms_townrankremove: 'Xóa townrank khỏi tệp townyperms.'
 help_ta_perms_nationrankadd: 'Thêm nationrank vào tệp townyperms.'
 help_ta_perms_nationrankremove: 'Xóa nationrank khỏi tệp townyperms.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Người dân đó không thuộc về quốc gia đó.'
-#Added in 0.115
 msg_comptype_founded: 'Ngày thành lập'
 msg_err_must_be_greater_than_or_equal_to: 'Số tiền phải lớn hơn hoặc bằng %s'
 err_invalid_yaml: 'Lỗi tải: Không tải được tệp %s (tệp này có vượt qua được trình phân tích cú pháp yaml không?).'
-#Added in 0.116
 msg_town_map_color_changed: '<aqua>Màu bản đồ thị trấn đã được đổi thành %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Không thể thêm mảnh đất này vào nhóm vì nó không thuộc loại: %s'
-#Added in 0.118
 status_title_nopvp: '<green>(Không PVP)'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Bạn không thể bỏ tù cư dân của mình chỉ vì họ đang ở nơi mà họ bị coi là bất hợp pháp.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Bạn không thể bỏ tù cư dân của mình chỉ vì họ ở nơi mà họ bị coi là kẻ thù.'
-#Added in 0.120
 msg_resident_prompt: 'Nhập tên người chơi vào trò chuyện hoặc q để thoát. Thao tác này sẽ tự động hết thời gian sau 30 giây.'
 msg_prompt_cancel: 'Yêu cầu đã bị hủy hoặc hết thời gian.'
 status_home_element: ' <gray>[Nhà: %s]'
@@ -1541,13 +1447,10 @@ status_jailed: 'Bị bỏ tù:'
 status_bad_yes: '<red>CÓ'
 status_good_no: '<green>KHÔNG'
 status_resident_tax_title: '%s Thuế'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Vì chúng không đủ gần thủ đô của quốc gia bạn nên các thị trấn sau sẽ bị xóa nếu quá trình hợp nhất hoàn tất: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "'%s không phải là thế giới thị trấn hợp lệ."
 msg_err_enter_world_name_first: 'Vui lòng nhập tên thế giới trước.'
 msg_wilderness_use_set_to: '<aqua>Sử dụng vùng hoang dã đã được đặt thành %s trong %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Câu trả lời không hợp lệ! Nhập q để thoát hoặc back để quay lại câu hỏi trước.'
 msg_setup_full_guide_link: '<aqua>Để biết liên kết đến hướng dẫn cài đặt đầy đủ, hãy nhấp vào đây.'
 msg_setup_wildernessuse: 'Bạn có muốn bật chế độ sử dụng vùng hoang dã không? Điều này sẽ cho phép người chơi phá/xây dựng trong vùng hoang dã.'
@@ -1557,14 +1460,12 @@ msg_setup_town_cost: 'Chi phí để tạo một thị trấn mới là bao nhi�
 msg_setup_nation_cost: 'Chi phí để tạo ra một quốc gia mới là bao nhiêu? Mặc định là 1000.'
 msg_setup_townblock_cost: 'Phải tốn bao nhiêu để yêu cầu một mảnh đất? Mặc định là 25. Một mảnh đất có cùng kích thước với một chunk (cài đặt mặc định)'
 msg_setup_success: 'Đã thay đổi thành công giá trị cấu hình sang giá trị mới.'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s mới xuất hiện gần đây và không thể bị tổn hại.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Bạn đã mất khả năng bảo vệ hồi sinh.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'Bạn không thể nhặt vật phẩm khi đang được bảo vệ hồi sinh.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Thủ đô:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1577,7 +1478,6 @@ status_unknown: 'không xác định'
 msg_nationzone_override_set_to: '%s đã đặt ghi đè khu vực quốc gia của họ thành %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s đã xóa bỏ vùng quốc gia ghi đè của họ.'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Kích thước vùng quốc gia:'
 #Shown when a player adds people to their friends list.
@@ -1621,21 +1521,18 @@ msg_purge_complete: 'Hoàn tất quá trình xóa cư dân: %s đã bị xóa.'
 msg_you_have_been_given_bonus_blocks: 'Bạn đã được tặng %s mảnh đất.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Thị trấn của bạn không thể mua thêm bất kỳ khối thị trấn nào nữa. Đã đạt đến số lượng tối đa.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Các thủ đô không thể chuyển đổi trạng thái hòa bình.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Khu vực quốc gia xung quanh thị trấn hiện là %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Thị trấn của bạn không có Khu vực quốc gia để chuyển đổi!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Việc duy trì quốc gia dựa trên <green>%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'số lượng thị trấn.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'cấp quốc gia (số cư dân)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Bị bỏ tù bởi thị trưởng.'
 #Jail causes
@@ -1666,30 +1563,22 @@ msg_jailed_war_prisoner: 'Với tư cách là tù nhân chiến tranh, bạn s�
 msg_jailed_title: 'Vậy là bạn đã bị bỏ tù :('
 #Jail handbook author
 msg_jailed_author: 'Nhà tù thị trấn.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Thị trấn không có đồng minh nào để liệt kê.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Thị trấn không có kẻ thù nào để liệt kê.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Đã hết thời gian xác nhận.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Âm thanh kênh đã bị tắt tiếng'
 tc_player_channel_sound_unmuted: 'Âm thanh kênh đã được bỏ tắt tiếng'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Có một người ngoài cuộc trong lô đất của bạn, bạn không thể thay đổi trạng thái pvp của mình!'
-#Added in 0.136
 msg_view_on_web: '<gray>Nhấp để xem trên web.'
-#Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>Thị trấn %s đã đồng ý sáp nhập với thị trấn hiện tại là %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Chi phí trung lập:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Nếu bạn đã trả bất kỳ khoản tiền thật nào cho những mảnh đất này, xin hãy hiểu rằng: máy chủ bạn đang chơi đã vi phạm EULA của Minecraft và giấy phép Towny.'
 #Line 2 of the givebonus warning.
@@ -1698,49 +1587,37 @@ msg_ptw_warning_2: 'Nhóm Towny không bao giờ có ý định cho phép mua c�
 msg_ptw_warning_3: 'Nếu bạn đã trả tiền thật, bạn nên cân nhắc chơi trên máy chủ Towny tôn trọng mong muốn của Nhóm Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Bạn đã được mời tham gia %s<blue> (Quốc gia: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Thị trấn của bạn không đủ khả năng chi trả để thu hồi đất này. %là bắt buộc.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Thị trấn của bạn đã trả %s để không bị thu hồi lại đất.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Việc hủy bỏ quyền sở hữu vùng đất này sẽ tốn %s, bạn có muốn tiếp tục không?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Bạn phải đợi %s giây trước khi có thể đổi tên thị trấn của mình lần nữa.'
-#Added in 1.141
 msg_newday_already_running: 'Một nhiệm vụ ngày mới hiện đang chạy.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Bạn không thể chuyển đổi trạng thái trung lập vì còn %s giây.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Không thể sử dụng lệnh này từ bảng điều khiển.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Thị trấn %s đã thiết lập cài đặt unlimitedclaims thành %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Bạn không có đủ mảnh đất để yêu cầu, bạn có muốn bật yêu cầu không giới hạn cho thị trấn %s không?'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Bạn không thể rời khỏi đất nước của mình, thị trấn của bạn đã bị chiếm đóng.'
 msg_err_console_only: 'Lệnh này chỉ có thể sử dụng bằng bàn điều khiển.'
 msg_err_player_only: 'Lệnh này chỉ có người chơi mới có thể sử dụng.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Tiêu đề tin nhắn hiển thị khi vượt qua biên giới là %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Chạy lệnh này sẽ đặt lại config.yml của bạn thành tệp mặc định. Bạn có muốn tiếp tục không?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Bằng cách này, bạn đang ghi đè giới hạn lưu trú được thiết lập trong cấu hình máy chủ. Bạn có muốn tiếp tục không?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Đã xóa %d điểm xuất hiện tiền đồn không hợp lệ.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Thị trấn của bạn bị phá sản, hãy nạp tiền vào ngân hàng bằng cách sử dụng /t deposit {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Bạn không thể sử dụng lệnh này vì bạn đã là thành viên của thị trấn. Nếu bạn muốn tiếp tục, bạn sẽ phải sử dụng ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
@@ -1763,12 +1640,10 @@ status_plot_hover: '%s:'
 msg_usage: 'Sử dụng: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Không có trang nào để hiển thị!'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'Quốc gia đó không liên quan gì đến bạn.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Thị trấn đó không liên quan gì tới bạn.'
-#Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'Địa điểm này đã có một phòng giam.'
 #Title line of the /plot perm hud.
@@ -1817,7 +1692,6 @@ msg_perm_hud_plot_for_sale: 'Rao Bán: '
 msg_perm_hud_no: 'Không'
 #Seen in /plot perm hud:
 msg_perm_hud_yes: 'Có'
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Thị trấn %s có cấp độ thị trấn được thiết lập là %s.'
 #Message shown when unsetting a manual town level.
@@ -1828,14 +1702,11 @@ msg_err_town_not_allowed_purchased_blocks: 'Thị trấn %s không thể mua cá
 msg_purchased_blocks_unset: 'Thị trấn %s đã bị dỡ bỏ các mảnh đất đã mua.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'Thị trấn %s đã được cấp %s mảnh đất, hiện tại họ có %s mảnh đất.'
-#Added in 0.154
 msg_comptype_upkeep: 'Phí bảo trì'
-#Added in 0.155
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'Thị trấn %s đã thiết lập chế độ bảo trì ở mức %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Thị trấn của bạn đã đạt đến giới hạn %d %s lô đất.'
-#Added in 0.156
 msg_spawn_cost_free: 'Miễn phí'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Lô đất này hiện đã là loại %s.'

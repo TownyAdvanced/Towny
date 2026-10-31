@@ -42,12 +42,10 @@ msg_cannot_abandon_town_while_jailed: 'Ye cannot abandon your town while ye is j
 msg_plot_price_too_expensive: 'No one will pay that price.'
 msg_you_robbed_player: 'You have robst %s of %s.'
 msg_player_robbed_you: '%s has robst you of %s.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Ye cannot be hurting your friends in this mortal realm!'
 town_deleted_by_admin: '<aqua>Town %s sits at the bottom of the ocean'
 nation_deleted_by_admin: '<aqua>Nation %s sits at the bottom of the ocean'
 are_you_sure_you_want_to_continue: 'Are ye sure?'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Error: That command is unheard of!'
 tc_err_unrecognized_command_format: 'Error: you be usin'' the wrong command format!'
@@ -56,11 +54,9 @@ explosions: 'Explodin'':'
 firespread: 'Fire:'
 mobspawns: 'Here be monsters:'
 online2: ' <green>(On Board)'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>You cannot be usin'' that command while ye is locked up in jail.'
 msg_neutral_towns: 'Neutral ports'
 msg_confirmation_spigot_click_accept: 'Click %s or type %s or walk the plank'
-#Added in 0.76
 msg_you: 'Ye'
 msg_you_have_been_jailed: 'Ye have been jailed.'
 msg_you_have_paid_bail: 'Ye paid bail and are free.'

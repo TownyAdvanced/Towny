@@ -323,8 +323,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>Kota %s tidak memiliki cu
 msg_not_enough_residents_capital: '<aqua>Kota %s tidak memiliki cukup penduduk untuk menjadi ibukota.'
 list_page: '<aqua>Halaman %s dari %s'
 list_err_not_enough_pages: '<red>Hanya terdapat %s halaman yang tersedia'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Kamu tidak dapat mengatur pajak kota dibawah %s.'
 msg_unknown_rank_available_ranks: 'Jabatan tidak diketahui %s. jabatan yang diperbolehkan adalah %s.'
 msg_no_permission_to_give_rank: 'Kamu tidak memiliki izin untuk mendapatkan jabatan ini.'
@@ -368,7 +366,6 @@ msg_err_cant_use_bed: '<dark_red>Kamu tidak memiliki wilayah ini dan kasur telah
 msg_town_plots_revenue_disclaimer: '<green>Tampilan pendapatan merupakan perkiraaan dan apakah pemilik lahan dapat membayarnya adalah sebuah faktor.'
 msg_town_set_perm_syntax_error: 'Perintah yang dimasukan tidak sesuia. Ketik ''/town set perm ?'' Untuk lebih jelasnya.'
 msg_plot_set_perm_syntax_error: 'Perintah yang dimasukan tidak sesuia. Ketik ''/town set perm ?'' Untuk lebih jelasnya.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Penduduk tersebut bukan berasal dari kota itu.'
 msg_err_resident_already_an_outlaw: 'Pemain tersebut telah ditetapkan sebagai penjahat oleh kota mu.'
 msg_err_not_outlaw_in_your_town: 'Kamu tidak bisa menentukan penduduk sebagai penjahat.'
@@ -381,22 +378,15 @@ msg_err_outlaw_in_open_town: 'Kamu tidak bisa bergabung dengan kota yang mengang
 msg_you_are_an_outlaw_in_this_town: '<dark_red>Hati-hati %s memutuskan kamu sebagai penjahat, mati di sini sama dengan penjara.'
 msg_err_town_not_close_enough_to_nation: 'Wilayah %s tidak cukup dekat dengan ibukota mu untuk bergabung dengan negara.'
 msg_nation_town_moved_their_homeblock_too_far: 'Wilayah %s berpindah terlalu jauh dari ibukota mu dan telah di hapus dari negara mu.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Radius tidak benar. Gunakan %s atau kurang.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Jumlah batas maksimal penduduk (%s) telah tercapai.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>%s belum mencapai waktu minimal bermain di server yang dibutuhkan untuk di undang, Harap menunggu.'
 msg_cant_toggle_pvp_outsider_in_town: 'Terdapat orang asing di kota mu, tidak dapat mengganti status PVP!'
 msg_err_unclaim_not_outpost: 'Tidak dalam melepas lahan, lahan ini adalah sebuah outpost!'
 outpost_plu: 'Outpost'
-#Added in 0.36
 msg_err_not_enough_residents: 'Penduduk tidak cukup untuk melakukan hal tersebut.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Pengaturan tidak dapat memukul teman di matikan!'
-#Added in 0.38
 msg_claim_error: '<red>Plugin lain memberhentikan proses pengambilan lahan (%s)/(%s), proses dibatalkan.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Menggunakan spawn town hanya diperbolehkan disaat perang.'
 msg_err_town_spawn_forbidden_peace: '<red>TMenggunakan spawn town dilarang saat perang.'
 msg_err_town_spawn_nation_forbidden_war: '<red>Menggunakan spawn town ke kota lain dalam negara mu hanya diperbolehkan disaat perang.'
@@ -405,9 +395,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Menggunakan spawn town ke kota seku
 msg_err_town_spawn_ally_forbidden_false: '<red>Menggunakan spawn town ke kota sekutu lain dalam negara mu dilarang disaat perang.'
 msg_err_public_spawn_forbidden_war: '<red>Spawn publik ke kota lain hanya diperbolehkan disaat perang.'
 msg_err_public_spawn_forbidden_peace: '<red>Spawn publik ke kota lain dilarang di saat perang.'
-#Added in 0.40
 mayor_help_9: 'Mencoba untuk melepaskan wilayah outpost'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Undangan'
 invite_sent_by: 'Undangan dikirim oleh'
 invite_help_1: 'Terima undangann untuk bergabung dengan kota'
@@ -467,16 +455,13 @@ you_have_been_requested_to_ally: 'Kamu telah mengirim permintaan bersekutu '
 this_message_will_expire: 'Akan otomatis kadaluarsa dalam 2o detik'
 player_sing: 'Pemain'
 nation_zone_this_area_under_protection_of: 'Bagian wilayah %s dalam perlindungan %s'
-#Added in 0.42
 you_have_been_invited_to_join2: 'Kamu telah diundang untuk bergabung dengan %s'
 you_have_been_requested_to_ally2: 'Kamu telah mengirimkan permintaan bersekutu ke %s'
-#Added in 0.43
 town_help_11: 'Membuat kota baru. Gunakan ''_'' dan bukan spasi.'
 changed_plot_town: '<aqua>Berhasil mengubah lahan kota menjadi %s!'
 not_standing_in_plot: 'Kamu tidak sedang berdiri di lahan yang benar!'
 msg_err_homeblock_has_not_been_set: 'Home Block belum diatur, gunakan ''/town set homeblock'' terlebih dahulu.'
 msg_err_spawn_not_within_homeblock: 'Spawn tidak berada didalam homeBlock, gunakan ''/town set homeblock'' terlebih dahulu.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Error: perintah tidak benar!'
 tc_settings_reloaded: '[TownyChat] Pengaturan di muat ulang!'
@@ -577,7 +562,6 @@ status_res_taxexempt: 'Staf dibebaskan dari pembayaran pajak kota.'
 status_res_tax: 'Pajak Kota:'
 status_res_plottax: 'Total Pajak Bidang Tanah:'
 status_res_totaltax: 'Total Pajak yang dibayar:'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Kamu tidak dapat menggunakan bank negara diluar dari ibukota.'
 msg_err_unable_to_use_bank_outside_your_town: 'Kamu tidak dapat menggunakan bank kota diluar kota.'
 msg_time_until_a_new_day: 'Waktu sebelum hari baru dimulai: '
@@ -587,7 +571,6 @@ msg_seconds: ' detik'
 msg_err_invalid_string_nationboard_not_set: 'Data tidak benar, Nation Board belum diatur.'
 msg_plot_evict: 'Lahan berhasil diusir.'
 msg_no_one_to_evict: 'Tidak ada orang untuk diusir dari lahan ini.'
-#Added in 0.46
 nation_help_10: 'Teleportasi ke spawn negara.'
 msg_nation_spawn_warmup: '<aqua>Menunggu teleportasi...'
 msg_set_nation_spawn: '<aqua>Berhasil mengganti spawn negara.'
@@ -613,7 +596,6 @@ msg_spawn_cost_set_to: '<aqua>%s telah merubah harga spawn /%s menjadi %s'
 msg_err_cannot_set_spawn_cost_more_than: '<red>Kamu tidak dapat merubah harga spawn lebih dari %s'
 msg_err_ally_isnt_public: '<red>Sekutu mu, %s, tidak mengaktifkan publik spawn. Teleportasi ditolak.'
 msg_nation_changed_public: '<red>Status publik negara menjadi %s.'
-#Added in 0.47:
 status_plot_type: 'Tipe Bidang Tanah:'
 msg_no_self_jailing: 'Tidak dapat mempenjarakan diri sendiri.'
 online2: ' <green>(Sedang aktif)'
@@ -634,7 +616,6 @@ enabled: 'Aktif'
 disabled: 'Tidak Aktif'
 forced: 'Paksa'
 adjustable: 'Dapat Dirubah'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s Tidak memiliki cukup uang untuk membuat kota baru, yang harganya %s.'
 msg_no_funds_new_nation2: '<red>Tidak memiliki cukup uang untuk membuat negara baru, yang harganya %s.'
 msg_no_funds_claim2: '<red>Kota tidak mampu mengambil %s seharga %s. Simpan %s kedalam bank kota, gunakan /t deposit %s'
@@ -642,11 +623,9 @@ msg_err_cant_afford_blocks2: '<red>Kota tidak mampu mengambil %s seharga %s. Sim
 msg_err_not_enough_variables: '<red>Variabel tidak cukup: '
 nation_rechecked_by_admin: '<aqua>Jarak kota dari negara %s berhasil di cek kembali.'
 msg_err_nation_over_town_limit: '<red>Negara mu telah mencapai blocktown per negara: %s.'
-#Added in 0.49
 msg_process_claim: 'Memproses pengambilan lahan...'
 msg_process_unclaim: 'Memproses pelepasan lahan...'
 msg_total_townblocks: 'Total Lahan Kota: '
-#Added in 0.50
 friend_list: 'Daftar teman'
 not_registered: 'Belum registrasi.'
 msg_error_missing_comparator: '<aqua>Spesifikasikan diurutkan berdasarkan.'
@@ -667,7 +646,6 @@ msg_couldnt_pay_plot_taxes_multiple: '<aqua>Penduduk berikut tidak dapat membaya
 msg_bankrupt_town2: '<aqua>%s Tidak dapat membiayai kotanya lagi.'
 msg_bankrupt_nation2: '<aqua>%s Tidak dapat membiayai negaranya lagi.'
 status_embassy_town: 'Kedutaan di'
-#Added in 0.51:
 msg_error_invalid_comparator_nation: '<aqua>Pembanding tidak valid. Cobalah %s.'
 msg_error_invalid_comparator_town: '<aqua>Pembanding tidak valid. Cobalah %s.'
 msg_err_merging_for_kings_only: '<aqua>Penggabungan lahan hanya dapat dilakukan oleh Pemimpin Negara.'
@@ -675,7 +653,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>Pemimpin Negara %s, %s, sedang
 nation1_has_merged_with_nation2: '<gold>Negara %s telah setuju untuk bersatu dengan negara %s.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>Apakah kamu setuju untuk membubarkan negara mu %s menajadi bagian dari %s? Ini akan memindahkan seluruh kota dan bank negara ke %s.'
 no_open_towns: 'Tidak ada kota dalam daftar.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Negara tidak punya sekutu dalam daftar.'
 msg_error_nation_has_no_enemies: 'Negara tidak punya musuh dalam daftar.'
 msg_error_ta_plot_claim: 'Membutuhkan nama pemain, contoh: /ta plot claim namapemain'
@@ -687,19 +664,14 @@ msg_err_already_in_a_nation: 'Kota mu sudah menjadi bagian dari suatu negara.'
 msg_err_nation_not_open: '<red>Negara %s tidak dibuka untuk umum. Tanyakan pemimpin negara atau asisten untuk bergabung.'
 msg_err_nation_homeblock_in_another_world: '<red>Homeblock kota mu tidak berada di dunia yang sama dengan homeblock negara mu.'
 status_bank_town_penalty_upkeep: 'Pemeliharaan klaim berlebih:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Kamu tidak bisa spawn ke %s, kamu ditandai sebagai orang yang di usir.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Kamu tidak dapat menggunakan perintah itu saat dipenjara.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Anggota negara tidak dapat melakukan %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s telah menjadi penduduk kota.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>Kamu tidak mampu merubah tipe lahan menjadi %s seharga %s'
 msg_plot_set_cost: '<aqua>Kamu dikenakan biaya %s untuk merubah tipe lahan: %s'
 msg_err_townspawn_has_not_been_set: '<red>Spawn kota belum ditentukan.'
 msg_err_player_too_far_from_town_spawn: '<red>%s terlalu jauh untuk menerima undangan bergabung ke kota. Jarak maksimal: %s blok.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Biaya asuransi penduduk: '
 msg_mayor_bail_amount: 'Biaya asuransi walikota: '
 msg_king_bail_amount: 'Biaya Jaminan Pemimpin Negara:'
@@ -720,7 +692,6 @@ homeblock: 'blokrumah'
 townblock: 'blokkota'
 outpost: 'pos terdepan'
 msg_err_not_same_town: '<aqua>%s tidak termasuk dalam kota mu.'
-#Added in 0.59:
 msg_modes_set: 'Setelan mode: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Lahan ini tidak memiliki database yang terkait.'
 msg_err_the_metadata_for_key_is_not_registered: 'metadata untuk ''%s'' tidak teregistrasi!'
@@ -747,28 +718,19 @@ msg_err_tag_too_long: 'Label terlalu panjang.'
 msg_err_nation_has_not_set_a_spawn_location: 'Negara tidak mengatur lokasi spawn.'
 msg_err_resident_doesnt_belong_to_any_town: 'Penduduk tidak termasuk dalam suatu kota'
 msg_err_could_not_set_default_modes_for: 'Tidak dapat mengatur ke pengaturan standar untuk '
-#Added in 0.60
 msg_set_war_allowed_on: 'Perang akan diperbolehkan di dunia ini.'
 msg_set_war_allowed_off: 'Perang tidak mempengeruhi dunia ini.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Kamu tidak bisa merubah pengaturan PVP, %s detik lagi.'
 msg_err_cannot_spawn_x_seconds_remaining: 'Kamu tidak bisa spawn dalam %s detik.'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Lahan tidak lagi untuk di jual.'
 msg_err_x_spawn_disallowed_from_x: '<red>%s spawn tidak diperbolehkan dari %s.'
 msg_the_wilderness: 'Lahan Kosong'
 msg_enemy_areas: 'Area Musuh'
 msg_neutral_towns: 'Kota Netral'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Tidak ada negara dengan nama %s'
 msg_err_cannot_unclaim_homeblock: 'Kamu tidak bisa melepaskan homeblock, gunakan ''/town set homeblock'' untuk memindahkan homeblock.'
-#Added in 0.65
 msg_err_rename_cancelled: 'Penggantian nama dibatalkan oleh plugin lain.'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '[Conquered]'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Wilayah ini adalah bagian dari grup %s konfirmasi untuk membeli semua.'
 msg_plot_group_unclaim_confirmation: 'Wilayah ini adalah bagian dari grup %s konfirmasi untuk melepaskan seluruh wilayah.'
 msg_plot_group_toggle_confirmation: 'Wilayah ini adalah bagian dari grup %s by confirming you will toggle a property on them all.'
@@ -789,38 +751,26 @@ msg_set_group_type_to_x: 'Merubah grup lahan menjadi %s'
 msg_player_successfully_bought_group_x: '%s berhasil membeli grup wilayah %s'
 status_plot_group_name_and_size: 'Blokkota adalah bagian dari grup: %s. Grup memiliki %s total blokkota.'
 msg_player_made_group_not_for_sale: '%s menjadikan grup %s tidak untuk dijual.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'grup wilayah tidak dapat dijadikan penjara.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Kamu harus menulis nama grup suatu wilayah, contoh:/plot group add {nama}'
 msg_confirmation_spigot_click_accept: 'Klik %s atau ketik %s'
 msg_confirmation_spigot_click_cancel: 'Klik %s atau ketik %s'
 msg_you_cannot_kick_yourself: 'Kamu tidak bisa mengusir dirimu sendiri.'
 msg_you_cannot_kick_this_resident: 'Kamu tidak bisa mengusir %s, dia adalah walikota atau asisten.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Wilayah: %s telah termasuk dalam grup, gunakan /plot group fs [harga]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Wilayah: %s telah termasuk dalam grup, gunakan /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Pengaturan kontrol-admin %s mencegah Anda mengalihkan pvp ke %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Kamu tidak sedang dipenjarakan.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Kamu tidak bisa membuat portal lain di lokasi ini.'
-#Added in 0.75
 msg_already_ally: 'Negara mu sudah bersekutu dengan negara %s.'
-#Added in 0.76
 msg_you: 'Kamu'
 msg_click_spawn: '<green>Klik untuk teleport: <yellow>%s'
 msg_spawn_cost: '<green>Biaya teleport = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Ada eror saat memuat Towny.'
-msg_reloaded_config: '<dark_green>Configuration successfully reloaded.'
-msg_reloaded_perms: '<dark_green>Permissions successfully reloaded.'
 msg_reloaded_db: '<dark_green>Database successfully reloaded.'
 msg_reloaded_lang: '<dark_green>Language file successfully reloaded.'
 msg_reset_config: '<dark_green>Config has been reset.'
 msg_err_teleport_cancelled: 'Bergerak membuat teleportasi mu dibatalkan.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'teman'
 msg_cache_block_error_plot_allies: 'sekutu'
 msg_cache_block_error_plot_outsiders: 'orang luar'
@@ -834,25 +784,18 @@ msg_confirm_purchase: 'Melakukan ini dikenai biaya %s. Lanjutkan?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Karena mereka tidak akan cukup mendekati ibu kota yang baru, kota-kota berikut akan dihapus dari negara Anda: %s. Apakah Anda ingin melanjutkan?'
 msg_ta_deposit_all_success: 'Berhasil deposit %s keseluruh bank negara dan kota.'
 bonus_townblocks: 'bonus blokkota'
-#Added in 0.80
 nomad_sing: 'Pengembara'
 msg_new_town_advice: 'Kamu berhasil membuat kota! Kota mu akan membayar pemeliharaan harian yang saat ini bernilai %s. Kamu dapat menyimpan uang di bank kota menggunakan ''/t deposit #''. Kota mu akan terhapus jika bank kota tidak memiliki uang. Kamu dapat melihat biaya perawatan kapan saja menggunakan ''/towny''. Pembayaran pemeliharaan harian berikutnya dilakukan dalam %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Teleportasi mu dibatalkan karena ter-damage.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Undangan<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Konfirmasi<dark_gray>] <blue>"
 this_message_will_expire2: '<blue>Ini akan otomatis kadaluwarsa dalam %s detik'
 msg_hover_next_page: 'Halaman berikutnya'
 msg_hover_previous_page: 'Halaman sebelumnya'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Maks jumlah pajak hanya dapat diatur untuk kota-kota dengan persentase pajak."
 msg_town_set_tax_max_percent_amount: "%s telah mengatur jumlah persentase pajak maks menjadi %s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Bidang Tanah dimiliki oleh grup, gunakan tombol pengalihan grup /plot'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>Berhaisl mengatur ulang perizinan untuk bidang tanah ini.'
-#Added in 0.86
 status_bank_bankrupt: '(BANGKRUT)'
 msg_warning_bankrupt: '<dark_red>*** PERINGATAN!, %s AKAN BANGKRUT PADA HARI BERIKUTNYA KARENA KURANGNYA DANA BANK UNTUK MEMBAYAR PERAWATAN ***'
 msg_town_bankrupt_by_upkeep: '<aqua>%s tidak sanggup membayar pemeliharaan dan kini telah bangkrut.'
@@ -870,7 +813,6 @@ msg_your_town_payed_upkeep: '<aqua>Kota mu membayar biaya perawatan sebesar %s.'
 msg_your_nation_payed_upkeep: '<aqua>Negara mu membayar biaya perawatan sebesar %s.'
 msg_your_town_couldnt_pay_upkeep: '<aqua>Kota Anda tidak dapat membayar pemeliharaan harian %s dan kini dibubarkan.'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>Negara Anda tidak dapat membayar pemeliharaan harian %s dan kini dibubarkan.'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s tidak dapat membayar pemeliharaan mereka, mencapai batas hutangnya, dan kini dibubarkan.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>Kota berikut tidak dapat membayar pemeliharaan mereka, mencapai batas hutangnya, dan kini dibubarkan: '
 msg_unable_to_deposit_x: 'Tidak dapat melakukan deposit %s ke dalam bank kota.'
@@ -878,10 +820,8 @@ msg_unable_to_withdraw_x: 'Tidak dapat menarik %s dari bank kota.'
 status_debtcap: 'Batas Hutang:'
 status_world_explrevert_entity: 'Pemulihan Ledakan Entitas:'
 status_world_explrevert_block: 'Pemulihan Ledakan Blok:'
-#Added in 0.88
 msg_nation_already_peaceful: '<red>Negara sudah damai.'
 msg_nation_already_not_peaceful: '<red>Negara sudah tidak damai.'
-#Added in 0.89
 status_world_friendlyfire: 'TembakanPersahabatan:'
 status_world_wildernessmobs: 'Mahluk Alam Liar:'
 msg_outlaw_kick_cooldown: '<red>Anda dianggap diusir di %s. Anda punya sisa %s untuk meninggalkan kota, jika tidak, Anda akan diteleportasi kembali ke titik muncul Anda.'
@@ -889,14 +829,11 @@ msg_outlaw_kicked: '<dark_red>Anda tidak diterima di %s. Anda diteleportasi perg
 msg_outlaw_town_notify: '<red>Seorang yang diusir, %s, telah memasuki wilayah kota Anda.'
 msg_your_town_payed_upkeep_with_debt: '<red>Kota Anda membayar pemeliharaan harian %s dengan hutang.'
 msg_payed_nation_tax_with_debt: '<red>Kota Anda membayar pajak negara sebesar %s dengan hutang.'
-#Added in 0.90
 status_plot_clear_deletion: 'BersihkanBlokHapusBidangTanah:'
 msg_err_plot_clear_disabled_in_this_world: 'Perintah membersihkan /plot dinonaktifkan di dunia ini.'
-#Added in 0.91
 msg_universe_attribution: 'Penulis: '
 msg_universe_contributors: ' Dan kontributor seperti Anda. '
 townblock_plu: 'BlokKota'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'perintah jambaru berhasi dieksekusi'
 town_help_12: 'Klaim kembali kota Anda dari kehancuran.'
@@ -910,10 +847,8 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '<red>Kota mu dalam keadaan kr
 msg_time_remaining_before_full_removal: 'Waktu yang tersisa sebelum penghapusan penuh: %d jam.'
 msg_time_until_reclaim_available: 'Waktu hingga klaim ulang tersedia: %d jam.'
 msg_reclaim_available: 'Klaim ulang tersedia.'
-#Added in 0.93
 msg_changed_peaceful: '<red>Kenetralan/kedamaian Kota saat ini %s.'
 msg_err_town_unclaim_canceled: '<red>Tidak klaim dibatalkan. Anda tidak dapat tidak mengeklaim area ini saat ini.'
-#Added in 0.94
 msg_comptype_residents: 'Jumlah Penduduk'
 msg_comptype_townblocks: 'Jumlah Blokkota yang Diklaim'
 msg_comptype_balance: 'Saldo Bank'
@@ -926,7 +861,6 @@ npc_created: 'Dibuat:'
 msg_no_funds_claim_plot: '<red>Anda tidak mampu mengeklaim bidang tanah seharga %s.'
 msg_no_funds_claim_plot_group: '<red>Anda tidak mampu mengeklaim %s bidang tanah seharga %s.'
 status_town_title_peaceful: '<aqua>(Damai)'
-#Added in 0.95
 status_public: '<aqua>(Publik)'
 msg_days: ' hari'
 msg_comptype_public: 'Status Publik'
@@ -949,23 +883,15 @@ towny_prices_price_shop: '<red>            <dark_green>Toko: <green>%s <dark_gra
 towny_prices_taxes_plot: '<red>    [Taxes]    <dark_green>Penduduk: <green>%s <dark_gray>| <dark_green>Lahan: <green>%s'
 towny_prices_taxes_shop: '<red>            <dark_green>Toko: <green>%s <dark_gray>| <dark_green>Kedutaan: <green>%s'
 towny_prices_town_neutral_tax: '<red>            <dark_green>Kedamaian: <green>%s'
-towny_prices_plots: '<red>    [Setting Plots]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
 towny_prices_nationname: '<red>Negara: <gold>%s'
 towny_prices_nation_tax: '<red>    [Taxes] <dark_green>Kota: <green>%s <dark_gray>| <dark_green>Kedamaian: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>Kota yang ditaklukkan %s tidak dapat membayar pajak negara.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>Kota-kota berikut yang tidak mampu membayar pajak negara: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Kota mu telah dibebaskan dari pajak negara.'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Status Kehancuran'
 msg_comptype_bankrupt: 'Status Kepailitan'
 msg_ruined: '<red>(Hancur)'
 msg_bankrupt: '<red>(Pailit Bangkrut)'
-#Added in 0.98
 msg_del_town2: '<aqua>Kota %s telah dihapus!'
 msg_ruin_town: '<aqua>Kota %s jatuh dalam kehancuran!'
 gui_title_select_plot_type: 'Pilih Jenis Lahan'
@@ -977,7 +903,6 @@ gui_title_towny_switch: 'Daftar Pengalihan Towny'
 gui_title_towny_plotclear: 'Daftar Penghapusan Bersih Lahan Towny'
 msg_ta_removed_all_titles_and_surnames_removed: 'Semua penduduk yang memiliki gelar telah dihapus.'
 msg_err_homeblock_already_set_here: 'Lokasi ini sudah ada di homeblock kota Anda.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>Penggabungan lahan hanya dapat dilakukan oleh walikota.'
 msg_town_merge_err_not_close: '<red>Kota %s terlalu jauh dari kota Anda. Homeblock mereka harus berada dalam %d townblock dari homeblock Anda.'
 msg_town_merge_request_sent: '<aqua>Permintaan Penggabungan telah dikirimkan ke walikota %s.'
@@ -998,7 +923,6 @@ msg_town_merge_success: '<aqua>Kota %s, milik %s, telah berhasil bergabung ke ko
 msg_town_merge_cost_withdraw: 'Biaya Penggabungan Kota'
 msg_town_merge_transaction_reason: 'Penggabungan Kota'
 towny_prices_town_merge: '<yellow>[Merging] <dark_green>Biaya dasar: <green>%s <dark_gray>| <dark_green>Per Lahan: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Negaramu tidak bersekutu dengan %s.'
 msg_err_nation_not_enemies_with: '<red>Negaramu tidak bermusuhan dengan %s.'
 msg_err_nation_already_enemies_with: '<red>Negaramu sudah bermusuhan dengan %s.'
@@ -1008,20 +932,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s tidak bermusuhan dengan %s.'
 msg_err_nation_already_allied_with_2: '<red>%s sudah bersekutu dengan %s.'
 msg_err_nation_already_enemies_with_2: '<red>%s sudah bermusuhan dengan %s.'
 msg_ta_allies_enemies_updated: '<aqua>Sekutu/Musuh untuk %s telah diperbarui.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>Klik untuk melihat informasi lahan selengkapnya.'
 msg_err_nation_capital_too_many_residents: '<red>Ibu kota saat ini memiliki terlalu banyak penduduk untuk diganti oleh %s.'
 msg_deleting_nation_will_result_in_losing_residents: '<red>Peringatan: Menghapus negaramu akan membuat kotamu melebihi batas populasi sebesar %d, yang berakibat penghapusan sebesar %d penduduk.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '<red>Kamu tidak dapat menggunakan perintah itu di dalam kota.'
 msg_command_limited: 'Kamu hanya dapat menggunakan command tersebut di dalam plot milik mu.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Diklaim pada:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Penggunaan alam liar menjadi %s di semua dunia.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerasi menjadi %s di semua dunia.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Anda tidak dapat menjalankan perintah tersebut karena Anda tidak tinggal di %s.'
 msg_err_this_jail_has_no_cells: 'Penjara ini tidak memiliki sel.'
 msg_err_no_cell_found_at_this_location: 'Tidak ada sel penjara ditemukan di lokasi ini.'
@@ -1045,21 +964,18 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Jangan keluar sebelum ditele
 jail_plu: 'Penjara'
 jail_sing: 'Penjara'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s belum bermain cukup lama untuk dipenjara, tunggu hingga %s'
-#Added in 0.108
 msg_town_not_peaceful: '<aqua>Kota tidak mampu menjaga kedamaiannya.'
 msg_town_already_peaceful: '<aqua>Kota sudah damai.'
 msg_town_already_not_peaceful: '<aqua>Kota sudah tidak aman.'
 msg_town_paid_for_neutral_status: '<aqua>Kota Anda membayar %s untuk mengembalikan status damainya.'
 msg_nation_paid_for_neutral_status: '<aqua>Negara Anda membayar %s untuk mengembalikan status damai Anda.'
 your_town_has_been_invited_to_join_nation: 'Kota Anda telah diundang untuk bergabung ke negara: %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>Tak ada anggota tidak aktif untuk dibersihkan.'
 msg_purging_will_remove_the_following_residents: '<aqua>Mohon konfirmasi bahwa Anda ingin membersihkan penduduk berikut: %s'
 msg_purge_complete_x_removed: '<aqua>Pembersihan selesai, penduduk %s dihapus.'
 msg_err_days_must_be_greater_than_0: 'Hari harus lebih besar dari nol.'
 msg_err_outlawed_players_no_teleport: '<dark_red>Anda dianggap penjahat di kota ini dan tidak dapat berteleportasi!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>Anda tidak dapat menggunakan perintah selagi dalam kota dimana Anda dianggap penjahat.'
-#Added in 0.110
 msg_safe_mode: "[Error]Terkunci di safe mode!"
 msg_safe_mode_base: '[Error] Towny dikunci di Mode Aman karena eror! '
 msg_safe_mode_player: 'Beritahu admin untuk mengecek konsol servernya.'
@@ -1069,7 +985,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Tidak dapat mengeklaim pos 
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Anda juga telah memindahkan blokrumah baru-baru ini! Tunggu %s lagi.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Anda tidak dapat memindahkan blokrumah dengan blokkota sebanyak ini, batasnya adalah %s, ruang ini lebih %s blokkota.'
 msg_err_usingtowny_disabled: 'Towny tidak dapat dipergunakan di world ini. Gunakan ''/townyworld toggle'' untuk memperbolehkan towny di world ini.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Blokkota ini telah menjadi bagian dari grupbidangtanah %s. Apa Anda yakin ingin mentransfernya ke grupbidangtanah %s.'
 msg_townblock_transferred_from_x_to_x_group: 'Blokkota ditransfer dari %s ke grup bidang tanah %s.'
 msg_plotgroup_deleted: 'Grupbidangtanah %s telah dihapus.'
@@ -1080,7 +995,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Townblock ini sudah menj
 map_hover_plot_group: 'Kelompok Lahan:'
 map_hover_plot_group_size: ' Ukuran: '
 map_hover_plots: '%s lahan'
-#Added in 0.112
 msg_checking_for_updates: 'Memeriksa pembaruan...'
 msg_no_new_updates: 'Pembaruan terbaru tidak ditemukan.'
 msg_new_update_available: '<aqua>Pembaruan tersedia: %s | Versi saat ini: %s'
@@ -1090,7 +1004,6 @@ msg_latest_version: '<dark_green>Versi towny: <green>%s <dark_green>| Versi terk
 msg_up_to_date: '<green>Aplikasimu sudah mutakhir.'
 msg_click_purchase: 'Klik untuk membeli'
 msg_you_must_join_this_town_to_claim_this_plot: 'Kamu harus bergabung di kota ini: %s, untuk mengklaim lahan. Apakah kamu ingin bergabung di kota ini dan melanjutkan klaim?'
-#Added in 0.113
 status_trustedlist: 'Terpercaya'
 msg_click_to_edit: '<gold>Klik untuk mengubah.'
 permission_gui_header: 'GUI Izin Towny'
@@ -1111,7 +1024,6 @@ msg_cache_block_err: 'Kamu tidak diizinkan untuk %s disini.'
 msg_err_plot_belongs_to_group: '<red>Lahan ini milik kelompok lain, gunakan %s.'
 plotgroup_sing: 'Kelompok Lahan'
 msg_err_ally_limit_reached: 'Negaramu sudah mencapai batas sekutu, tidak dapat menerima sekutu lagi.'
-#Added in 0.114
 msg_err_group_not_found: 'Tidak menemukan kelompok %s.'
 msg_err_expected_command_format: 'Sintaks salah, yang diharapkan: %s'
 msg_err_group_already_has_node: 'Kelompok %s telah memiliki node %s.'
@@ -1133,23 +1045,16 @@ help_ta_perms_townrankremove: 'Hapus peringkatkota dari fail townyperms.'
 help_ta_perms_nationrankadd: 'Tambahkan peringkatnegara pada fail townyperms.'
 help_ta_perms_nationrankremove: 'Hapus peringkatnegara pada fail townyperms.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Penduduk tersebut tidak berasal dari negara itu.'
-#Added in 0.115
 msg_comptype_founded: 'Tanggal Ditemukan'
 msg_err_must_be_greater_than_or_equal_to: 'Jumlahnya harus lebih besar dari atau sama dengan %s'
 err_invalid_yaml: 'Eror memuat: Gagal memuat fail %s (apakah ini melewati parser yaml?).'
-#Added in 0.116
 msg_town_map_color_changed: '<aqua>Warna map kota telah diubah ke %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Blokkota ini tidak dapat ditambahkan ke grup karena bukan tipe: %s'
-#Added in 0.118
 status_title_nopvp: '<green>(Tanpa PVP)'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Anda tidak dapat memenjarakan penduduk Anda karena mereka berada di lokasi dimana mereka sedang diusir.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Anda tidak dapat memenjarakan penduduk Anda karena mereka berada di lokasi dimana mereka dianggap musuh.'
-#Added in 0.120
 msg_resident_prompt: 'Masukkan nama pemain dalam obrolan, atau q untuk keluar. Ini akan secara otomatis dihentikan dalam 30 detik.'
 msg_prompt_cancel: 'Bantuan dibatalkan atau waktu habis.'
-status_home_element: ' <gray>[Home: %s]'
 status_registered: 'Didaftar:'
 status_lastonline: 'Daring Terakhir:'
 status_fractions: '%s/%s'
@@ -1159,13 +1064,10 @@ status_jailed: 'Dipenjara:'
 status_bad_yes: '<red>YA'
 status_good_no: '<green>TIDAK'
 status_resident_tax_title: 'Pajak Milik %s'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Karena tidak akan cukup mendekati ibu kota negara Anda, kota-kota berikut akan dihapus jika penggabungan selesai: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "'%s' bukan towny world yang valid."
 msg_err_enter_world_name_first: 'Mohon masukkan nama dunia terlebih dulu.'
 msg_wilderness_use_set_to: '<aqua>Alam liar yang digunakan telah disetel ke %s dalam %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Tanggapan tidak valid! Tekan q untuk keluar atau kembali ke pertanyaan sebelumnya.'
 msg_setup_full_guide_link: '<aqua>Untuk tautan ke pedoman penginstalan selengkapnya, klik di sini.'
 msg_setup_wildernessuse: 'Apakah Anda ingin mengaktifkan penggunaan alam liar? Ini akan membolehkan pemain untuk menghancurkan/membangun di alam liar.'
@@ -1175,14 +1077,12 @@ msg_setup_town_cost: 'Berapa harga membuat satu kota baru? Bawaannya adalah 250.
 msg_setup_nation_cost: 'Berapa harga untuk membuat satu negara baru? Bawaannya adalah 1000.'
 msg_setup_townblock_cost: 'Berapa harga mengeklaim blokkota? Bawaannya adalah 25. Sebuah blokkota sama ukurannya dengan satu potong (pengaturan bawaan)'
 msg_setup_success: 'Berhasil mengubah nilai config ke nilai Anda yang baru.'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s dimunculkan baru-baru ini dan tidak dapat dicelakai.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Kamu telah kehilangan perlindungan respawn.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'Kamu tidak dapat mengambil item selagi berada dalam perlindungan respawn.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Kapital:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1195,7 +1095,6 @@ status_unknown: 'tidak diketahui'
 msg_nationzone_override_set_to: '%s mengubah setelan zonanegaranya menjadi %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s menghapus perubahan zonanegaranya.'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Ukuran Zona Negara:'
 #Shown when a player adds people to their friends list.
@@ -1239,21 +1138,18 @@ msg_purge_complete: 'Pembersihan penduduk selesai: %s dihapus.'
 msg_you_have_been_given_bonus_blocks: 'Kamu telah diberi %s bonus townblock.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Kotamu tidak dapat membeli blok bonus lagi. Jumlah maksimum telah tercapai.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Ibu kota tidak dapat mengubah status damai.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Zona Negara di sekeliling kota sekarang adalah %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Kotamu tidak memiliki NationZone untuk diubah!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Biaya pemeliharaan negara didasari oleh <green> %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'jumlah kota.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'level negara (jumlah penduduk.)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Dipenjara oleh walikota.'
 #Jail causes
@@ -1284,30 +1180,22 @@ msg_jailed_war_prisoner: 'Sebagai tawanan perang kamu akan dibebaskan jika orang
 msg_jailed_title: 'Kamu telah dipenjara :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Kota tidak memiliki sekutu dalam daftar.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Kota tidak memiliki musuh dalam daftar.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Pengonfirmasian Melebihi Batas Waktu.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Suara saluran telah dibisukan'
 tc_player_channel_sound_unmuted: 'Suara saluran telah dinyalakan'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Ada orang asing di lahanmu, kamu tidak dapat mengubah status pvp!'
-#Added in 0.136
 msg_view_on_web: '<gray>Klik untuk melihat di web.'
-#Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>Kota %s telah setuju untuk bergabung dengan negara %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Biaya Netralitas:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Jika kamu membayar dengan uang asli untuk town block tersebut harus dipahami bahwa: server yang sedang kamu mainkan saat ini melanggar Minecraft EULA dan Lisensi Towny.'
 #Line 2 of the givebonus warning.
@@ -1316,47 +1204,36 @@ msg_ptw_warning_2: 'Tim Towny tidak pernah menginginkan blokkota dapat dibeli de
 msg_ptw_warning_3: 'Jika kamu membayar dengan uang asli, kami sarankan untuk bermain di server Towny lainnya yang menghormati harapan dari Tim Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Anda telah diundang untuk bergabung %s<blue> (Negara: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Kota Anda tidak memiliki cukup uang untuk tidak mengklaim lahan ini. Dibutuhkan %s.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Kota Anda membayar %s untuk tidak mengeklaim lahan tersebut.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Tidak mengeklaim lahan ini akan seharga %s, apakah Anda ingin melanjutkan?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Anda harus menunggu %s detik sebelum dapat menamai ulang kota Anda lagi.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Anda tidak dapat mengalihkan netralitas, tersisa %s detik lagi.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Perintah ini tidak dapat digunakan dari konsol.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Kota %s telah menetapkan pengaturan klaim tanpa batasnya ke %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Kamu tidak memiliki cukup townblock untuk mengklaim, apakah kamu ingin menyalakan pengklaiman tanpa batas untuk kota %s'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Kamu tidak dapat meninggalkan negaramu, kotamu sudah ditaklukan.'
 msg_err_console_only: 'Perintah ini hanya dapat digunakan dengan konsol.'
 msg_err_player_only: 'Perintah ini hanya dapat digunakan oleh player.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Pesan judul yang ditampilkan ketika melewati batas adalah %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Menjalankan perintah ini akan mengembalikan config.yml kamu menjadi file bawaan. Apakah kamu ingin melanjutkan?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Dengan menjalankan perintah ini, kamu mengubah pengaturan batas penduduk di konfigurasi server. apakah kamu tetap ingin melanjutkan?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Menghapus %d spawn pos luar salah.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Kotamu pailit, tambahkan uang ke bank menggunakan/town deposit {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Kamu tidak dapat menggunakan perintah ini, karena kamu sudah menjadi anggota kota lain. Jika ingin melanjutkan, kamu akan harus menggunakan ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
@@ -1375,12 +1252,10 @@ status_plot_hover: '%s:'
 msg_usage: 'Penggunaan: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Tidak ada halaman untuk ditampilkan!'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'Negara itu tidak berafiliasi denganmu.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Negara itu tidak berafiliasi denganmu.'
-#Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'Lokasi ini sudah memiliki sel penjara.'
 #Title line of the /plot perm hud.
@@ -1419,7 +1294,6 @@ msg_perm_hud_nation: 'negara'
 msg_perm_hud_outsider: 'orang luar'
 #Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Lahan: '
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Kota %s telah mengatur townlevel mereka ke %s.'
 #Message shown when unsetting a manual town level.
@@ -1430,14 +1304,11 @@ msg_err_town_not_allowed_purchased_blocks: 'Kota %s tidak dapat membeli townbloc
 msg_purchased_blocks_unset: 'Kota %s telah menghapus pembelian townblock mereka.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'Kota %s telah diberi %s townblock yang dibeli, mereka saat ini memiliki %s townblock yang dibeli.'
-#Added in 0.154
 msg_comptype_upkeep: 'Biaya pemeliharaan'
-#Added in 0.155
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'Kota %s telah mengatur biaya pemeliharaannya ke %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Kotamu telah mencapai batas %d %s lahan.'
-#Added in 0.156
 msg_spawn_cost_free: 'Kosong'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Lahan ini sudah berjenis %s.'

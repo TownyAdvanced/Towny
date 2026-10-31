@@ -322,8 +322,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>Byen %s har ikke nok innb
 msg_not_enough_residents_capital: '<aqua>Byen %s har ikke nok innbyggere til å være hovedstad.'
 list_page: '<aqua>Side %s av %s'
 list_err_not_enough_pages: '<red>Bare %s sider tilgjengelig'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Du kan ikke sette byskatten til under %s.'
 msg_unknown_rank_available_ranks: 'Ukjent rangering %s. Tillatt rangering er %s .'
 msg_no_permission_to_give_rank: 'Du har ikke tilgang til å gi denne rangen.'
@@ -367,7 +365,6 @@ msg_err_cant_use_bed: '<dark_red>Du eier ikke landet denne sengen okkuperer og d
 msg_town_plots_revenue_disclaimer: '<green>Inntektene som vises er estimert, og om eier av tomten kan betale er en faktor.'
 msg_town_set_perm_syntax_error: 'Ugyldig ordkombinasjon for denne kommandoen. Se '' / town set perm? '' For riktig kommandosyntax.'
 msg_plot_set_perm_syntax_error: 'Ugyldig ordkombinasjon for denne kommandoen. Se '' / plot set perm? '' For riktig kommandosyntax.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Inbyggeren hører ikke til den byen.'
 msg_err_resident_already_an_outlaw: 'Den spilleren er allerede ansett som forbryter av byen din.'
 msg_err_not_outlaw_in_your_town: 'Du kan ikke sette et bymedlem som en forbryter.'
@@ -380,22 +377,15 @@ msg_err_outlaw_in_open_town: 'Du kan ikke bli med i en åpen by som har ansett d
 msg_you_are_an_outlaw_in_this_town: '<dark_red>Vær forsiktig %s anser deg som en forbryter, dør du her kan det bety fengsel.'
 msg_err_town_not_close_enough_to_nation: '%s''s hjemmeblokker ikke nære nok hovedstadens hjemmeblokker til å bli med i nasjonen.'
 msg_nation_town_moved_their_homeblock_too_far: '%s''s hjemmeblokk ble flyttet for langt bort fra din nasjons hovedstad''s hjemmeblokk og har blitt fjernet fra nasjonen.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Ugyldig radiusbeløp. Bruk en %s eller mindre. '
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Maksimalt nummer av innbyggere (%s) er allerede nådd.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>Spilleren %s har ikke vært på serveren lenge nok til å bli invitert til en by. Vennligst vent.'
 msg_cant_toggle_pvp_outsider_in_town: 'Det er en utenforstående i byen din, du kan ikke endre pvp statusen din!'
 msg_err_unclaim_not_outpost: 'Kan ikke unclaimes, denne tomten er ikke en utpost!'
 outpost_plu: 'Utposter'
-#Added in 0.36
 msg_err_not_enough_residents: 'Det er ikke nok innbyggere i denne byen til å gjøre det.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Skade fra PvP er deaktivert!'
-#Added in 0.38
 msg_claim_error: '<red>En annen plugin stoppet claiming av (%s)/(%s) byblokker, kunne ikke fullføre operasjonen.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>By spawn reise er bare tillatt under krig.'
 msg_err_town_spawn_forbidden_peace: '<red>By spawn reise er forbudt under krig.'
 msg_err_town_spawn_nation_forbidden_war: '<red>By spawn reise til andre byer i nasjonen din er bare tillatt under krig.'
@@ -404,9 +394,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>By spawn reise til byer alliert med
 msg_err_town_spawn_ally_forbidden_false: '<red>By spawn reise til byer som er alliert med nasjonen din er forbudt under krig.'
 msg_err_public_spawn_forbidden_war: '<red>Offentlig reise til andre byer er bare tillatt under krig.'
 msg_err_public_spawn_forbidden_peace: '<red>Offentlig reise til andre byer er forbudt under krig.'
-#Added in 0.40
 mayor_help_9: 'Forsøk på å ukrevd en utpost'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Invitasjoner'
 invite_sent_by: 'Intvitasjon sendt av'
 invite_help_1: 'Aksepter invitasjonen for å bli med i en by'
@@ -466,16 +454,13 @@ you_have_been_requested_to_ally: 'Du har blitt bedt om å alliere '
 this_message_will_expire: 'Dette vil automatisk utløpe om 20 sekunder'
 player_sing: 'Spiller'
 nation_zone_this_area_under_protection_of: 'Denne delen av %s er under beskyttelse av %s'
-#Added in 0.42
 you_have_been_invited_to_join2: 'Du har blitt invitert til %s'
 you_have_been_requested_to_ally2: 'Du har blitt bedt om å alliere %s'
-#Added in 0.43
 town_help_11: 'Lag en ny by. Bruk ''_'' og ikke mellomrom.'
 changed_plot_town: '<aqua>Du har endret tomtens by til %s!'
 not_standing_in_plot: 'Du står ikke inne i en gyldig tomt!'
 msg_err_homeblock_has_not_been_set: 'Hjemmeblokk er ikke angitt, bruk ''/town set homeblock'' først.'
 msg_err_spawn_not_within_homeblock: 'Spawn er ikke i hjemmeblokken, bruk ''/town set homeblock'' først.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Feil: Ugyldig kommando!'
 tc_settings_reloaded: '[TownyChat] Innstillinger lastet inn på nytt!'
@@ -575,7 +560,6 @@ status_res_taxexempt: 'Ansatte er fritatt for å betale byskatt.'
 status_res_tax: 'Byskatt:'
 status_res_plottax: 'Total tomteavgift:'
 status_res_totaltax: 'Total skatt å betale:'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Du kan ikke bruke nasjonsbanken din utenfor nasjonens hovedstaden.'
 msg_err_unable_to_use_bank_outside_your_town: 'Du kan ikke bruke bybanken din utenfor byen.'
 msg_time_until_a_new_day: 'Tid før en ny dag: '
@@ -585,7 +569,6 @@ msg_seconds: ' sekunder'
 msg_err_invalid_string_nationboard_not_set: 'Ugyldig streng, Nasjon Tavle ikke angitt.'
 msg_plot_evict: 'Tomten ble kastet ut.'
 msg_no_one_to_evict: 'Ingen å kaste ut fra denne tomten.'
-#Added in 0.46
 nation_help_10: 'Teleporter til nasjonens spawn.'
 msg_nation_spawn_warmup: '<aqua>Venter på å teleportere...'
 msg_set_nation_spawn: '<aqua>Nasjonens spawn ble endret.'
@@ -611,7 +594,6 @@ msg_spawn_cost_set_to: '<aqua>%s har satt prisen for å bruke /%s spawn til %s'
 msg_err_cannot_set_spawn_cost_more_than: '<red>Du kan ikke angi spawn kostnaden høyere enn %s'
 msg_err_ally_isnt_public: '<red>Din allierte, %s, har ikke offentlig spawn aktivert. Teleport nektet.'
 msg_nation_changed_public: '<red>Nasjonens offentlige status er nå %s.'
-#Added in 0.47:
 status_plot_type: 'Plottype:'
 msg_no_self_jailing: 'Du kan ikke fengsle deg selv.'
 online2: ' <green>(Aktivt)'
@@ -632,7 +614,6 @@ enabled: 'Aktivert'
 disabled: 'Deaktivert'
 forced: 'Tvunget'
 adjustable: 'Justerbar'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s har ikke råd til å starte en ny by her, det koster %s.'
 msg_no_funds_new_nation2: '<red>Byen har ikke råd til å starte en ny nasjon, det koster %s.'
 msg_no_funds_claim2: '<red>Byen har ikke råd til å claime %s byklokker, det koster %s. Legg til %s i bybanken ved å bruke /t deposit %s'
@@ -640,11 +621,9 @@ msg_err_cant_afford_blocks2: '<red>Byen har ikke råd til å claime %s byklokker
 msg_err_not_enough_variables: '<red>Ikke nok variabler: '
 nation_rechecked_by_admin: '<aqua>Nasjon %s by-distanser har suksessfullt blitt sjekket på nytt.'
 msg_err_nation_over_town_limit: '<red>Nasjonen din har nådd maksimalt antall tillate towns-per-nation: %s.'
-#Added in 0.49
 msg_process_claim: 'Behandler plot-claim...'
 msg_process_unclaim: 'Behandler plot-unclaim...'
 msg_total_townblocks: 'Totalt antall byblokker: '
-#Added in 0.50
 friend_list: 'Venneliste'
 not_registered: 'Ikke registrert.'
 msg_error_missing_comparator: '<aqua>Må spesifisere hva du skal sortere etter.'
@@ -670,7 +649,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>Nasjonslederen av %s, %s, er i
 nation1_has_merged_with_nation2: '<gold>Nasjonen %s har blitt enig om å slå seg sammen med den rådende nasjonen %s.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>Godkjenner du å oppløse nasjonen din, %s med nasjonen %s? Dette vil overføre alle by- og nasjonsbank-penger til %s.'
 no_open_towns: 'Ingen åpne byer å liste opp.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Nasjonen har ingen allierte å liste opp.'
 msg_error_nation_has_no_enemies: 'Nasjonen har ingen fiender å liste opp.'
 msg_error_ta_plot_claim: 'Manglende spillernavn, f eks /ta plot claim spillernavn'
@@ -682,19 +660,14 @@ msg_err_already_in_a_nation: 'Byen din er allerede med i en nasjon.'
 msg_err_nation_not_open: '<red>Nasjonen %s har ikke dørene åpne for alle. Spør nasjonslederen eller assistent om å bli med.'
 msg_err_nation_homeblock_in_another_world: '<red>Byen din sin hjemblokk er ikke i samme verden som nasjonen din sin hjemblokk.'
 status_bank_town_penalty_upkeep: 'Overclaim avgift:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Du kan ikke spawne i %s, du er markert som en fremmed der.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Du kan ikke bruke denne kommandoen mens du er i fengsel.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Nasjonens medlemmer kan ikke %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s tilhører allerede en annen by.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>Du har ikke råd til å sette tomten til %s, det koster %s'
 msg_plot_set_cost: '<aqua>Du har blitt belastet %s for å sette plot til type: %s'
 msg_err_townspawn_has_not_been_set: '<red>Townspawn er ikke satt.'
 msg_err_player_too_far_from_town_spawn: '<red>%s er for langt unna townspawnen til å kunne motta en invitasjon til byen. Maks avstand: %s blokker.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Innbyggerkausjon koster:'
 msg_mayor_bail_amount: 'Ordførerkausjon koster:'
 msg_king_bail_amount: 'Nominelle overskriftskostnader er: '
@@ -715,7 +688,6 @@ homeblock: 'hjemblokk'
 townblock: 'byblokk'
 outpost: 'utpost'
 msg_err_not_same_town: '<aqua>%s tilhører ikke byen din.'
-#Added in 0.59:
 msg_modes_set: 'Moduser satt: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Denne tomten er ikke tilknyttet noe metadata.'
 msg_err_the_metadata_for_key_is_not_registered: 'Metadata for ´%s´er ikke registrert!'
@@ -742,28 +714,19 @@ msg_err_tag_too_long: 'Merket er for langt.'
 msg_err_nation_has_not_set_a_spawn_location: 'Nasjonen har ikke satt noe spawnpunkt.'
 msg_err_resident_doesnt_belong_to_any_town: 'Innbyggeren tilhører ingen by'
 msg_err_could_not_set_default_modes_for: 'Kunne ikke angi standardmoduser for '
-#Added in 0.60
 msg_set_war_allowed_on: 'Krig vil bli tillatt i denne verdenen.'
 msg_set_war_allowed_off: 'Krig vil ikke påvirke denne verdenen.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Du kan ikke skru av/på PvP, %s sekunder gjenstår.'
 msg_err_cannot_spawn_x_seconds_remaining: 'Du kan ikke spawne på %s sekunder enda.'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Tomten er ikke lengre til salgs.'
 msg_err_x_spawn_disallowed_from_x: '<red>%s spawn er ikke lov fra %s.'
 msg_the_wilderness: 'Villmark'
 msg_enemy_areas: 'Fiendens områder'
 msg_neutral_towns: 'Nøytrale byer'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Ingen nasjon funnet med navn %s'
 msg_err_cannot_unclaim_homeblock: 'Du kan ikke unclaime hjemblokken din, bruk ´/town set homeblock´ for å flytte hjemblokk.'
-#Added in 0.65
 msg_err_rename_cancelled: 'Navneendring ble kansellert av en annen plugin.'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '[Conquered]'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Denne tomten er en del av gruppen %s sin(e) tomt(er), ved å bekrefte claimen din, vil du kjøpe alle.'
 msg_plot_group_unclaim_confirmation: 'Denne tomten er en del av gruppen %s sin(e) tomt(er), ved å bekrefte, vil du unclaime de alle.'
 msg_plot_group_toggle_confirmation: 'Denne tomten er en del av gruppen %s sin(e) tomt(er). Ved å bekrefte bytter du egenskapen på de alle.'
@@ -784,30 +747,21 @@ msg_set_group_type_to_x: 'Endret tomtgruppens type til %s'
 msg_player_successfully_bought_group_x: '%s suksessfullt kjøpt tomtgruppe %s'
 status_plot_group_name_and_size: 'Byblokk er en del av gruppe: %s. Gruppen har %s byblokker totalt.'
 msg_player_made_group_not_for_sale: '%s endret gruppe %s til ikke for salg.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Tomtgruppen kan ikke settes som fengsel.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Du må spesifisere gruppenavnet, eksempelvis /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'Klikk %s eller skriv %s'
 msg_confirmation_spigot_click_cancel: 'Klikk %s eller skriv %s'
 msg_you_cannot_kick_yourself: 'Du kan ikke kaste ut deg selv.'
 msg_you_cannot_kick_this_resident: 'Du kan ikke sparke ut %s, de er ordfører eller assistent.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Tomt: %s tilhører en gruppe. Bruk /plot group fs [amount]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Tomt: %s tilhører en gruppe. Bruk /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Den adminkontrollerte %s innstillingen hindrer deg fra å bytte pvp til %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Du er ikke fengslet for øyeblikket.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Du har ikke tillatelser til å opprette den andre siden av denne portalen på denne lokasjonen.'
-#Added in 0.75
 msg_already_ally: 'Nasjonen din er allerede alliert med %s.'
-#Added in 0.76
 msg_you: 'Du'
 msg_click_spawn: '<green>Klikk for å spawne til: <yellow>%s'
 msg_spawn_cost: '<green>Spawnpris = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Det oppstod en feil under lasting av Towny.'
 msg_reloaded_config: '<dark_green>Konfigurasjonen lastet på nytt.'
 msg_reloaded_perms: '<dark_green>Tillatelser lastet på nytt.'
@@ -815,7 +769,6 @@ msg_reloaded_db: '<dark_green>Database lastet inn på nytt'
 msg_reloaded_lang: '<dark_green>Språkfilen ble lastet inn på nytt'
 msg_reset_config: '<dark_green>Konfigurasjonen er resatt'
 msg_err_teleport_cancelled: 'Bevegelsen stoppet din teleportering.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'venner'
 msg_cache_block_error_plot_allies: 'allierte'
 msg_cache_block_error_plot_outsiders: 'utenforstående'
@@ -829,25 +782,18 @@ msg_confirm_purchase: 'Å gjøre dette vil koste %s. Fortsette?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Fordi de ikke vil være nær nok til den nye hovedstaden, vil følgende byer bli fjernet fra din nasjon: %s. Ønsker du å fortsette?'
 msg_ta_deposit_all_success: 'Innbetalte %s til alle nasjonene og byene.'
 bonus_townblocks: 'ekstra byblokker'
-#Added in 0.80
 nomad_sing: 'Nomade'
 msg_new_town_advice: 'Congratulation on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Skade har avbrutt teleporteringen din.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Invitasjon<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Bekreftelse<dark_gray>] <blue>"
 this_message_will_expire2: '&Dette utløper automatisk om %s sekunder'
 msg_hover_next_page: 'Neste side'
 msg_hover_previous_page: 'Forrige side'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Maks skattebeløp kan bare bli satt for byer med prosentsats."
 msg_town_set_tax_max_percent_amount: "%s har angitt maks skatteprosent til %s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Tomten tilhører en gruppe, bruk /plot group toggle'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>Tilbakestilte alle tillatelser på denne tomten.'
-#Added in 0.86
 status_bank_bankrupt: '(KONKURS)'
 msg_warning_bankrupt: '<dark_red>*** ADVARSEL, %s VIL GÅ KONKURS NESTE DAG GRUNNET MANGEL PÅ PENGER ***'
 msg_town_bankrupt_by_upkeep: '<aqua>%s hadde ikke råd til vedlikeholdet og har gått konkurs.'
@@ -865,7 +811,6 @@ msg_your_town_payed_upkeep: '<aqua>Din by betalte det daglige vedlikeholdet på 
 msg_your_nation_payed_upkeep: '<aqua>Din nasjon betalte det daglige vedlikeholdet på %s.'
 msg_your_town_couldnt_pay_upkeep: '<aqua>Din by kunne ikke betale det daglige vedlikeholdet på %s og har dermed blitt oppløst.'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>Din nasjon kunne ikke betale det daglige vedlikeholdet på %s og har dermed blitt oppløst.'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s kunne ikke betale vedlikeholdet, gjeldstaket er nådd, og har dermed blitt oppløst.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>Følgende byer kunne ikke betale vedlikeholdet, gjeldstaket deres er nådd, og har dermed blitt oppløst: '
 msg_unable_to_deposit_x: 'Kunne ikke sette inn %s i byens bank.'
@@ -873,10 +818,8 @@ msg_unable_to_withdraw_x: 'Kunne ikke ta ut %s fra byens bank.'
 status_debtcap: 'Gjeldstak:'
 status_world_explrevert_entity: 'Entity Eksplosjon Reversert:'
 status_world_explrevert_block: 'Blokk Eksplosjon Reversert:'
-#Added in 0.88
 msg_nation_already_peaceful: '<red>Nasjonen er allerede fredelig.'
 msg_nation_already_not_peaceful: '<red>Nasjonen er allerede ikke fredelig.'
-#Added in 0.89
 status_world_friendlyfire: 'VennligIld:'
 status_world_wildernessmobs: 'Villmarksmonstre:'
 msg_outlaw_kick_cooldown: '<red>Du anses som en lovløs i %s. Du har %s på å forlate byen, ellers vil du bli teleportert tilbake til spawn.'
@@ -884,14 +827,11 @@ msg_outlaw_kicked: '<dark_red>Du er ikke velkommen i %s. Du ble teleportert bort
 msg_outlaw_town_notify: '<red>En lovløs, %s, har kommet inn i by territoriumet.'
 msg_your_town_payed_upkeep_with_debt: '<aqua>Din by betalte det daglige vedlikeholdet på %s med gjeld.'
 msg_payed_nation_tax_with_debt: '<red>Din by betalte nasjonalskatten på %s med gjeld.'
-#Added in 0.90
 status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'Kommandoen /plot clear er deaktivert i denne verdenen.'
-#Added in 0.91
 msg_universe_attribution: 'Forfattere: '
 msg_universe_contributors: ' Og bidragsytere som deg selv. '
 townblock_plu: 'Byblokker'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'newhour kommandoen ble vellykket utført'
 town_help_12: 'Gjenopprett byen din fra ruinert tilstand.'
@@ -905,10 +845,8 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '<red>Din by er i en ruinert t
 msg_time_remaining_before_full_removal: 'Gjenstående tid før full fjerning: %d timer.'
 msg_time_until_reclaim_available: 'Tid før reclaim er tilgjengelig: %d timer.'
 msg_reclaim_available: 'Reclaim er tilgjengelig.'
-#Added in 0.93
 msg_changed_peaceful: '<red>Byens nøytralitet/fredelighet er nå %s.'
 msg_err_town_unclaim_canceled: '<red>Unclaim ble avbrutt. Du kan ikke bruke unclaim på dette område på dette tidspunktet.'
-#Added in 0.94
 msg_comptype_residents: 'Innbyggertall'
 msg_comptype_townblocks: 'Antall byblokker som er benyttet'
 msg_comptype_balance: 'Bankens saldo'
@@ -921,7 +859,6 @@ npc_created: 'Opprettet:'
 msg_no_funds_claim_plot: '<red>Du har ikke råd til å gjøre krav på denne tomten, som koster %s.'
 msg_no_funds_claim_plot_group: '<red>Du har ikke råd til å gjøre krav på %s tomten, som koster %s.'
 status_town_title_peaceful: '<aqua>(Peacful)'
-#Added in 0.95
 status_public: '<aqua>(Offentlig)'
 msg_days: ' dager'
 msg_comptype_public: 'Offentlig status'
@@ -944,23 +881,15 @@ towny_prices_price_shop: '<red>            <dark_green>Butikk: <green>%s <dark_g
 towny_prices_taxes_plot: '<red>    [Taxes]    <dark_green>Innbygger: <green>%s <dark_gray>| <dark_green>Tomt: <green>%s'
 towny_prices_taxes_shop: '<red>            <dark_green>Butikk: <green>%s <dark_gray>| <dark_green>Ambassade: <green>%s'
 towny_prices_town_neutral_tax: '<red>            <dark_green>Fred: <green>%s'
-towny_prices_plots: '<red>    [Setting Plots]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
 towny_prices_nationname: '<red>Nasjon: <gold>%s'
 towny_prices_nation_tax: '<red>    [Taxes] <dark_green>By: <green>%s <dark_gray>| <dark_green>Fred: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>Den erobrede byen %s kunne ikke betale nasjonsskatt og har dermed falt.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>Følgende erobrede byer kunne ikke betale nasjonsskatten og har dermed falt: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Din by var fritatt fra nasjonsskatt.'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Ruinert status'
 msg_comptype_bankrupt: 'Konkurs status'
 msg_ruined: '<red>(Ruinert)'
 msg_bankrupt: '<red>(Konkurs)'
-#Added in 0.98
 msg_del_town2: '<aqua>Byen %s ble slettet!'
 msg_ruin_town: '<aqua>Byen %s falt i ruiner!'
 gui_title_select_plot_type: 'Velg type tomt'
@@ -972,7 +901,6 @@ gui_title_towny_switch: 'Towny Switch Liste'
 gui_title_towny_plotclear: 'Towny Tomt Rens Slett Liste'
 msg_ta_removed_all_titles_and_surnames_removed: 'Alle innbyggerne har fått titler og etternavn fjernet.'
 msg_err_homeblock_already_set_here: 'Denne lokasjonen er allerede en hjemblokk i din by.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '&Sammenslåing kan bare gjøres av borgermesteren.'
 msg_town_merge_err_not_close: '<red>Byen %s er for langt unna din by. Deres hjemblokk må være innenfor %d byblokker fra din hjemblokk.'
 msg_town_merge_request_sent: '<aqua>Forespørsel om sammenslåing sendt til borgermesteren i %s.'
@@ -993,7 +921,6 @@ msg_town_merge_success: '<aqua>Byen %s, eid av %s, har slått sammen til byen %s
 msg_town_merge_cost_withdraw: 'Kostnad for sammenslåing av byen'
 msg_town_merge_transaction_reason: 'Sammenslåing av by'
 towny_prices_town_merge: '<yellow>[Merging] <dark_green>Basiskostnad: <green>%s <dark_gray>| <dark_green>Per Tomt: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Din nasjon er ikke alliert med %s.'
 msg_err_nation_not_enemies_with: '<red>Din nasjon er ikke fiender med %s.'
 msg_err_nation_already_enemies_with: '<red>Din nasjon er allerede fiender med %s.'
@@ -1003,20 +930,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s er ikke fiender med %s.'
 msg_err_nation_already_allied_with_2: '<red>%s er allerede alliert med %s.'
 msg_err_nation_already_enemies_with_2: '<red>%s er allerede fiender med %s.'
 msg_ta_allies_enemies_updated: '<aqua>Allianser/Fiender oppdatert for %s.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>Klikk for å se detaljert tomt informasjon.'
 msg_err_nation_capital_too_many_residents: '<red>Den nåværende hovedstaden har for mange innbyggere til å bli erstattet med %s.'
 msg_deleting_nation_will_result_in_losing_residents: '<red>Advarsel: Å slette nasjonen din vil bety at din by er over befolkningsgrensen på %d. Dette resulterer i at %d innbyggere blir fjernet.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '<red>Du kan ikke bruke den kommandoen i byene.'
 msg_command_limited: 'Du kan bare bruke den kommandoen i dine egne tomter.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claim laget:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Villmarksbruk endret til %s i alle verdener.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerering endret til %s i alle verdener.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Du kan ikke bruke den kommandoen fordi du ikke bor i %s.'
 msg_err_this_jail_has_no_cells: 'Dette fengslet har ingen celler.'
 msg_err_no_cell_found_at_this_location: 'Ingen fengselsceller funnet på dette stedet.'
@@ -1040,21 +962,18 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Ikke logg ut før du blir te
 jail_plu: 'Fengsler'
 jail_sing: 'Fengsel'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s har ikke spilt lenge nok til å bli fengslet, vent ytterligere %s'
-#Added in 0.108
 msg_town_not_peaceful: '<aqua>Byen hadde ikke råd til dens fredfulle status.'
 msg_town_already_peaceful: '<aqua>Byen er allerede fredelig.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_paid_for_neutral_status: '<aqua>Din by betalte %s for å opprettholde sin fredfulle status.'
 msg_nation_paid_for_neutral_status: '<aqua>Din nasjon betalte %s for å opprettholde sin fredfulle status.'
 your_town_has_been_invited_to_join_nation: 'Din by har blitt invitert til å bli med i nasjonen: %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>Det er ingen inaktive medlemmer å fjerne.'
 msg_purging_will_remove_the_following_residents: '<aqua>Vennligst bekreft at du ønsker å fjerne følgende innbyggere: %s'
 msg_purge_complete_x_removed: '<aqua>Fjerning fullført, %s innbyggere ble fjernet.'
 msg_err_days_must_be_greater_than_0: 'Dager må være større enn null.'
 msg_err_outlawed_players_no_teleport: '<dark_red>Du er en lovløs i byen du nå er i og kan ikke teleportere!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>Du kan ikke bruke den kommandoen mens du er i en by du er lovløs.'
-#Added in 0.110
 msg_safe_mode: "[Error] Låst i sikker modus!"
 msg_safe_mode_base: '[Error] Byen er låst i Sikker Modus på grunn av en feil! '
 msg_safe_mode_player: 'Fortell en admin å kontrollere serverens konsoll.'
@@ -1064,7 +983,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Du kan ikke gjøre krav på
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Du har nylig flyttet din hjemblokk! Vent ytterligere %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Du kan ikke flytte din hjemblokk med så mange byblokker, grensen er %s, denne avstanden er %s byblokker unna.'
 msg_err_usingtowny_disabled: 'Denne verdenen er unntatt alle Towny interaksjoner. Bruk /townyworld toggle usingtowny først.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Denne byblokken er allerede en del av gruppen %s. Er du sikker på at du vil overføre den til gruppen %s.'
 msg_townblock_transferred_from_x_to_x_group: 'Byblokk overført fra %s til gruppen %s.'
 msg_plotgroup_deleted: 'Gruppen %s har blitt slettet.'
@@ -1075,7 +993,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Denne byblokken er aller
 map_hover_plot_group: 'Tomtgruppe: '
 map_hover_plot_group_size: ' Størrelse: '
 map_hover_plots: '%s tomter'
-#Added in 0.112
 msg_checking_for_updates: 'Søker etter oppdateringer...'
 msg_no_new_updates: 'Ingen nye opppdateringer funnet.'
 msg_new_update_available: '<aqua>Ny oppdatering tilgjengelig: %s | Gjeldende versjon: %s'
@@ -1085,7 +1002,6 @@ msg_latest_version: '<dark_green>Towny versjon: <green>%s <dark_green>| Siste ve
 msg_up_to_date: '<green>Du har den mest oppdaterte versjonen.'
 msg_click_purchase: 'Klikk for å kjøpe'
 msg_you_must_join_this_town_to_claim_this_plot: 'Du må bli med i denne byen: %s, for å kreve denne tomten. Vil du bli med i denne byen og fortsette å kreve denne tomten?'
-#Added in 0.113
 status_trustedlist: 'Betrodd'
 msg_click_to_edit: '<gold>Klikk for å endre.'
 permission_gui_header: 'Towny tillatelse GUI'
@@ -1106,7 +1022,6 @@ msg_cache_block_err: '<red>Du har ikke lov til å %s her.'
 msg_err_plot_belongs_to_group: '<red>Tomten tilhører en gruppe, bruk %s.'
 plotgroup_sing: 'Tomtgruppe'
 msg_err_ally_limit_reached: 'Din nasjon har nådd tillatt grense for allierte, ikke mulig å akseptere.'
-#Added in 0.114
 msg_err_group_not_found: 'Gruppe %s ble ikke funnet.'
 msg_err_expected_command_format: 'Feil syntaks, forventet: %s'
 msg_err_group_already_has_node: 'Gruppen %s har allerede noden %s.'
@@ -1128,20 +1043,14 @@ help_ta_perms_townrankremove: 'Fjerner en byrangering fra filen townyperm.'
 help_ta_perms_nationrankadd: 'Legger til en nasjonrangering i filen townyperm.'
 help_ta_perms_nationrankremove: 'Fjerner en nasjonrangering fra filen townyperm.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Innbyggeren hører ikke til den nasjonen.'
-#Added in 0.115
 msg_comptype_founded: 'Grunnlagt dato'
 msg_err_must_be_greater_than_or_equal_to: 'Verdien må være større enn eller lik %s'
 err_invalid_yaml: 'Lastefeil: Kunne ikke laste filen %s (passerer den en yaml parser?).'
-#Added in 0.116
 msg_town_map_color_changed: '<aqua>Byens farge på kart ble endret til %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Denne byblokken kan ikke legges til gruppen fordi den ikke er av type: %s'
-#Added in 0.118
 status_title_nopvp: '<green>(Ingen PvP)'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Du kan ikke fengsle innbyggeren fordi de er på en lokasjon hvor de er lovløs.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Du kan ikke fengsle innbyggeren fordi de er på en lokasjon hvor de er ansett som fiende.'
-#Added in 0.120
 msg_resident_prompt: 'Skriv inn navnet på spilleren i chatten, eller q for å avslutte. Dette vil automatisk avbrytes etter 30 sekunder.'
 msg_prompt_cancel: 'Forespørsel kansellert eller tidsavbrutt.'
 status_home_element: ' <gray>[Hjem: %s]'
@@ -1154,13 +1063,10 @@ status_jailed: 'Fengslet:'
 status_bad_yes: '<red>JA'
 status_good_no: '<green>NEI'
 status_resident_tax_title: '%ssin skatt'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Fordi de ikke vil være nær nok nasjonens hovedstad, vil følgende byer bli fjernet hvis sammenslåingen fullføres: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "'%s' er ikke en gyldig byverden."
 msg_err_enter_world_name_first: 'Vennligst skriv inn navnet på verden først.'
 msg_wilderness_use_set_to: '<aqua>Villmarksbruk er satt til %s i %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Ugyldig svar! Skriv inn q for å avslutte eller back for å gå tilbake til forrige spørsmål.'
 msg_setup_full_guide_link: '<aqua>For en lenke til en full installasjonsveiledning, klikk her.'
 msg_setup_wildernessuse: 'Vil du aktivere villmarksbruk? Dette vil tillate spillere å ødelegge/bygge i villmarken.'
@@ -1170,14 +1076,12 @@ msg_setup_town_cost: 'Hvor mye skal kostnaden for å opprette en ny by være? St
 msg_setup_nation_cost: 'Hvor mye skal kostnaden for å skape en ny nasjon være? Standard er 1000.'
 msg_setup_townblock_cost: 'Hvor mye skal det koste å claime en byblokk? Standard er 25. En byblokk har samme størrelse som en chunk (standardinnstillinger)'
 msg_setup_success: 'Konfigurasjonsverdiene ble endret til de nye verdiene.'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s har nylig gjennoppstått og kan ikke bli skadet.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Du har mistet din respawn-beskyttelse.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'Du kan ikke plukke opp gjenstander når du er i respawn-beskyttelse.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Hovedstad:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1190,7 +1094,6 @@ status_unknown: 'ukjent'
 msg_nationzone_override_set_to: '%s har fått nasjonsonen satt til %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s har fått overstyringen på nasjonsonen fjernet.'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Størrelse på Nasjonsonen:'
 #Shown when a player adds people to their friends list.
@@ -1234,21 +1137,18 @@ msg_purge_complete: 'Sletting av innbyggere: %s fjernet.'
 msg_you_have_been_given_bonus_blocks: 'Du har fått %s bonusbyblokker.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Din by kan ikke kjøpe flere bonusblokker. Maksimalt antall er nådd.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Hovedstader kan ikke velge fredfull status.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Nasjonsonen rundt byen er nå %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Din by har ingen nasjonsone å endre!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Nasjonens kostnader er basert på <green>%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'antall byer.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'nasjonsnivå (antall innbyggere)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Fengslet av borgermesteren.'
 #Jail causes
@@ -1279,28 +1179,21 @@ msg_jailed_war_prisoner: 'Som krigsfange vil du bli løslatt hvis landsmennene d
 msg_jailed_title: 'Så du har blitt fengslet :('
 #Jail handbook author
 msg_jailed_author: 'Towny Fengsel.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Byen har ingen allierte å liste opp.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Byen har ingen fiender å liste opp.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Bekreftelse ble tidsavbrutt.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Kanallyden er av'
 tc_player_channel_sound_unmuted: 'Kanallyden er på'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Det er en utenforstående i tomten din, du kan ikke endre pvp statusen din!'
-#Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>Byen %s har gått med på å slå seg sammen med den rådende byen %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Nøytralitetskostnad:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Hvis du har betalt noen med ekte penger for disse byblokkene, vennligst forstå følgende: serveren du spiller på er i strid med Minecraft EULA og Towny lisensen.'
 #Line 2 of the givebonus warning.
@@ -1309,47 +1202,36 @@ msg_ptw_warning_2: 'Towny teamet hadde aldri til hensikt at byblokker skulle kun
 msg_ptw_warning_3: 'Hvis du betalte ekte penger, bør du vurdere å spille på en Towny server som respekterer Towny teamets ønsker.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Du har blitt invitert til å bli med i %s<blue> (Nasjon: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Byen din har ikke råd til å fjerne denne tomten. %s kreves.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Din by betalte %s for å fjerne tomten.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Å fjerne denne tomten vil koste %s, vil du fortsette?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Du må vente %s sekunder før du kan endre navnet på din by igjen.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Du kan ikke skru av/på PvP, %s sekunder gjenstår.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Denne kommandoen kan ikke brukes fra konsollen.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Byen %s har hatt sine ubegrensete kravinnstillinger satt til %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Du har ikke nok byblokker å kreve, vil du slå på ubegrenset antall krav om byen %s'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Du kan ikke forlate nasjonen, din by erobres.'
 msg_err_console_only: '<red>Denne kommandoen kan bare utføres i konsollen.'
 msg_err_player_only: 'Denne kommandoen kan bare brukes av en spiller.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Tittel-meldinger som vises ved kryssing av grenser er %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Kjører du denne kommandoen tilbakestiller config.yml til standardfilen. Vil du fortsette?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Ved å gjøre dette vil du overstyre grensene angitt i serverkonfigurasjonen. Vil du fortsette likevel?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Fjernet %d ugyldige outpost spawns.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Byen din er konkurs, legg til penger i banken din ved å bruke/by innskudd {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Du kan ikke bruke denne kommandoen, fordi du allerede er medlem av byen. Hvis du vil fortsette må du bruke ''/t leave.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
@@ -1368,7 +1250,6 @@ status_plot_hover: '%s:'
 msg_usage: 'Bruk: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Ingen sider å vise!'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'Dette landet er ikke tilknyttet deg.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
@@ -1407,8 +1288,6 @@ msg_perm_hud_nation: 'nasjon'
 msg_perm_hud_outsider: 'utsider'
 #Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Tomt: '
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Byen %s har fått bynivået sitt satt til %s.'
-#Added in 0.156
 msg_spawn_cost_free: 'Gratis'

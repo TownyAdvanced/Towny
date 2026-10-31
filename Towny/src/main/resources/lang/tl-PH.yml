@@ -314,8 +314,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>Ang bayan na %s ay wala n
 msg_not_enough_residents_capital: '<aqua>Ang bayan na %s ay walang sapat na mga residente para maging kapitolyo nang nasyon.'
 list_page: '<aqua>Pahina %s ng %s'
 list_err_not_enough_pages: '<red>Mga %s pahinang magagamit'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Ikaw ay hindi ma-aaaring gawin ang buwis nang iyong bayan na %s.'
 msg_unknown_rank_available_ranks: 'Hindi alam na rango %s. Mga pinapayagan na mga rango ay ang mga %s.'
 msg_no_permission_to_give_rank: 'Ikaw ay walang permiso para magbigay nang rango.'
@@ -359,7 +357,6 @@ msg_err_cant_use_bed: '<dark_red>Hindi ikaw may ari sa lupa na ito nasasakop ng 
 msg_town_plots_revenue_disclaimer: '<green>Kitang ipinakita ay tinatantya at kung ang may-ari ng plot ay maaaring magbayad ay isang salik.'
 msg_town_set_perm_syntax_error: 'Di-wastong kumbinasyon ng salita para sa utos na ito. Tignan mo ''/town set perm ?'' Para sa wastong command syntax.'
 msg_plot_set_perm_syntax_error: 'Di-wastong kumbinasyon ng salita para sa utos na ito. Tignan mo ''/plot set perm ?'' Para sa wastong command syntax.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Ang residenteng iyon ay hindi kabilang sa bayang iyon.'
 msg_err_resident_already_an_outlaw: 'Ang player na iyon ay itinuturing na isang outlaw ng iyong bayan.'
 msg_err_not_outlaw_in_your_town: 'Hindi mo maaaring itakda ang isang miyembro ng bayan bilang isang outlaw.'
@@ -372,22 +369,15 @@ msg_err_outlaw_in_open_town: 'Hindi ka pwede makasali sa bayan na bukas na itinu
 msg_you_are_an_outlaw_in_this_town: '<dark_red>Mag-ingat ka, %s Itinuturing kang isang outlaw, ang pagkamatay dito ay maaaring mangahulugan ng kulungan.'
 msg_err_town_not_close_enough_to_nation: 'Ang homeblock ni %s ay hindi sapat na malapit sa homeblock ng iyong kabisera upang makasali sa iyong bansa.'
 msg_nation_town_moved_their_homeblock_too_far: 'Masyadong malayo ang homeblock ni %s mula sa homeblock ng kabisera ng iyong bansa at inalis na ito sa iyong bansa.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Di-wastong halaga ng radius. Gumamit ng %s o mas kaunti.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Naabot na ang maximum na bilang ng mga residente (%s).'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>Ang manlalarong %s ay wala pa sa server ng sapat na tagal upang maimbitahan sa isang bayan, mangyaring maghintay.'
 msg_cant_toggle_pvp_outsider_in_town: 'May tagalabas sa bayan mo, hindi mo mababago ang kalagayan mo sa pvp!'
 msg_err_unclaim_not_outpost: 'Hindi ma-unclaim, ang balangkas na ito ay hindi isang outpost!'
 outpost_plu: 'Mga outpost'
-#Added in 0.36
 msg_err_not_enough_residents: 'Walang sapat na mga residente sa bayang ito para gawin iyon.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Hindi kayo maaaring mag-atake sa isa''t isa!'
-#Added in 0.38
 msg_claim_error: '<red>Pinahinto ng isa pang plugin ang pag-claim ng (%s)/(%s) na mga blocks ng bayan, hindi makumpleto ang operasyon.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Ang paglalakbay sa bayan ay pinapayagan lamang sa panahon ng digmaan.'
 msg_err_town_spawn_forbidden_peace: '<red>Ang paglalakbay sa bayan ay ipinagbabawal sa panahon ng digmaan.'
 msg_err_town_spawn_nation_forbidden_war: '<red>Ang paglalakbay sa bayan sa ibang mga bayan sa iyong bansa ay pinapayagan lamang sa panahon ng digmaan.'
@@ -396,9 +386,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Ang paglalakbay sa bayan sa mga bay
 msg_err_town_spawn_ally_forbidden_false: '<red>Ang paglalakbay sa bayan sa mga bayan na kaalyado ng iyong bansa ay ipinagbabawal sa panahon ng digmaan.'
 msg_err_public_spawn_forbidden_war: '<red>Ang publiko na paglakbay sa spawn ng ibang mga bayan ay pinapayagan lamang sa panahon ng digmaan.'
 msg_err_public_spawn_forbidden_peace: '<red>Ang publiko na paglakbay sa spawn ng ibang mga bayan ay pinagbabawal sa panahon ng digmaan.'
-#Added in 0.40
 mayor_help_9: 'Subukang i-unclaim ang isang outpost'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Imbitasyon'
 invite_sent_by: 'Imbitasyon na Ipinadala Ni'
 invite_help_1: 'Tanggapin ang imbitasyon na sumali sa isang bayan'
@@ -458,16 +446,13 @@ you_have_been_requested_to_ally: 'Ikaw ay hiniling na kakampi '
 this_message_will_expire: 'Awtomatikong mag-e-expire ito sa loob ng 20 segundo'
 player_sing: 'Manlalaro'
 nation_zone_this_area_under_protection_of: 'Ang bahaging ito ng %s ay nasa ilalim ng proteksyon ng %s'
-#Added in 0.42
 you_have_been_invited_to_join2: 'Inimbitahan kang sumali sa %s'
 you_have_been_requested_to_ally2: 'Hiniling sa iyo na kakampi si %s'
-#Added in 0.43
 town_help_11: 'Lumikha ng bagong bayan. Gumamit ng ''_'' at hindi mga puwang.'
 changed_plot_town: '<aqua>Matagumpay mong napalitan ang bayan ng plot sa %s!'
 not_standing_in_plot: 'Hindi ka nakatayo sa loob ng isang wastong plot!'
 msg_err_homeblock_has_not_been_set: 'Hindi pa naitakda ang Home Block, gamitin muna ang ''/town set homeblock''.'
 msg_err_spawn_not_within_homeblock: 'Ang spawn ay wala sa loob ng homeBlock, gamitin muna ang ''/town set homeblock''.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Error: Di-wastong utos!'
 tc_settings_reloaded: '[TownyChat] Na-reload ang mga setting!'
@@ -509,15 +494,10 @@ msg_err_over_outposts_limit: 'Hindi ka maaaring mag-teleport sa iyong outpost, l
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: 'Mga Outlaws:'
-online: '<green>(Online)'
 #Used in mayor hover text in /town status screen.
 registered_last_online: '<dark_green>Nakarehistro: <green>%s <dark_gray>| <dark_green>Huling Online: <green>%s'
 #Used on /plot perm, /res
 status_perm: 'Perm:'
-status_on: '<dark_red>ON'
-status_off: '<green>OFF'
-status_on_good: '<green>ON'
-status_off_bad: '<dark_red>OFF'
 status_forced: '<red>Pilit'
 status_adjustable: '<green>Madaling iakma'
 status_pvp: 'PVP:'
@@ -534,7 +514,6 @@ jailed_in_town: ' sa Bayan: %s'
 status_friends: 'Mga Kaibigan'
 rank_list_title: '%s Listahan ng Ranggo'
 rank_list_mayor: 'Alkalde:'
-status_title_pvp: '<dark_red>(PVP)'
 status_title_open: '<aqua>(Bukas)'
 status_town_board: 'Lupon:'
 status_founded: 'Itinatag:'
@@ -567,7 +546,6 @@ status_res_taxexempt: 'Ang mga kawani ay hindi nagbabayad ng buwis sa bayan.'
 status_res_tax: 'Buwis ng Bayan:'
 status_res_plottax: 'Kabuuang Mga Buwis sa Plot:'
 status_res_totaltax: 'Kabuuang Buwis na babayaran:'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Hindi mo maaaring gamitin ang iyong bangko ng bansa sa labas ng kabisera ng bansa.'
 msg_err_unable_to_use_bank_outside_your_town: 'Hindi mo maaaring gamitin ang iyong bangko ng bayan sa labas ng iyong bayan.'
 msg_time_until_a_new_day: 'Oras hanggang sa Bagong Araw: '
@@ -577,7 +555,6 @@ msg_seconds: ' segundo'
 msg_err_invalid_string_nationboard_not_set: 'Imbalidong string, Ang board nang bansa ay hindi naka-set.'
 msg_plot_evict: 'Matagumpay na napaalis ang plot.'
 msg_no_one_to_evict: 'Walang magpapaalis sa plot na ito.'
-#Added in 0.46
 nation_help_10: 'Mag teleport sa spawn nang iyong Bansa.'
 msg_nation_spawn_warmup: '<aqua>Naghihintay mag teleport...'
 msg_set_nation_spawn: '<aqua>Matagumpay na nabago ang spawn ng bansa.'
@@ -603,10 +580,8 @@ msg_spawn_cost_set_to: '<aqua>Itinakda ni %s ang presyo ng paggamit ng /%s spawn
 msg_err_cannot_set_spawn_cost_more_than: '<red>Hindi mo maaaring itakda ang halaga ng spawn na mas mataas sa %s'
 msg_err_ally_isnt_public: '<red>Ang iyong kaalyado, %s, ay walang pampublikong pangingitlog na pinagana. Tinanggihan ang Teleport.'
 msg_nation_changed_public: '<red>Ang publikong katayuan nang Bansa ngayon ay %s.'
-#Added in 0.47:
 status_plot_type: 'Uri ng Plot:'
 msg_no_self_jailing: 'Hindi mo makukulong ang sarili mo.'
-online2: ' <green>(Online)'
 build: 'Itayo'
 destroy: 'Sirain'
 switch: 'Switch'
@@ -624,7 +599,6 @@ enabled: 'Naka-enable'
 disabled: 'Naka-disable'
 forced: 'Pinilit'
 adjustable: 'Madaling iakma'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s ay hindi kayang manirahan sa isang bagong bayan dito, na nagkakahalaga ng %s.'
 msg_no_funds_new_nation2: '<red>Ang bayan ay hindi kayang magsimula ng bagong bansa, na nagkakahalaga ng %s.'
 msg_no_funds_claim2: '<red>Hindi kayang i-claim ng Bayan ang %s town blocks na nagkakahalaga ng %s. Magdagdag ng %s sa bangko ng bayan gamit ang /t deposito %s'
@@ -632,11 +606,9 @@ msg_err_cant_afford_blocks2: '<red>Hindi kayang i-claim ng Bayan ang %s town blo
 msg_err_not_enough_variables: '<red>Hindi sapat na mga variable: '
 nation_rechecked_by_admin: '<aqua>Matagumpay na muling nasuri ang mga distansya ng bansa %s ng bayan.'
 msg_err_nation_over_town_limit: '<red>Naabot ng iyong bansa ang maximum na bilang ng mga pinapayagang bayan-bawat-bansa: %s.'
-#Added in 0.49
 msg_process_claim: 'Pinoproseso ang Plot Claim...'
 msg_process_unclaim: 'Pinoproseso ang Plot Unclaim...'
 msg_total_townblocks: 'Kabuuang TownBlocks: '
-#Added in 0.50
 friend_list: 'Listahan ng mga Kaibigan'
 not_registered: 'Hindi registrado.'
 msg_error_missing_comparator: '<aqua>Dapat tukuyin kung ano ang pag-uuri-uriin.'
@@ -662,7 +634,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>Ang Piunong ng Bansa ng %s, %s
 nation1_has_merged_with_nation2: '<gold>Ang bansang %s ay sumang-ayon na sumanib kasama ang nangingibabaw na bansa ng %s.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>Sumasang-ayon ka ba na buwagin ang iyong bansa %s sa bansang %s? Ililipat nito ang lahat ng pera ng bangko ng bansa at mga bayan sa %s.'
 no_open_towns: 'Walang bukas na bayan na ilista.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Ang bansa ay walang kakampi na ilista.'
 msg_error_nation_has_no_enemies: 'Ang bansa ay walang mga kaaway na ilista.'
 msg_error_ta_plot_claim: 'Nawawalang playername, hal: /ta plot claim PlayerNameHere'
@@ -674,19 +645,14 @@ msg_err_already_in_a_nation: 'Ang iyong bayan ay nasa isang bansa na.'
 msg_err_nation_not_open: '<red>Ang bansang %s ay hindi bukas sa lahat. Hilingin sa pinuno ng bansa o isang katulong na sumali.'
 msg_err_nation_homeblock_in_another_world: '<red>Ang homeblock ng iyong bayan ay wala sa parehong mundo sa homeblock ng kabisera ng bansa.'
 status_bank_town_penalty_upkeep: 'Overclaim na pangangalaga:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Hindi ka maaaring mag-spawn sa %s, minarkahan ka bilang isang outlaw doon.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Hindi mo magagamit ang utos na iyon habang nakakulong.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Hindi pinapayagan ang mga miyembro ng Bansa na %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s ay nabibilang na sa isang bayan.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>Hindi mo kayang itakda ang plot sa isang uri ng %s na nagkakahalaga ng %s'
 msg_plot_set_cost: '<aqua>Siningil ka ng %s para sa pagtatakda ng plot sa uri: %s'
 msg_err_townspawn_has_not_been_set: '<red>Town spawn ay hindi pa naitakda.'
 msg_err_player_too_far_from_town_spawn: '<red>Masyadong malayo si %s mula sa iyong bayan upang makatanggap ng imbitasyon sa bayan. Max na distansya: %s blocks.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Mga gastos sa Piyansa ng Residente: '
 msg_mayor_bail_amount: 'Mga gastos sa Piyansa ng Alkalde: '
 msg_king_bail_amount: 'Mga gastos ng Piyansa ng Pinuno ng Bansa: '
@@ -707,7 +673,6 @@ homeblock: 'homeblock'
 townblock: 'townblock'
 outpost: 'outpost'
 msg_err_not_same_town: '<aqua>Si %s ay hindi kabilang sa iyong bayan.'
-#Added in 0.59:
 msg_modes_set: 'Itinakda ang mga mode: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Ang plot na ito ay walang anumang nauugnay na metadata.'
 msg_err_the_metadata_for_key_is_not_registered: 'Ang metadata para sa ''%s'' ay hindi nakarehistro!'
@@ -717,61 +682,46 @@ msg_set_group_type_to_x: 'Ginawang %s ang uri ng plot group'
 msg_player_successfully_bought_group_x: 'Matagumpay na nakabili si %s ng plot group na %s'
 status_plot_group_name_and_size: 'Ang townblock ay bahagi ng pangkat: %s. Ang grupo ay may kabuuang %s Townblock.'
 msg_player_made_group_not_for_sale: 'Ginawa ni %s ang pangkat na %s na hindi ibinebenta.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Ang mga pangkat ng plot ay hindi maaaring itakda sa mga uri ng kulungan.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Dapat mong tukuyin ang pangalan ng plot group hal, /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'I-click ang %s o i-type ang %s'
 msg_confirmation_spigot_click_cancel: 'I-click ang %s o i-type ang %s'
 msg_you_cannot_kick_yourself: 'Hindi mo kayang sipain ang sarili mo.'
 msg_you_cannot_kick_this_resident: 'Hindi mo masisipa si %s, sila ang alkalde o isang katulong.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s ay kabilang sa isang pangkat, gamitin ang /plot group fs [amount]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s ay kabilang sa isang grupo, gamitin ang /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Pinipigilan ka ng setting ng %s na kontrolado ng Admin na i-toggling ang pvp sa %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Hindi ka kasalukuyang nakakulong.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Hindi ka pinapayagang lumikha ng kabilang panig ng portal na ito sa lokasyong ito.'
-#Added in 0.75
 msg_already_ally: 'Ang iyong bansa ay kaalyado na ng %s.'
-#Added in 0.76
 msg_you: 'Ikaw'
 msg_click_spawn: '<green>Mag-click upang mag-spawn sa: <yellow>%s'
 msg_spawn_cost: '<green>Gastos para mag-spawn = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Nagkaroon ng error sa pag-reload kay Towny.'
 msg_reloaded_config: '<dark_green>Matagumpay na na-reload ang configuration.'
 status_bad_yes: '<red>OO'
 status_good_no: '<green>HINDI'
 status_resident_tax_title: 'Buwis ni %s'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Dahil hindi sila magiging malapit sa iyong kabisera ng bansa, ang mga sumusunod na bayan ay aalisin kung makumpleto ang pagsasanib: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "Ang '%s' ay hindi wastong mundo ng towny."
 msg_err_enter_world_name_first: 'Pakilagay muna ang pangalan ng mundo.'
 msg_wilderness_use_set_to: '<aqua>Ang paggamit sa kagubatan ay naitakda sa %s sa %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Di-wastong tugon! Ipasok ang Q upang lumabas o bumalik upang bumalik sa nakaraang tanong.'
 msg_setup_full_guide_link: '<aqua>Para sa isang link sa buong gabay sa pag-install, mag-click dito.'
 msg_setup_wildernessuse: 'Gusto mo bang paganahin ang paggamit sa ilang? Ito ay magbibigay-daan sa mga manlalaro na masira/magtayo sa ilang.'
 msg_setup_revertunclaim: 'Gusto mo bang gumamit ng revert sa unclaim? Gagawin nitong dahan-dahang muling bubuo ang mga townblock kapag hindi na-claim ang mga ito.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Hindi maaaring i-toggle ng mga kabiserang lungsod ang mapayapang kalagayan.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Ang Nation Zone na nakapalibot sa bayan ay %s na ngayon'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Ang iyong bayan ay walang NationZone upang i-toggle!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Ang upkeep ng Bansa ay batay sa <green>the %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'bilang ng mga bayan.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'antas ng bansa (bilang ng mga residente.)'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Ikinulong ng alkalde.'
 #Jail causes
@@ -802,28 +752,21 @@ msg_jailed_war_prisoner: 'Bilang isang bilanggo ng digmaan, makakalaya ka kung m
 msg_jailed_title: 'Kaya ka nakulong :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Ang bayan ay walang kakampi na ilista.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Ang bayan ay walang mga kaaway na ilista.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Nag-time Out ang Kumpirmasyon.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Ang tunog ng channel ay naka-mute'
 tc_player_channel_sound_unmuted: 'Na-unmute ang tunog ng channel'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'May taga labas sa balangkas mo, hindi mo mababago ang kalagayn ng mo sa pvp!'
-#Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>Ang bayan %s ay sumang-ayon na sumanib sa namamayaning bayan ng %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Gastos ng Neutralidad:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Kung nagbayad ka ng anumang pera sa totoong buhay para sa mga townblock na ito, pakiunawa: ang server na iyong nilalaro ay lumalabag sa Minecraft EULA at sa lisensya ng Towny.'
 #Line 2 of the givebonus warning.
@@ -832,47 +775,36 @@ msg_ptw_warning_2: 'Ang koponan ng Towny ay hindi kailanman nilayon na ang mga t
 msg_ptw_warning_3: 'Kung nagbayad ka ng totoong pera dapat mong isaalang-alang ang paglalaro sa isang server ng Towny na gumagalang sa mga kagustuhan ng Koponan ng Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Inimbitahan kang sumali sa %s<blue> (Bansa: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Hindi kayang bayaran ng iyong bayan ang pera upang alisin ang pag-angkin sa lupaing ito. %s ang kailangan.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Ang iyong bayan ay nagbayad ng %s upang alisin ang pag-angkin sa lupa.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Ang pag-alis sa pag-aangkin sa lupaing ito ay nagkakahalaga ng %s, gusto mo bang magpatuloy?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Kailangan mong maghintay ng %s segundo bago mo muling mapalitan ang pangalan ng iyong bayan.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Hindi mo maaaring i-toggle ang neutrality, %s segundo ang natitira.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Hindi magagamit ang command na ito mula sa console.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Ang bayan na %s ay nagkaroon ng kanilang unlimited claims na setting na nakatakda sa %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Wala kang sapat na townblock para i-claim, gusto mo bang i-on ang unlimited claiming para sa bayan ng %s'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Hindi mo maaaring iwanan ang iyong bansa, ang iyong bayan ay nasakop.'
 msg_err_console_only: 'Ang utos na ito ay magagamit lamang ng console.'
 msg_err_player_only: 'Ang utos na ito ay maaari lamang gamitin ng isang manlalaro.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Ang mga mensahe ng pamagat na ipinapakita kapag tumatawid sa mga hangganan ay %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Ang pagpapatakbo ng command na ito ay nire-reset ang iyong config.yml sa default na file. Gusto mo bang magpatuloy?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Sa paggawa nito, na-override mo ang mga limitasyon ng residente na itinakda sa configuration ng server. Gusto mo pa bang magpatuloy?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Inalis ang %d na di-wastong outpost spawns.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Ang iyong bayan ay bangkarota, magdagdag ng pera sa iyong bangko gamit ang /town deposit {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Hindi mo magagamit ang utos na ito, dahil miyembro ka na ng isang bayan. Kung gusto mong magpatuloy, kailangan mong gamitin ang ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.

@@ -297,7 +297,6 @@ msg_set_claim: '<aqua>เปลี่ยนความสามารถ Claima
 msg_set_perms_reset: '<aqua>Reset การอนุญาตบน %s Plot ทั้งหมด เรียบร้อยแล้ว.'
 msg_usedefault: '<aqua>World (%s) กำลังใช้การตั้งค่าเป็น Default'
 msg_set_wild_perms: '<aqua>เปลี่ยนการอนุญาตเสริมของ %s สำเร็จแล้ว %s'
-msg_set_wild_ignore: '<aqua>Successfully changed %s''s wild ignore blocks to %s'
 msg_set_wild_name: '<aqua>เปลี่ยนชื่อป่าจาก %s''s เป็น %s เรียบร้อยแล้ว'
 msg_set_wild_regen: '<aqua>เปลี่ยนค่า Regen ป่า ของ %s เป็น ''%s'' เรียบร้อยแล้ว'
 msg_set_use_towny_on: '<aqua>World นี้เป็นไปตามกฎของ Towny.'
@@ -401,8 +400,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>Town %s ไม่มี R
 msg_not_enough_residents_capital: '<aqua>Town %s มี Resident ไม่เพียงพอที่จะเป็นเมืองหลวงของ Nation.'
 list_page: '<aqua>หน้า %s จาก %s'
 list_err_not_enough_pages: '<red>มีเพียง %s หน้าที่ใช้ได้'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'คุณไม่สามารถกำหนดภาษี Town ของคุณให้ต่ำกว่า %s'
 msg_unknown_rank_available_ranks: 'ไม่ทราบ Rank %s Rank ที่อนุญาตคือ %s'
 msg_no_permission_to_give_rank: 'คุณไม่ได้รับอนุญาตให้จัด Rank นี้.'
@@ -446,7 +443,6 @@ msg_err_cant_use_bed: '<dark_red>คุณไม่สามารถใช้�
 msg_town_plots_revenue_disclaimer: '<green>รายได้ที่แสดงเป็นค่าโดยประมาณ และเจ้าของที่ดินสามารถกำหนดได้ว่าจะให้จ่ายหรือไม่.'
 msg_town_set_perm_syntax_error: 'คำสั่งนี้ใช้คำไม่ถูกต้อง. ''/town set perm ?'' เพื่อดูคำสั่ง.'
 msg_plot_set_perm_syntax_error: 'คำสั่งนี้ใช้คำไม่ถูกต้อง. ''/plot set perm ?'' เพื่อดูคำสั่ง.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Resident ไม่ได้อยู่ Town นั้น.'
 msg_err_resident_already_an_outlaw: 'Player คนนี้เป็น Outlaw ในเมืองของคุณ.'
 msg_err_not_outlaw_in_your_town: 'คุณไม่สามารถตั้งสมาชิกใน Town เป็น Outlaw ได้.'
@@ -459,22 +455,15 @@ msg_err_outlaw_in_open_town: 'คุณไม่สามารถเข้า�
 msg_you_are_an_outlaw_in_this_town: '<dark_red>ระวังตัวด้วย %s ประกาศให้คุณเป็น Outlaw, ถ้าตายที่นี่อาจหมายถึง ail.'
 msg_err_town_not_close_enough_to_nation: 'Homeblock %s ต้องอยู่ไกลจาก Capital Homeblock(Chunk ที่เป็นเมืองหลวง) ของคุณเพื่อเข้าร่วม Nation.'
 msg_nation_town_moved_their_homeblock_too_far: 'HomeBlock ของ %s ถูกย้ายออกห่างจาก HomeBlock ของเมืองหลวงของ Nation คุณมากเกินไป และถูกนำออกจาก Nation ของคุณแล้ว'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>จำนวนรัศมีไม่ถูกต้อง ใช้ %s หรือน้อยกว่า'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>ถึงจำนวน Resident สูงสุด (%s) แล้ว'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>ผู้เล่น %s ไม่ได้อยู่บนเซิร์ฟเวอร์นานพอที่จะได้รับเชิญให้เข้า Town โปรดรอสักครู่'
 msg_cant_toggle_pvp_outsider_in_town: 'มี Outsider อยู่ใน Town ของคุณ คุณไม่สามารถเปลี่ยนสถานะ pvp ของคุณได้!'
 msg_err_unclaim_not_outpost: 'ไม่สามารถยกเลิกการอ้างสิทธิ์ Plot นี้ไม่ใช่ด่านหน้า!'
 outpost_plu: 'Outposts'
-#Added in 0.36
 msg_err_not_enough_residents: 'มี Resident ใน Town นี้ไม่เพียงพอที่จะทำอย่างนั้น'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'ไฟที่เป็นมิตรถูกปิดการใช้งาน!'
-#Added in 0.38
 msg_claim_error: '<red>Plugin อื่น หยุดการ Claim ของ (%s)/(%s) Town Block ไม่สามารถดำเนินการให้เสร็จสิ้น.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Town spawn  ทำได้เฉพาะในช่วง War เท่านั้น'
 msg_err_town_spawn_forbidden_peace: '<red>ห้ามTown spawn  ระหว่าง War.'
 msg_err_town_spawn_nation_forbidden_war: '<red>Town spawn  สามารถเดินทางไปยัง Town อื่นๆ ใน Nation ของคุณได้ในช่วง War เท่านั้น.'
@@ -483,9 +472,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Town spawn  จะอนุญา�
 msg_err_town_spawn_ally_forbidden_false: '<red>Town spawn การเดินทางไปยัง Town ที่เป็นพันธมิตรกับ Nation ของคุณถูกห้ามในระหว่าง War'
 msg_err_public_spawn_forbidden_war: '<red>อนุญาตให้ Town spawn ในที่ สาธารณะไปยัง Town อื่นได้ในช่วง War เท่านั้น.'
 msg_err_public_spawn_forbidden_peace: '<red>วาปในที่สาธารณะ ห้ามเดินทางไปยัง Town อื่นในระหว่าง War'
-#Added in 0.40
 mayor_help_9: 'พยายามที่จะ Unclaim Outpost'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'คำเชิญ'
 invite_sent_by: 'คำเชิญถูกส่งโดย'
 invite_help_1: 'ตอบรับคำเชิญเข้าร่วมเมือง'
@@ -544,16 +531,13 @@ you_have_been_requested_to_ally: 'คุณได้รับคำขอเป�
 this_message_will_expire: 'การดำเนินการนี้จะหมดอายุโดยอัตโนมัติใน 20 วินาที'
 player_sing: 'Player'
 nation_zone_this_area_under_protection_of: 'ส่วนนี้ของ %s อยู่ภายใต้การคุ้มครองของ %s'
-#Added in 0.42
 you_have_been_invited_to_join2: 'คุณได้รับเชิญให้เข้าร่วม %s'
 you_have_been_requested_to_ally2: 'คุณได้รับการร้องขอให้เป็นพันธมิตร %s'
-#Added in 0.43
 town_help_11: 'สร้างเมืองใหม่ ใช้ ''_'' เพื่อเว้นวรรค.'
 changed_plot_town: '<aqua>คุณได้เปลี่ยนแปลง %s!'
 not_standing_in_plot: 'คุณไม่ได้ยืนอยู่ใน Plot ที่ถูกต้อง!'
 msg_err_homeblock_has_not_been_set: 'ยังไม่ได้ตั้งค่า Home Block ใช้ ''/town set homeblock'' ก่อน.'
 msg_err_spawn_not_within_homeblock: 'Spawn ไม่ได้อยู่ใน Home Block ใช้ ''/town set homeblock'' ก่อน.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'ข้อผิดพลาด: คำสั่งไม่ถูกต้อง!'
 tc_settings_reloaded: '[TownyChat] Reloaded การตั้งค่าแล้ว!'
@@ -595,7 +579,6 @@ msg_err_over_outposts_limit: 'คุณไม่สามารถวาปไ�
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 #Used on /t outlawlist
 outlaws: '<dark_green>Outlaws: <white>'
-online: '<green>(Online)'
 #Used in mayor hover text in /town status screen.
 registered_last_online: '<dark_green>ลงทะเบียนแล้ว: <green>%s <dark_gray>| <dark_green>ออนไลน์ล่าสุด: <green>%s'
 #Used on /plot perm, /res
@@ -620,8 +603,6 @@ jailed_in_town: '<dark_green>Jailed: <green>Yes <dark_green>in Town: <green>%s'
 status_friends: 'Friends'
 rank_list_title: ' <dark_aqua>รายการ Rank '
 rank_list_mayor: '<dark_green>เจ้าเมือง: <green>%s'
-status_title_pvp: '<dark_red>(PVP)'
-status_title_open: '<aqua>(Open)'
 status_town_board: '<dark_green>กระดาน: <green>%s'
 status_founded: '<dark_green>ก่อตั้ง: <gray>%s'
 status_town_size: 'ขนาดเมือง:'
@@ -652,7 +633,6 @@ status_res_taxexempt: '<dark_green>Staff ได้รับการยกเว
 status_res_tax: '<dark_green>ภาษี Town : <green>'
 status_res_plottax: '<dark_green>ภาษี Plot ทั้งหมด: <green>'
 status_res_totaltax: '<dark_green>รวมภาษีที่ต้องชำระ: <green>'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'คุณไม่สามารถใช้ประโยชน์จาก Nation Bank ของคุณนอกเมืองหลวงได้.'
 msg_err_unable_to_use_bank_outside_your_town: 'คุณไม่สามารถใช้ประโยชน์จาก Town Bank ของคุณนอก Town ของคุณ.'
 msg_time_until_a_new_day: 'เวลาจนถึงวันใหม่: '
@@ -662,7 +642,6 @@ msg_seconds: ' วินาที'
 msg_err_invalid_string_nationboard_not_set: 'String ไม่ถูกต้อง ไม่ได้ตั้งค่า Nation Board.'
 msg_plot_evict: 'ขับไล่ Plot เรีนยร้อย.'
 msg_no_one_to_evict: 'ไม่มีใครขับไล่ออกจาก Plot นี้.'
-#Added in 0.46
 nation_help_10: 'วาปไปยัง Spawn ของ Nation.'
 msg_nation_spawn_warmup: '<aqua>กำลังรอการวาป...'
 msg_set_nation_spawn: '<aqua>เปลี่ยนการ Spawn ของ Nation เรียบร้อยแล้ว.'
@@ -673,8 +652,6 @@ msg_err_spawn_not_within_capital: '<red>Spawn ของ Nation ต้องอ�
 msg_err_nation_spawn_war: '<red>Nation Spawn ไม่เป็นมิตรในช่วงสงคราม.'
 msg_err_nation_not_public: '<red>Nation นั้นไม่เป็นสาธารณะ.'
 msg_nation_toggle_public: '<green>สลับการตั้งค่า Nation เป็นสาธารณะ เรียบร้อยแล้ว.'
-status_yes: '<green>YES'
-status_no: '<red>NO'
 msg_err_nation_spawn_forbidden: '<red>ห้ามวาปในประเทศ'
 msg_err_nation_spawn_forbidden_war: '<red>Nation spawn travel อนุญาตเฉพาะในช่วงสงครามเท่านั้น'
 msg_err_nation_spawn_forbidden_peace: '<red>Nation spawn travel ต้องห้ามในระหว่างสงคราม.'
@@ -688,10 +665,8 @@ msg_spawn_cost_set_to: '<aqua>%s ได้กำหนดราคาของ�
 msg_err_cannot_set_spawn_cost_more_than: '<red>คุณไม่สามารถกำหนดราคา Spawn ให้สูงกว่า %s'
 msg_err_ally_isnt_public: '<red>พันธมิตรของคุณ %s ไม่ได้เปิดใช้งานการวาปแบบสาธารณะ การวาปถูกปฏิเสธ.'
 msg_nation_changed_public: '<red>สถานะ Nation ของตอนนี้คือ %s.'
-#Added in 0.47:
 status_plot_type: '<dark_green>ประเภท Plot: <green>'
 msg_no_self_jailing: 'คุณไม่สามารถ ติดคุกของตัวเองได้.'
-online2: ' <green>(Online)'
 build: 'สร้าง'
 destroy: 'ทำลาย'
 switch: 'สวิตช์'
@@ -709,19 +684,15 @@ enabled: 'เปิดใช้งาน'
 disabled: 'ปิดใช้งาน'
 forced: 'บังคับ'
 adjustable: 'ปรับได้'
-#Added in 0.48:
-msg_no_funds_new_town2: '<red>%s can''t afford to settle a new town here, which costs %s.'
 msg_no_funds_new_nation2: '<red>Town นี้ไม่สามารถเริ่มต้น Nation ใหม่ได้ ซึ่งมีค่าใช้จ่าย %s.'
 msg_no_funds_claim2: '<red>Town ไม่สามารถรับ %s Town Block ที่คิดต้นทุน %s เพิ่ม %s ไปยังธนาคารเมืองโดยใช้ /t เงินฝาก %s'
 msg_err_cant_afford_blocks2: '<red>Town ไม่สามารถรับ %s Town Block ที่คิดต้นทุน %s เพิ่ม %s ไปยัง Town Bank โดยใช้ /t เงินฝาก %s'
 msg_err_not_enough_variables: '<red>ตัวแปรไม่เพียงพอ: '
 nation_rechecked_by_admin: '<aqua>Nation %s ระยะทางใน Town ตรวจสอบได้สำเร็จอีกครั้ง.'
 msg_err_nation_over_town_limit: '<red>Nation ของคุณมีจำนวน Town ต่อ Nation ถึงจำนวนสูงสุดที่อนุญาตแล้ว: %s.'
-#Added in 0.49
 msg_process_claim: 'กำลังดำเนินการ Claim ใน Plot ...'
 msg_process_unclaim: 'กำลังยกเลิกการ Claim Plot...'
 msg_total_townblocks: 'TownBlocks ทั้งหมด: '
-#Added in 0.50
 friend_list: 'รายชื่อเพื่อน'
 not_registered: 'ยังไม่ได้ลงทะเบียน.'
 msg_error_missing_comparator: '<aqua>ต้องระบุสิ่งที่จะจัดเรียงตาม.'
@@ -744,7 +715,6 @@ status_embassy_town: '<dark_green>สถานทูตใน'
 nation1_has_merged_with_nation2: '<gold>Nation %s ได้ตกลงที่จะ Merge ด้วยกันกับ Nation ที่มีอยู่ของ %s'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>คุณตกลงที่จะยุบ Nation ของคุณ %s ให้เป็น Nation ของ %s หรือไม่? การดำเนินการนี้จะโอนเงินทุก Town และ Nation Bank ไปที่ %s.'
 no_open_towns: 'ไม่มี Town เปิดในรายการ.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'ไม่มีพันธมิตร [Ally] ในรายการ'
 msg_error_nation_has_no_enemies: 'ไม่มีศัตรู [Enemies] ในรายการ'
 msg_error_ta_plot_claim: 'ไม่มีชื่อผู้เล่น เช่น /ta plot claim PlayerNameHere'
@@ -755,19 +725,14 @@ msg_nation_changed_open: '<red>สถานะของ Nation ตอนนี�
 msg_err_already_in_a_nation: 'Town ของคุณมีอยู่แล้วใน Nation'
 msg_err_nation_homeblock_in_another_world: '<red>HomeBlock Town ของคุณไม่ได้อยู่ใน World เดียวกับบล็อกหลักของ Nation Capital'
 status_bank_town_penalty_upkeep: '<gray>| <dark_green>ค่าบำรุงรักษา การ Claim : <dark_red>%s'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'คุณไม่สามารถ Spawn ที่ %s ได้ คุณถูกทำเครื่องหมายว่าเป็น Outlaw ที่นั่น.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>คุณไม่สามารถใช้คำสั่งนั้นในขณะที่ถูกจำคุก.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>สมาชิก Nation ไม่ได้รับอนุญาตให้ %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s อยู่ในเมืองแล้ว.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>คุณไม่สามารถตั้งค่า Plot เป็นประเภท %s โดยคิดต้นทุน %s'
 msg_plot_set_cost: '<aqua>คุณถูกเรียกเก็บเงิน %s สำหรับการตั้งค่า Plot เป็นประเภท: %s'
 msg_err_townspawn_has_not_been_set: '<red>ไม่ได้ตั้งค่า Spawn ใน Town.'
 msg_err_player_too_far_from_town_spawn: '<red>%s อยู่ห่างจากเมืองของคุณเกินกว่าจะรับคำเชิญให้เข้าเมืองได้ ระยะทางสูงสุด: %s บล็อค.'
-#Added in 0.58:
 msg_resident_bail_amount: 'ค่าประกัน Resident : '
 msg_mayor_bail_amount: 'ค่าประกัน Mayor: '
 msg_has_paid_bail: 'ได้ประกันตัวแล้วฟรี.'
@@ -787,7 +752,6 @@ homeblock: 'homeblock'
 townblock: 'townblock'
 outpost: 'ด่านหน้า'
 msg_err_not_same_town: '<aqua>%s ไม่ได้อยู่ใน Town ของคุณ.'
-#Added in 0.59:
 msg_modes_set: 'Modes set: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Plot นี้ไม่มีข้อมูล Meta ที่เกี่ยวข้อง.'
 msg_err_the_metadata_for_key_is_not_registered: 'ข้อมูล Meta สำหรับ ''%s'' ไม่ได้ลงทะเบียน!'
@@ -814,28 +778,18 @@ msg_err_tag_too_long: 'Tag ยาวเกินไป.'
 msg_err_nation_has_not_set_a_spawn_location: 'Nation ไม่ได้ตั้งจุดเกิดไว้'
 msg_err_resident_doesnt_belong_to_any_town: 'ไม่มี Resident อยู่ใน Town อื่นๆ'
 msg_err_could_not_set_default_modes_for: 'ไม่สามารถตั้งเป็น default modes สำหรับ '
-#Added in 0.60
 msg_set_war_allowed_on: 'War ถูกเปิด'
 msg_set_war_allowed_off: 'War ถูกปิด'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'คุณไม่สามารถสลับเป็น PVP ได้ เหลืออีก %s วินาที'
 msg_err_cannot_spawn_x_seconds_remaining: 'คุณไม่สามารถเกิดได้อีก %s วินาที'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Plot นี้ไม่ได้ขายแล้ว'
 msg_err_x_spawn_disallowed_from_x: '<red>%s spawn ถูกปิดโดย %s.'
 msg_the_wilderness: 'ที่รกร้างว่างเปล่า'
 msg_enemy_areas: 'พื้นที่ศัตรู'
 msg_neutral_towns: 'towns ที่เป็นกลาง'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'ไม่พบ Nation ที่ชื่อ %s'
 msg_err_cannot_unclaim_homeblock: 'คุณไม่สามารถยกเลิกการ Claim homeblock ของคุณ,คุณสามารถพิมพ์ /town set homeblock เพื่อย้าย homeblock ของคุณ'
-#Added in 0.65
 msg_err_rename_cancelled: 'การเปลี่ยนชื่อถูกยกเลิกโดยปลั๊กอินอื่น'
-#Added in 0.66
-#Added in 0.67
-msg_conquered: '<dark_red>(Occupied)'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Plot นี้เป็นส่วนหนึ่งของกลุ่มของ %s Plot โดยการยืนยันการ Claim ของคุณ คุณจะซื้อทั้งหมด.'
 msg_plot_group_unclaim_confirmation: 'Plot นี้เป็นส่วนหนึ่งของกลุ่มของ %s Plot โดยยืนยันว่าคุณจะยกเลิกการ Claim ทั้งหมด.'
 msg_plot_group_toggle_confirmation: 'Plot นี้เป็นส่วนหนึ่งในกลุ่มของ %s Plot โดยยืนยันว่าคุณจะสลับคุณสมบัติทั้งหมด'
@@ -856,30 +810,19 @@ msg_set_group_type_to_x: 'เปลี่ยนประเภทของกล
 msg_player_successfully_bought_group_x: '%s ซื้อกลุ่ม Plot สำเร็จแล้ว %s'
 status_plot_group_name_and_size: '<dark_green>Town block เป็นส่วนหนึ่งของกลุ่ม: %s กลุ่มมีทั้งหมด %s Town block'
 msg_player_made_group_not_for_sale: '%s สร้างกลุ่ม %s ไม่ขาย'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'ไม่สามารถตั้งค่ากลุ่ม Plot เป็นประเภท Jail ได้.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'คุณต้องระบุชื่อกลุ่ม Plot เช่น, /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'คลิก %s หรือพิมพ์ %s'
 msg_confirmation_spigot_click_cancel: 'คลิก %s หรือพิมพ์ %s'
 msg_you_cannot_kick_yourself: 'คุณไม่สามารถ Kick ตัวเองได้.'
 msg_you_cannot_kick_this_resident: 'คุณไม่สามารถ kick %s ได้, พวกเขาคือ Mayor หรือ Assistant.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s อยู่ในกลุ่ม, ใช้ /plot group fs [amount]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s อยู่ในกลุ่ม, ใช้ /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'การตั้งค่า %s ที่ควบคุมโดย Admin จะป้องกันไม่ให้คุณสลับ pvp เป็น %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'คุณยังไม่เคยถูก Jail.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'คุณไม่ได้รับอนุญาตให้สร้างอีกด้านหนึ่งของ Portal นี้ในตำแหน่งนี้.'
-#Added in 0.75
 msg_already_ally: 'Nation ของคุณเป็นพันธมิตรกับ %s แล้ว.'
-#Added in 0.76
 msg_you: 'คุณ'
-msg_click_spawn: '<green>Click to spawn to: <yellow>%s'
-msg_spawn_cost: '<green>Spawn Cost = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'เกิดข้อผิดพลาดในการโหลด Towny.'
 msg_reloaded_config: '<dark_green>โหลดการกำหนดค่าอีกครั้งสำเร็จ.'
 msg_reloaded_perms: '<dark_green>โหลดสิทธิ์สำเร็จแล้ว.'
@@ -887,7 +830,6 @@ msg_reloaded_db: '<dark_green>โหลด Database สำเร็จแล้�
 msg_reloaded_lang: '<dark_green>โหลด Language file สำเร็จแล้ว'
 msg_reset_config: '<dark_green>รีเซ็ตการกำหนดค่าแล้ว'
 msg_err_teleport_cancelled: 'คุณเคลื่อนที่ ยกเลิกการเทเลพอร์ตของคุณ.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'เพื่อน'
 msg_cache_block_error_plot_allies: 'พันธมิตร'
 msg_cache_block_error_plot_outsiders: 'คนนอก'
@@ -901,24 +843,15 @@ msg_confirm_purchase: 'การทำเช่นนี้จะมีค่า
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Town ต่อไปนี้จะถูกลบออกจาก Nation ของคุณ: %s คุณต้องการที่จะดำเนินการต่อ?'
 msg_ta_deposit_all_success: 'ฝาก %s สำเร็จไปยัง Bank ของทุก Nation และทุก Town.'
 bonus_townblocks: 'โบนัส townblocks'
-#Added in 0.80
 nomad_sing: 'Nomad'
 msg_new_town_advice: 'ขอแสดงความยินดีที่สร้าง Town ของคุณ! Town ของคุณจะจ่ายค่าบำรุงรักษารายวัน ซึ่งปัจจุบันมีมูลค่า %s คุณสามารถฝากเงินใน Bank ของ Town โดยใช้ ''/t deposit #'' หากไม่มีเงินจ่ายค่าบำรุงรักษา Town ของคุณจะถูกลบ คุณสามารถดูค่าใช้จ่ายของคุณได้ตลอดเวลาโดยใช้ /towny price ค่าบำรุงรักษารายวันถัดไปใน %s.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'ความเสียหายได้ยกเลิกการเคลื่อนย้ายของคุณ.'
-#Added in 0.82
-invitation_prefix: "<dark_gray>[<gray>Invitation<dark_gray>] <blue>"
-confirmation_prefix: "<dark_gray>[<gray>Confirmation<dark_gray>] <blue>"
 msg_hover_next_page: 'หน้าต่อไป'
 msg_hover_previous_page: 'หน้าก่อนหน้า'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "จำนวนภาษีสูงสุดสามารถกำหนดได้เฉพาะ Town ที่มีเปอร์เซ็นต์ภาษีเท่านั้น"
 msg_town_set_tax_max_percent_amount: "%s ได้กำหนดจำนวนเปอร์เซ็นต์ภาษีสูงสุดเป็น %s"
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'พล็อตเป็นของกลุ่ม ใช้ /plot กลุ่ม toggle'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>รีเซ็ตการอนุญาตบน Plot นี้สำเร็จ'
-#Added in 0.86
 status_bank_bankrupt: '<dark_green>ธนาคาร: <green>%s <red>(ล้มละลาย)'
 msg_warning_bankrupt: '<dark_red>*** คำเตือน %s จะล้มละลายในวันถัดไปเนื่องจากขาดเงินทุน ***'
 msg_town_bankrupt_by_upkeep: '<aqua>%s ไม่สามารถจ่ายค่าบำรุงรักษาและจะล้มละลายได้'
@@ -936,7 +869,6 @@ msg_your_town_payed_upkeep: '<aqua>Town ของคุณจ่ายค่า�
 msg_your_nation_payed_upkeep: '<aqua>Nation ของคุณจ่ายค่าบำรุงรักษารายวันเป็น %s'
 msg_your_town_couldnt_pay_upkeep: '<aqua>Town ของคุณไม่สามารถจ่ายค่าบำรุงรักษารายวัน %s และจะถูกยุบได้'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>Nation ของคุณไม่สามารถจ่ายค่าบำรุงรักษารายวันของ %s และได้ยุบไปแล้ว'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s ไม่สามารถจ่ายค่ารักษาพยาบาลได้ ใช้หนี้จนครบแล้ว และได้ยุบไปแล้ว'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>Town ต่อไปนี้ไม่สามารถจ่ายค่ารักษาพยาบาล ใช้หนี้จนหมด และยุบไป: '
 msg_unable_to_deposit_x: 'ไม่สามารถฝาก %s เข้าธนาคารของ Town นั้นได้'
@@ -944,10 +876,8 @@ msg_unable_to_withdraw_x: 'ไม่สามารถถอน %s ออกจ�
 status_debtcap: '<dark_green>ยอดหนี้: <green>%s'
 status_world_explrevert_entity: '<dark_green>Entity Explosion ย้อนกลับ:'
 status_world_explrevert_block: '<dark_green>บล็อกการระเบิดย้อนกลับ: '
-#Added in 0.88
 msg_nation_already_peaceful: '<red>Nation นี้สงบสุขแล้ว.'
 msg_nation_already_not_peaceful: '<red>Nation นี้ไม่สงบสุขแล้ว.'
-#Added in 0.89
 status_world_friendlyfire: '<dark_green>FriendlyFire: '
 status_world_wildernessmobs: '<dark_green>Wilderness Mobs: '
 msg_outlaw_kick_cooldown: '<red>คุณถูกมองว่าเป็นคนนอกกฎหมายใน %s คุณเหลือ %s ให้ออกจาก Town มิฉะนั้น คุณจะถูกเทเลพอร์ตกลับไปยัง Spawn ของคุณ.'
@@ -955,14 +885,11 @@ msg_outlaw_kicked: '<dark_red>ไม่ต้อนรับคุณใน %s �
 msg_outlaw_town_notify: '<red>อาชญากร %s ได้เข้าสู่อาณาเขตของ Town ของคุณแล้ว.'
 msg_your_town_payed_upkeep_with_debt: '<red>Town ของคุณจ่ายค่าบำรุงรักษารายวัน %s ด้วยหนี้'
 msg_payed_nation_tax_with_debt: '<red>Town ของคุณจ่ายภาษีของประเทศเป็น %s ด้วยหนี้'
-#Added in 0.90
 status_plot_clear_deletion: '<dark_green>PlotClearBlockลบ: '
 msg_err_plot_clear_disabled_in_this_world: 'คำสั่ง /plot clear ถูกปิดใช้งานใน World นี้'
-#Added in 0.91
 msg_universe_attribution: 'ผู้เขียน: '
 msg_universe_contributors: ' และผู้มีส่วนร่วมเช่นคุณ '
 townblock_plu: 'TownBlocks'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'คำสั่ง newhour ดำเนินการสำเร็จแล้ว'
 town_help_12: 'ReClaim Town ของคุณจากรัฐที่ถูกทำลาย'
@@ -976,10 +903,8 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '<red>Town ของคุณ�
 msg_time_remaining_before_full_removal: '<red>เวลาที่เหลือก่อนลบทั้งหมด: %d ชั่วโมง'
 msg_time_until_reclaim_available: '<red>เวลาจนกว่าจะเรียกคืนได้: %d ชั่วโมง'
 msg_reclaim_available: '<green>Reclaim ใช้ได้'
-#Added in 0.93
 msg_changed_peaceful: '<red>ความเป็นกลางของเมือง/ความปลอดภัยตอนนี้คือ %s'
 msg_err_town_unclaim_canceled: '<red>ยกเลิกการ Claim แล้ว คุณไม่สามารถยกเลิกการ Claim พื้นที่นี้ได้ในขณะนี้'
-#Added in 0.94
 msg_comptype_residents: 'จำนวนผู้อยู่อาศัย'
 msg_comptype_townblocks: 'จำนวนสิทธิ์ของ Townblocks'
 msg_comptype_balance: 'ยอดคงเหลือใน Bank'
@@ -992,7 +917,6 @@ npc_created: '<dark_green>Created: <green>%s'
 msg_no_funds_claim_plot: '<red>คุณไม่สามารถ Claim Plot ราคา %s.'
 msg_no_funds_claim_plot_group: '<red>คุณไม่สามารถ Claim ใน %s plots ในราคา %s.'
 status_town_title_peaceful: '<aqua>(สงบสุข)'
-#Added in 0.95
 status_public: '<aqua>(สาธารณะ)'
 msg_days: ' วัน'
 msg_comptype_public: 'สถานะ สาธารณะ'
@@ -1016,18 +940,13 @@ towny_prices_taxes_plot: '<red>    [ภาษี]    <dark_green>ผู้อย
 towny_prices_taxes_shop: '<red>            <dark_green>ร้านค้า: <green>%s <dark_gray>| <dark_green>สถานทูต: <green>%s'
 towny_prices_nationname: '<red>ประเทศ: <gold>%s'
 towny_prices_nation_tax: '<red>    [ภาษี] <dark_green>ทาวน์: <green>%s <dark_gray>| <dark_green>สันติภาพ: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>Town ที่ถูกยึดครอง %s ไม่สามารถจ่ายภาษีของ Nation และ ล่มสลาย.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>Town ที่ถูกยึดครองต่อไปนี้ไม่สามารถจ่ายภาษีของ Nation และ ล่มสลาย: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Town ของคุณได้รับการยกเว้นภาษี Nation .'
-#Added in 0.97
 #The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '<green>%s = <gray>'
 msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
-msg_ruined: '<red>(Ruined)'
-msg_bankrupt: '<red>(Bankrupt)'
-#Added in 0.98
 msg_del_town2: '<aqua>เมือง %s ถูกลบไปแล้ว!'
 msg_ruin_town: '<aqua>เมือง %s พังทลายลง!'
 gui_title_towny_wildsblocks: 'รายการ Towny WildsBlocks'
@@ -1036,7 +955,6 @@ gui_title_towny_switch: 'รายการ Towny Switch'
 gui_title_towny_plotclear: 'ลบรายการ Towny Plot '
 msg_ta_removed_all_titles_and_surnames_removed: 'ผู้อยู่อาศัยทุกคนถูกลบ ชื่อและนามสกุล.'
 msg_err_homeblock_already_set_here: 'ตำแหน่งนี้เป็นบ้านหลักใน Town ของคุณอยู่แล้ว.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>การ Merge ทำได้โดย Mayor เท่านั้น.'
 msg_town_merge_err_not_close: '<red>Town %s อยู่ห่างจาก Town ของคุณมากเกินไป. Homeblock ของพวกเขาจะต้องอยู่ภายใน %d Townblocks ของ Homeblock คุณ.'
 msg_town_merge_request_sent: '<aqua>ส่งคำขอ Merge ไปยัง Mayor ของ %s.'
@@ -1057,7 +975,6 @@ msg_town_merge_success: '<aqua>Town ของ %s, ซึ่งเป็นเจ
 msg_town_merge_cost_withdraw: 'ค่าใช้จ่ายในการรวมเมือง'
 msg_town_merge_transaction_reason: 'การรวมเมือง'
 towny_prices_town_merge: '<yellow>[Merging] <dark_green>ค่าใช้จ่ายพื้นฐาน: <green>%s <dark_gray>| <dark_green>ต่อ Plot: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Nation ของคุณไม่ได้เป็นพันธมิตรกับ %s.'
 msg_err_nation_not_enemies_with: '<red>Nation ของคุณไม่ใช่ศัตรูกับ %s.'
 msg_err_nation_already_enemies_with: '<red>Nation ของคุณเป็นศัตรูกับ %s.'
@@ -1067,20 +984,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s ไม่ใช่ศัตรูก
 msg_err_nation_already_allied_with_2: '<red>%s เป็นพันธมิตรกับ %s แล้ว.'
 msg_err_nation_already_enemies_with_2: '<red>%s เป็นศัตรูกับ %s แล้ว.'
 msg_ta_allies_enemies_updated: '<aqua>พันธมิตร/ศัตรู อัปเดตสำหรับ %s.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>คลิกเพื่อดูรายละเอียดข้อมูลของ Plot.'
 msg_err_nation_capital_too_many_residents: '<red>เมืองหลวงปัจจุบันมีผู้อยู่อาศัยมากเกินไปที่จะแทนที่ด้วย %s.'
 msg_deleting_nation_will_result_in_losing_residents: '<red>คำเตือน:การลบประเทศของคุณจะทำให้เมืองของคุณมีประชากรเกินขีดจำกัด %d คน, ส่งผลให้มีการนำผู้อยู่อาศัยออก %d คน.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '<red>คุณไม่สามารถใช้คำสั่งนี้ในเมืองได้'
 msg_command_limited: 'คุณสามารถใช้คำสั่งนี้ใน Plot ของคุณเองเท่านั้น'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: '<dark_green>Claimed at: <green>%s'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'การใช้ถิ่นทุรกันดาร %s เกิดขึ้นในทุก world.'
 msg_regenerations_use_x_in_all_worlds: 'การ Regenerations %s เกิดขึ้นในทุก World'
-#Added in 0.106
 msg_command_outsider_blocked: 'คุณไม่สามารถเรียกใช้คำสั่งนั้นได้เพราะคุณไม่ได้อาศัยอยู่ใน %s.'
 msg_err_no_cell_found_at_this_location: 'ไม่พบห้องขังในสถานที่นี้'
 msg_jail_cell_set: 'ชุดห้องขัง.'
@@ -1098,6 +1010,5 @@ msg_x_has_served_their_sentence_and_is_free: '%s ได้รับโทษจ�
 jail_plu: 'คุก'
 jail_sing: 'คุก'
 map_hover_plot_group_size: ' ขนาด: '
-#Added in 0.112
 msg_checking_for_updates: 'ตรวจหาการอัปเดต…'
 msg_no_new_updates: 'ไม่พบการอัปเดตใหม่'

@@ -20,10 +20,10 @@ author: Daybreak 새벽
 #placed on the line.
 #A note on text colouring and formatting.
 #----------------------------------------
-#Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
-#Purple = &5, Gold = &6, LightGray = &7, Gray = &8
-#DarkPurple = &9, LightGreen = &a, LightBlue = &b
-#Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+#Black = <black>, Navy = <dark_blue>, Green = <dark_green>, Blue = <dark_aqua>, Red = <dark_red>
+#Purple = <dark_purple>, Gold = <gold>, LightGray = <gray>, Gray = <dark_gray>
+#DarkPurple = <blue>, LightGreen = <green>, LightBlue = <aqua>
+#Rose = <red>, LightPurple = <light_purple>, Yellow = <yellow>, White = <white>
 #This language file also supports using MiniMessage for colours
 #and formatting. Learn about MiniMessage formatting here:
 #https://docs.adventure.kyori.net/minimessage/format.html
@@ -439,8 +439,6 @@ msg_nation_disbanded_town_not_enough_residents: '<aqua>마을 %s은(는) 더 이
 msg_not_enough_residents_capital: '<aqua>마을 %s에는 국가의 수도가 될 만큼의 충분한 주민이 없습니다.'
 list_page: '<dark_aqua>페이지 <aqua>%s / %s'
 list_err_not_enough_pages: '<red>%s 페이지가 유효합니다.'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: '마을 세금을 %s 보다 적게 설정할 수 없습니다.'
 msg_unknown_rank_available_ranks: '<aqua>%s<white>은(는) 존재하지 않는 등급입니다. 하사 가능한 등급: %s.'
 msg_no_permission_to_give_rank: '이 등급을 받을 권한이 없습니다.'
@@ -484,7 +482,6 @@ msg_err_cant_use_bed: '<dark_red>이 침대를 사용할 수 없습니다.'
 msg_town_plots_revenue_disclaimer: '<green>표시된 매출액은 추정치이며, 해당 토지의 소유자가 지불할 수 있는지는 인수에 의해 결정됩니다.'
 msg_town_set_perm_syntax_error: '잘못된 명령어 조합입니다. /town set perm ? 을 참조하세요.'
 msg_plot_set_perm_syntax_error: '잘못된 명령어 조합입니다. /plot set perm ? 을 참조하세요.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: '그 주민은 귀하의 마을에 속하지 않습니다.'
 msg_err_resident_already_an_outlaw: '그 플레이어는 이미 무법자로 간주됩니다.'
 msg_err_not_outlaw_in_your_town: '마을원을 무법자로 지정할 수 없습니다.'
@@ -497,22 +494,15 @@ msg_err_outlaw_in_open_town: '귀하를 무법자로 간주하는 공용 마을�
 msg_you_are_an_outlaw_in_this_town: '<dark_red>%s은(는) 귀하를 무법자로 간주합니다. 이 마을 영토에 접근시 불이익이 있습니다.'
 msg_err_town_not_close_enough_to_nation: '%s의 홈 블록이 수도의 홈 블록에서 너무 멀어 국가에 가입할 수 없습니다.'
 msg_nation_town_moved_their_homeblock_too_far: '%s의 홈 블록이 수도의 홈 블록에서 너무 멀리 이동되어 귀하의 국가에서 제거되었습니다.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>반지름이 잘못되었습니다. %s 이하를 사용하십시오.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>최대 주민 수 (%s)에 이미 도달하였습니다.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>%s 플레이어가 마을로 초대될 만큼 서버에 오래 있지 않았습니다. 기다려 주십시오.'
 msg_cant_toggle_pvp_outsider_in_town: '외부인이 귀하의 마을에 있습니다. 마을 PVP 설정을 변경할 수 없습니다.'
 msg_err_unclaim_not_outpost: '점유를 해제할 수 없습니다. 이 토지는 전초기지가 아닙니다.'
 outpost_plu: '전초기지'
-#Added in 0.36
 msg_err_not_enough_residents: '마을에 주민이 충분하지 않습니다.'
-#Added in 0.37
 msg_err_friendly_fire_disable: '친선 공격은 비활성화되었습니다!'
-#Added in 0.38
 msg_claim_error: '<red>다른 플러그인이 (%s)/(%s) 마을 블록 점유를 중지하여 작업을 완료할 수 없습니다.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>마을 스폰 여행은 전쟁 중에만 허용됩니다.'
 msg_err_town_spawn_forbidden_peace: '<red>마을 스폰 여행은 전쟁 중에 금지됩니다.'
 msg_err_town_spawn_nation_forbidden_war: '<red>전쟁 중에만 같은 국가에 속한 마을로 이동할 수 있습니다.'
@@ -521,9 +511,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>전쟁 중에만 동맹국에 속�
 msg_err_town_spawn_ally_forbidden_false: '<red>전쟁 중에는 동맹국에 속한 마을로의 이동이 금지됩니다.'
 msg_err_public_spawn_forbidden_war: '<red>전쟁 중에만 공용 마을 스폰으로 이동할 수 있습니다.'
 msg_err_public_spawn_forbidden_peace: '<red>전쟁 중에는 공용 마을 스폰으로 이동하는 것이 금지되어있습니다.'
-#Added in 0.40
 mayor_help_9: '전초기지를 점유 해제합니다.'
-#Added in 0.41 (Invite-Update)
 invite_plu: '초대'
 invite_sent_by: '초대자:'
 invite_help_1: '마을 초대를 수락합니다.'
@@ -585,16 +573,13 @@ you_have_been_requested_to_ally: '동맹 요청을 받았습니다: '
 this_message_will_expire: '20초 후에 자동으로 만료됩니다.'
 player_sing: '플레이어'
 nation_zone_this_area_under_protection_of: '%s의 이 지역은 %s의 보호 하에 있습니다.'
-#Added in 0.42
 you_have_been_invited_to_join2: '%s에서 초대받았습니다.'
 you_have_been_requested_to_ally2: '%s에서 동맹 요청을 받았습니다.'
-#Added in 0.43
 town_help_11: '새 마을을 만듭니다. 공백 대신 _를 사용합니다.'
 changed_plot_town: '<aqua>토지의 마을을 성공적으로 %s(으)로 변경하였습니다!'
 not_standing_in_plot: '유요한 토지에 서있지 않습니다!'
 msg_err_homeblock_has_not_been_set: '홈 블록이 설정되지 않았습니다. /town set homeblock을 먼저 사용하세요.'
 msg_err_spawn_not_within_homeblock: '스폰이 홈 블록 안에 있지 않습니다. /town set homeblock을 먼저 사용하세요.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: '오류: 잘못된 명령어입니다!'
 tc_settings_reloaded: '[타우니채팅] 설정이 리로드되었습니다!'
@@ -698,7 +683,6 @@ status_res_taxexempt: '마을 관리자는 세금이 면제됩니다.'
 status_res_tax: '마을 세금:'
 status_res_plottax: '납부할 토지 세금 합계: '
 status_res_totaltax: '납부해야하는 세금의 합계:'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '국가 수도 밖에서 국가 금고를 이용할 수 없습니다.'
 msg_err_unable_to_use_bank_outside_your_town: '마을 밖에서 마을 금고를 이용할 수 없습니다.'
 msg_time_until_a_new_day: '새 날까지 남은 시간: '
@@ -708,7 +692,6 @@ msg_seconds: ' 초'
 msg_err_invalid_string_nationboard_not_set: '잘못된 문자열입니다.'
 msg_plot_evict: '토지의 주인을 성공적으로 쫓아냈습니다.'
 msg_no_one_to_evict: '이 토지에서 쫓아낼 사람이 아무도 없습니다.'
-#Added in 0.46
 nation_help_10: '국가 스폰으로 이동합니다.'
 msg_nation_spawn_warmup: '<aqua>이동 중입니다...'
 msg_set_nation_spawn: '<aqua>성공적으로 국가의 스폰을 변경하였습니다.'
@@ -734,7 +717,6 @@ msg_spawn_cost_set_to: '<aqua>%s님이 /%s spawn 명령어의 사용 요금을 %
 msg_err_cannot_set_spawn_cost_more_than: '<red>스폰 사용 요금은 %s보다 높게 설정할 수 없습니다.'
 msg_err_ally_isnt_public: '<red>귀하의 동맹, %s은(는) 공용 스폰이 활성화되지 않았습니다. 이동이 거부되었습니다.'
 msg_nation_changed_public: '<red>국가 공용 상태 : %s.'
-#Added in 0.47:
 status_plot_type: '토지 유형: '
 msg_no_self_jailing: '스스로 감옥에 들어갈 수 없습니다.'
 online2: ' <green>(접속중)'
@@ -755,7 +737,6 @@ enabled: '활성화'
 disabled: '비활성화'
 forced: '강제적'
 adjustable: '조정 가능'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s은(는) 여기에 새 마을을 만들 만큼의 돈을 가지고 있지 않습니다. (%s)'
 msg_no_funds_new_nation2: '<red>마을이 국가를 세우기 위해 필요한 돈이 부족합니다. (%s)'
 msg_no_funds_claim2: '<red>%s 만큼의 마을 블록을 점유할 돈이 부족합니다. (%s) /town deposit &s(으)로 마을 금고에 &s 만큼의 돈을 입금하세요.'
@@ -763,11 +744,9 @@ msg_err_cant_afford_blocks2: '<red>%s 만큼의 마을 블록을 점유할 돈�
 msg_err_not_enough_variables: '<red>부족한 변수: '
 nation_rechecked_by_admin: '<aqua>국가 %s의 마을간 거리가 성공적으로 재-확인되었습니다.'
 msg_err_nation_over_town_limit: '<red>귀하의 국가가 국가별 최대 마을 개수(&s개)에 도달하였습니다.'
-#Added in 0.49
 msg_process_claim: '토지 점유 진행중...'
 msg_process_unclaim: '토지 점유 해제 진행중...'
 msg_total_townblocks: '총 마을 블록: '
-#Added in 0.50
 friend_list: '친구 목록'
 not_registered: '등록되지 않았습니다.'
 msg_error_missing_comparator: '<aqua>정렬 기준을 지정해야 합니다.'
@@ -788,7 +767,6 @@ msg_couldnt_pay_plot_taxes_multiple: '<aqua>다음 주민들은 자신들이 소
 msg_bankrupt_town2: '<aqua>%s은(는) 마을을 유지할 여유가 없었습니다.'
 msg_bankrupt_nation2: '<aqua>%s은(는) 국가를 유지할 여유가 없었습니다.'
 status_embassy_town: '대사관'
-#Added in 0.51:
 msg_error_invalid_comparator_nation: '<aqua>잘못된 정렬 기준입니다. %s을(를) 시도하세요.'
 msg_error_invalid_comparator_town: '<aqua>잘못된 정렬 기준입니다. %s을(를) 시도하세요.'
 msg_err_merging_for_kings_only: '&합병은 국가 리더만 진행 할 수 있습니다.'
@@ -796,7 +774,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>%s 국가 리더 %s이(가) �
 nation1_has_merged_with_nation2: '<gold>국가 &s이(가) 우세한 국가 %s과(와)의 합병에 동의했습니다.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>귀하의 국가 %s을(를) %s 국가에 병합하는 것에 동의하시겠습니까? 동의하시면 귀하의 국가에 있는 모든 마을과 자금이 %s(으)로 이동됩니다.'
 no_open_towns: '나열할 공공 마을이 없습니다.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: '국가가 나열할 동맹국이 없습니다.'
 msg_error_nation_has_no_enemies: '국가가 나열할 적국이 없습니다.'
 msg_error_ta_plot_claim: '플레이어 이름 없음, 예시: /ta plot claim 플레이어이름'
@@ -810,19 +787,14 @@ msg_err_already_in_a_nation: '귀하의 마을은 이미 국가에 소속되어 
 msg_err_nation_not_open: '<red>국가 %s의 문은 아무에게나 열려있지 않습니다. 국가의 리더 또는 보좌관에게 가입을 요청하세요.'
 msg_err_nation_homeblock_in_another_world: '<red>귀하의 마을의 홈블록이 국가 수도의 홈블록과 같은 월드에 있지 않습니다.'
 status_bank_town_penalty_upkeep: '과점유 유지비:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '당신은 %s(으)로 소환될 수 없습니다, 당신은 해당 마을의 무법자입니다.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>감옥에 갇힌 동안 해당 명령어를 사용할 수 없습니다.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>국민은 %s을/를 할 수 없습니다.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s님은 이미 마을에 속해있습니다.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>귀하께서는 다음 유형 %s의 토지 (금액:%s)를 설정할 수 없습니다'
 msg_plot_set_cost: '<aqua>귀하께서는 토지를 다음 유형으로 설정하여 %s(이)가 청구되셨습니다: %s'
 msg_err_townspawn_has_not_been_set: '<red>마을 소환지점이 설정되지 않았습니다.'
 msg_err_player_too_far_from_town_spawn: '<red>%s님은 마을에 초대를 받기에는 너무 멀리 떨어져있습니다. 최대 거리: %s 블록.'
-#Added in 0.58:
 msg_resident_bail_amount: '주민 보석금 가격: '
 msg_mayor_bail_amount: '시장 보석금 가격: '
 msg_king_bail_amount: '국가 지도자 보석금 가격: '
@@ -843,7 +815,6 @@ homeblock: '홈 블록'
 townblock: '마을 블록'
 outpost: '전초기지'
 msg_err_not_same_town: '<aqua>%s은/는 귀하의 마을에 속하지 않았습니다.'
-#Added in 0.59:
 msg_modes_set: '모드 설정: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: '이 토지와 연결된 메타데이터가 없습니다.'
 msg_err_the_metadata_for_key_is_not_registered: '메타데이터 ''%s''(이)가 등록되지 않았습니다!'
@@ -870,28 +841,19 @@ msg_err_tag_too_long: '태그가 너무 깁니다.'
 msg_err_nation_has_not_set_a_spawn_location: '국가는 소환 지점을 설정하지 않았습니다.'
 msg_err_resident_doesnt_belong_to_any_town: '주민은 어떤 마을에도 속해있지 않습니다'
 msg_err_could_not_set_default_modes_for: '기본 모드를 다음과 같이 설정할 수 없습니다 '
-#Added in 0.60
 msg_set_war_allowed_on: '이 세계에서 전쟁이 허용되었습니다.'
 msg_set_war_allowed_off: '전쟁은 더 이상 이 세계에서 일어나지 않습니다.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'PVP를 모드를 변경할 수 없습니다, %s초 남음.'
 msg_err_cannot_spawn_x_seconds_remaining: '귀하는 %s초 동안 스폰을 사용할 수 없습니다.'
-#Added in 0.63
 msg_plot_set_to_nfs: '토지를 더 이상 판매하지 않습니다.'
 msg_err_x_spawn_disallowed_from_x: '<red>%s의 스폰은 %s에서 허용되지 않습니다.'
 msg_the_wilderness: '야생'
 msg_enemy_areas: '적대 지역들'
 msg_neutral_towns: '중립 마을들'
-#Added in 0.64
 msg_err_no_nation_with_that_name: '해당 국가(%s)를 찾을 수 없습니다'
 msg_err_cannot_unclaim_homeblock: '홈블록을 점유 해제할 수 없습니다, ''/town set homeblock''명령어를 사용하여 홈 블록을 이동시키세요.'
-#Added in 0.65
 msg_err_rename_cancelled: '다른 플러그인에 의해 이름 바꾸기가 취소되었습니다.'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '[정복됨]'
-#Added in 0.68
 msg_plot_group_claim_confirmation: '해당 땅은 %s 토지의 일부이며, 요청을 확인하면 점유 합니다.'
 msg_plot_group_unclaim_confirmation: '해당 땅은 %s 토지의 일부이며 요청을 확인하면 점유 해제 합니다.'
 msg_plot_group_toggle_confirmation: '해당 땅은 %s 토지의 일부이며 요청을 확인하면 모든 속성을 전환합니다.'
@@ -912,30 +874,21 @@ msg_set_group_type_to_x: '토지의 그룹 유형이 %s으로 변경 되었습�
 msg_player_successfully_bought_group_x: '%s을(를) 토지 그룹 %s으로 구입 했습니다.'
 status_plot_group_name_and_size: '타운블록의 부분인 그룹: %s. 그룹은 %s개의 타운블록을 가집니다.'
 msg_player_made_group_not_for_sale: '%s이(가) 그룹 %s을(를) 판매하지 않습니다.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: '토지 그룹은 감옥 타입으로 설정할 수 없습니다.'
-#Added in 0.70
 msg_err_plot_group_name_required: '토지 그룹 이름을 지정해야 합니다, /plot group add {name}'
 msg_confirmation_spigot_click_accept: '%s을(를) 클릭하거나 %s을(를) 타이핑 하십시오.'
 msg_confirmation_spigot_click_cancel: '%s을(를) 클릭하거나 %s을(를) 타이핑 하십시오.'
 msg_you_cannot_kick_yourself: '스스로를 추방할 수 없습니다.'
 msg_you_cannot_kick_this_resident: '%s을 추방할 수 있는 권한이 없습니다. 그들은 촌장 혹은 부촌장입니다.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: '토지: %s은(는) 그룹에 속하며, /plot group fs [amount] 을 사용 하십시오.'
 msg_err_plot_belongs_to_group_plot_nfs: '토지: %s은(는) 그룹에 속하며, /plot group nfs 을 사용 하십시오.'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '관리자가 제어하는 항목을 %s에 사용하면 Pvp를 %s에 대해 전환할 수 없습니다.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: '이미 감옥에서 나오셨습니다.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '이 위치에서 포탈의 다른쪽 부분은 만들 수 없습니다.'
-#Added in 0.75
 msg_already_ally: '국가는 이미 %s와 동맹 상태입니다.'
-#Added in 0.76
 msg_you: '나'
 msg_click_spawn: '<green>클릭하여 다음 마을로 이동합니다: <yellow>%s'
 msg_spawn_cost: '<green>마을 이동 비용 = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Towny를 불러들이는 도중 오류가 발생했습니다.'
 msg_reloaded_config: '<dark_green>설정을 성공적으로 불러왔습니다.'
 msg_reloaded_perms: '<dark_green>권한들을 성공적으로 불러왔습니다.'
@@ -943,7 +896,6 @@ msg_reloaded_db: '<dark_green>데이터베이스를 성공적으로 불러왔습
 msg_reloaded_lang: '<dark_green>언어 파일을 성공적으로 불러왔습니다.'
 msg_reset_config: '<dark_green>Config 파일을 성공적으로 초기화하였습니다.'
 msg_err_teleport_cancelled: '움직임으로 인해 텔레포트가 취소되었습니다.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: '친구'
 msg_cache_block_error_plot_allies: '동맹'
 msg_cache_block_error_plot_outsiders: '외부인'
@@ -957,25 +909,18 @@ msg_confirm_purchase: '%s 정도의 값이 지불될 것입니다. 계속하시�
 msg_warn_the_following_towns_will_be_removed_from_your_nation: '새 수도와 가깝지 않기 때문에 다음 %s이(가) 국가에서 제거 됩니다. 계속 하시겠습니까?'
 msg_ta_deposit_all_success: '성공적으로 %s 이 모든 국가와 마을의 금고에 입금되었습니다.'
 bonus_townblocks: '보너스 마을 블록'
-#Added in 0.80
 nomad_sing: '유목민'
 msg_new_town_advice: '마을을 생성하신 것을 축하합니다! 현재 당신 마을의 유지비는 %s입니다. 현재 소유하고 있는 돈을 ''/t deposit #'' 명령어를 사용하여 마을 금고에 넣어보세요. 마을 금고에 돈을 넣지 않아 유지비를 지불하지 못할 경우 마을은 삭제될 것 입니다. 언제든지 /towny prices 명령어를 통해 유지비를 확인하실 수 있습니다. 다음 유지비는 %s 뒤에 걷어집니다.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: '공격을 받아서 이동이 취소되었습니다.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>초대<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>확인<dark_gray>] <blue>"
 this_message_will_expire2: '이것은 자동으로 %s초 후에 만료 됩니다.'
 msg_hover_next_page: '다음 페이지'
 msg_hover_previous_page: '이전 페이지'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "최대 세금 금액은 세금 비율이 있는 마을에사만 설정할 수 있습니다."
 msg_town_set_tax_max_percent_amount: "%s이(가) 최대 세금 백분율을 %s 퍼센트 정도로 설정 했습니다."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: '토지는 그룹에 속합니다, /plot group toggle 를 사용해서 전환할 수 있습니다.'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua> 토지의 권한이 초기화되었습니다.'
-#Added in 0.86
 status_bank_bankrupt: '(파산)'
 msg_warning_bankrupt: '<dark_red>*** 경고, %s 는 금고에 돈이 없어 새 날이 되면 파산할 것 입니다 ***'
 msg_town_bankrupt_by_upkeep: '<aqua>%s 마을이 유지비를 감당 할 수 없어 파산 하였습니다.'
@@ -993,7 +938,6 @@ msg_your_town_payed_upkeep: '<aqua>당신의 마을이 하루 유지비 %s 를 �
 msg_your_nation_payed_upkeep: '<aqua>당신의 국가가 하루 유지비 %s 를 냈습니다.'
 msg_your_town_couldnt_pay_upkeep: '<aqua>당신의 마을이 유지비 %s 를 감당하지 못해 해체 되었습니다.'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>당신의 국가가 유지비 %s 를 감당 하지 못해 해체 되었습니다.'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s 마을이 유지비를 감당하지 못하고, 부채 한도에 도달하여, 해체 되었습니다.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>다음 마을들이 유지비를 감당하지 못하고, 부채 한도에 도달하여, 해체 되었습니다: '
 msg_unable_to_deposit_x: '%s 을 마을 금고에 입금 할 수 없습니다.'
@@ -1001,10 +945,8 @@ msg_unable_to_withdraw_x: '%s 을 마을 금고에서 출금 할 수 없습니�
 status_debtcap: '부채 한도:'
 status_world_explrevert_entity: '엔티티 폭발 취소:'
 status_world_explrevert_block: '블록 폭발 취소:'
-#Added in 0.88
 msg_nation_already_peaceful: '국가는 이미 평화상태 입니다.'
 msg_nation_already_not_peaceful: '국가는 이미 평화상태가 아닙니다.'
-#Added in 0.89
 status_world_friendlyfire: '아군 공격:'
 status_world_wildernessmobs: '야생 몹:'
 msg_outlaw_kick_cooldown: '당신은 %s에서 법외추방자로 지정되었습니다. 당신은 이 도시에서 %s초 이내에 떠나지 않을 경우, 자동으로 지정된 스폰으로 TP 됩니다.'
@@ -1013,12 +955,10 @@ msg_outlaw_town_notify: '법외추방자인 %s가 영토에 진입하였습니�
 msg_your_town_payed_upkeep_with_debt: '<aqua>당신의 마을이 하루 유지비 %s을(를) 냈습니다.'
 msg_payed_nation_tax_with_debt: '<aqua>당신의 국가가 하루 유지비 %s을(를) 냈습니다.'
 msg_err_plot_clear_disabled_in_this_world: '해당 월드에서 /plot clear 커맨드가 비활성화 되어 있습니다.'
-#Added in 0.91
 msg_universe_attribution: '제작자들: '
 msg_universe_contributors: ' 그리고 당신 같은 조력자들 말이에요. '
 msg_universe_heart: '<3'
 townblock_plu: '마을 블록'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'newhour 커맨드가 성공적으로 실행 되었습니다!'
 town_help_12: '페허가된 상태에서 마을을 재점유합니다.'
@@ -1032,10 +972,8 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '<red>당신의 마을은 %d�
 msg_time_remaining_before_full_removal: '완전 삭제까지 남은 시간: %d시간 남음.'
 msg_time_until_reclaim_available: '재점유 가능한 시간: %d시간 남음'
 msg_reclaim_available: '재점유가 가능합니다.'
-#Added in 0.93
 msg_changed_peaceful: '<red>마을의 중립/평화도는 %s입니다.'
 msg_err_town_unclaim_canceled: '<red>점유 해제가 취소됨. 지금 해당 지역을 점유 해제 할 수 없습니다.'
-#Added in 0.94
 msg_comptype_residents: '시민 수'
 msg_comptype_townblocks: '점유된 타운블록 숫자'
 msg_comptype_balance: '금고 잔고'
@@ -1048,7 +986,6 @@ npc_created: '생성일:'
 msg_no_funds_claim_plot: '<red>당신은 비용 %s원이 드는 점유를 할 수 없습니다.'
 msg_no_funds_claim_plot_group: '<red>당신은 %s을(를) 비용 %s원에 점유 할 수 없습니다.'
 status_town_title_peaceful: '<aqua>(Peacful)'
-#Added in 0.95
 status_public: '<aqua>(공개)'
 msg_days: ' 일'
 msg_comptype_public: '공개 상태'
@@ -1073,7 +1010,6 @@ towny_prices_taxes_shop: '<red>            <dark_green>상점: <green>%s <dark_g
 towny_prices_town_neutral_tax: '<dark_green>평화상태: <green>%s'
 towny_prices_nationname: '<red>국가: <gold>%s'
 towny_prices_nation_tax: '<red>    [세금] <dark_green>Town: <green>%s <dark_gray>| <dark_green>Peace: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>점령된 %s시가 세금을 지불하지 못하고 멸망했습니다.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>다음 점령된 도시들이 국가 세금을 감당 할 수 없어 멸망했습니다: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>당신의 도시가 국가 세금에서 면제되었습니다.'
@@ -1081,10 +1017,8 @@ msg_comptype_ruined: '폐허 상태'
 msg_comptype_bankrupt: '파산 상태'
 msg_ruined: '<red>(폐허)'
 msg_bankrupt: '<red>(파산)'
-#Added in 0.98
 msg_del_town2: '<aqua>%s 마을이 삭제 되었습니다!'
 msg_ruin_town: '<aqua>%s 마을이 폐허 상태가 되었습니다!'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>합병은 시장만 할 수 있습니다.'
 msg_town_merge_request_denied: '<red>합병 요청이 거절되었습니다.'
 msg_town_merge_failed: '<red>합병을 실패했습니다.'
@@ -1092,7 +1026,6 @@ msg_town_merge_cancelled: '<red>합병이 취소되었습니다.'
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: '도시 합병 가격'
 msg_town_merge_transaction_reason: '도시 합병'
-#Added in 0.106
 msg_command_outsider_blocked: '%s에서 거주하고 있지 않기 때문에 해당 명령어를 실행할 수 없습니다.'
 msg_err_resident_is_already_jailed: '%s은(는) 이미 수감되었습니다'
 msg_err_the_town_does_not_have_that_many_jails: '마을에 감옥이 그렇게 많지 않습니다.'
@@ -1112,21 +1045,18 @@ msg_do_not_log_out_while_waiting_to_be_teleported: '감옥으로 이송되기전
 jail_plu: '감옥들'
 jail_sing: '감옥'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s님은 감옥에 갈만큼 오래 플레이하지 않았습니다, %s을(를) 기다리세요.'
-#Added in 0.108
 msg_town_not_peaceful: '<aqua>마을이 평화로운 상태를 유지할 수 없습니다.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_paid_for_neutral_status: '<aqua>마을은 비용 %s원을 지불해야 평화상태를 유지할 수 있습니다.'
 msg_nation_paid_for_neutral_status: '<aqua>국가는 비용 %s원을 지불해야 평화상태를 유지할 수 있습니다.'
 your_town_has_been_invited_to_join_nation: '당신의 마을을 초대한 국가: %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>정리할 비활성 멤버가 없습니다.'
 msg_purging_will_remove_the_following_residents: '<aqua>다음 거주자를 정리 하시겠습니까?: %s'
 msg_purge_complete_x_removed: '<aqua>정리완료, %s님이 거주자에서 삭제 되었습니다.'
 msg_err_days_must_be_greater_than_0: '일 수는 0보다 커야합니다.'
 msg_err_outlawed_players_no_teleport: '<dark_red>당신은 현재 거주하고 있는 마을에서 불체자이며 텔레포트를 할 수 없습니다!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>불법체류중인 마을에서는 커맨드를 사용할 수 없습니다.'
-#Added in 0.110
 msg_safe_mode: "[에러] 안전모드 잠김!"
 msg_safe_mode_base: '[에러] 오류로 인해 타우니가 안전모드로 잠겨 있습니다! '
 msg_safe_mode_player: '어드민에게 서버 콘솔을 체크해달라고 이야기하세요.'
@@ -1136,7 +1066,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: '전초기지를 점유 할 
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: '홈 블록을 최근에 옮겼기에 %s을(를) 기다리십시오.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: '이렇게 많은 타운블록으로는 홈블록을 이동할 수 없습니다, 제한은 %s이며, 해당 공간은 %s 타운블록 만큼 멀리 있습니다.'
 msg_err_usingtowny_disabled: '이 월드는 타우니의 모든 상호작용에서 제한됩니다. 타우니를 사용하려면 먼저 /townyworld toggle 을 이용하십시오.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: '해당 타운블록은 이미 토지그룹 %s에 있습니다. 이것을 토지그룹 %s으로 전송하시겠습니까?'
 msg_townblock_transferred_from_x_to_x_group: '타운블록이 %s으로 부터 %s 토지그룹으로 전송됨.'
 msg_plotgroup_deleted: '토지그룹 %s이(가) 삭제됨.'
@@ -1147,7 +1076,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: '이 타운블록은 이�
 map_hover_plot_group: '땅 그룹: '
 map_hover_plot_group_size: ' 크기: '
 map_hover_plots: '%s 토지'
-#Added in 0.112
 msg_checking_for_updates: '업데이트 확인 중...'
 msg_no_new_updates: '새 업데이트가 없습니다.'
 msg_new_update_available: '<aqua>새로운 업데이트 이용 가능: %s | 현재 버전: %s'
@@ -1157,7 +1085,6 @@ msg_latest_version: '<dark_green>타우니 버전: <green>%s <dark_green>| 최�
 msg_up_to_date: '<green>최신 버전입니다.'
 msg_click_purchase: '클릭하여 구매하세요'
 msg_you_must_join_this_town_to_claim_this_plot: '당신은 다음 마을에 참가해야합니다: %s, 마을에 가입하고 점유를 수행하실건가요?'
-#Added in 0.113
 status_trustedlist: '신뢰됨'
 msg_click_to_edit: '<gold>클릭하여 수정'
 permission_gui_header: '타우니 권한 GUI'
@@ -1172,13 +1099,11 @@ msg_trusted_removed: '<aqua>%s을(를) %s의 신뢰에서 삭제함.'
 msg_trusted_removed_2: '<aqua>%s이(가) 당신을 %s의 신뢰에서 삭제함: %s.'
 plotgroup_sing: '땅 그룹'
 msg_title_group_permissions: '%s 권한'
-#Added in 0.115
 msg_comptype_founded: '설립일'
 #Jail handbook messages
 msg_jailed_handbook_bail_1: '''/res jail paybail''을 사용하여 보석금을 지불하고 자유의 몸이 될 수 있습니다.'
 #Jail handbook messages
 msg_jailed_handbook_bail_2: '보석금의 가격은 %s 입니다.'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '외부인이 귀하의 마을에 있습니다. 마을 PVP 설정을 변경할 수 없습니다.'
 #Seen in /plot perm hud:
 msg_perm_hud_friend: '친구'

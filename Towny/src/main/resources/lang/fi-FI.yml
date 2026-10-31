@@ -666,8 +666,6 @@ msg_not_enough_residents_refunded: '<aqua>Sinulle palautettiin %s, koska valtios
 msg_not_enough_residents_capital: '<aqua>Kylässä %s ei ole tarpeeksi asukkaita valtion pääkaupungiksi.'
 list_page: '<aqua>Sivu %s/%s'
 list_err_not_enough_pages: '<red>Vain %s sivua on saatavilla'
-#Added in 0.30
-#Added in 0.31
 msg_err_tax_minimum_not_met: 'Et voi asettaa kyläveroa pienemmäksi kuin %s.'
 msg_unknown_rank_available_ranks: 'Tuntematon arvoaste %s. Sallitut arvoasteet ovat %s.'
 msg_no_permission_to_give_rank: 'Sinulla ei ole oikeutta myöntää tätä arvoastetta.'
@@ -717,7 +715,6 @@ msg_err_cant_use_bed: '<dark_red>Et omista aluetta, jolla tämä sänky sijaitse
 msg_town_plots_revenue_disclaimer: '<green>Näytetty tuotto on arvio, ja siihen vaikuttaa myös tontin omistajan maksukyky.'
 msg_town_set_perm_syntax_error: 'Tämän komennon sanayhdistelmä on virheellinen. Oikea komentosyntaksi löytyy komennolla ''/town set perm ?''.'
 msg_plot_set_perm_syntax_error: 'Tämän komennon sanayhdistelmä on virheellinen. Oikea komentosyntaksi löytyy komennolla ''/plot set perm ?''.'
-#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Tämä asukas ei kuulu kyseiseen kylään.'
 msg_err_resident_already_an_outlaw: 'Kyläsi pitää tätä pelaajaa jo lainsuojattomana.'
 msg_err_not_outlaw_in_your_town: 'Et voi määrittää kylän jäsentä lainsuojattomaksi.'
@@ -731,22 +728,15 @@ msg_you_are_an_outlaw_in_this_town: '<dark_red>Ole varovainen: %s pitää sinua 
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Takuusummasi olisi %s.'
 msg_err_town_not_close_enough_to_nation: 'Kylän %s homeblock ei ole tarpeeksi lähellä pääkaupunkisi homeblockia valtioosi liittymistä varten.'
 msg_nation_town_moved_their_homeblock_too_far: 'Kylän %s homeblock siirrettiin liian kauas valtiosi pääkaupungin homeblockista, joten kylä poistettiin valtiostasi.'
-#Added in 0.33
 msg_err_invalid_radius_number: '<red>Virheellinen säde. Käytä arvoa %s tai pienempää.'
-#Added in 0.34
 msg_err_max_residents_per_town_reached: '<red>Asukkaiden enimmäismäärä (%s) on jo saavutettu.'
-#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '<red>Pelaaja %s ei ole ollut palvelimella tarpeeksi kauan saadakseen kutsun kylään. Odota vielä.'
 msg_cant_toggle_pvp_outsider_in_town: 'Kylässäsi on ulkopuolinen, joten et voi vaihtaa PVP-statusta!'
 msg_err_unclaim_not_outpost: 'Aluetta ei voi luovuttaa, koska tämä tontti ei ole etuvartio!'
 outpost_plu: 'Etuvartiot'
-#Added in 0.36
 msg_err_not_enough_residents: 'Tässä kylässä ei ole tarpeeksi asukkaita tämän tekemiseen.'
-#Added in 0.37
 msg_err_friendly_fire_disable: 'Omien vahingoittaminen on poissa käytöstä!'
-#Added in 0.38
 msg_claim_error: '<red>Toinen plugin esti townblockien valtaamisen (%s)/(%s), joten toimintoa ei voitu suorittaa loppuun.'
-#Added in 0.39
 msg_err_town_spawn_forbidden_war: '<red>Kylien spawneille siirtyminen on sallittua vain sodan aikana.'
 msg_err_town_spawn_forbidden_peace: '<red>Kylien spawneille siirtyminen on estetty sodan aikana.'
 msg_err_town_spawn_nation_forbidden_war: '<red>Valtiosi muiden kylien spawneille siirtyminen on sallittua vain sodan aikana.'
@@ -755,9 +745,7 @@ msg_err_town_spawn_ally_forbidden_war: '<red>Valtiosi liittolaiskylien spawneill
 msg_err_town_spawn_ally_forbidden_false: '<red>Valtiosi liittolaiskylien spawneille siirtyminen on estetty sodan aikana.'
 msg_err_public_spawn_forbidden_war: '<red>Muiden kylien julkisille spawneille siirtyminen on sallittua vain sodan aikana.'
 msg_err_public_spawn_forbidden_peace: '<red>Muiden kylien julkisille spawneille siirtyminen on estetty sodan aikana.'
-#Added in 0.40
 mayor_help_9: 'Yritä luovuttaa etuvartio'
-#Added in 0.41 (Invite-Update)
 invite_plu: 'Kutsut'
 invite_sent_by: 'Kutsun lähettäjä'
 invite_help_1: 'Hyväksy kutsu liittyä kylään'
@@ -825,16 +813,13 @@ nation_zone_conquered_status_denies_use: "Kyläsi valloitettu-status estää sin
 nation_zone_conquered_status_denies_use_2: "Et voi käyttää tämän vallatun kylän valtion aluetta."
 nation_spawn_not_allowed_for_conquered_towns: "Kyläsi valloitettu-status estää sinua siirtymästä valtiosi spawnille."
 nation_outpost_not_allowed_for_conquered_towns: "Kyläsi valloitettu-status estää sinua siirtymästä valtiosi etuvartioihin."
-#Added in 0.42
 you_have_been_invited_to_join2: 'Sinut on kutsuttu liittymään kohteeseen %s'
 you_have_been_requested_to_ally2: 'Sinua on pyydetty liittoutumaan kohteen %s kanssa'
-#Added in 0.43
 town_help_11: 'Luo uusi kylä. Käytä välilyöntien sijaan alaviivoja ''_''.'
 changed_plot_town: '<aqua>Vaihdoit tontin kyläksi onnistuneesti %s!'
 not_standing_in_plot: 'Et seiso kelvollisen tontin sisällä!'
 msg_err_homeblock_has_not_been_set: 'Homeblockia ei ole asetettu. Käytä ensin komentoa ''/town set homeblock''.'
 msg_err_spawn_not_within_homeblock: 'Spawn ei ole homeblockin sisällä. Käytä ensin komentoa ''/town set homeblock''.'
-#Added in 0.44
 #TownyChat language strings
 tc_err_invalid_command: 'Virhe: virheellinen komento!'
 tc_settings_reloaded: '[TownyChat] Asetukset ladattu uudelleen!'
@@ -902,7 +887,6 @@ status_friends: 'Kaverit'
 rank_list_title: 'Kohteen %s arvoastelista'
 rank_list_mayor: 'Pormestari:'
 status_title_capital: '<aqua>(Pääkaupunki)'
-status_title_pvp: '<dark_red>(PVP)'
 status_title_open: '<aqua>(Avoin)'
 status_town_board: 'Viesti:'
 status_founded: 'Perustettu:'
@@ -943,7 +927,6 @@ status_townblock_untaxed: 'Veroton'
 status_townblock_max_and_minjoindays: 'Tontin ostaminen edellyttää, että kyläjäsenyytesi on kestänyt %s–%s päivää.'
 status_townblock_minjoindays: 'Tontin ostaminen edellyttää yli %s päivää kestänyttä kyläjäsenyyttä.'
 status_townblock_maxjoindays: 'Tontin ostaminen edellyttää alle %s päivää kestänyttä kyläjäsenyyttä.'
-#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Et voi käyttää valtiosi pankkia valtion pääkaupungin ulkopuolella.'
 msg_err_unable_to_use_bank_outside_your_town: 'Et voi käyttää kyläsi pankkia kyläsi ulkopuolella.'
 msg_time_until_a_new_day: 'Aikaa uuteen päivään: '
@@ -953,7 +936,6 @@ msg_seconds: ' sekuntia'
 msg_err_invalid_string_nationboard_not_set: 'Virheellinen merkkijono, valtion viestiä ei asetettu.'
 msg_plot_evict: 'Tontin asukas häädettiin onnistuneesti.'
 msg_no_one_to_evict: 'Tältä tontilta ei ole ketään häädettävää.'
-#Added in 0.46
 nation_help_10: 'Siirry valtion spawnille.'
 msg_nation_spawn_warmup: '<aqua>Odotetaan siirtymistä...'
 msg_set_nation_spawn: '<aqua>Valtion spawn vaihdettiin onnistuneesti.'
@@ -981,7 +963,6 @@ msg_spawn_fail_safe_teleport: '<red>Siirtyminen epäonnistui, koska sijainti ei 
 msg_err_cannot_set_spawn_cost_more_than: '<red>Spawnin käyttöhinta ei voi olla suurempi kuin %s'
 msg_err_ally_isnt_public: '<red>Liittolaisesi %s ei salli julkista siirtymistä spawnilleen. Siirtyminen estettiin.'
 msg_nation_changed_public: '<red>Valtion julkisuusstatus on nyt %s.'
-#Added in 0.47:
 status_plot_type: 'Tontin tyyppi:'
 msg_no_self_jailing: 'Et voi vangita itseäsi.'
 online2: ' <green>(Paikalla)'
@@ -1002,7 +983,6 @@ enabled: 'Käytössä'
 disabled: 'Pois käytöstä'
 forced: 'Pakotettu'
 adjustable: 'Säädettävä'
-#Added in 0.48:
 msg_no_funds_new_town2: '<red>%s:llä ei ole varaa perustaa tänne uutta kylää, jonka hinta on %s.'
 msg_no_funds_new_nation2: '<red>Kylällä ei ole varaa perustaa uutta valtiota, jonka hinta on %s.'
 msg_no_funds_claim2: '<red>Kylällä ei ole varaa vallata %s townblockia hintaan %s. Lisää kylän pankkiin %s komennolla /t deposit %s'
@@ -1010,11 +990,9 @@ msg_err_cant_afford_blocks2: '<red>Kylällä ei ole varaa vallata %s townblockia
 msg_err_not_enough_variables: '<red>Muuttujia ei ole tarpeeksi: '
 nation_rechecked_by_admin: '<aqua>Valtion %s kylien etäisyydet tarkistettiin onnistuneesti uudelleen.'
 msg_err_nation_over_town_limit: '<red>Valtiosi on saavuttanut valtiossa sallittujen kylien enimmäismäärän: %s.'
-#Added in 0.49
 msg_process_claim: 'Käsitellään tontin valtausta...'
 msg_process_unclaim: 'Käsitellään tontin luovutusta...'
 msg_total_townblocks: 'Townblockeja yhteensä: '
-#Added in 0.50
 friend_list: 'Kaverilista'
 not_registered: 'Ei rekisteröity.'
 msg_error_missing_comparator: '<aqua>Lajitteluperuste on määritettävä.'
@@ -1035,7 +1013,6 @@ msg_couldnt_pay_plot_taxes_multiple: '<aqua>Seuraavilla asukkailla ei ollut vara
 msg_bankrupt_town2: '<aqua>Kylällä %s ei ollut varaa pysyä kylänä.'
 msg_bankrupt_nation2: '<aqua>Valtiolla %s ei ollut varaa pysyä valtiona.'
 status_embassy_town: 'Suurlähetystöt kohteessa'
-#Added in 0.51:
 msg_error_invalid_comparator_nation: '<aqua>Virheellinen vertailuperuste. Kokeile: %s.'
 msg_error_invalid_comparator_town: '<aqua>Virheellinen vertailuperuste. Kokeile: %s.'
 msg_err_merging_for_kings_only: '<aqua>Vain valtion johtaja voi yhdistää valtioita.'
@@ -1043,7 +1020,6 @@ msg_err_king_of_that_nation_is_not_online: '<aqua>Valtion %s johtaja %s ei ole p
 nation1_has_merged_with_nation2: '<gold>Valtio %s suostui yhdistymään hallitsevaan valtioon %s.'
 msg_would_you_merge_your_nation_into_other_nation: '<gold>Suostutko hajottamaan valtiosi %s ja liittämään sen valtioon %s? Kaikki kylät ja valtion pankin varat siirretään valtiolle %s.'
 no_open_towns: 'Listattavia avoimia kyliä ei ole.'
-#Added in 0.52:
 msg_error_nation_has_no_allies: 'Valtiolla ei ole listattavia liittolaisia.'
 msg_error_nation_has_no_enemies: 'Valtiolla ei ole listattavia vihollisia.'
 msg_error_ta_plot_claim: 'Pelaajan nimi puuttuu, esim.: /ta plot claim PlayerNameHere'
@@ -1057,19 +1033,14 @@ msg_err_already_in_a_nation: 'Kyläsi kuuluu jo valtioon.'
 msg_err_nation_not_open: '<red>Valtio %s ei ole avoin kaikille. Pyydä valtion johtajaa tai assistanttia hyväksymään sinut.'
 msg_err_nation_homeblock_in_another_world: '<red>Kyläsi homeblock ei ole samassa maailmassa kuin valtion pääkaupungin homeblock.'
 status_bank_town_penalty_upkeep: 'Ylivaltausten ylläpitomaksu:'
-#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Et voi siirtyä kylän %s spawnille, koska sinut on merkitty siellä lainsuojattomaksi.'
-#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '<dark_red>Et voi käyttää tätä komentoa ollessasi vankilassa.'
-#Added in 0.56:
 msg_cache_block_error_town_nation: '<red>Valtion jäsenet eivät saa tehdä tätä: %s.'
-#Added in 0.57:
 msg_err_already_res2: '<red>%s kuuluu jo kylään.'
 msg_err_cannot_afford_plot_set_type_cost: '<red>Sinulla ei ole varaa asettaa tonttia tyyppiin %s, jonka hinta on %s'
 msg_plot_set_cost: '<aqua>Sinulta veloitettiin %s tontin tyypin asettamisesta tyypiksi %s'
 msg_err_townspawn_has_not_been_set: '<red>Kylän spawnia ei ole asetettu.'
 msg_err_player_too_far_from_town_spawn: '<red>%s on liian kaukana kyläsi spawnista saadakseen kutsun kylään. Enimmäisetäisyys: %s lohkoa.'
-#Added in 0.58:
 msg_resident_bail_amount: 'Asukkaan takuusumma: '
 msg_mayor_bail_amount: 'Pormestarin takuusumma: '
 msg_king_bail_amount: 'Valtion johtajan takuusumma: '
@@ -1090,7 +1061,6 @@ homeblock: 'homeblock'
 townblock: 'townblock'
 outpost: 'etuvartio'
 msg_err_not_same_town: '<aqua>%s ei kuulu kylääsi.'
-#Added in 0.59:
 msg_modes_set: 'Asetetut tilat: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Tähän tonttiin ei liity metadataa.'
 msg_err_the_metadata_for_key_is_not_registered: 'Avaimen ''%s'' metadataa ei ole rekisteröity!'
@@ -1123,28 +1093,19 @@ msg_err_tag_too_long: 'Tagi on liian pitkä.'
 msg_err_nation_has_not_set_a_spawn_location: 'Valtio ei ole asettanut spawn-sijaintia.'
 msg_err_resident_doesnt_belong_to_any_town: 'Asukas ei kuulu mihinkään kylään'
 msg_err_could_not_set_default_modes_for: 'Oletustiloja ei voitu asettaa kohteelle '
-#Added in 0.60
 msg_set_war_allowed_on: 'Sota sallitaan tässä maailmassa.'
 msg_set_war_allowed_off: 'Sota ei vaikuta tähän maailmaan.'
-#Added in 0.61
-#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Et voi vaihtaa PVP:tä. Jäljellä on %s sekuntia.'
 msg_err_cannot_spawn_x_seconds_remaining: 'Et voi siirtyä spawnille vielä %s sekuntiin.'
-#Added in 0.63
 msg_plot_set_to_nfs: 'Tontti ei ole enää myynnissä.'
 msg_err_x_spawn_disallowed_from_x: '<red>Kohteen %s spawnille siirtyminen ei ole sallittua kohteesta %s.'
 msg_the_wilderness: 'erämaa'
 msg_enemy_areas: 'Vihollisalueet'
 msg_neutral_towns: 'Neutraalit kylät'
-#Added in 0.64
 msg_err_no_nation_with_that_name: 'Valtiota nimeltä %s ei löytynyt'
 msg_err_cannot_unclaim_homeblock: 'Et voi luovuttaa homeblockiasi. Siirrä homeblock komennolla ''/town set homeblock''.'
-#Added in 0.65
 msg_err_rename_cancelled: 'Toinen plugin peruutti uudelleennimeämisen.'
-#Added in 0.66
-#Added in 0.67
 msg_conquered: '<dark_red>(Miehitetty)'
-#Added in 0.68
 msg_plot_group_claim_confirmation: 'Tämä tontti kuuluu %s tontin ryhmään. Vahvistamalla valtauksen ostat ne kaikki.'
 msg_plot_group_unclaim_confirmation: 'Tämä tontti kuuluu %s tontin ryhmään. Vahvistamalla luovutat ne kaikki.'
 msg_plot_group_toggle_confirmation: 'Tämä tontti kuuluu %s tontin ryhmään. Vahvistamalla vaihdat ominaisuuden kaikissa ryhmän tonteissa.'
@@ -1167,34 +1128,24 @@ msg_set_group_type_to_x: 'Tonttiryhmän tyypiksi vaihdettiin %s'
 msg_player_successfully_bought_group_x: '%s osti onnistuneesti tonttiryhmän %s'
 status_plot_group_name_and_size: 'Townblock kuuluu ryhmään %s. Ryhmässä on yhteensä %s townblockia.'
 msg_player_made_group_not_for_sale: '%s poisti ryhmän %s myynnistä.'
-#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Tonttiryhmiä ei voi asettaa vankilatyypiksi.'
-#Added in 0.70
 msg_err_plot_group_name_required: 'Sinun on määritettävä tonttiryhmän nimi, esim. /plot group add {name}'
 msg_confirmation_spigot_click_accept: 'Napsauta %s tai kirjoita %s'
 msg_confirmation_spigot_click_cancel: 'Napsauta %s tai kirjoita %s'
 msg_you_cannot_kick_yourself: 'Et voi potkia itseäsi.'
 msg_you_cannot_kick_this_resident: 'Et voi potkia pelaajaa %s, koska hän on pormestari tai assistantti.'
-#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'Tontti %s kuuluu ryhmään. Käytä komentoa /plot group fs [amount]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Tontti %s kuuluu ryhmään. Käytä komentoa /plot group nfs'
-#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Adminin hallitsema asetus %s estää sinua vaihtamasta PVP:n arvoon %s.'
-#Added in 0.73
 msg_err_you_aren't currently jailed: 'Et ole tällä hetkellä vankilassa.'
-#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Et saa luoda tämän portaalin toista päätä tähän sijaintiin.'
-#Added in 0.75
 msg_already_ally: 'Valtiosi on jo liitossa valtion %s kanssa.'
-#Added in 0.76
 msg_you: 'Sinä'
-#Added in 0.77
 msg_click_town_info: '<green>Napsauta nähdäksesi kylän statusruudun.'
 msg_click_nation_info: '<green>Napsauta nähdäksesi valtion statusruudun.'
 msg_click_spawn: '<green>Napsauta siirtyäksesi spawnille: <yellow>%s'
 msg_click_spawn_brief: '<green>[Spawn]'
 msg_spawn_cost: '<green>Spawnin hinta = <yellow>%s'
-#Added in 0.78
 msg_reload_error: 'Townyn uudelleenlatauksessa tapahtui virhe.'
 msg_reloaded_config: '<dark_green>Konfiguraatio ladattiin onnistuneesti uudelleen.'
 msg_reloaded_perms: '<dark_green>Oikeudet ladattiin onnistuneesti uudelleen.'
@@ -1202,7 +1153,6 @@ msg_reloaded_db: '<dark_green>Tietokanta ladattiin onnistuneesti uudelleen'
 msg_reloaded_lang: '<dark_green>Kielitiedosto ladattiin onnistuneesti uudelleen'
 msg_reset_config: '<dark_green>Konfiguraatio on palautettu oletuksiin'
 msg_err_teleport_cancelled: 'Liikkuminen peruutti siirtymisesi.'
-#Added in 0.79
 msg_cache_block_error_plot_friends: 'kaverit'
 msg_cache_block_error_plot_allies: 'liittolaiset'
 msg_cache_block_error_plot_outsiders: 'ulkopuoliset'
@@ -1218,25 +1168,18 @@ msg_ta_deposit_all_success: 'Talletettiin onnistuneesti %s kaikkien valtioiden j
 msg_ta_deposit_all_towns_success: 'Talletettiin onnistuneesti %s kaikkien kylien pankkeihin.'
 msg_ta_deposit_all_nations_success: 'Talletettiin onnistuneesti %s kaikkien valtioiden pankkeihin.'
 bonus_townblocks: 'bonus-townblockit'
-#Added in 0.80
 nomad_sing: 'Nomadi'
 msg_new_town_advice: 'Onnittelut kylän perustamisesta! Kyläsi maksaa päivittäistä ylläpitomaksua, joka on tällä hetkellä %s. Voit tallettaa rahaa kyläsi pankkiin komennolla ''/t deposit #''. Jos pankissa ei ole rahaa ylläpitomaksuun, kyläsi poistetaan. Näet kulusi milloin tahansa komennolla /towny prices. Seuraava päivittäinen ylläpitomaksu peritään %s kuluttua.'
-#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Vahingoittuminen peruutti siirtymisesi.'
-#Added in 0.82
 invitation_prefix: "<dark_gray>[<gray>Kutsu<dark_gray>] <blue>"
 confirmation_prefix: "<dark_gray>[<gray>Vahvistus<dark_gray>] <blue>"
 this_message_will_expire2: '<blue>Tämä vanhenee automaattisesti %s sekunnin kuluttua'
 msg_hover_next_page: 'Seuraava sivu'
 msg_hover_previous_page: 'Edellinen sivu'
-#Added in 0.83
 msg_max_tax_amount_only_for_percent: "Veron enimmäismäärän voi asettaa vain kylille, jotka käyttävät prosenttiveroa."
 msg_town_set_tax_max_percent_amount: "%s asetti prosenttiveron enimmäismääräksi %s."
-#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Tontti kuuluu ryhmään. Käytä komentoa /plot group toggle'
-#Added in 0.85
 msg_set_perms_reset_single: '<aqua>Tämän tontin oikeudet palautettiin onnistuneesti oletuksiin.'
-#Added in 0.86
 status_bank_bankrupt: '(KONKURSSISSA)'
 msg_warning_bankrupt: '<dark_red>*** VAROITUS: %s MENEE KONKURSSIIN SEURAAVANA UUTENA PÄIVÄNÄ VAROJEN PUUTTEEN VUOKSI ***'
 msg_town_bankrupt_by_upkeep: '<aqua>Kylällä %s ei ollut varaa ylläpitoonsa, joten se meni konkurssiin.'
@@ -1254,7 +1197,6 @@ msg_your_town_payed_upkeep: '<aqua>Kyläsi maksoi päivittäisen ylläpitomaksun
 msg_your_nation_payed_upkeep: '<aqua>Valtiosi maksoi päivittäisen ylläpitomaksun %s.'
 msg_your_town_couldnt_pay_upkeep: '<aqua>Kyläsi ei pystynyt maksamaan päivittäistä ylläpitomaksua %s, joten se hajotettiin.'
 msg_your_nation_couldnt_pay_upkeep: '<aqua>Valtiosi ei pystynyt maksamaan päivittäistä ylläpitomaksua %s, joten se hajotettiin.'
-#Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '<aqua>%s ei pystynyt maksamaan ylläpitoaan, saavutti velkakattonsa ja hajotettiin.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '<aqua>Seuraavat kylät eivät pystyneet maksamaan ylläpitoaan, saavuttivat velkakattonsa ja hajotettiin: '
 msg_unable_to_deposit_x: 'Summaa %s ei voitu tallettaa kyseisen kylän pankkiin.'
@@ -1262,10 +1204,8 @@ msg_unable_to_withdraw_x: 'Summaa %s ei voitu nostaa kyseisen kylän pankista.'
 status_debtcap: 'Velkakatto:'
 status_world_explrevert_entity: 'Entiteettiräjähdysten palautus:'
 status_world_explrevert_block: 'Lohkoräjähdysten palautus:'
-#Added in 0.88
 msg_nation_already_peaceful: '<red>Valtio on jo rauhanomainen.'
 msg_nation_already_not_peaceful: '<red>Valtio ei ole jo ennestään rauhanomainen.'
-#Added in 0.89
 status_world_friendlyfire: 'Omien vahingoittaminen:'
 status_world_wildernessmobs: 'Erämaan mobit:'
 msg_outlaw_kick_cooldown: '<red>Sinua pidetään lainsuojattomana kylässä %s. Sinulla on %s aikaa poistua kylästä, muuten sinut siirretään takaisin spawn-pisteeseesi.'
@@ -1273,14 +1213,11 @@ msg_outlaw_kicked: '<dark_red>Et ole tervetullut kylään %s. Sinut siirrettiin 
 msg_outlaw_town_notify: '<red>Lainsuojaton %s on saapunut kyläsi alueelle.'
 msg_your_town_payed_upkeep_with_debt: '<red>Kyläsi maksoi päivittäisen ylläpitomaksun %s velkarahalla.'
 msg_payed_nation_tax_with_debt: '<red>Kyläsi maksoi valtion veron %s velkarahalla.'
-#Added in 0.90
 status_plot_clear_deletion: 'Tontin tyhjennyksen lohkojen poisto:'
 msg_err_plot_clear_disabled_in_this_world: 'Komento /plot clear on poistettu käytöstä tässä maailmassa.'
-#Added in 0.91
 msg_universe_attribution: 'Tekijät: '
 msg_universe_contributors: ' Ja sinun kaltaisesi avustajat. '
 townblock_plu: 'Townblockit'
-#Added in 0.92
 #Town Ruins
 msg_newhour_success: 'newhour-komento suoritettiin onnistuneesti'
 town_help_12: 'Palauta kyläsi raunioituneesta tilasta.'
@@ -1295,10 +1232,8 @@ msg_time_remaining_before_full_removal: 'Aikaa täydelliseen poistamiseen: %d tu
 msg_time_until_reclaim_available: 'Aikaa palautuksen avautumiseen: %d tuntia.'
 msg_reclaim_available: 'Palautus käytettävissä.'
 msg_ruined_town_being_deleted: "%s oli raunioituneena %s tuntia ja poistetaan nyt."
-#Added in 0.93
 msg_changed_peaceful: '<red>Kylän neutraalius/rauhanomaisuus on nyt %s.'
 msg_err_town_unclaim_canceled: '<red>Luovutus peruutettiin. Et voi luovuttaa tätä aluetta juuri nyt.'
-#Added in 0.94
 msg_comptype_residents: 'Asukkaiden määrä'
 msg_comptype_townblocks: 'Vallattujen townblockien määrä'
 msg_comptype_balance: 'Pankkisaldo'
@@ -1311,7 +1246,6 @@ npc_created: 'Luotu:'
 msg_no_funds_claim_plot: '<red>Sinulla ei ole varaa vallata tonttia, jonka hinta on %s.'
 msg_no_funds_claim_plot_group: '<red>Sinulla ei ole varaa vallata %s tonttia, joiden hinta on %s.'
 status_town_title_peaceful: '<aqua>(Rauhanomainen)'
-#Added in 0.95
 status_public: '<aqua>(Julkinen)'
 msg_days: ' päivää'
 msg_comptype_public: 'Julkisuusstatus'
@@ -1337,23 +1271,16 @@ towny_prices_taxes_plot: '<red>    [Verot]    <dark_green>Asukas: <green>%s <dar
 towny_prices_taxes_shop: '<red>            <dark_green>Kauppa: <green>%s <dark_gray>| <dark_green>Suurlähetystö: <green>%s'
 towny_prices_town_neutral_tax: '<red>            <dark_green>Rauha: <green>%s'
 towny_prices_plots: '<red>    [Tonttien asetukset]'
-towny_prices_type_single: '            <dark_green>%s: <green>%s'
-towny_prices_type_double: '            <dark_green>%s: <green>%s <dark_gray>| <dark_green>%s: <green>%s'
 towny_prices_nationname: '<red>Valtio: <gold>%s'
 towny_prices_nation_tax: '<red>    [Verot] <dark_green>Kylä: <green>%s <dark_gray>| <dark_green>Rauha: <green>%s'
-#Added in 0.96
 msg_town_destroyed_by_nation_tax: '<aqua>Vallattu kylä %s ei pystynyt maksamaan valtion veroa ja kukistui.'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>Seuraavilla vallatuilla kylillä ei ollut varaa valtion veroon, joten ne kukistuivat: '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>Kyläsi vapautettiin valtion verosta.'
-#Added in 0.97
-#The Build = ---- Destroy = ---- seen in the status screen.
-status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: 'Rauniostatus'
 msg_comptype_forsale: 'Myyntistatus'
 msg_comptype_bankrupt: 'Konkurssistatus'
 msg_ruined: '<red>(Raunioitunut)'
 msg_bankrupt: '<red>(Konkurssissa)'
-#Added in 0.98
 msg_del_town2: '<aqua>Kylä %s on poistettu!'
 msg_ruin_town: '<aqua>Kylä %s raunioitui!'
 gui_title_select_plot_type: 'Valitse tonttityyppi'
@@ -1369,7 +1296,6 @@ flatfile_err_exception_reading_district_file_at_line: 'Latausvirhe: poikkeus lue
 flatfile_dbg_loading_district_list: 'Ladataan piirilistaa...'
 msg_ta_removed_all_titles_and_surnames_removed: 'Kaikkien asukkaiden tittelit ja sukunimet on poistettu.'
 msg_err_homeblock_already_set_here: 'Tämä sijainti on jo kyläsi homeblock.'
-#Added in 0.100
 msg_town_merge_err_mayor_only: '<red>Vain pormestari voi yhdistää kyliä.'
 msg_town_merge_err_not_close: '<red>Kylä %s on liian kaukana kylästäsi. Sen homeblockin on oltava enintään %d townblockin päässä homeblockistasi.'
 msg_town_merge_request_sent: '<aqua>Yhdistämispyyntö lähetettiin kylän %s pormestarille.'
@@ -1391,7 +1317,6 @@ msg_town_merge_success: '<aqua>Pelaajan %s omistama kylä %s yhdistyi onnistunee
 msg_town_merge_cost_withdraw: 'Kylien yhdistämiskulut'
 msg_town_merge_transaction_reason: 'Kylien yhdistäminen'
 towny_prices_town_merge: '<yellow>[Yhdistäminen] <dark_green>Perushinta: <green>%s <dark_gray>| <dark_green>Tonttia kohden: <green>%s'
-#Added in 0.101
 msg_err_nation_not_allied_with: '<red>Valtiosi ei ole liitossa valtion %s kanssa.'
 msg_err_nation_not_enemies_with: '<red>Valtiosi ei ole vihollinen valtion %s kanssa.'
 msg_err_nation_already_enemies_with: '<red>Valtiosi on jo vihollinen valtion %s kanssa.'
@@ -1401,20 +1326,15 @@ msg_err_nation_not_enemies_with_2: '<red>%s ei ole vihollinen valtion %s kanssa.
 msg_err_nation_already_allied_with_2: '<red>%s on jo liitossa valtion %s kanssa.'
 msg_err_nation_already_enemies_with_2: '<red>%s on jo vihollinen valtion %s kanssa.'
 msg_ta_allies_enemies_updated: '<aqua>Kohteen %s liittolaiset/viholliset päivitettiin.'
-#Added in 0.102
 towny_map_detailed_information: '<dark_green>Napsauta nähdäksesi tontin tarkat tiedot.'
 msg_err_nation_capital_too_many_residents: '<red>Nykyisessä pääkaupungissa on liikaa asukkaita, jotta %s voisi korvata sen.'
 msg_deleting_nation_will_result_in_losing_residents: '<red>Varoitus: valtiosi poistamisen jälkeen kyläsi ylittää asukasrajan %d, minkä vuoksi %d asukasta poistetaan.'
-#Added in 0.103
 msg_command_blocked_inside_towns: '<red>Et voi käyttää tätä komentoa kylien sisällä.'
 msg_command_limited: 'Voit käyttää tätä komentoa vain omilla tonteillasi.'
-#Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Vallattu sijainnissa:'
-#Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Erämaan käyttö vaihdettiin tilaan %s kaikissa maailmoissa.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerointi vaihdettiin tilaan %s kaikissa maailmoissa.'
-#Added in 0.106
 msg_command_outsider_blocked: 'Et voi suorittaa tätä komentoa, koska et asu kohteessa %s.'
 msg_err_this_jail_has_no_cells: 'Tässä vankilassa ei ole sellejä.'
 msg_err_no_cell_found_at_this_location: 'Tästä sijainnista ei löytynyt vankilaselliä.'
@@ -1438,7 +1358,6 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Älä kirjaudu ulos ennen ku
 jail_plu: 'Vankilat'
 jail_sing: 'Vankila'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s ei ole pelannut tarpeeksi kauan, jotta hänet voisi vangita. Odota vielä %s'
-#Added in 0.108
 msg_town_not_peaceful: '<aqua>Kylällä ei ollut varaa rauhanomaiseen tilaansa.'
 msg_town_already_peaceful: '<aqua>Kylä on jo rauhanomainen.'
 msg_town_already_not_peaceful: '<aqua>Kylä ei ole jo ennestään rauhanomainen.'
@@ -1446,7 +1365,6 @@ msg_town_cant_peaceful: '<aqua>Kylällä ei ollut varaa muuttua rauhanomaiseksi.
 msg_town_paid_for_neutral_status: '<aqua>Kyläsi maksoi %s säilyttääkseen rauhanomaisen statuksensa.'
 msg_nation_paid_for_neutral_status: '<aqua>Valtiosi maksoi %s säilyttääkseen rauhanomaisen statuksensa.'
 your_town_has_been_invited_to_join_nation: 'Kyläsi on kutsuttu liittymään valtioon %s'
-#Added in 0.109
 msg_err_no_one_to_purge: '<aqua>Puhdistettavia epäaktiivisia jäseniä ei ole.'
 msg_purging_will_remove_the_following_residents: '<aqua>Vahvista, että haluat puhdistaa seuraavat asukkaat: %s'
 msg_purge_complete_x_removed: '<aqua>Puhdistus valmis, %s asukasta poistettiin.'
@@ -1455,7 +1373,6 @@ msg_purge_reached_50_residents: '<aqua>Puhdistus on saavuttanut 50 asukasta. Seu
 msg_err_days_must_be_greater_than_0: 'Päivien määrän on oltava suurempi kuin nolla.'
 msg_err_outlawed_players_no_teleport: '<dark_red>Olet lainsuojaton nykyisessä kylässäsi etkä voi siirtyä!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '<dark_red>Et voi käyttää tätä komentoa kylässä, jossa olet lainsuojaton.'
-#Added in 0.110
 msg_safe_mode: "[Virhe] Lukittu vikasietotilaan!"
 msg_safe_mode_base: '[Virhe] Towny on lukittu vikasietotilaan virheen vuoksi! '
 msg_safe_mode_player: 'Pyydä adminia tarkistamaan palvelimen konsoli.'
@@ -1465,7 +1382,6 @@ msg_err_not_close_enough_to_your_town_nearest_plot: 'Etuvartiota ei voi vallata:
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Olet siirtänyt homeblockiasi liian äskettäin! Odota vielä %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Et voi siirtää homeblockiasi näin monen townblockin verran. Raja on %s, ja tämä paikka on %s townblockin päässä.'
 msg_err_usingtowny_disabled: 'Tämä maailma on vapautettu kaikista Townyn toiminnoista. Käytä ensin komentoa /townyworld toggle usingtowny.'
-#Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Tämä townblock kuuluu jo tonttiryhmään %s. Haluatko varmasti siirtää sen tonttiryhmään %s?'
 msg_townblock_transferred_from_x_to_x_group: 'Townblock siirrettiin tonttiryhmästä %s tonttiryhmään %s.'
 msg_plotgroup_deleted: 'Tonttiryhmä %s on poistettu.'
@@ -1476,7 +1392,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Tämä townblock kuuluu 
 map_hover_plot_group: 'Tonttiryhmä: '
 map_hover_plot_group_size: ' Koko: '
 map_hover_plots: '%s tonttia'
-#Added in 0.112
 msg_checking_for_updates: 'Tarkistetaan päivityksiä...'
 msg_no_new_updates: 'Uusia päivityksiä ei löytynyt.'
 msg_new_update_available: '<aqua>Uusi päivitys saatavilla: %s | Nykyinen versio: %s'
@@ -1488,7 +1403,6 @@ msg_click_purchase: 'Napsauta ostaaksesi'
 msg_you_must_join_this_town_to_claim_this_plot: 'Sinun on liityttävä tähän kylään: %s voidaksesi vallata tämän tontin. Haluatko liittyä kylään ja jatkaa valtaamista?'
 msg_legacy_economy_detected: "<aqua>Townyn taloustoteutukseksi on asetettu Legacy. On suositeltavaa antaa Townyn päivittää itsensä käyttämään Modern-toteutusta. Tämä parantaa yhteensopivuutta useampien Economy-lisäosien kanssa."
 msg_click_to_convert_to_modern_economy: "<aqua>Napsauta tästä muuntaaksesi Townyn taloustoteutuksen Legacysta Moderniksi."
-#Added in 0.113
 status_trustedlist: 'Luotetut'
 msg_click_to_edit: '<gold>Napsauta muokataksesi.'
 permission_gui_header: 'Townyn käyttöoikeus-GUI'
@@ -1513,7 +1427,6 @@ msg_err_ally_limit_reached: 'Valtiosi on saavuttanut liittolaisrajan, joten pyyn
 msg_err_ally_limit_reached_cannot_accept: 'Valtio %s on saavuttanut liittolaisrajansa, joten pyyntöä ei voi hyväksyä.'
 msg_err_ally_limit_reached_cannot_send: 'Valtiosi on saavuttanut liittolaisrajan, joten valtiota %s ei voi kutsua liittolaiseksesi.'
 msg_err_ally_limit_reached_cannot_send_targetNation: 'Valtio %s on saavuttanut liittolaisrajansa, joten valtiota %s ei voi kutsua liittolaiseksesi.'
-#Added in 0.114
 msg_err_group_not_found: 'Ryhmää %s ei löytynyt.'
 msg_err_expected_command_format: 'Virheellinen syntaksi, odotettu muoto: %s'
 msg_err_group_already_has_node: 'Ryhmällä %s on jo käyttöoikeussolmu %s.'
@@ -1538,21 +1451,15 @@ help_ta_perms_nationrankadd: 'Lisää valtion arvoasteen townyperms-tiedostoon.'
 help_ta_perms_nationrankremove: 'Poistaa valtion arvoasteen townyperms-tiedostosta.'
 help_ta_perms_nationrankrename: 'Nimeää valtion arvoasteen uudelleen townyperms-tiedostossa.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Kyseinen asukas ei kuulu kyseiseen valtioon.'
-#Added in 0.115
 msg_comptype_founded: 'Perustamispäivä'
 msg_err_must_be_greater_than_or_equal_to: 'Määrän on oltava vähintään %s'
 msg_err_must_be_less_than_or_equal_to: 'Määrän on oltava enintään %s'
 err_invalid_yaml: 'Latausvirhe: tiedoston %s lataaminen epäonnistui (läpäiseekö se YAML-jäsentimen?).'
-#Added in 0.116
 msg_town_map_color_changed: '<aqua>Kylän karttaväriksi vaihdettiin %s.'
-#Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Tätä townblockia ei voi lisätä ryhmään, koska sen tyyppi ei ole %s.'
-#Added in 0.118
 status_title_nopvp: '<green>(Ei PVP:tä)'
-#Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Et voi vangita asukastasi, koska hän on paikassa, jossa hänet on julistettu lainsuojattomaksi.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Et voi vangita asukastasi, koska hän on paikassa, jossa häntä pidetään vihollisena.'
-#Added in 0.120
 msg_resident_prompt: 'Kirjoita pelaajan nimi chattiin tai poistu kirjoittamalla q. Kehote vanhenee automaattisesti 30 sekunnissa.'
 msg_prompt_cancel: 'Kehote peruutettiin tai sen aikaraja ylittyi.'
 status_home_element: ' <gray>[Koti: %s]'
@@ -1566,13 +1473,10 @@ status_jailed: 'Vangittu:'
 status_bad_yes: '<red>KYLLÄ'
 status_good_no: '<green>EI'
 status_resident_tax_title: '%s:n vero'
-#Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Koska ne eivät olisi riittävän lähellä valtiosi pääkaupunkia, seuraavat kylät poistetaan, jos yhdistäminen suoritetaan: %s.'
-#Added in 0.123
 msg_err_invalid_townyworld: "'%s' ei ole kelvollinen Towny-maailma."
 msg_err_enter_world_name_first: 'Anna ensin maailman nimi.'
 msg_wilderness_use_set_to: '<aqua>Erämaan käyttöoikeudeksi on asetettu %s maailmassa %s.'
-#Added in 0.124
 msg_err_invalid_response: 'Virheellinen vastaus! Poistu kirjoittamalla q tai palaa edelliseen kysymykseen kirjoittamalla back.'
 msg_setup_full_guide_link: '<aqua>Napsauta tästä avataksesi täydellisen asennusoppaan.'
 msg_setup_wildernessuse: 'Haluatko sallia erämaan käytön? Tämä sallii pelaajien rikkoa ja rakentaa erämaassa.'
@@ -1582,14 +1486,12 @@ msg_setup_town_cost: 'Kuinka paljon uuden kylän perustamisen pitäisi maksaa? O
 msg_setup_nation_cost: 'Kuinka paljon uuden valtion perustamisen pitäisi maksaa? Oletus on 1000.'
 msg_setup_townblock_cost: 'Kuinka paljon townblockin valtaamisen pitäisi maksaa? Oletus on 25. Townblock on chunkin kokoinen (oletusasetuksilla).'
 msg_setup_success: 'Asetusarvot vaihdettiin onnistuneesti uusiin arvoihisi.'
-#Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s ilmestyi äskettäin eikä häntä voi vahingoittaa.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Olet menettänyt uudelleensyntymissuojasi.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'Et voi poimia esineitä uudelleensyntymissuojan aikana.'
-#Added in 0.126
 #Used in the nation screen:
 status_capital: 'Pääkaupunki:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1602,7 +1504,6 @@ status_unknown: 'tuntematon'
 msg_nationzone_override_set_to: 'Kohteen %s nationzone-ohitus asetettiin arvoon %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: 'Kohteen %s nationzone-ohitus poistettiin.'
-#Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Nationzone-koko:'
 #Shown when a player adds people to their friends list.
@@ -1646,21 +1547,18 @@ msg_purge_complete: 'Asukkaiden puhdistus valmis: %s poistettu.'
 msg_you_have_been_given_bonus_blocks: 'Sinulle on annettu %s bonus-townblockia.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Kyläsi ei voi ostaa enempää bonus-townblockeja. Enimmäismäärä on saavutettu.'
-#Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Pääkaupungit eivät voi vaihtaa rauhanomaisuustilaansa.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Kylää ympäröivä nationzone on nyt %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Kylälläsi ei ole vaihdettavaa nationzonea!'
-#Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '<gray>Valtion ylläpitokulu perustuu arvoon <green>%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'kylien määrään.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'valtion tasoon (asukkaiden määrään).'
-#Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Pormestarin vangitsema.'
 #Jail causes
@@ -1691,30 +1589,22 @@ msg_jailed_war_prisoner: 'Sotavankina vapaudut, jos maanmiehesi laskevat vankila
 msg_jailed_title: 'Sinut siis vangittiin :('
 #Jail handbook author
 msg_jailed_author: 'Townyn vankilayhtiö'
-#Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Kylällä ei ole listattavia liittolaisia.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Kylällä ei ole listattavia vihollisia.'
-#Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
-#Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Vahvistuksen aikaraja ylittyi.'
-#Added in 0.134
 tc_player_channel_sound_muted: 'Kanavan ääni on mykistetty'
 tc_player_channel_sound_unmuted: 'Kanavan mykistys on poistettu'
-#Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Tontillasi on ulkopuolinen, joten et voi muuttaa PVP-tilaasi!'
-#Added in 0.136
 msg_view_on_web: '<gray>Napsauta nähdäksesi verkossa.'
-#Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '<gold>Kylä %s on suostunut yhdistymään vastaanottavaan kylään %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Puolueettomuuden hinta:'
-#Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Jos olet maksanut näistä townblockeista oikeaa rahaa, huomioi: palvelin, jolla pelaat, rikkoo Minecraftin EULA-sopimusta ja Townyn lisenssiä.'
 #Line 2 of the givebonus warning.
@@ -1723,49 +1613,37 @@ msg_ptw_warning_2: 'Towny-tiimi ei koskaan tarkoittanut, että townblockeja vois
 msg_ptw_warning_3: 'Jos maksoit oikeaa rahaa, harkitse pelaamista Towny-palvelimella, joka kunnioittaa Towny-tiimin toiveita.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Sinut on kutsuttu liittymään kylään %s<blue> (Valtio: %s<blue>)'
-#Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Kylälläsi ei ole varaa luovuttaa tätä aluetta. Tarvitaan %s.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Kyläsi maksoi %s alueen luovuttamisesta.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Tämän alueen luovuttaminen maksaa %s. Haluatko jatkaa?'
-#Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Sinun on odotettava %s sekuntia, ennen kuin voit nimetä kyläsi uudelleen.'
-#Added in 1.141
 msg_newday_already_running: 'Uuden päivän tehtävä on jo käynnissä.'
-#Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Et voi vaihtaa puolueettomuutta vielä. Jäljellä %s sekuntia.'
-#Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Tätä komentoa ei voi käyttää konsolista.'
-#Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Kylän %s rajattomien valtausten asetukseksi määritettiin %s.'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'Sinulla ei ole riittävästi townblockeja valtaamiseen. Haluatko ottaa rajattoman valtaamisen käyttöön kylälle %s?'
-#Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Et voi erota valtiostasi, sillä kyläsi on vallattu.'
 msg_err_console_only: 'Tätä komentoa voi käyttää vain konsolista.'
 msg_err_player_only: 'Tätä komentoa voi käyttää vain pelaaja.'
-#Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Rajoja ylitettäessä näytettävät otsikkoviestit: %s.'
-#Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Tämän komennon suorittaminen palauttaa config.yml-tiedoston oletusversioon. Haluatko jatkaa?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'Tämä ohittaa palvelimen asetuksissa määritetyt asukasrajat. Haluatko silti jatkaa?'
-#Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Poistettiin %d virheellistä etuvartion spawn-pistettä.'
-#Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Kyläsi on konkurssissa. Lisää rahaa pankkiisi komennolla /town deposit {amount}.'
-#Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Et voi käyttää tätä komentoa, koska olet jo kylän jäsen. Jatkaaksesi sinun on käytettävä komentoa ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
@@ -1788,12 +1666,10 @@ status_plot_hover: '%s:'
 msg_usage: 'Käyttö: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Ei näytettäviä sivuja!'
-#Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'Kyseinen valtio ei ole sidoksissa sinuun.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Kyseinen kylä ei ole sidoksissa sinuun.'
-#Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'Tässä sijainnissa on jo vankilaselli.'
 #Title line of the /plot perm hud.
@@ -1842,7 +1718,6 @@ msg_perm_hud_plot_for_sale: 'Myytävänä: '
 msg_perm_hud_no: 'Ei'
 #Seen in /plot perm hud:
 msg_perm_hud_yes: 'Kyllä'
-#Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Kylän %s kylätasoksi asetettiin %s.'
 #Message shown when unsetting a manual town level.
@@ -1853,14 +1728,11 @@ msg_err_town_not_allowed_purchased_blocks: 'Kylä %s ei voi ostaa townblockeja a
 msg_purchased_blocks_unset: 'Kylän %s ostetut townblockit poistettiin.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'Kylälle %s annettiin %s ostettua townblockia; sillä on nyt %s ostettua townblockia.'
-#Added in 0.154
 msg_comptype_upkeep: 'Ylläpito'
-#Added in 0.155
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'Kylän %s ylläpitoasetukseksi määritettiin %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Kyläsi on saavuttanut %d %s-tontin rajan.'
-#Added in 0.156
 msg_spawn_cost_free: 'Ilmainen'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Tämä tontti on jo tyyppiä %s.'
