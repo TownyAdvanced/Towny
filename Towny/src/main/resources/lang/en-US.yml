@@ -1826,7 +1826,6 @@ msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protectio
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
 msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 
-
 #Used in the nation screen:
 status_capital: 'Capital:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
@@ -1973,7 +1972,6 @@ msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchasea
 msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'You have been invited to join %s<blue> (Nation: %s<blue>)'
-
 
 
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
