@@ -388,6 +388,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.endsWith("_BANNER")
 			.endsWith("_BUTTON")
 			.endsWith("RAIL")
+			.endsWith("_CUSHION")
 			.endsWith("PUMPKIN_STEM").endsWith("MELON_STEM")
 			.endsWith("_AMETHYST_BUD").add("AMETHYST_CLUSTER")
 			.includeList(FLOWERS)
