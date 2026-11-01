@@ -26,6 +26,10 @@ import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 
 import com.palmergames.util.JavaUtil;
+
+import io.papermc.paper.event.entity.EntityBreakByEntityEvent;
+import io.papermc.paper.event.entity.EntityBreakEvent;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -68,6 +72,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -753,6 +758,71 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
+	/**
+	 * Handle placing of cushions, and potentially other entities.
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityPlace(EntityPlaceEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		Block block = event.getEntity().getLocation().getBlock();
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+			return;
+
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), EntityTypeUtil.parseEntityToMaterial(event.getEntityType()))) {
+			event.setCancelled(true);
+		}
+	}
+
+	/**
+	 * Handles protection of cushions, and potentially other entities.
+	 * 
+	 * @param event EntityBreakEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onEntityBreak(EntityBreakEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+
+		Entity hanging = event.getEntity();
+		io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause removeCause = event.getCause();
+
+		// Protect entities from Physics-caused removals, including keeping them
+		// in place while we regenerate their exploded-attached-block.
+		if (removeCause.equals(io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause.PHYSICS)) {
+			if (attachedToRegeneratingBlock(hanging) || itemFrameBrokenByBoatExploit(hanging))
+				event.setCancelled(true);
+			return;
+		}
+
+		// It's an Entity that has broken this Entity.
+		if (event instanceof EntityBreakByEntityEvent evt) {
+			// Test entity-caused Explosions, Players and Mobs.
+			if (preventEntityBrokenByEntity(hanging, removeCause, evt.getRemover()))
+				event.setCancelled(true);
+			return;
+		}
+
+		// Probably a case of a block explosion/created explosion with no Entity.
+		if (removeCause.equals(io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause.EXPLOSION)) {
+			if (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.BLOCK_EXPLOSION) || weAreRevertingBlockExplosionsInWild(hanging.getLocation()))
+				event.setCancelled(true);
+			return;
+		}
+	}
+	
 	private boolean attachedToRegeneratingBlock(Entity hanging) {
 		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
 		return EntityLists.HANGING.contains(hanging) && 
@@ -792,6 +862,27 @@ public class TownyEntityListener implements Listener {
 			return !allowedToBreak(player, hanging);
 		} else if (remover instanceof Entity) {
 			// An entity (probably a skeleton,) breaking a hanging entity in a town.
+			return !TownyAPI.getInstance().isWilderness(hanging.getLocation());
+		}
+		return false;
+	}
+
+	private boolean preventEntityBrokenByEntity(Entity hanging, io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause removeCause, Object remover) {
+		// Handle instances of Explosions caused by entities.
+		if (removeCause.equals(io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause.EXPLOSION)
+				&& (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION) || weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover))) {
+			return true;
+		}
+
+		// Parse a potential projectile from its shooter entity.
+		if (remover instanceof Projectile projectile)
+			remover = projectile.getShooter();
+
+		if (remover instanceof Player player) {
+			// Player doesn't have permission to break this entity.
+			return !allowedToBreak(player, hanging);
+		} else if (remover instanceof Entity) {
+			// An entity (probably a skeleton,) breaking a entity in a town.
 			return !TownyAPI.getInstance().isWilderness(hanging.getLocation());
 		}
 		return false;
