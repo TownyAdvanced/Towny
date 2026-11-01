@@ -8,15 +8,21 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
+import com.palmergames.bukkit.towny.listeners.entity.TownyEntityListener;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.TimeTools;
 
+import io.papermc.paper.event.entity.EntityBreakByEntityEvent;
+import io.papermc.paper.event.entity.EntityBreakEvent;
+import io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause;
 import io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent;
 
 import io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent;
@@ -36,6 +42,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -68,7 +75,9 @@ public class TownyPaperEvents implements VersionDependentListener {
 
 	public static final String COPPER_GOLEM_MOVES_ITEM_EVENT = "io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent";
 	public static final String PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT = "io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent";
-	
+
+	public static final String ENTITY_BREAK_EVENT = "io.papermc.paper.event.entity.EntityBreakEvent";
+
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
 	}
@@ -97,6 +106,8 @@ public class TownyPaperEvents implements VersionDependentListener {
 		registerEvent(COPPER_GOLEM_MOVES_ITEM_EVENT, this::onGolemMoveItem, EventPriority.NORMAL, true);
 
 		registerEvent(PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT, this::playerToggleEntityAgeLockListener, EventPriority.LOW, true);
+
+		registerEvent(ENTITY_BREAK_EVENT, this::entityBreakEvent, EventPriority.LOW, true);
 	}
 	
 	// https://jd.papermc.io/paper/1.15/index.html?com/destroystokyo/paper/event/player/PlayerElytraBoostEvent.html
@@ -251,6 +262,81 @@ public class TownyPaperEvents implements VersionDependentListener {
 				event.setCancelled(true);
 			}
 		};
+	}
+
+	public Consumer<EntityEvent> entityBreakEvent() {
+		return e -> {
+			if (TownyEntityListener.ignoreEvent(e)) {
+				return;
+			}
+			final EntityBreakEvent event = (EntityBreakEvent) e;
+			final Entity entity = event.getEntity();
+			final RemoveCause removeCause = event.getCause();
+
+			// Protect entities from Physics-caused removals, including keeping them
+			// in place while we regenerate their exploded-attached-block.
+			if (removeCause.equals(RemoveCause.PHYSICS)) {
+				if (TownyRegenAPI.attachedToRegeneratingBlock(entity))
+					event.setCancelled(true);
+				return;
+			}
+
+			// It's an Entity that has broken this Entity.
+			if (event instanceof EntityBreakByEntityEvent evt) {
+				// Test entity-caused Explosions, Players and Mobs.
+				if (preventEntityBrokenByEntity(entity, removeCause, evt.getRemover()))
+					event.setCancelled(true);
+				return;
+			}
+
+			// Probably a case of a block explosion/created explosion with no Entity.
+			if (removeCause.equals(RemoveCause.EXPLOSION)) {
+				if (entityProtectedFromExplosiveDamageHere(entity, DamageCause.BLOCK_EXPLOSION) 
+						// Already tested if Explosions are enabled here, must check if in the
+						// wilderness and if we have explrevert in that world and we are reverting this
+						// type of entity's explosions.
+						|| TownyRegenAPI.weAreRevertingBlockExplosionsInWild(entity.getLocation()))
+					event.setCancelled(true);
+				return;
+			}
+		};
+	}
+
+	private boolean preventEntityBrokenByEntity(Entity hanging, RemoveCause removeCause, Object remover) {
+		// Handle instances of Explosions caused by entities.
+		if (removeCause.equals(RemoveCause.EXPLOSION)
+				&& (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION)
+						// Already tested if Explosions are enabled here, must check if in the
+						// wilderness and if we have explrevert in that world and we are reverting this
+						// type of entity's explosions.
+						|| TownyRegenAPI.weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover))) {
+			return true;
+		}
+
+		// Parse a potential projectile from its shooter entity.
+		if (remover instanceof Projectile projectile)
+			remover = projectile.getShooter();
+
+		if (remover instanceof Player player) {
+			// Player doesn't have permission to break this entity.
+			return !TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), EntityTypeUtil.parseEntityToMaterial(hanging.getType(), Material.GRASS_BLOCK));
+		} else if (remover instanceof Entity) {
+			// An entity (probably a skeleton,) breaking a entity in a town.
+			return !TownyAPI.getInstance().isWilderness(hanging.getLocation());
+		}
+		return false;
+	}
+
+	/**
+	 * Are entities protected from Explosions here.
+	 * 
+	 * @param entity Entity which is being damaged.
+	 * @param cause  DamageCause that is hurting said entity.
+	 * @return True if Towny would protect the entity from explosions, using the
+	 *         plot permissions and a cancellable event.
+	 */
+	private boolean entityProtectedFromExplosiveDamageHere(Entity entity, DamageCause cause) {
+		return !TownyActionEventExecutor.canExplosionDamageEntities(entity.getLocation(), entity, cause);
 	}
 
 	private void setGolemLastChestLocation(CopperGolem golem, int x, int z) {
