@@ -304,13 +304,16 @@ public class TownyPaperEvents implements VersionDependentListener {
 
 	private boolean preventEntityBrokenByEntity(Entity hanging, RemoveCause removeCause, Object remover) {
 		// Handle instances of Explosions caused by entities.
-		if (removeCause.equals(RemoveCause.EXPLOSION)
-				&& (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION)
-						// Already tested if Explosions are enabled here, must check if in the
-						// wilderness and if we have explrevert in that world and we are reverting this
-						// type of entity's explosions.
-						|| TownyRegenAPI.weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover))) {
-			return true;
+		if (removeCause.equals(RemoveCause.EXPLOSION)) {
+			if (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION)) {
+				return true;
+			}
+			// Already tested if Explosions are enabled here, must check if in the
+			// wilderness and if we have explrevert in that world and we are reverting this
+			// type of entity's explosions.
+			if (TownyRegenAPI.weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover)) {
+				return true;
+			}
 		}
 
 		// Parse a potential projectile from its shooter entity.

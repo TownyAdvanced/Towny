@@ -22,6 +22,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.entity.Cushion;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
@@ -484,9 +485,20 @@ public class TownyRegenAPI {
 	 * @return true when there is a regen task for the attachment block.
 	 */
 	public static boolean attachedToRegeneratingBlock(Entity hanging) {
+		if (!EntityLists.HANGING.contains(hanging))
+			return false;
+
+		// Cushions need supports underneath them.
+		if (hanging instanceof Cushion) {
+			// Cushions can be supported by blocks which aren't the full block height,
+			// meaning their support could be in the same location as the Cushion.
+			boolean isInMidBlock = !(hanging.getLocation().getY() == Double.valueOf(hanging.getLocation().getBlockY()));
+			BlockLocation blockLoc = new BlockLocation(isInMidBlock ? hanging.getLocation() : hanging.getLocation().add(0, -1, 0));
+			return hasProtectionRegenTask(blockLoc);
+		}
+
 		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
-		return EntityLists.HANGING.contains(hanging) && 
-			hasProtectionRegenTask(new BlockLocation(hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection())));
+		return hasProtectionRegenTask(new BlockLocation(hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection())));
 	}
 
 	/**

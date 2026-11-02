@@ -405,6 +405,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 
 	public static final ItemLists SHELVES = newBuilder().endsWith("SHELF").build();
 
+	public static final ItemLists CUSHIONS= newBuilder().endsWith("CUSHION").build();
+
 	/**
 	 * Config-useable material groups.
 	 */

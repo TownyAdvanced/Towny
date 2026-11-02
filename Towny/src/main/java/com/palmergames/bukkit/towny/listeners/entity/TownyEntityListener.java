@@ -761,28 +761,6 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	/**
-	 * Handle placing of cushions, and potentially other entities.
-	 * @param event
-	 */
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onEntityPlace(EntityPlaceEvent event) {
-
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		Block block = event.getEntity().getLocation().getBlock();
-		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
-			return;
-
-		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), EntityTypeUtil.parseEntityToMaterial(event.getEntityType()))) {
-			event.setCancelled(true);
-		}
-	}
-
 	private boolean itemFrameBrokenByBoatExploit(Entity hanging) {
 		// This workaround prevent boats from destroying item_frames, detailed in https://hub.spigotmc.org/jira/browse/SPIGOT-3999.
 		// TODO: This was potentially fixed by Mojang in Minecraft 1.21.11+.
@@ -846,6 +824,28 @@ public class TownyEntityListener implements Listener {
 
 		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), mat));
+	}
+
+	/**
+	 * Handle placing of cushions, and potentially other entities.
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityPlace(EntityPlaceEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		Block block = event.getEntity().getLocation().getBlock();
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+			return;
+
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), EntityTypeUtil.parseEntityToMaterial(event.getEntityType()))) {
+			event.setCancelled(true);
+		}
 	}
 
 	/**

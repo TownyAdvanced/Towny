@@ -38,6 +38,8 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists HANGING = newBuilder().add("item_frame", "glow_item_frame", "painting", "cushion").build();
 	
+	public static final EntityLists CUSHIONS = newBuilder().endsWith("cushion").build();
+	
 	public static final EntityLists BOATS = newBuilder().endsWith("boat").endsWith("raft").build();
 
 	public static final EntityLists MULTISEAT_ANIMAL_MOUNTS = newBuilder().add("camel", "camel_husk", "happy_ghast").build();
