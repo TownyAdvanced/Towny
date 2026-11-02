@@ -54,6 +54,7 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.memory.MemoryKey;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -66,8 +67,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -79,6 +82,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -732,7 +736,7 @@ public class TownyEntityListener implements Listener {
 		// Protect hanging entities from Physics-caused removals, including keeping them
 		// in place while we regenerate their exploded-attached-block.
 		if (removeCause.equals(RemoveCause.PHYSICS)) {
-			if (attachedToRegeneratingBlock(hanging) || itemFrameBrokenByBoatExploit(hanging))
+			if (TownyRegenAPI.attachedToRegeneratingBlock(hanging) || itemFrameBrokenByBoatExploit(hanging))
 				event.setCancelled(true);
 			return;
 		}
@@ -747,16 +751,36 @@ public class TownyEntityListener implements Listener {
 
 		// Probably a case of a block explosion/created explosion with no Entity.
 		if (removeCause.equals(RemoveCause.EXPLOSION)) {
-			if (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.BLOCK_EXPLOSION) || weAreRevertingBlockExplosionsInWild(hanging.getLocation()))
+			if (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.BLOCK_EXPLOSION)
+					// Already tested if Explosions are enabled here, must check if in the
+					// wilderness and if we have explrevert in that world and we are reverting this
+					// type of entity's explosions.
+					|| TownyRegenAPI.weAreRevertingBlockExplosionsInWild(hanging.getLocation()))
 				event.setCancelled(true);
 			return;
 		}
 	}
 
-	private boolean attachedToRegeneratingBlock(Entity hanging) {
-		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
-		return EntityLists.HANGING.contains(hanging) && 
-			TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection())));
+	/**
+	 * Handle placing of cushions, and potentially other entities.
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityPlace(EntityPlaceEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		Block block = event.getEntity().getLocation().getBlock();
+		if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+			return;
+
+		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), EntityTypeUtil.parseEntityToMaterial(event.getEntityType()))) {
+			event.setCancelled(true);
+		}
 	}
 
 	private boolean itemFrameBrokenByBoatExploit(Entity hanging) {
@@ -779,7 +803,12 @@ public class TownyEntityListener implements Listener {
 	private boolean preventHangingBrokenByEntity(Entity hanging, RemoveCause removeCause, Object remover) {
 		// Handle instances of Explosions caused by entities.
 		if (removeCause.equals(RemoveCause.EXPLOSION)
-				&& (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION) || weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover))) {
+				&& (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION)
+						// Already tested if Explosions are enabled here, must check if in the
+						// wilderness and if we have blockexplrevert enabled in the world.
+						// Because of the nature of block explosions in Bukkit's API it is impossible or
+						// not worth finding the explosion's source-block, we assume it is being reverted.
+						|| TownyRegenAPI.weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover))) {
 			return true;
 		}
 
@@ -789,34 +818,12 @@ public class TownyEntityListener implements Listener {
 
 		if (remover instanceof Player player) {
 			// Player doesn't have permission to break this hanging entity.
-			return !allowedToBreak(player, hanging);
+			return !TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), EntityTypeUtil.parseEntityToMaterial(hanging.getType(), Material.GRASS_BLOCK));
 		} else if (remover instanceof Entity) {
 			// An entity (probably a skeleton,) breaking a hanging entity in a town.
 			return !TownyAPI.getInstance().isWilderness(hanging.getLocation());
 		}
 		return false;
-	}
-
-	private boolean allowedToBreak(Player player, Entity hanging) {
-		// Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		return TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), EntityTypeUtil.parseEntityToMaterial(hanging.getType(), Material.GRASS_BLOCK));
-	}
-
-	private boolean weAreRevertingThisRemoversExplosionsInWild(Location loc, Object remover) {
-		// Already tested if Explosions are enabled here, must check if in the
-		// wilderness and if we have explrevert in that world and we are reverting this
-		// type of entity's explosions.
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld());
-		return remover != null && TownyAPI.getInstance().isWilderness(loc) 
-				&& townyWorld.isUsingPlotManagementWildEntityRevert() && townyWorld.isProtectingExplosionEntity((Entity)remover);
-	}
-
-	private boolean weAreRevertingBlockExplosionsInWild(Location loc) {
-		// Already tested if Explosions are enabled here, must check if in the
-		// wilderness and if we have blockexplrevert enabled in the world.
-		// Because of the nature of block explosions in Bukkit's API it is impossible or
-		// not worth finding the explosion's source-block, we assume it is being reverted.
-		return TownyAPI.getInstance().isWilderness(loc) && TownyAPI.getInstance().getTownyWorld(loc.getWorld()).isUsingPlotManagementWildBlockRevert();
 	}
 
 	/**
@@ -1007,5 +1014,18 @@ public class TownyEntityListener implements Listener {
 
                 return legacyName != null && detrimentalPotions.contains(legacyName);
             });
+	}
+
+	@ApiStatus.Internal
+	public static boolean ignoreEvent(final EntityEvent event) {
+		if (Towny.getPlugin().isError()) {
+			if (event instanceof Cancellable cancellable) {
+				cancellable.setCancelled(true); // Always cancel events while we're in safe mode.
+			}
+
+			return true;
+		}
+
+		return !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld());
 	}
 }

@@ -59,6 +59,7 @@ public class EntityTypeUtil {
 		register(map, "ender_pearl", "ender_pearl");
 		register(map, "wind_charge", "wind_charge");
 		register(map, "interaction", "grass_block"); // No such thing as a interaction block as far as I know.
+		register(map, "cushion", "red_cushion");
 		TownyMessaging.sendDebugMsg("[EntityTypeUtil] Attempted: " + attempted + " | Registered: " + map.size());
 
 		return map;
