@@ -9,17 +9,16 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectLoadException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.District;
+import com.palmergames.bukkit.towny.object.NameAndId;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.util.FileMgmt;
@@ -28,7 +27,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import com.zaxxer.hikari.pool.HikariPool;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -43,6 +41,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,8 +49,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
@@ -397,10 +398,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		JAIL("JAILS", "SELECT uuid FROM ", "uuid"),
 		PLOTGROUP("PLOTGROUPS", "SELECT groupID FROM ", "groupID"),
 		DISTRICT("DISTRICTS", "SELECT uuid FROM ", "uuid"),
-		RESIDENT("RESIDENTS", "SELECT name FROM ", "name"),
+		RESIDENT("RESIDENTS", "SELECT uuid FROM ", "uuid"),
 		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "", "uuid"),
-		TOWN("TOWNS", "SELECT name FROM ", "name"),
-		NATION("NATIONS", "SELECT name FROM ", "name"),
+		TOWN("TOWNS", "SELECT uuid FROM ", "uuid"),
+		NATION("NATIONS", "SELECT uuid FROM ", "uuid"),
 		WORLD("WORLDS", "SELECT name FROM ", "name"),
 		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name"),
 		COOLDOWN("COOLDOWNS", "SELECT * FROM ", "key");
@@ -439,20 +440,112 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 	}
 
-	private Map<String, String> loadResultSetIntoMap(ResultSet rs) throws SQLException {
-		Map<String, String> keys = new HashMap<>();
-		ResultSetMetaData md = rs.getMetaData();
-		int columns = md.getColumnCount();
-		for (int i = 1; i <= columns; ++i)
-			keys.put(md.getColumnName(i), rs.getString(i));
+	private boolean loadResultSetListOfType(TownyDBTableType type, Consumer<NameAndId> consumer) {
+		TownyMessaging.sendDebugMsg("Searching for " + type.tableName.toLowerCase(Locale.ROOT) + "...");
+		if (!isReady())
+			return false;
+		
+		try {
+			try (Statement s = getConnection().createStatement()) {
+				ResultSet rs = s.executeQuery(type.queryString + tb_prefix + type.tableName);
+				if (rs.getFetchSize() != 0)
+					TownyMessaging.sendDebugMsg("Loading " + rs.getFetchSize() + " entries from the " + type.tableName + " table...");
 
-		return keys;
+				while (rs.next()) {
+					UUID uuid = UUID.fromString(rs.getString(type.primaryKey));
+					String name = null;
+					try {
+						name = rs.getString("name");
+					} catch (SQLException ignored) {} // Some data types do not store a name.
+
+					// Residents that are NPCs can have special UUID versions applied to them.
+					if (type.equals(TownyDBTableType.RESIDENT) && name != null)
+						uuid = super.parsePlayerUUID(uuid.toString(), name);
+
+					consumer.accept(new NameAndId(name, uuid));
+				}
+			}
+			
+			return true;
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+		}
+		return false;
+	}
+
+	private boolean loadResultSetOfType(TownyDBTableType type, Set<UUID> UUIDs) throws ObjectLoadException {
+		for (UUID uuid : UUIDs)
+			if (!loadResultSet(type, uuid))
+				throw new ObjectLoadException(type.getLoadErrorMsg(uuid));
+		return true;
 	}
 
 	/*
 	 * Load keys
 	 */
+
+	@Override
+	public boolean loadJailList() {
+		return loadResultSetListOfType(TownyDBTableType.JAIL, nameAndId -> universe.newJailInternal(nameAndId.uuid()));
+	}
+
+	@Override
+	public boolean loadPlotGroupList() {
+		return loadResultSetListOfType(TownyDBTableType.PLOTGROUP, nameAndId -> universe.newPlotGroupInternal(nameAndId.uuid()));
+	}
 	
+	@Override
+	public boolean loadDistrictList() {
+		return loadResultSetListOfType(TownyDBTableType.DISTRICT, nameAndId -> universe.newDistrictInternal(nameAndId.uuid()));
+	}
+	
+	@Override
+	public boolean loadResidentList() {
+		return loadResultSetListOfType(TownyDBTableType.RESIDENT, nameAndId -> {
+			if (!universe.hasResident(nameAndId.uuid()))
+				universe.newResidentInternal(nameAndId.name(), nameAndId.uuid());
+			else {
+				final Resident otherResident = universe.getResident(nameAndId.uuid());
+				if (otherResident != null && !otherResident.getName().equals(nameAndId.name())) {
+					// UUID is already registered
+					super.pendingDuplicateResidents.add(Pair.pair(nameAndId.name(), otherResident.getName()));
+				}
+			}
+		});
+	}
+
+	@Override
+	public boolean loadTownList() {
+		return loadResultSetListOfType(TownyDBTableType.TOWN, nameAndId -> universe.newTownInternal(nameAndId.name(), nameAndId.uuid()));
+	}
+
+	@Override
+	public boolean loadNationList() {
+		return loadResultSetListOfType(TownyDBTableType.NATION, nameAndId -> universe.newNationInternal(nameAndId.name(), nameAndId.uuid()));
+	}
+
+	@Override
+	public boolean loadWorldList() {
+		loadResultSetListOfType(TownyDBTableType.WORLD, nameAndId -> universe.newWorldInternal(nameAndId.name(), nameAndId.uuid()));
+		for (World world : plugin.getServer().getWorlds()) {
+			if (universe.getWorldIDMap().containsKey(world.getUID()))
+				continue;
+
+			// Register and create rows for any worlds which did not have files yet.
+			TownyWorld townyWorld = new TownyWorld(world.getName(), world.getUID());
+			universe.registerTownyWorld(townyWorld);
+			try {
+				queueUpdateDB("WORLDS", townyWorld.getObjectDataMap(context), null);
+			} catch (Exception e) {
+				Towny.getPlugin().getLogger().warning("Could not save new world row for TownyWorld: " + townyWorld.getUUID());
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public boolean loadTownBlockList() {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
@@ -464,14 +557,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			int total = 0;
 			while (rs.next()) {
 				String worldName = rs.getString("world");
-				TownyWorld world = universe.getWorld(worldName);
-				if (world == null)
-					throw new Exception("World " + worldName + " not registered!");
-
 				int x = Integer.parseInt(rs.getString("x"));
 				int z = Integer.parseInt(rs.getString("z"));
 
-				TownBlock townBlock = new TownBlock(x, z, world);
+				if (!universe.hasTownyWorld(worldName))
+					continue;
+
+				TownBlock townBlock = new TownBlock(x, z, TownyUniverse.getInstance().getWorld(worldName));
 				universe.addTownBlock(townBlock);
 				total++;
 			}
@@ -488,537 +580,358 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
-	@Override
-	public boolean loadResidentList() {
-		TownyMessaging.sendDebugMsg("Loading Resident List");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "RESIDENTS")) {
-			
-			while (rs.next()) {
-				final String name = rs.getString("name");
-				final UUID uuid = super.parsePlayerUUID(rs.getString("uuid"), name);
-				
-				if (uuid == null) {
-					plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
-					continue;
-				}
-
-				try {
-					newResident(name, uuid);
-				} catch (AlreadyRegisteredException e) {
-					final Resident otherResident = universe.getResident(uuid);
-					if (otherResident != null && !otherResident.getName().equals(name)) {
-						// UUID is already registered
-						super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
-					}
-				}
-			}
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: resident list unknown error", e);
+	private boolean loadResultSet(TownyDBTableType type, UUID uuid) {
+		return switch (type) {
+		case JAIL -> loadJailData(uuid);
+		case NATION -> loadNationData(uuid);
+		case PLOTGROUP -> loadPlotGroupData(uuid);
+		case DISTRICT -> loadDistrictData(uuid);
+		case RESIDENT -> loadResidentData(uuid);
+		case TOWN -> loadTownData(uuid);
+		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case WORLD -> {
+			TownyWorld world = TownyUniverse.getInstance().getWorld(uuid);
+			yield world != null && loadWorldData(world.getName());
 		}
-		return false;
+		default -> throw new IllegalArgumentException("Unexpected value: " + type);
+		};
 	}
 
-	@Override
-	public boolean loadTownList() {
-		TownyMessaging.sendDebugMsg("Loading Town List");
+	private Map<String, String> loadResultSetIntoMap(ResultSet rs) throws SQLException {
+		Map<String, String> keys = new HashMap<>();
+		ResultSetMetaData md = rs.getMetaData();
+		int columns = md.getColumnCount();
+		for (int i = 1; i <= columns; ++i)
+			keys.put(md.getColumnName(i), rs.getString(i));
 
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "TOWNS")) {
-
-			while (rs.next()) {
-				final String name = rs.getString("name");
-
-				try {
-					universe.newTownInternal(name, super.parseUUIDOrNew(rs.getString("uuid"), "town '" + name + "'"));
-				} catch (AlreadyRegisteredException ignored) {}
-			}
-			return true;
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: town list sql error : " + e.getMessage());
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: town list unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadNationList() {
-		TownyMessaging.sendDebugMsg("Loading Nation List");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "NATIONS")) {
-			
-			while (rs.next()) {
-				final String name = rs.getString("name");
-
-				try {
-					newNation(name, super.parseUUIDOrNew(rs.getString("uuid"), "nation '" + name + "'"));
-				} catch (AlreadyRegisteredException ignored) {}
-			}
-			return true;
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: nation list sql error : " + e.getMessage());
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: nation list unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadWorldList() {
-		TownyMessaging.sendDebugMsg("Loading World List");
-
-		// Check for any new worlds registered with bukkit.
-		for (World world : Bukkit.getServer().getWorlds())
-			universe.registerTownyWorld(new TownyWorld(world.getName(), world.getUID()));
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "WORLDS")) {
-			
-			while (rs.next()) {
-				final String name = rs.getString("name");
-					
-				// World is loaded in bukkit and got registered by the newWorld above.
-				if (universe.getWorld(name) != null)
-					continue;
-					
-				UUID uuid = null;
-				try {
-					uuid = UUID.fromString(rs.getString("uuid"));
-				} catch (IllegalArgumentException | NullPointerException | SQLException ignored) {}
-					
-				if (uuid != null) {
-					universe.registerTownyWorld(new TownyWorld(rs.getString("name"), uuid));
-				} else {
-					try {
-						newWorld(rs.getString("name"));
-					} catch (AlreadyRegisteredException ignored) {}
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: world list sql error : " + e.getMessage());
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: world list unknown error", e);
-		}
-
-		return true;
-	}
-	
-	public boolean loadPlotGroupList() {
-		TownyMessaging.sendDebugMsg("Loading PlotGroup List");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS")) {
-
-			while (rs.next()) {
-				try {
-					universe.newPlotGroupInternal(UUID.fromString(rs.getString("groupID")));
-				} catch (IllegalArgumentException e) {
-					plugin.getLogger().log(Level.WARNING, "ID for plot group is not a valid uuid, skipped loading plot group {}", rs.getString("groupID"));
-				}
-			}
-			
-			return true;
-
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading plot group list", e);
-		}
-		
-		return false;
-	}
-	
-	@Override
-	public boolean loadDistrictList() {
-		TownyMessaging.sendDebugMsg("Loading District List");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "DISTRICTS")) {
-
-			while (rs.next()) {
-				try {
-					universe.newDistrictInternal(UUID.fromString(rs.getString("uuid")));
-				} catch (IllegalArgumentException e) {
-					plugin.getLogger().log(Level.WARNING, "ID for district is not a valid uuid, skipped loading district {}", rs.getString("uuid"));
-				}
-			}
-			
-			return true;
-
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading district list", e);
-		}
-		
-		return false;
-	}
-
-	public boolean loadJailList() {
-		TownyMessaging.sendDebugMsg("Loading Jail List");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS")) {
-				
-			while (rs.next()) {
-				universe.newJailInternal(rs.getString("uuid"));
-			}
-
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading jail list", e);
-		}
-		
-		return false;
+		return keys;
 	}
 
 	/*
 	 * Load individual towny object
 	 */
-
 	@Override
-	public boolean loadResidents() {
-		TownyMessaging.sendDebugMsg("Loading Residents");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS")) {
-			
-			while (rs.next()) {
-				String residentName;
-				try {
-					residentName = rs.getString("name");
-				} catch (SQLException ex) {
-					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..", ex);
-					continue;
-				}
-				
-				Resident resident = universe.getResident(residentName);
-				
-				if (resident == null) {
-					plugin.getLogger().severe(String.format("Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
-					continue;
-				}
-
-				if (!loadResident(resident, rs)) {
-					plugin.getLogger().severe("Loading Error: Could not read resident data '" + resident.getName() + "'.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean loadResident(Resident resident) {
-
-		/*
-		 * Never called in SQL setups.
-		 */
-		return true;
-
-	}
-
-	private boolean loadResident(Resident resident, ResultSet rs) {
-		try {
-			return resident.load(loadResultSetIntoMap(rs));
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Load resident unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadTowns() {
-		TownyMessaging.sendDebugMsg("Loading Towns");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS ")) {
-			while (rs.next()) {
-				String townName;
-				try {
-					townName = rs.getString("name");
-				} catch (SQLException ex) {
-					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a town name from SQL Database. Skipping loading town..", ex);
-					continue;
-				}
-				Town town = universe.getTown(townName);
-				if (town == null) {
-					plugin.getLogger().severe(String.format("Loading Error: Could not fetch town '%s' from Towny universe while loading from SQL DB.", townName));
-					continue;
-				}
-
-				if (!loadTown(rs)) {
-					plugin.getLogger().warning("Loading Error: Could not read town data properly.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
-			return false;
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean loadTown(Town town) {
-
-		/*
-		 * Never called in SQL setups.
-		 */
-		return true;
-
-	}
-
-	private boolean loadTown(ResultSet rs) {
-		String name = null;
-		try {
-			Town town = universe.getTown(rs.getString("name"));
-
-			if (town == null) {
-				TownyMessaging.sendErrorMsg("SQL: Load Town " + rs.getString("name") + ". Town was not registered properly on load!");
-				return false;
-			}
-
-			name = town.getName();
-
-			TownyMessaging.sendDebugMsg("Loading town " + name);
-			return town.load(loadResultSetIntoMap(rs));
-
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Load Town " + name + " unknown Error - ", e);
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean loadNations() {
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS")) {
-			
-			while (rs.next()) {
-				String nationName;
-				try {
-					nationName = rs.getString("name");
-				} catch (SQLException ex) {
-					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a nation name from SQL Database. Skipping loading nation..", ex);
-					continue;
-				}
-				Nation nation = universe.getNation(nationName);
-				if (nation == null) {
-					plugin.getLogger().severe(String.format("Loading Error: Could not fetch nation '%s' from Towny universe while loading from SQL DB.", nationName));
-					continue;
-				}
-
-				if (!loadNation(rs)) {
-					plugin.getLogger().warning("Loading Error: Could not properly read nation data.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean loadNation(Nation nation) {
-
-		/*
-		 * Never called in SQL setups.
-		 */
-		return true;
-
-	}
-
-	private boolean loadNation(ResultSet rs) {
-		String name = null;
-		try {
-			Nation nation = universe.getNation(rs.getString("name"));
-			
-			// Could not find nation in universe maps
-			if (nation == null) {
-				plugin.getLogger().warning(String.format("Error: The nation with the name '%s' was not registered and cannot be loaded!", rs.getString("name")));
-				return false;
-			}
-			
-			name = nation.getName();
-
-			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
-
-			return nation.load(loadResultSetIntoMap(rs));
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean loadWorlds() {
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
-
-			while (rs.next()) {
-				String worldName;
-				try {
-					worldName = rs.getString("name");
-				} catch (SQLException ex) {
-					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a world name from SQL Database. Skipping loading world..", ex);
-					continue;
-				}
-				TownyWorld world = universe.getWorld(worldName);
-				if (world == null) {
-					plugin.getLogger().severe(String.format("Loading Error: Could not fetch world '%s' from Towny universe while loading from SQL DB.", worldName));
-					continue;
-				}
-				if (!loadWorld(rs)) {
-					plugin.getLogger().warning("Loading Error: Could not read properly world data.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Error reading worlds from SQL database!");
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean loadWorld(TownyWorld world) {
-		try (Connection connection = getConnection();
-			 PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
-			ps.setString(1, world.getName());
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return loadWorld(rs);
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load world sql error (" + world.getName() + ")" + e.getMessage());
-		}
-		return false;
-	}
-
-	private boolean loadWorld(ResultSet rs) {
-		String worldName = null;
-		try {
-			worldName = rs.getString("name");
-			TownyWorld world = universe.getWorld(worldName);
-			if (world == null)
-				throw new Exception("World " + worldName + " not registered!");
-
-			TownyMessaging.sendDebugMsg("Loading world " + world.getName());
-
-			return world.load(loadResultSetIntoMap(rs));
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg(
-					"SQL: Load world sql error (" + (worldName != null ? worldName : "NULL") + ")" + e.getMessage());
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(e.getMessage());
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadTownBlocks() {
-
-		String line = "";
-		TownyMessaging.sendDebugMsg("Loading Town Blocks.");
-
-		TownBlock townBlock = null;
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
-
-			while (rs.next()) {
-				String worldName = rs.getString("world");
-				int x = rs.getInt("x");
-				int z = rs.getInt("z");
-
-				if (!universe.hasTownyWorld(worldName))
-					continue;
-
-				try {
-					townBlock = universe.getTownBlock(new WorldCoord(worldName, x, z));
-					townBlock.load(loadResultSetIntoMap(rs));
-				} catch (NotRegisteredException ex) {
-					TownyMessaging.sendErrorMsg("Loading Error: Exception while fetching townblock: " + worldName + " "
-							+ x + " " + z + " from memory!");
-					return false;
-				}
-			}
-
-		} catch (SQLException ex) {
-			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading TownBlock: "
-					+ (townBlock != null ? townBlock : "NULL") + " at line: " + line + " in the sql database", ex);
-			return false;
-		}
-
-		return true;
+	public boolean loadJailUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.JAIL, uuids);
 	}
 	
 	@Override
-	public boolean loadPlotGroups() {
-		TownyMessaging.sendDebugMsg("Loading plot groups.");
-		
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS ")) {
-			while (rs.next()) {
-				if (!loadPlotGroup(rs)) {
-					plugin.getLogger().warning("Loading Error: Could not read plotgroup data properly.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load PlotGroup sql Error - " + e.getMessage());
-			return false;
-		}
-
-		return true;
+	public boolean loadPlotGroupUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.PLOTGROUP, uuids);
 	}
 
 	@Override
-	public boolean loadDistricts() {
-		TownyMessaging.sendDebugMsg("Loading districts.");
-		
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "DISTRICTS ")) {
-			while (rs.next()) {
-				if (!loadDistrict(rs)) {
-					plugin.getLogger().warning("Loading Error: Could not read district data properly.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load District sql Error - " + e.getMessage());
-			return false;
-		}
+	public boolean loadDistrictUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.DISTRICT, uuids);
+	}
 
+	@Override
+	public boolean loadResidentUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.RESIDENT, uuids);
+	}
+
+	@Override
+	public boolean loadTownUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.TOWN, uuids);
+	}
+	
+	@Override
+	public boolean loadNationUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.NATION, uuids);
+	}
+	
+	@Override
+	public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectLoadException {
+		return loadResultSetOfType(TownyDBTableType.WORLD, uuids);
+	}
+
+	public boolean loadTownBlocks(Collection<TownBlock> townBlocks) throws ObjectLoadException {
+		for (TownBlock townblock : townBlocks)
+			if (!loadTownBlock(townblock))
+				throw new ObjectLoadException("Loading Error: Could not read the townblock with details: '" + townblock.toString() + "' from the TOWNBLOCKS table.");
 		return true;
+	}
+
+//	@Override
+//	public boolean loadWorlds() {
+//		try (Connection connection = getConnection();
+//			 Statement s = connection.createStatement();
+//			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
+//
+//			while (rs.next()) {
+//				String worldName;
+//				try {
+//					worldName = rs.getString("name");
+//				} catch (SQLException ex) {
+//					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a world name from SQL Database. Skipping loading world..", ex);
+//					continue;
+//				}
+//				TownyWorld world = universe.getWorld(worldName);
+//				if (world == null) {
+//					plugin.getLogger().severe(String.format("Loading Error: Could not fetch world '%s' from Towny universe while loading from SQL DB.", worldName));
+//					continue;
+//				}
+//				if (!loadWorld(rs)) {
+//					plugin.getLogger().warning("Loading Error: Could not read properly world data.");
+//					return false;
+//				}
+//			}
+//		} catch (SQLException e) {
+//			TownyMessaging.sendErrorMsg("SQL: Error reading worlds from SQL database!");
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean loadWorld(TownyWorld world) {
+//		try (Connection connection = getConnection();
+//			 PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
+//			ps.setString(1, world.getName());
+//
+//			try (ResultSet rs = ps.executeQuery()) {
+//				if (rs.next()) {
+//					return loadWorld(rs);
+//				}
+//			}
+//		} catch (SQLException e) {
+//			TownyMessaging.sendErrorMsg("SQL: Load world sql error (" + world.getName() + ")" + e.getMessage());
+//		}
+//		return false;
+//	}
+
+	/*
+	 * Methods that return objects as Maps for loading.
+	 */
+
+	@Override
+	public Map<String, String> getJailMap(UUID uuid) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS WHERE uuid='" + uuid + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find jail with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getPlotGroupMap(UUID uuid) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS WHERE groupID='" + uuid + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find plotgroup with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getDistrictMap(UUID uuid) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "DISTRICTS WHERE uuid='" + uuid + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find district with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getResidentMap(UUID uuid) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "RESIDENTS WHERE uuid='" + uuid + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find resident with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getTownMap(UUID uuid) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "TOWNS WHERE uuid='" + uuid + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find town with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getNationMap(UUID uuid) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "NATIONS WHERE uuid='" + uuid + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find nation with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getWorldMap(String name) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS WHERE name='" + name + "'")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Unable to find world with name " + name + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> getTownBlockMap(TownBlock townBlock) {
+		if (!isReady())
+			return null;
+		try (Statement s = getConnection().createStatement();
+			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
+			return loadResultSetIntoMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: "
+					+ (townBlock != null ? townBlock : "NULL") + " in the sql database");
+			return null;
+		}
+	}
+
+	/*
+	 * Save individual towny objects
+	 */
+
+	@Override
+	public synchronized boolean saveJail(Jail jail) {
+		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
+		try {
+			updateDB("JAILS", jail.getObjectDataMap(context), Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean savePlotGroup(PlotGroup group) {
+		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
+		try {
+			updateDB("PLOTGROUPS", group.getObjectDataMap(context), Collections.singletonList("groupID"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean saveDistrict(District district) {
+		TownyMessaging.sendDebugMsg("Saving district " + district.getName());
+		try {
+			updateDB("DISTRICTS", district.getObjectDataMap(context), Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save District unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveResident(Resident resident) {
+		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
+		try {
+			updateDB("RESIDENTS", resident.getObjectDataMap(context), Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveHibernatedResident(UUID uuid, long registered) {
+		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
+		try {
+			HashMap<String, Object> res_hm = new HashMap<>();
+			res_hm.put("uuid", uuid);
+			res_hm.put("registered", registered);
+
+			updateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
+			return true;
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Hibernated Resident unknown error " + e.getMessage());
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveTown(Town town) {
+		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
+		try {
+			updateDB("TOWNS", town.getObjectDataMap(context), Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveNation(Nation nation) {
+		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
+		try {
+			updateDB("NATIONS", nation.getObjectDataMap(context), Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveWorld(TownyWorld world) {
+		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
+		try {
+			updateDB("WORLDS", world.getObjectDataMap(context), Collections.singletonList("name"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save World unknown error (" + world.getName() + ")");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveTownBlock(TownBlock townBlock) {
+		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x"
+				+ townBlock.getZ());
+		try {
+			updateDB("TOWNBLOCKS", townBlock.getObjectDataMap(context), Arrays.asList("world", "x", "z"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override
@@ -1048,221 +961,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 		
 		return true;
-	}
-
-	private boolean loadPlotGroup(ResultSet rs) {
-		String uuid = null;
-		
-		try {
-			uuid = rs.getString("groupID");
-			PlotGroup group = universe.getGroup(UUID.fromString(uuid));
-			if (group == null) {
-				TownyMessaging.sendErrorMsg("SQL: A plot group was not registered properly on load!");
-				return true;
-			}
-			return group.load(loadResultSetIntoMap(rs));
-		} catch (SQLException | IllegalArgumentException e) {
-			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading plot group: " + uuid, e);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadPlotGroup(PlotGroup group) {
-		// Unused in SQL.
-		return true;
-	}
-
-	private boolean loadDistrict(ResultSet rs) {
-		String line = null;
-		String uuidString = null;
-		
-		try {
-			District district = universe.getDistrict(UUID.fromString(rs.getString("uuid")));
-			if (district == null) {
-				TownyMessaging.sendErrorMsg("SQL: A district was not registered properly on load!");
-				return true;
-			}
-			return district.load(loadResultSetIntoMap(rs));
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading district: " + uuidString
-			+ " at line: " + line + " in the sql database", e);
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean loadDistrict(District district) {
-		// Unused in SQL.
-		return true;
-	}
-	
-	@Override
-	public boolean loadJails() {
-		TownyMessaging.sendDebugMsg("Loading Jails");
-
-		try (Connection connection = getConnection();
-			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "JAILS ")) {
-			while (rs.next()) {
-				if (!loadJail(rs)) {
-					plugin.getLogger().warning("Loading Error: Could not read jail data properly.");
-					return false;
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Jail sql Error - " + e.getMessage());
-			return false;
-		}
-
-		return true;
-	}
-	
-	@Override
-	public boolean loadJail(Jail jail) {
-		// Unused in SQL.
-		return true;
-	}
-	
-	private boolean loadJail(ResultSet rs) {
-		String uuid = null;
-		try {
-			Jail jail = universe.getJail(UUID.fromString(rs.getString("uuid")));
-			if (jail == null) {
-				TownyMessaging.sendErrorMsg("SQL: A jail was not registered properly on load!");
-				return true;
-			}
-			return jail.load(loadResultSetIntoMap(rs));
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " sql Error - " + e.getMessage());
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Load Jail " + uuid + " unknown Error - ", e);
-		}
-
-		return false;
-	}
-	
-	/*
-	 * Save individual towny objects
-	 */
-
-	@Override
-	public synchronized boolean saveResident(Resident resident) {
-
-		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
-		try {
-			updateDB("RESIDENTS", resident.getObjectDataMap(context), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
-		}
-		return false;
-	}
-	
-	@Override
-	public synchronized boolean saveHibernatedResident(UUID uuid, long registered) {
-		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
-		try {
-			HashMap<String, Object> res_hm = new HashMap<>();
-			res_hm.put("uuid", uuid);
-			res_hm.put("registered", registered);
-
-			updateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
-			return true;
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Hibernated Resident unknown error " + e.getMessage());
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveTown(Town town) {
-
-		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
-		try {
-			updateDB("TOWNS", town.getObjectDataMap(context), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save Town unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean savePlotGroup(PlotGroup group) {
-		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
-		try {
-			updateDB("PLOTGROUPS", group.getObjectDataMap(context), Collections.singletonList("groupID"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save Plot groups unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean saveDistrict(District district) {
-		TownyMessaging.sendDebugMsg("Saving district " + district.getName());
-		try {
-			updateDB("DISTRICTS", district.getObjectDataMap(context), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save Districts unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveNation(Nation nation) {
-
-		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
-		try {
-			updateDB("NATIONS", nation.getObjectDataMap(context), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save Nation unknown error", e);
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveWorld(TownyWorld world) {
-
-		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
-		try {
-			updateDB("WORLDS", world.getObjectDataMap(context), Collections.singletonList("name"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save world unknown error (" + world.getName() + ")", e);
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveTownBlock(TownBlock townBlock) {
-
-		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorldCoord().toString());
-		try {
-			updateDB("TOWNBLOCKS", townBlock.getObjectDataMap(context), Arrays.asList("world", "x", "z"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save TownBlock unknown error", e);
-		}
-		return false;
-	}
-	
-	@Override
-	public synchronized boolean saveJail(Jail jail) {
-
-		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
-		try {
-			updateDB("JAILS", jail.getObjectDataMap(context), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Save jail unknown error", e);
-		}
-		return false;
 	}
 
 	/*
