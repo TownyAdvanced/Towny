@@ -26,7 +26,7 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.8 #install the python needed
+          python-version: 3.8.0 #install the python needed
       - name: create sponsors.txt
         run: python ./.github/workflows/prerelease/get_sponsors.py
       - name: create staging dir
