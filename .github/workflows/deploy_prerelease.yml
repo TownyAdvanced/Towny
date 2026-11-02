@@ -24,9 +24,9 @@ jobs:
         run: mvn -B clean package -DskipTests=false
 
       - name: setup python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.8.0 #install the python needed
+          python-version: '3.15.2' #install the python needed
       - name: create sponsors.txt
         run: python ./.github/workflows/prerelease/get_sponsors.py
       - name: create staging dir
