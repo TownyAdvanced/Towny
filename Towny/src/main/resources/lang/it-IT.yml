@@ -1524,7 +1524,7 @@ status_format_bracket_element: '<aqua>' #Colour applied to a status element with
 status_format_hover_key: '<green>' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
 status_format_hover_bracket_colour: '<gray>' #Colour applied to the brackets of a hover-able status screen element.
 status_format_key_important: '<red>' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
-status_splitter: ' <gray><unk> ' #Used in status screens where a splitter is used between values.
+status_splitter: ' <gray>|' #Used in status screens where a splitter is used between values.
 status_home_element: ' <gray>[Casa: %s]'
 status_about: "Riguardo a:"
 status_registered: 'Registrato il:'
@@ -1534,6 +1534,7 @@ status_rank_list: 'Lista Rango'
 status_hover_click_for_more: 'Click per altre informazioni.'
 status_jailed: 'Incarcerato:'
 status_bad_yes: '<red>SI'
+status_good_no: '<green>NO'
 status_resident_tax_title: 'Tassa di %s'
 help_menu_command: '<blue>'
 help_menu_subcommand: '<aqua>'
@@ -1635,6 +1636,8 @@ msg_jailed_war: 'Prigioniero di Guerra.'
 msg_jailed_handbook_1: 'Sembra che tu sia stato imprigionato per %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Questo è troppo cattivo ehh. Beh, cosa puoi fare al riguardo? Ecco alcuni consigli utili per te mentre ascolti la tua sentenza.'
+#Jail handbook messages
+msg_jailed_handbook_3.1: 'Sei stato incarcerato per %s. Una volta scontata la pena, tornerai in libertà.'
 #Jail handbook messages
 msg_jailed_handbook_4_can: 'Puoi scappare dalla prigione lasciando la tua città usando ''/town leave''.'
 #Jail handbook messages
@@ -1805,6 +1808,8 @@ msg_plot_already_of_type: 'Questo plot è già di tipo %s.'
 msg_town_board_reset: '<aqua>Ripristino bordo della città.'
 msg_nation_board_reset: '<aqua>Bacheca della Nazione ripristinata.'
 msg_town_has_no_jailslots: 'La prigione della città è piena.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x_for_x_bail: '%s è stato trasferito a %s nel carcere n. %s per %s, con una cauzione di %s fissata da %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x: '%s è stato inviato a %s al numero di cella %s per %s da %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'Sei stato incarcerato, la tua cauzione è %s.'
 msg_err_higher_than_max_allowed_bail_x: 'La tua cauzione impostata era più alta del massimo che è %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Le ore impostate sono state più alte del massimo che è %s.'
@@ -1917,6 +1922,8 @@ msg_perm_gui_folia: "Questo bottone attualmente non funziona per via del non fun
 msg_folia_scoreboard: "Cambiare la scoreboard non è attualmente supportato su Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Non puoi abbandonare questo blocco perché il blocco a %s,%s Non avrebbe abbastanza blocchi adiacenti (%s sono richiesti.)"
+#Message shown when a player tries to unclaim an outpost with attached townblocks, while the min_adjacent_blocks setting is in use.
+msg_err_cannot_unclaim_outpost_with_adjacent_claims: "Non è possibile rinunciare a un avamposto a cui siano annessi dei blocchi urbani."
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>La tua nazione ha riscosso %s di tasse dalle sue città."
 #Message shown when a nation pays taxes to its towns.
@@ -2010,6 +2017,7 @@ msg_err_name_validation_contains_numbers: "%s contiene numeri che non sono ammes
 msg_err_name_validation_used_in_command_structure: "%s è utilizzato nella struttura dei comandi, non è possibile utilizzare questo nome."
 msg_town_being_deleted_because_no_residents: "%s è stata eliminata perché ha perso il suo ultimo residente."
 outlawed_in: "Fuorilegge in"
+trusted_in: "Fidato in"
 msg_warning_town_deposit_hint: "Per mettere denaro nella tua banca della tua città utilizza /town deposit [cifra]."
 msg_warning_nation_deposit_hint: "Per mettere denaro nella banca della tua nazione utilizza /nation deposit [cifra]."
 teleport_warmup_title_dont_move: "<gold>Non muoverti!"
@@ -2022,6 +2030,9 @@ msg_err_town_cede_the_mayor_is_not_online: "Il sindaco di %s, %s non è online p
 msg_err_town_no_longer_owns_this_plot: "%s non possiede più questo lotto."
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s non può cedere il loro se homeblock."
 msg_town_cede_plot_confirmation_give_plot: "Sei sicuro di voler dare a %s questo lotto?"
+msg_town_cede_plot_confirmation_give_plot_cost: "Sei sicuro di voler assegnare questo appezzamento a %s? Questa operazione costerà %s."
+msg_town_cede_plot_err_not_enough_money: "Impossibile cedere il lotto a %s, non ci sono abbastanza soldi! (%s)"
+msg_town_cede_plot_offer_sent: "È stato possibile proporre a %s il lotto %s"
 msg_town_cede_plot_confirmation_accept_plot: "%s vorrebbe cedere il blocco della città di %s nella tua città, accetterai?"
 msg_town_cede_plot_accepted: "%s ha accettato il cedimento del tuo lotto."
 msg_town_cede_plot_denied: "%s ha rifiutato la tua offerta."
@@ -2103,3 +2114,20 @@ msg_nation_level_overridden_with: 'Il livello della nazione %s è stato impostat
 msg_nation_level_unset: "È stato rimosso il livello nazionale, dapprima impostato manualmente, della nazione %s. Il suo livello attuale \nè %s."
 msg_err_cannot_merge_x_seconds_remaining: 'È necessario attendere %s secondi prima di chiedere a %s di unirsi di nuovo.'
 msg_towny_prices_percentage_capped_at: ", fino a %s"
+msg_click_join_town: '<green>[Entra nella città]'
+status_join_town: 'Entra nella città'
+msg_click_join_town_hover: '<green>Clicca per entrare nella città di <aqua>%s'
+msg_err_resident_has_no_trusted_plots: "%s non gode di fiducia in nessuna delle zone della città di %s."
+msg_err_town_has_no_trusted_plots: "Nella tua città non ci sono lotti con residenti affidabili."
+msg_town_plots_trustlist_resident_title: "Elenco dei lotti affidabili di %s (%s)"
+msg_town_plots_trustlist_town_title: "%s Elenco dei lotti affidabili"
+msg_list_plotgroups_trustlist_component: " (Gruppo di appezzamenti %s)"
+msg_list_trusted_hover: "Fiduciari: %s"
+msg_err_no_ruined_town_here: "Per poterla rivendicare, devi trovarti in una città in rovina se non ne sei un residente."
+msg_err_cannot_claim_outpost_in_claimed_world: "Non puoi rivendicare un avamposto in questo mondo, poiché la tua città ha già dei territori rivendicati qui."
+msg_claim_resident_plot: '<aqua>%s ha rivendicato il lotto situato a %s.'
+msg_set_min_adj_chunks: '<aqua>Il numero minimo di blocchi adiacenti di %s è stato modificato con successo in %s.'
+status_min_adjacency: 'Adiacenza minima:'
+msg_err_cannot_list_outposts_because_town_ruined: "Non puoi controllare gli avamposti di questa città perché è in rovina."
+msg_jail_bossbar_duration: '%sSei in prigione a <red>%s</red> <gray>|</gray> Tempo rimanente: <aqua>%s</aqua>'
+msg_jail_bossbar_duration_bail: '%sSei in carcere a <red>%s</red> <gray>|</gray> Tempo rimanente: <aqua>%s</aqua> <gray>|</gray> La cauzione è fissata a <green>%s</green> <gray>(Paga con </gray>/res jail paybail<gray>)</gray>'
