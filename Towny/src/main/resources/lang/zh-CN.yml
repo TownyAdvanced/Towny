@@ -451,7 +451,7 @@ msg_nation_not_peaceful: '<aqua>国家的和平已被打破.'
 msg_nation_cant_peaceful: '<aqua>国家支付不起转变为和平国家的费用。你必须能够每天支付%s的费用。'
 msg_peaceful_disabled: '<aqua>全局国家和平已禁用。'
 msg_you_paid: '<aqua>你花费了%s来设置和平状态。'
-msg_nation_set_peace: '<aqua>成功改变国家状态.'
+msg_nation_set_peace: '<aqua>成功改变国家状态。'
 msg_nation_allow_peaceful: '<aqua>现在国家保持和平的权限为：%s'
 msg_mobremoval_world: '<aqua>阻止世界怪物生成: %s'
 msg_mobremoval_town: '<aqua>阻止城镇怪物生成: %s'
@@ -480,7 +480,7 @@ msg_nation_town_left: '<aqua>城镇 %s 离开了你的国家.'
 msg_nation_kicked: '<aqua>%s 把 %s 踢出了国家。'
 msg_nation_you_kicked: '<aqua>你把 %s 踢出了国家。'
 msg_raised_ass: '<aqua>%s 把 %s 提升为 %s 助手.'
-msg_lowered_to_res_by: '<aqua>你被 %s 降职了.'
+msg_lowered_to_res_by: '<aqua>你被 %s 降职为普通居民。'
 msg_lowered_to_res: '<aqua>%s 将 %s 降级为普通居民。'
 msg_invalid_name: '<aqua>以上名称无效。'
 msg_invited_join_town: '<aqua>%s 邀请 %s 加入城镇.'
@@ -1602,6 +1602,8 @@ msg_jailed_handbook_1: '看起来你因%s而被监禁。'
 #Jail handbook messages
 msg_jailed_handbook_2: '很遗憾，但你该当如何？这些小贴士或许有用，看一看吧。'
 #Jail handbook messages
+msg_jailed_handbook_3.1: '你已被监禁了%s，服刑后你将自由。'
+#Jail handbook messages
 msg_jailed_handbook_4_can: '你可使用“/town leave”离开城镇来逃离监狱。'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: '监禁期间你不能靠退出城镇越狱。'
@@ -2079,4 +2081,7 @@ msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
 msg_err_no_ruined_town_here: "当你不是居民时，你必须站在城镇废墟里才能重新声明它。"
+status_min_adjacency: '最小附加值: '
 msg_err_cannot_list_outposts_because_town_ruined: "你不能检查这个城镇的前哨，因为该镇已沦为废墟。"
+msg_jail_bossbar_duration: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua>'
+msg_jail_bossbar_duration_bail: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua> <gray>|</gray> 保释金设定为 <green>%s</green> <gray>(使用 </gray>/res jail paybail 来支付<gray>)</gray>'
