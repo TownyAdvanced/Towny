@@ -674,54 +674,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-//	@Override
-//	public boolean loadWorlds() {
-//		try (Connection connection = getConnection();
-//			 Statement s = connection.createStatement();
-//			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
-//
-//			while (rs.next()) {
-//				String worldName;
-//				try {
-//					worldName = rs.getString("name");
-//				} catch (SQLException ex) {
-//					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a world name from SQL Database. Skipping loading world..", ex);
-//					continue;
-//				}
-//				TownyWorld world = universe.getWorld(worldName);
-//				if (world == null) {
-//					plugin.getLogger().severe(String.format("Loading Error: Could not fetch world '%s' from Towny universe while loading from SQL DB.", worldName));
-//					continue;
-//				}
-//				if (!loadWorld(rs)) {
-//					plugin.getLogger().warning("Loading Error: Could not read properly world data.");
-//					return false;
-//				}
-//			}
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg("SQL: Error reading worlds from SQL database!");
-//			return false;
-//		}
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean loadWorld(TownyWorld world) {
-//		try (Connection connection = getConnection();
-//			 PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
-//			ps.setString(1, world.getName());
-//
-//			try (ResultSet rs = ps.executeQuery()) {
-//				if (rs.next()) {
-//					return loadWorld(rs);
-//				}
-//			}
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg("SQL: Load world sql error (" + world.getName() + ")" + e.getMessage());
-//		}
-//		return false;
-//	}
-
 	/*
 	 * Methods that return objects as Maps for loading.
 	 */

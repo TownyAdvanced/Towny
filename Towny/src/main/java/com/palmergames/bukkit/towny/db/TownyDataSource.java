@@ -45,12 +45,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * the database. 
  * 
  * TownyDatabaseHandler is responsible for using the database source
- * methods, removing individual objects, renaming objects, operating
- * with aspects of the Database which are always stored in Flatfile:
- * PlotBlockData, Snapshot and Regen queues.
+ * methods, removing individual objects, renaming objects, and 
+ * operating on the aspects of the Database which are always stored 
+ * in Flatfile: PlotBlockData, Snapshot and Regen queues.
  * 
  * The database source classes are responsible for providing keys,
- * loading and saving objects using Maps, deleting objects.
+ * loading and saving objects using Maps, deleting objects, all in
+ * their respective database types (ie: flatfile, mysql, etc.)
  * 
  * Creating new database sources is achieved by creating a new class
  * which extends TownyDatabaseHandler, and implementing the required
@@ -60,7 +61,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * --- : Loading process : ---
  *
  * - Load all the keys for each world, nation, town, and resident, jail,
- *   plotgroup, townblock into TownyUniverse.
+ *   plotgroup, district, and townblock into TownyUniverse.
  * - Parse over each key loaded into TownyUniverse, loading each object
  *   by requesting Maps made up of each object's data from the 
  *   DatabaseSource classes.
@@ -90,10 +91,15 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		final boolean loaded = loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList()
-				&& loadDistrictList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds()
-				&& loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups()
-				&& loadDistricts() && loadJails() && loadRegenList() && loadCooldowns();
+		final boolean loaded = 
+				// Load Object keys first, loaded into the TownyUniverse maps.
+				loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList()
+				&& loadDistrictList() && loadJailList() && loadResidentList() && loadTownBlockList()
+				// Load Objects in full after all keys are present in the TownyUniverse maps. 
+				&& loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks()
+				&& loadPlotGroups() && loadDistricts() && loadJails()
+				// Load extras.
+				&& loadRegenList() && loadCooldowns();
 
 		if (loaded) {
 			postLoad();
@@ -313,7 +319,8 @@ public abstract class TownyDataSource {
 
 	/*
 	 * Load object from the database into Memory, to be entered into the Objects
-	 * themselves, not used by Towny itself.
+	 * themselves, not used by Towny itself. Could be useful for plugins/database
+	 * types needing to load objects at will.
 	 */
 
 	public boolean loadJail(Jail jail) {
@@ -420,6 +427,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveRegenList();
 
+	abstract public boolean saveCooldowns();
+
 	/*
 	 * Individual objects saving methods. Methods are found in TownyFlatfile/SQlSource classes.
 	 */
@@ -442,8 +451,6 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveTownBlock(TownBlock townBlock);
 
-	abstract public boolean saveCooldowns();
-
 	/*
 	 * Save all of category
 	 */
@@ -456,21 +463,25 @@ public abstract class TownyDataSource {
 
 	public boolean savePlotGroups() {
 		TownyMessaging.sendDebugMsg("Saving all PlotGroups");
-		universe.getGroups().stream().forEach(g -> vetPlotGroupForSaving(g));
+		universe.getGroups().stream().forEach(g -> {
+			// Only save plotgroups which actually have townblocks associated with them.
+			if (g.hasTownBlocks())
+				savePlotGroup(g);
+			else
+				deletePlotGroup(g);
+		});
 		return true;
-	}
-
-	private void vetPlotGroupForSaving(PlotGroup g) {
-		// Only save plotgroups which actually have townblocks associated with them.
-		if (g.hasTownBlocks())
-			savePlotGroup(g);
-		else
-			deletePlotGroup(g);
 	}
 
 	public boolean saveDistricts() {
 		TownyMessaging.sendDebugMsg("Saving all Districts");
-		universe.getDistricts().stream().forEach(d -> saveDistrict(d));
+		universe.getDistricts().stream().forEach(d -> {
+			// Only save districts which actually have townblocks associated with them.
+			if (d.hasTownBlocks())
+				saveDistrict(d);
+			else
+				deleteDistrict(d);
+		});
 		return true;
 	}
 
@@ -624,7 +635,7 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	/*
-	 * Misc
+	 * Misc methods found in TownyDatabaseHandler
 	 */
 
 	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation);
@@ -643,6 +654,10 @@ public abstract class TownyDataSource {
 		return true;
 
 	}
+
+	/*
+	 * Deprecated method graveyard.
+	 */
 
 	/**
 	 * @deprecated Use {@link #newResident(String, UUID)} instead.
@@ -679,11 +694,10 @@ public abstract class TownyDataSource {
 	}
 
 	/**
-	 * @deprecated don't use this.
+	 * @deprecated Just don't use this.
 	 */
 	@Deprecated(since = "0.103.3.1")
 	public void newWorld(String name) throws NotRegisteredException {
 		throw new NotRegisteredException("This deprecated method can no longer function and will be removed soon.");
 	}
-
 }
