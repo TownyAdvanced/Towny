@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.ObjectLoadException;
 import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
@@ -25,6 +26,7 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Pair;
 import org.bukkit.Bukkit;
@@ -234,12 +236,32 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadTownList() {
-		return loadFlatFileListOfType(TownyDBFileType.TOWN, nameAndId -> universe.newTownInternal(nameAndId.name(), nameAndId.uuid()));
+		return loadFlatFileListOfType(TownyDBFileType.TOWN, nameAndId -> {
+			String name = nameAndId.name();
+			try {
+				NameValidation.checkAndFilterTownNameOrThrow(name);
+			} catch (InvalidNameException e) {
+				name = generateReplacementName(true);
+				String nameAndReason = String.format("'%s', invalid because: %s", nameAndId.name(), e.getMessage());
+				super.pendingRenamedTowns.add(Pair.pair(nameAndId.uuid().toString(), nameAndReason));
+			}
+			universe.newTownInternal(name, nameAndId.uuid());
+		});
 	}
 
 	@Override
 	public boolean loadNationList() {
-		return loadFlatFileListOfType(TownyDBFileType.NATION, nameAndId -> universe.newNationInternal(nameAndId.name(), nameAndId.uuid()));
+		return loadFlatFileListOfType(TownyDBFileType.NATION, nameAndId -> {
+			String name = nameAndId.name();
+			try {
+				NameValidation.checkAndFilterNationNameOrThrow(name);
+			} catch (InvalidNameException e) {
+				name = generateReplacementName(false);
+				String nameAndReason = String.format("'%s', invalid because: %s", nameAndId.name(), e.getMessage());
+				super.pendingRenamedNations.add(Pair.pair(nameAndId.uuid().toString(), nameAndReason));
+			}
+			universe.newNationInternal(name, nameAndId.uuid());
+		});
 	}
 
 	@Override

@@ -111,6 +111,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final ScheduledTask task;
 	protected List<Pair<String, String>> pendingDuplicateResidents = new ArrayList<>();
+	protected List<Pair<String, String>> pendingRenamedTowns = new ArrayList<>();
+	protected List<Pair<String, String>> pendingRenamedNations = new ArrayList<>();
 	
 	protected TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
@@ -202,6 +204,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void postLoad() {
 		deleteDuplicateResidents();
+		handleRenamedTownsAndNations();
 	}
 
 	/*
@@ -443,6 +446,25 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		this.pendingDuplicateResidents.clear();
+	}
+
+	private void handleRenamedTownsAndNations() {
+		for (final Pair<String, String> townPair : this.pendingRenamedTowns) {
+			Town town = universe.getTown(UUID.fromString(townPair.left()));
+			if (town != null && town.exists()) {
+				Towny.getPlugin().getLogger().warning(String.format("Towny loaded a town with an invalid name (%s). That town has been renamed to %s.", townPair.right(), town.getName()));
+				town.save();
+			}
+		}
+		for (final Pair<String, String> nationPair : this.pendingRenamedNations) {
+			Nation nation = universe.getNation(UUID.fromString(nationPair.left()));
+			if (nation != null && nation.exists()) {
+				Towny.getPlugin().getLogger().warning(String.format("Towny loaded a nation with an invalid name (%s). That town has been renamed to %s.", nationPair.right(), nation.getName()));
+				nation.save();
+			}
+		}
+		this.pendingRenamedTowns.clear();
+		this.pendingRenamedNations.clear();
 	}
 
 	/*
