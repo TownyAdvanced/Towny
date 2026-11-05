@@ -95,16 +95,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	public enum TownyDBFileType {
-		ALLIANCE("alliances", ".txt"), NATION("nations", ".txt"), TOWN("towns", ".txt"), RESIDENT("residents", ".txt"),
-		HIBERNATED_RESIDENT("residents" + File.separator + "hibernated", ".txt"), JAIL("jails", ".txt"),
-		WORLD("worlds", ".txt"), TOWNBLOCK("townblocks", ".data"), PLOTGROUP("plotgroups", ".data"), DISTRICT("districts", ".data");
+		NATION("nations", ".txt", false), TOWN("towns", ".txt", false), RESIDENT("residents", ".txt", false),
+		HIBERNATED_RESIDENT("residents" + File.separator + "hibernated", ".txt", false), JAIL("jails", ".txt", true),
+		WORLD("worlds", ".txt", false), TOWNBLOCK("townblocks", ".data", true), PLOTGROUP("plotgroups", ".data", true),
+		DISTRICT("districts", ".data", true);
 
 		String folderName;
 		String fileExtension;
+		boolean hasOnlyUUID;
 
-		TownyDBFileType(String folderName, String fileExtension) {
+		TownyDBFileType(String folderName, String fileExtension, boolean hasOnlyUUID) {
 			this.folderName = folderName;
 			this.fileExtension = fileExtension;
+			this.hasOnlyUUID = hasOnlyUUID;
 		}
 
 		private String getSingular() {
@@ -125,6 +128,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return "Loading Error: Could not read the " + getSingular() + " with UUID '" + uuid + "' from the "
 					+ folderName + " folder.";
 		}
+
+		public boolean hasOnlyUUID() {
+			return hasOnlyUUID;
+		}
 	}
 
 	private String getFileOfTypeWithUUID(TownyDBFileType type, UUID uuid) {
@@ -144,10 +151,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg("Loading " + files.length + " entries from the " + type.folderName + " folder...");
 
 		for (File file : files) {
-			String fileName = file.getName();
+			String fileName = file.getName().replace(".txt", "").replace(".data", "");
+
+			// Jails, Districts and PlotGroups have always been UUID-named files and don't require a name.
+			if (type.hasOnlyUUID() && fileName.length() == UUID_LENGTH) {
+				consumer.accept(new NameAndId("", UUID.fromString(fileName)));
+				continue;
+			}
+
 			final NameAndId nameAndId = this.loadNameAndUUIDFromFile(file, fileName, type.name());
 
-			if (fileName.length() != UUID_LENGTH) {
+			if (fileName.length() != UUID_LENGTH && !type.name().equals("WORLD")) {
 				final Path filePath = file.toPath();
 
 				try {
@@ -180,6 +194,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return switch (type) {
 		case JAIL -> loadJailData(uuid);
 		case PLOTGROUP -> loadPlotGroupData(uuid);
+		case DISTRICT -> loadDistrictData(uuid);
 		case RESIDENT -> loadResidentData(uuid);
 		case TOWN -> loadTownData(uuid);
 		case NATION -> loadNationData(uuid);
@@ -195,7 +210,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	private String getTownBlockFilename(TownBlock townBlock) {
 
-		return dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getUUID()
+		return dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName()
 				+ File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize()
 				+ ".data";
 	}
@@ -558,7 +573,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveWorld(TownyWorld world) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(world.getObjectDataMap(context), getFileOfTypeWithUUID(TownyDBFileType.WORLD, world.getUUID())));
+			this.queryQueue.add(new FlatFileSaveTask(world.getObjectDataMap(context), getFileOfTypeWithName(TownyDBFileType.WORLD, world.getName())));
 			return true;
 		} catch (ObjectSaveException e) {
 			plugin.getLogger().log(Level.WARNING, e.getMessage());
@@ -662,137 +677,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		deleteFileByTypeAndUUID(TownyDBFileType.JAIL, jail.getUUID());
 	}
 
-//	/*
-//	 * Load keys
-//	 */
-//	
-//	@Override
-//	public boolean loadTownBlockList() {
-//		
-//		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_townblock_list"));
-//
-//		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
-//		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
-//		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_folders_found", worldFolders.length));
-//		boolean mismatched = false;
-//		int mismatchedCount = 0;
-//		try {
-//			for (File worldfolder : worldFolders) {
-//				String worldName = worldfolder.getName();
-//				if (BukkitTools.getWorld(worldName) == null) {
-//					Towny.getPlugin().getScheduler().runAsyncLater(() -> {
-//						// Check if the World is still null in Bukkit and warn the admin.
-//						if (BukkitTools.getWorld(worldName) == null) {
-//							Towny.getPlugin().getLogger().warning("Your towny\\data\\townblocks\\ folder contains a folder named '"
-//									+ worldName + "' which doesn't appear to exist on your Bukkit server!");
-//							Towny.getPlugin().getLogger().warning("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
-//						}
-//					}, 20L);
-//				}
-//
-//				TownyWorld world = universe.getWorld(worldName);
-//				if (world == null) {
-//					newWorld(worldName);
-//					world = universe.getWorld(worldName);
-//				}
-//				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
-//				File[] townBlockFiles = worldFolder.listFiles(file->file.getName().endsWith(".data"));
-//				int total = 0;
-//				for (File townBlockFile : townBlockFiles) {
-//					String[] coords = townBlockFile.getName().split("_");
-//					String[] size = coords[2].split("\\.");
-//					// Do not load a townBlockFile if it does not use teh currently set town_block_size.
-//					if (Integer.parseInt(size[0]) != TownySettings.getTownBlockSize()) {
-//						mismatched = true;
-//						mismatchedCount++;
-//						continue;
-//					}
-//					int x = Integer.parseInt(coords[0]);
-//					int z = Integer.parseInt(coords[1]);
-//	                TownBlock townBlock = new TownBlock(x, z, world);
-//	                universe.addTownBlock(townBlock);
-//					total++;
-//				}
-//				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_world_loaded_townblocks", worldName, total));
-//			}
-//			if (mismatched)
-//				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_mismatched_townblock_size", mismatchedCount));
-//
-//			return true;
-//		} catch (Exception e1) {
-//			plugin.getLogger().log(Level.WARNING, "An exception occurred while loading the flatfile townblock list", e1);
-//			return false;
-//		}
-//	}
-//
-//	@Override
-//	public boolean loadResidentList() {
-//		
-//		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_resident_list"));
-//		List<String> residents = receiveListFromLegacyFile("residents.txt");
-//		File[] residentFiles = receiveObjectFiles("residents", ".txt");
-//
-//		for (File residentFile : residentFiles) {
-//			String fileName = residentFile.getName().replace(".txt", "");
-//
-//			// Don't load resident files if they weren't in the residents.txt file.
-//			if (!residents.isEmpty() && !residents.contains(fileName)) {
-//				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_resident_not_found", residentFile.getName()));
-//				deleteFile(residentFile.getAbsolutePath());
-//				continue;
-//			}
-//			
-//			String name;
-//			String uuidString;
-//
-//			if (fileName.length() == UUID_LENGTH) {
-//				name = loadKeyFromFile(residentFile, "name");
-//				uuidString = fileName;
-//			} else {
-//				uuidString = this.loadKeyFromFile(residentFile, "uuid");
-//				name = fileName;
-//			}
-//
-//			final @Nullable UUID uuid = super.parsePlayerUUID(uuidString, fileName);
-//
-//			if (uuid == null) {
-//				plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
-//				continue;
-//			}
-//			
-//			if (fileName.length() != UUID_LENGTH) {
-//				final Path residentFilePath = residentFile.toPath();
-//
-//				try {
-//					Files.move(residentFilePath, residentFilePath.resolveSibling(uuid + ".txt"), StandardCopyOption.REPLACE_EXISTING);
-//				} catch (IOException e) {
-//					plugin.getSLF4JLogger().warn("Failed to rename name-based resident file '{}' to uuid variant", fileName, e);
-//					return false;
-//				}
-//			}
-//				
-//			try {
-//				newResident(name, uuid);
-//			} catch (NotRegisteredException e) {
-//				// Thrown if the resident name does not pass the filters.
-//				plugin.getLogger().log(Level.WARNING, "Resident " + name + " has an invalid name", e);
-//				return false;
-//			} catch (AlreadyRegisteredException e) {
-//				final Resident otherResident = universe.getResident(uuid);
-//				if (otherResident != null && !otherResident.getName().equals(name)) {
-//					// UUID is already registered
-//					super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
-//				}
-//			}			
-//		}
-//
-//		if (!residents.isEmpty())
-//			deleteFile(dataFolderPath + File.separator + "residents.txt");
-//
-//		return true;
-//			
-//	}
-//
 //	@Override
 //	public boolean loadTownList() {
 //		

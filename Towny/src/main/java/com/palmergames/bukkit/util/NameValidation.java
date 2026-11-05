@@ -3,6 +3,7 @@ package com.palmergames.bukkit.util;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -88,6 +89,9 @@ public class NameValidation {
 		if (out.startsWith(TownySettings.getTownAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
 
+		if (TownyUniverse.getInstance().hasTown(out))
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
+
 		return out;
 	}
 
@@ -113,6 +117,9 @@ public class NameValidation {
 
 		if (out.startsWith(TownySettings.getNationAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
+
+		if (TownyUniverse.getInstance().hasNation(out))
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
 
 		return out;
 	}

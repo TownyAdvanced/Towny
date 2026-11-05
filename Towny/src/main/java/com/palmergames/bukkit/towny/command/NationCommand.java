@@ -967,8 +967,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_already_nation"));
 
 		String filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
-		if (TownyUniverse.getInstance().hasNation(filteredName))
-			throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", filteredName));
 
 		BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
 

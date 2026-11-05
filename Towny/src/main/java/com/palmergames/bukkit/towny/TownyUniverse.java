@@ -620,7 +620,9 @@ public class TownyUniverse {
 	@ApiStatus.Internal
 	public void newTownInternal(String name, UUID uuid) {
 		Town town = new Town(name, uuid);
-		registerTownUUID(town);
+		try {
+			registerTown(town);
+		} catch (AlreadyRegisteredException ignored) {}
 	}
 
 	/**
@@ -799,7 +801,9 @@ public class TownyUniverse {
 	@ApiStatus.Internal
 	public void newNationInternal(@NotNull String nationName, @NotNull UUID nationUUID) {
 		Nation nation = new Nation(nationName, nationUUID);
-		registerNationUUID(nation);
+		try {
+			registerNation(nation);
+		} catch (AlreadyRegisteredException ignored) {}
 	}
 
 	/**
@@ -896,7 +900,7 @@ public class TownyUniverse {
 	@ApiStatus.Internal
 	public void newWorldInternal(@NotNull String worldName, @NotNull UUID worldUUID) {
 		TownyWorld world = new TownyWorld(worldName, worldUUID);
-		registerTownyWorldUUID(world);
+		registerTownyWorld(world);
 	}
 
 	/**
@@ -919,8 +923,8 @@ public class TownyUniverse {
 
 	public void registerTownyWorld(@NotNull TownyWorld world) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
-		worldUUIDMap.putIfAbsent(world.getUUID(), world);
 		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
+		registerTownyWorldUUID(world);
 	}
 
 	public Map<UUID, TownyWorld> getWorldIDMap() {
