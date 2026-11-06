@@ -43,10 +43,12 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
+import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -150,6 +152,28 @@ public class TownyCustomListener implements Listener {
 		//TODO: at some point it might be nice to have a written_book given to mayors 
 		// which could contain the above advice about depositing money, or containing
 		// links to the commands page on the wiki.
+		
+		if (mayor.isNPC()) {
+			return;
+		}
+
+		Player player = mayor.getPlayer();
+		if (player == null) {
+			return;
+		}
+		List<Nation> nationsInRange = NationUtil.getOpenNationsInRange(town, false);
+		if (nationsInRange.isEmpty()) {
+			return;
+		}
+		Translator translator = Translator.locale(player);
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		for (Nation nation : nationsInRange) {
+			sb.append("\n- ").append(translator.of("msg_new_town_can_join_nations_line", nation.getName(), TownySettings.getNationBonusBlocks(nation)));
+			if (++count == 10) break;
+		}
+		
+		TownyMessaging.sendMsg(player, Translatable.of("msg_new_town_can_join_nations", sb.toString()));
 	}
 	
 	/**

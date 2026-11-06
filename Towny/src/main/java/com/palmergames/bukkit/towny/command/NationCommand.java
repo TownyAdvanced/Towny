@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
@@ -54,6 +56,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
@@ -66,6 +69,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -87,6 +91,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
 
 import java.io.InvalidObjectException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -203,6 +208,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"help",
 		"list"
 	);
+	
+	private static final Cache<UUID, List<String>> nationJoinTabCompleteCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.build();
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -232,6 +241,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "ranklist":
 				case "online":
 				case "join":
+					if (args.length == 2) {
+						Town ownTown = res.getTownOrNull();
+						if (ownTown == null) {
+							return getTownyStartingWith(args[1], "n");
+						}
+						List<String> nations = nationJoinTabCompleteCache.asMap().computeIfAbsent(ownTown.getUUID(), k -> NationUtil.getNationJoinTabComplete(ownTown));
+						return NameUtil.filterByStart(nations, args[1]);
+					}
+					break;
 				case "delete":
 				case "merge":
 				case "baltop":

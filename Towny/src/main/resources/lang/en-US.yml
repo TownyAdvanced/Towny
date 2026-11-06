@@ -2621,3 +2621,6 @@ msg_err_cannot_list_outposts_because_town_ruined: "You cannot use check this tow
 
 msg_jail_bossbar_duration: '%sYou are jailed in <red>%s</red> <gray>|</gray> Time left: <aqua>%s</aqua>'
 msg_jail_bossbar_duration_bail: '%sYou are jailed in <red>%s</red> <gray>|</gray> Time left: <aqua>%s</aqua> <gray>|</gray> Bail is set at <green>%s</green> <gray>(Pay with </gray>/res jail paybail<gray>)</gray>'
+
+msg_new_town_can_join_nations: "<green>Your new town can join the following nations in range: <aqua>%s"
+msg_new_town_can_join_nations_line: "%s (Bonus: %d)"
