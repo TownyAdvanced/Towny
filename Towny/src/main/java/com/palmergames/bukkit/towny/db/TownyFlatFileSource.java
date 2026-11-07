@@ -587,7 +587,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (!townBlock.hasTown())
 			return false;
 
-		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName()); // TODO: This is probably going to become a UUID
+		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName());
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(townBlock.getObjectDataMap(context), getTownBlockFilename(townBlock)));
 			return true;

@@ -89,7 +89,7 @@ public class NameValidation {
 		if (out.startsWith(TownySettings.getTownAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
 
-		if (TownyUniverse.getInstance().hasTown(out))
+		if (TownyUniverse.getInstance().getTowns().stream().anyMatch(t -> t.getName().equalsIgnoreCase(out)))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
 
 		return out;
@@ -118,7 +118,7 @@ public class NameValidation {
 		if (out.startsWith(TownySettings.getNationAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
 
-		if (TownyUniverse.getInstance().hasNation(out))
+		if (TownyUniverse.getInstance().getNations().stream().anyMatch(n -> n.getName().equalsIgnoreCase(out)))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
 
 		return out;

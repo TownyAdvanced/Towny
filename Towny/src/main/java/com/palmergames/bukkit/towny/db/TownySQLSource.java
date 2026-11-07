@@ -58,7 +58,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
-	private final String tb_prefix;
+	private static String tb_prefix;
 	private static final SerializationContext context = new SerializationContext(false);
 	private final HikariDataSource hikariDataSource;
 
@@ -74,7 +74,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Setup SQL connection
 		 */
-		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase(Locale.ROOT);
 		
 		String dsn = "jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + TownySettings.getSQLDBName() + TownySettings.getSQLFlags();
 		HikariConfig config = new HikariConfig();
@@ -178,6 +178,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		return true;
 
+	}
+
+	/**
+	 * Builds the SQL string during the saving of each object.
+	 * @param type
+	 * @param args
+	 * @return
+	 */
+	private boolean updateDB(TownyDBTableType type, Map<String, ?> args) {
+		List<String> keys = type.equals(TownyDBTableType.TOWNBLOCK)
+				? Arrays.asList("world", "x", "z") // TownBlocks have a distinct key made of multiple elements.
+				: Collections.singletonList(type.primaryKey);
+		this.queryQueue.add(new SQLTask(this, type.tableName, args, keys));
+		return true;
 	}
 
 	@SuppressWarnings("unused")
@@ -302,7 +316,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		} catch (SQLException e) {
 
-			Towny.getPlugin().getLogger().warning("SQL: " + e.getMessage() + " --> " + stmt.toString());
+			if (stmt != null)
+				Towny.getPlugin().getLogger().warning("SQL: " + e.getMessage() + " --> " + stmt.toString());
+			else 
+				Towny.getPlugin().getLogger().warning("SQL: " + e.getMessage());
 
 		} finally {
 
@@ -397,46 +414,59 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 	
 	public enum TownyDBTableType {
-		JAIL("JAILS", "SELECT uuid FROM ", "uuid"),
-		PLOTGROUP("PLOTGROUPS", "SELECT groupID FROM ", "groupID"),
-		DISTRICT("DISTRICTS", "SELECT uuid FROM ", "uuid"),
-		RESIDENT("RESIDENTS", "SELECT uuid FROM ", "uuid"),
-		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "", "uuid"),
-		TOWN("TOWNS", "SELECT uuid FROM ", "uuid"),
-		NATION("NATIONS", "SELECT uuid FROM ", "uuid"),
-		WORLD("WORLDS", "SELECT name FROM ", "name"),
-		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name"),
-		COOLDOWN("COOLDOWNS", "SELECT * FROM ", "key");
-		
-		private final String tableName;
-		@SuppressWarnings("unused")
-		private String queryString;
-		@SuppressWarnings("unused")
-		private String primaryKey;
+		JAIL("JAILS", "uuid", "uuid"),
+		PLOTGROUP("PLOTGROUPS", "groupID", "groupID"),
+		DISTRICT("DISTRICTS", "uuid", "uuid"),
+		RESIDENT("RESIDENTS", "name,uuid", "uuid"),
+		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "*", "uuid"),
+		TOWN("TOWNS", "name,uuid", "uuid"),
+		NATION("NATIONS", "name,uuid", "uuid"),
+		WORLD("WORLDS", "name,uuid", "name"),
+		TOWNBLOCK("TOWNBLOCKS", "world,x,z", "world,x,z"),
+		COOLDOWN("COOLDOWNS", "*", "key");
 
-		TownyDBTableType(String tableName, String queryString, String primaryKey) {
+		private final String tableName;
+		private final String queryStringSlug;
+		private final String primaryKey;
+
+		TownyDBTableType(String tableName, String queryStringSlug, String primaryKey) {
 			this.tableName = tableName;
-			this.queryString = queryString;
+			this.queryStringSlug = queryStringSlug;
 			this.primaryKey = primaryKey;
 		}
-		
+
 		public String tableName() {
 			return tableName;
 		}
-		
-		public String primaryKey() {
-			return primaryKey;
+
+		/**
+		 * @return the Query used to look up an objects key information, used in loading
+		 *         Lists of objects before they load completely.
+		 */
+		public String getKeyQuery() {
+			return String.format("SELECT %s FROM %s", queryStringSlug, tb_prefix + tableName);
 		}
-		
+
+		/**
+		 * @param key the UUID to look up an objects Row.
+		 * @return the String needed to query a Row of an object that is being loaded fully.
+		 */
+		public String getRowQuery(UUID key) {
+			return getRowQuery(key.toString());
+		}
+
+		/**
+		 * @param key the name to look up an objects Row.
+		 * @return the String needed to query a Row of an object that is being loaded fully.
+		 */
+		public String getRowQuery(String key) {
+			return String.format("SELECT * FROM %s WHERE %s=%s", tb_prefix + tableName, primaryKey, key);
+		}
+
 		private String getSingular() {
-			// Hibernated Residents are never loaded so this method is never called on them.
 			return tableName.substring(0, tableName.length()-1).toLowerCase(Locale.ROOT);
 		}
-		
-		public String getSaveLocation(String rowKeyName) {
-			return TownySettings.getSQLTablePrefix() + tableName + File.separator + rowKeyName;
-		}
-		
+
 		public String getLoadErrorMsg(UUID uuid) {
 			return "Loading Error: Could not read the " + getSingular() + " with UUID '" + uuid + "' from the " + tableName + " table.";
 		}
@@ -444,30 +474,38 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	private boolean loadResultSetListOfType(TownyDBTableType type, Consumer<NameAndId> consumer) {
 		TownyMessaging.sendDebugMsg("Searching for " + type.tableName.toLowerCase(Locale.ROOT) + "...");
-		if (!isReady())
+		if (!isReady()) {
+			TownyMessaging.sendDebugMsg("Hikari is not currently ready!");
 			return false;
-		
+		}
 		try {
 			try (Statement s = getConnection().createStatement()) {
-				ResultSet rs = s.executeQuery(type.queryString + tb_prefix + type.tableName);
+				ResultSet rs = s.executeQuery(type.getKeyQuery());
 				if (rs.getFetchSize() != 0)
 					TownyMessaging.sendDebugMsg("Loading " + rs.getFetchSize() + " entries from the " + type.tableName + " table...");
 
 				while (rs.next()) {
-					UUID uuid = UUID.fromString(rs.getString(type.primaryKey));
-					String name = null;
-					try {
-						name = rs.getString("name");
-					} catch (SQLException ignored) {} // Some data types do not store a name.
+					switch (type) {
+					// These objects don't require a name at all.
+					case JAIL, PLOTGROUP, DISTRICT -> consumer.accept(new NameAndId("", UUID.fromString(rs.getString(type.primaryKey))));
+					// Worlds have UUID and name, but the name is the primary key.
+					case WORLD -> consumer.accept(new NameAndId(rs.getString("name"), UUID.fromString(rs.getString("uuid"))));
+					// The remaining objects loaded this way require a UUID and name, with the UUID being the primary key. 
+					case NATION, TOWN, RESIDENT -> {
+						UUID uuid = UUID.fromString(rs.getString(type.primaryKey));
+						String name = rs.getString("name");
+						// Residents that are NPCs can have special UUID versions applied to them.
+						if (type.equals(TownyDBTableType.RESIDENT) && name != null)
+							uuid = super.parsePlayerUUID(uuid.toString(), name);
 
-					// Residents that are NPCs can have special UUID versions applied to them.
-					if (type.equals(TownyDBTableType.RESIDENT) && name != null)
-						uuid = super.parsePlayerUUID(uuid.toString(), name);
-
-					consumer.accept(new NameAndId(name, uuid));
+						consumer.accept(new NameAndId(name, uuid));
+					}
+					case TOWNBLOCK, COOLDOWN, HIBERNATED_RESIDENT -> throw new IllegalArgumentException("Unexpected value: " + type);
+					default -> throw new IllegalArgumentException("Unexpected value: " + type);
+					}
 				}
 			}
-			
+
 			return true;
 		} catch (SQLException s) {
 			s.printStackTrace();
@@ -574,8 +612,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS")) {
-				
+			 ResultSet rs = s.executeQuery(TownyDBTableType.TOWNBLOCK.getKeyQuery())) {
+
 			int total = 0;
 			while (rs.next()) {
 				String worldName = rs.getString("world");
@@ -683,7 +721,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS WHERE uuid='" + uuid + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.JAIL.getRowQuery(uuid))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find jail with UUID " + uuid.toString() + " in the database!");
@@ -696,7 +734,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS WHERE groupID='" + uuid + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.PLOTGROUP.getRowQuery(uuid))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find plotgroup with UUID " + uuid.toString() + " in the database!");
@@ -709,7 +747,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "DISTRICTS WHERE uuid='" + uuid + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.DISTRICT.getRowQuery(uuid))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find district with UUID " + uuid.toString() + " in the database!");
@@ -722,7 +760,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "RESIDENTS WHERE uuid='" + uuid + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.RESIDENT.getRowQuery(uuid))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find resident with UUID " + uuid.toString() + " in the database!");
@@ -735,7 +773,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "TOWNS WHERE uuid='" + uuid + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.TOWN.getRowQuery(uuid))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find town with UUID " + uuid.toString() + " in the database!");
@@ -748,7 +786,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "NATIONS WHERE uuid='" + uuid + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.NATION.getRowQuery(uuid))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find nation with UUID " + uuid.toString() + " in the database!");
@@ -761,7 +799,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS WHERE name='" + name + "'")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.WORLD.getRowQuery(name))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find world with name " + name + " in the database!");
@@ -774,11 +812,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!isReady())
 			return null;
 		try (Statement s = getConnection().createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
+			ResultSet rs = s.executeQuery(TownyDBTableType.TOWNBLOCK.getRowQuery(townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ()))) {
 			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: "
-					+ (townBlock != null ? townBlock : "NULL") + " in the sql database");
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: " + (townBlock != null ? townBlock : "NULL") + " in the sql database");
 			return null;
 		}
 	}
@@ -791,7 +828,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveJail(Jail jail) {
 		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
 		try {
-			updateDB("JAILS", jail.getObjectDataMap(context), Collections.singletonList("uuid"));
+			updateDB(TownyDBTableType.JAIL, jail.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
@@ -804,7 +841,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean savePlotGroup(PlotGroup group) {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
-			updateDB("PLOTGROUPS", group.getObjectDataMap(context), Collections.singletonList("groupID"));
+			updateDB(TownyDBTableType.PLOTGROUP, group.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
@@ -817,7 +854,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean saveDistrict(District district) {
 		TownyMessaging.sendDebugMsg("Saving district " + district.getName());
 		try {
-			updateDB("DISTRICTS", district.getObjectDataMap(context), Collections.singletonList("uuid"));
+			updateDB(TownyDBTableType.DISTRICT, district.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save District unknown error");
@@ -830,7 +867,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveResident(Resident resident) {
 		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
 		try {
-			updateDB("RESIDENTS", resident.getObjectDataMap(context), Collections.singletonList("uuid"));
+			updateDB(TownyDBTableType.RESIDENT, resident.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
@@ -846,7 +883,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("uuid", uuid);
 			res_hm.put("registered", registered);
 
-			updateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
+			updateDB(TownyDBTableType.HIBERNATED_RESIDENT, res_hm);
 			return true;
 
 		} catch (Exception e) {
@@ -859,7 +896,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveTown(Town town) {
 		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
 		try {
-			updateDB("TOWNS", town.getObjectDataMap(context), Collections.singletonList("uuid"));
+			updateDB(TownyDBTableType.TOWN, town.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
@@ -872,7 +909,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveNation(Nation nation) {
 		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
 		try {
-			updateDB("NATIONS", nation.getObjectDataMap(context), Collections.singletonList("uuid"));
+			updateDB(TownyDBTableType.NATION, nation.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
@@ -885,7 +922,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveWorld(TownyWorld world) {
 		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
 		try {
-			updateDB("WORLDS", world.getObjectDataMap(context), Collections.singletonList("name"));
+			updateDB(TownyDBTableType.WORLD, world.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save World unknown error (" + world.getName() + ")");
@@ -899,7 +936,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x"
 				+ townBlock.getZ());
 		try {
-			updateDB("TOWNBLOCKS", townBlock.getObjectDataMap(context), Arrays.asList("world", "x", "z"));
+			updateDB(TownyDBTableType.TOWNBLOCK, townBlock.getObjectDataMap(context));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
@@ -911,7 +948,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadCooldowns() {
 		try (Connection connection = getConnection();
-		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tb_prefix + TownyDBTableType.COOLDOWN.tableName()); 
+		     PreparedStatement statement = connection.prepareStatement(TownyDBTableType.COOLDOWN.getKeyQuery()); 
 		     ResultSet resultSet = statement.executeQuery()) {
 			
 			while (resultSet.next())
@@ -931,7 +968,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			data.put("key", entry.getKey());
 			data.put("expiry", entry.getValue());
 
-			queueUpdateDB(TownyDBTableType.COOLDOWN.tableName(), data, Collections.singletonList("key"));
+			queueUpdateDB(TownyDBTableType.COOLDOWN.tableName, data, Collections.singletonList(TownyDBTableType.COOLDOWN.primaryKey));
 		}
 		
 		return true;
