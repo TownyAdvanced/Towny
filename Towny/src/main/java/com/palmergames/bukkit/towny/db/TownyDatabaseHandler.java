@@ -288,7 +288,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 
 	public boolean loadJailData(UUID uuid) {
-		Jail jail = TownyUniverse.getInstance().getJail(uuid);
+		Jail jail = universe.getJail(uuid);
 		if (jail == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a jail with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
@@ -300,7 +300,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public boolean loadPlotGroupData(UUID uuid) {
-		PlotGroup plotGroup = TownyUniverse.getInstance().getGroup(uuid);
+		PlotGroup plotGroup = universe.getGroup(uuid);
 		if (plotGroup == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a plotgroup with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
@@ -312,7 +312,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public boolean loadDistrictData(UUID uuid) {
-		District district = TownyUniverse.getInstance().getDistrict(uuid);
+		District district = universe.getDistrict(uuid);
 		if (district == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a district with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
@@ -324,7 +324,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public boolean loadResidentData(UUID uuid) {
-		Resident resident = TownyUniverse.getInstance().getResident(uuid);
+		Resident resident = universe.getResident(uuid);
 		if (resident == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a resident with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
@@ -336,7 +336,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public boolean loadTownData(UUID uuid) {
-		Town town = TownyUniverse.getInstance().getTown(uuid);
+		Town town = universe.getTown(uuid);
 		if (town == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a town with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
@@ -348,7 +348,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public boolean loadNationData(UUID uuid) {
-		Nation nation = TownyUniverse.getInstance().getNation(uuid);
+		Nation nation = universe.getNation(uuid);
 		if (nation == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a nation with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
@@ -360,7 +360,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	public boolean loadWorldData(String name) {
-		TownyWorld world = TownyUniverse.getInstance().getWorld(name);
+		TownyWorld world = universe.getWorld(name);
 		if (world == null) {
 			TownyMessaging.sendErrorMsg("Cannot find a world with the name " + name + " in the TownyUniverse.");
 			return false;
