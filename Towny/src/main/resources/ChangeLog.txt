@@ -11134,3 +11134,5 @@ c
   - Converted all lang files from using old colour codes (ie &a, &4,) to using minimessage colour codes (ie <aqua>, <dark_red>.)
   - Fix protection of cushions in town lands.
   - Fix cushions being broken in the wilderness by explosions that will be reverted by Towny.
+0.103.2.16:
+  - Fix /t jail list requiring passing a permission node test.

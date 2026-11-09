@@ -1759,10 +1759,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (!admin) {
 			town = getTownFromPlayerOrThrow((Player) sender);
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL.getNode());
-			catchRuinedTown((Player) sender);
+			if (!(split.length >= 1 && split[0].equalsIgnoreCase("list"))) {
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL.getNode());
+				catchRuinedTown((Player) sender);
+			}
 		}
-			
+
 		if (!town.hasJails())
 			throw new TownyException(Translatable.of("msg_town_has_no_jails"));
 
