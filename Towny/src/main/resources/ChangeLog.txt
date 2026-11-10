@@ -11137,3 +11137,5 @@ c
 0.103.2.16:
   - Fix /t jail list requiring passing a permission node test.
   - Fix permission lines shown on status screens having their colour codes corrupted by string replacement.
+  - Fix missing space in the So You've Been Jailed book.
+  - Fix players who are offline not getting unjailed.
