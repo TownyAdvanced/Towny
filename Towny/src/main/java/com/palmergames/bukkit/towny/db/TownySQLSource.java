@@ -647,37 +647,80 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadJailUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.JAIL);
+		if (!loadResultSetOfType(TownyDBTableType.JAIL))
+			throw new ObjectLoadException("SQL: Could not load jail table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			if (!loadJailData(uuid))
+				throw new ObjectLoadException(TownyDBTableType.JAIL.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	@Override
 	public boolean loadPlotGroupUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.PLOTGROUP);
+		if (!loadResultSetOfType(TownyDBTableType.PLOTGROUP))
+			throw new ObjectLoadException("SQL: Could not load plotgroups table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			if (!loadPlotGroupData(uuid))
+				throw new ObjectLoadException(TownyDBTableType.PLOTGROUP.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	@Override
 	public boolean loadDistrictUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.DISTRICT);
+		if (!loadResultSetOfType(TownyDBTableType.DISTRICT))
+			throw new ObjectLoadException("SQL: Could not load districts table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			if (!loadDistrictData(uuid))
+				throw new ObjectLoadException(TownyDBTableType.DISTRICT.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	@Override
 	public boolean loadResidentUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.RESIDENT);
+		if (!loadResultSetOfType(TownyDBTableType.RESIDENT))
+			throw new ObjectLoadException("SQL: Could not load residents table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			if (!loadResidentData(uuid))
+				throw new ObjectLoadException(TownyDBTableType.RESIDENT.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	@Override
 	public boolean loadTownUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.TOWN);
+		if (!loadResultSetOfType(TownyDBTableType.TOWN))
+			throw new ObjectLoadException("SQL: Could not load towns table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			if (!loadTownData(uuid))
+				throw new ObjectLoadException(TownyDBTableType.TOWN.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	@Override
 	public boolean loadNationUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.NATION);
+		if (!loadResultSetOfType(TownyDBTableType.NATION))
+			throw new ObjectLoadException("SQL: Could not load nations table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			if (!loadNationData(uuid))
+				throw new ObjectLoadException(TownyDBTableType.NATION.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	@Override
 	public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectLoadException {
-		return loadResultSetOfType(TownyDBTableType.WORLD);
+		if (!loadResultSetOfType(TownyDBTableType.WORLD))
+			throw new ObjectLoadException("SQL: Could not load worlds table into loadedMaps.");
+		for (UUID uuid : uuids) {
+			TownyWorld world = TownyUniverse.getInstance().getWorld(uuid);
+			if (world == null || !loadWorldData(world.getName()))
+				throw new ObjectLoadException(TownyDBTableType.WORLD.getLoadErrorMsg(uuid));
+		}
+		return true;
 	}
 
 	Map<TownyDBTableType, Map<String, Map<String, String>>> loadedMaps = new ConcurrentHashMap<>();
@@ -708,6 +751,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	public boolean loadTownBlocks(Collection<TownBlock> townBlocks) throws ObjectLoadException {
+		if (!loadResultSetOfType(TownyDBTableType.TOWNBLOCK))
+			throw new ObjectLoadException("SQL: Could not load townblocks table into loadedMaps.");
+
 		for (TownBlock townblock : townBlocks)
 			if (!loadTownBlock(townblock))
 				throw new ObjectLoadException("Loading Error: Could not read the townblock with details: '" + townblock.toString() + "' from the TOWNBLOCKS table.");
@@ -777,7 +823,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public synchronized boolean savePlotGroup(PlotGroup group) {
-		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
+		TownyMessaging.sendDebugMsg("Saving group " + group.getUUID());
 		try {
 			updateDB(TownyDBTableType.PLOTGROUP, group.getObjectDataMap(context));
 			return true;
@@ -790,7 +836,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean saveDistrict(District district) {
-		TownyMessaging.sendDebugMsg("Saving district " + district.getName());
+		TownyMessaging.sendDebugMsg("Saving district " + district.getUUID());
 		try {
 			updateDB(TownyDBTableType.DISTRICT, district.getObjectDataMap(context));
 			return true;

@@ -329,9 +329,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a resident with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
+		System.out.println("Resident " + resident.getName() + ":" + uuid.toString());
 		Map<String, String> residentAsMap = getResidentMap(uuid);
 		if (residentAsMap == null)
 			return false;
+		for (String key : residentAsMap.keySet()) {
+			System.out.println("key " + key + ":" + residentAsMap.get(key));
+			
+		}
 		return resident.load(residentAsMap);
 	}
 
