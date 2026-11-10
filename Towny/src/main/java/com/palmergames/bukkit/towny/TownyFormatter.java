@@ -107,7 +107,7 @@ public class TownyFormatter {
 			screen.addComponentOf("claimedat", colourKeyValue(translator.of("msg_plot_perm_claimed_at"), registeredFormat.format(townBlock.getClaimedAt())));
 		if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
 			screen.addComponentOf("townblock_plotType", colourKeyValue(translator.of("status_plot_type"), townBlock.getType().toString()));
-		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r"))));
+		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), townBlock.getPermissions().getColourString(owner)));
 		screen.addComponentOf("pvp", colourKeyValue(translator.of("status_pvp"), ((!preventPVP) ? translator.of("status_on"): translator.of("status_off")))); 
 		screen.addComponentOf("explosion", colourKeyValue(translator.of("explosions"), ((world.isForceExpl() || townBlock.getPermissions().explosion) ? translator.of("status_on"): translator.of("status_off")))); 
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), ((world.isForceFire() || townBlock.getPermissions().fire) ? translator.of("status_on"):translator.of("status_off")))); 
@@ -223,7 +223,7 @@ public class TownyFormatter {
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
 		screen.addComponentOf("ownsXPlots", colourKey(translator.of("owner_of_x_plots", resident.getTownBlocks().size())));
-		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), resident.getPermissions().getColourString().replace("n", "t")));
+		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), resident.getPermissions().getColourString(resident)));
 		screen.addComponentOf("pvp", colourKeyValue(translator.of("status_pvp"), (resident.getPermissions().pvp) ? translator.of("status_on"): translator.of("status_off")));
 		screen.addComponentOf("explosions", colourKeyValue(translator.of("explosions"), (resident.getPermissions().explosion) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (resident.getPermissions().fire) ? translator.of("status_on"): translator.of("status_off"))); 
@@ -343,7 +343,7 @@ public class TownyFormatter {
 			OutpostUtil.addOutpostComponent(town, screen, translator);
 
 		// Permissions: B=rnao D=---- S=rna- I=rnao
-		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), town.getPermissions().getColourString().replace("f", "r")));
+		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), town.getPermissions().getColourString(town)));
 		screen.addComponentOf("explosion", colourKeyValue(translator.of("explosions"), (town.isExplosion() || world.isForceExpl()) ? translator.of("status_on"): translator.of("status_off")));
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (town.isFire() || world.isForceFire()) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (town.hasMobs() || town.isAdminEnabledMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));

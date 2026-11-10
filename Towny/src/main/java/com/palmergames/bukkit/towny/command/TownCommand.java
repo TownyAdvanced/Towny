@@ -3497,7 +3497,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translator translator = Translator.locale(sender);
 		TownyMessaging.sendMsg(sender, translator.of("msg_set_perms"));
-		TownyMessaging.sendMessage(sender, (Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+		TownyMessaging.sendMessage(sender, (Colors.DARK_GREEN + translator.of("status_perm") + " " + perm.getColourString((TownyObject) townBlockOwner)));
 		String on = translator.of("status_on");
 		String off = translator.of("status_off");
 		TownyMessaging.sendMessage(sender, Colors.DARK_GREEN + translator.of("status_pvp") + " " + (perm.pvp ? on : off) + " " +

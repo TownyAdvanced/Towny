@@ -11136,3 +11136,4 @@ c
   - Fix cushions being broken in the wilderness by explosions that will be reverted by Towny.
 0.103.2.16:
   - Fix /t jail list requiring passing a permission node test.
+  - Fix permission lines shown on status screens having their colour codes corrupted by string replacement.

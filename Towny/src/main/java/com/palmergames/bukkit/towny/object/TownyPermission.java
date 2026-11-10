@@ -286,10 +286,51 @@ public class TownyPermission {
 		return getPerm(PermLevel.NATION, type);
 	}
 
+	public String getColoredPermLevel(ActionType type, TownyObject townyObject) {
+		return getColoredPermLevel(type, type.getCommonName(), townyObject);
+	}
+
+	public String getColoredPermLevel(ActionType type, String typeCommonName, TownyObject townyObject) {
+		StringBuilder output = new StringBuilder(PermLevel.values().length);
+
+		for (PermLevel permLevel : PermLevel.values) {
+			if (getPerm(permLevel, type)) {
+				output.append(permLevel.getShortChar());
+			} else {
+				output.append('-');
+			}
+		}
+		String permLine = output.toString();
+		// We have to replace the colouring based on the Towny object here so we don't
+		// alter any translation strings' colours.
+		permLine = townyObject instanceof Resident ? permLine.replace("n", "t") : permLine.replace("f", "r");
+		return Translation.of("status_perm_line_format", typeCommonName).concat(permLine);
+	}
+
+	public String getColourString(TownyObject townyObject) {
+		return getColoredPermLevel(ActionType.BUILD, townyObject) + " " + getColoredPermLevel(ActionType.DESTROY, townyObject) + " " + getColoredPermLevel(ActionType.SWITCH, townyObject) + " " + getColoredPermLevel(ActionType.ITEM_USE, townyObject);
+	}
+
+	/**
+	 * @deprecated since 0.103.2.16, use
+	 *             {@link #getColoredPermLevel(ActionType, TownyObject) instead,
+	 * supplying the owner of the TownyPermission.
+	 * @return a String which can contain translation errors due to colour codes
+	 *         being corrupted by string replacement.
+	 */
+	@Deprecated(since = "0.103.2.16", forRemoval = true)
 	public String getColoredPermLevel(ActionType type) {
 		return getColoredPermLevel(type, type.getCommonName());
 	}
-	
+
+	/**
+	 * @deprecated since 0.103.2.16, use
+	 *             {@link #getColoredPermLevel(ActionType, String, TownyObject)
+	 * instead, supplying the owner of the TownyPermission.
+	 * @return a String which can contain translation errors due to colour codes
+	 *         being corrupted by string replacement.
+	 */
+	@Deprecated(since = "0.103.2.16", forRemoval = true)
 	public String getColoredPermLevel(ActionType type, String typeCommonName) {
 		StringBuilder output = new StringBuilder(Translation.of("status_perm_line_format", typeCommonName));
 		
@@ -303,7 +344,14 @@ public class TownyPermission {
 		
 		return output.toString();
 	}
-	
+
+	/**
+	 * @deprecated since 0.103.2.16, use {@link #getColourString(TownyObject)}
+	 *             instead, supplying the owner of the TownyPermission.
+	 * @return a String which can contain translation errors due to colour codes
+	 *         being corrupted by string replacement.
+	 */
+	@Deprecated(since = "0.103.2.16", forRemoval = true)
 	public String getColourString() {
 		return getColoredPermLevel(ActionType.BUILD) + " " + getColoredPermLevel(ActionType.DESTROY) + " " + getColoredPermLevel(ActionType.SWITCH) + " " + getColoredPermLevel(ActionType.ITEM_USE);
 	}
