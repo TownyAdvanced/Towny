@@ -23,6 +23,8 @@ import com.palmergames.util.TimeTools;
 import io.papermc.paper.event.entity.EntityBreakByEntityEvent;
 import io.papermc.paper.event.entity.EntityBreakEvent;
 import io.papermc.paper.event.entity.EntityBreakEvent.RemoveCause;
+import io.papermc.paper.event.entity.EntityKnockbackEvent;
+import io.papermc.paper.event.entity.EntityKnockbackEvent.Cause;
 import io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent;
 
 import io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent;
@@ -77,6 +79,7 @@ public class TownyPaperEvents implements VersionDependentListener {
 	public static final String PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT = "io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent";
 
 	public static final String ENTITY_BREAK_EVENT = "io.papermc.paper.event.entity.EntityBreakEvent";
+	public static final String ENTITY_KNOCKBACK_EVENT = "io.papermc.paper.event.entity.EntityKnockbackEvent";
 
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -108,6 +111,8 @@ public class TownyPaperEvents implements VersionDependentListener {
 		registerEvent(PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT, this::playerToggleEntityAgeLockListener, EventPriority.LOW, true);
 
 		registerEvent(ENTITY_BREAK_EVENT, this::entityBreakEvent, EventPriority.LOW, true);
+
+		registerEvent(ENTITY_KNOCKBACK_EVENT, this::entityKnockBackEvent, EventPriority.LOW, true);
 	}
 	
 	// https://jd.papermc.io/paper/1.15/index.html?com/destroystokyo/paper/event/player/PlayerElytraBoostEvent.html
@@ -354,5 +359,21 @@ public class TownyPaperEvents implements VersionDependentListener {
 			return null;
 
 		return new Location(golem.getWorld(), Double.valueOf(pdc.get(GOLEM_CHEST_X, PersistentDataType.INTEGER)), 0.0, Double.valueOf(pdc.get(GOLEM_CHEST_Z, PersistentDataType.INTEGER)));
+	}
+
+	public Consumer<EntityEvent> entityKnockBackEvent() {
+		return e -> {
+			if (TownyEntityListener.ignoreEvent(e)) {
+				return;
+			}
+			final EntityKnockbackEvent event = (EntityKnockbackEvent) e;
+			final Cause cause = event.getCause();
+			System.out.println("Cause: " + cause.name());
+			if (!(event.getEntity() instanceof Player p) || !cause.equals(Cause.EXPLOSION))
+				return;
+
+			// Wind charges just return Explosion. Doesn't seem to have a sender from this event. 
+			// Have to look at whether earlier EntityExplosionEvents, when cancelled, prevent knockback from being dealt.
+		};
 	}
 }
