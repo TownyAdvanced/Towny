@@ -11139,3 +11139,9 @@ c
   - Fix permission lines shown on status screens having their colour codes corrupted by string replacement.
   - Fix missing space in the So You've Been Jailed book.
   - Fix players who are offline not getting unjailed.
+  - Add max trusted residents setting.
+    - Towns will not be able to add any more residents to their trusted residents list.
+    - Closes #8343.
+  - New Config Option: global_town_settings.max_trusted_players_per_town
+    - Default: -1
+    - When set to above -1, the maximum number of players that a town can trust at the same time. -1 for infinite.

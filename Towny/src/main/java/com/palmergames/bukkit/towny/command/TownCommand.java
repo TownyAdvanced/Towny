@@ -4454,6 +4454,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (resident.hasNation() && town.hasNation() && town.getNationOrNull().hasEnemy(resident.getNationOrNull()))
 			throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_enemy"));
 
+		if (TownySettings.getMaxTrustedResidentsPerTown() > -1 && town.getTrustedResidents().size() >= TownySettings.getMaxTrustedResidentsPerTown())
+			throw new TownyException(Translatable.of("msg_err_you_cannot_trust_more_residents", TownySettings.getMaxTrustedResidentsPerTown()));
+
 		BukkitTools.ifCancelledThenThrow(new TownTrustAddEvent(sender, resident, town));
 
 		town.addTrustedResident(resident);
