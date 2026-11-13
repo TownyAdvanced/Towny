@@ -112,7 +112,7 @@ public class TownyWorld extends TownyObject {
 			return true;
 		if (!(other instanceof TownyWorld otherTownyWorld))
 			return false;
-		return this.getName().equals(otherTownyWorld.getName()); // TODO: Change this to UUID when the UUID database is in use.
+		return this.getName().equals(otherTownyWorld.getName());
 	}
 
 	@Override
