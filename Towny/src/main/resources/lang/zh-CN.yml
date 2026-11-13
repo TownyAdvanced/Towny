@@ -28,6 +28,8 @@ website: 'https://townyadvanced.github.io/'
 #and formatting. Learn about MiniMessage formatting here:
 #https://docs.adventure.kyori.net/minimessage/format.html
 default_towny_prefix: '&6[Towny] &b'
+default_town_prefix: '<gold>[%s] <aqua>'
+default_nation_prefix: '<gold>[%s] <gold>'
 unclaimed_plot_name: '无主之地'
 unclaimed_zone_name: '荒郊野地'
 ############################################################
@@ -1022,6 +1024,10 @@ msg_process_claim: '声明土地中...'
 msg_process_unclaim: '放弃声明土地中...'
 msg_total_townblocks: '共有城镇区块: '
 friend_list: '好友列表'
+#The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
+#nationranks lists on the /nation screen; and probably more lists of residents.
+#First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
+res_format_list_1: '<dark_green>'
 not_registered: '未注册.'
 msg_error_missing_comparator: '<aqua>必须指定排序依据.'
 msg_error_invalid_comparator: '<aqua>无效的比较器.'
@@ -2085,3 +2091,4 @@ status_min_adjacency: '最小附加值: '
 msg_err_cannot_list_outposts_because_town_ruined: "你不能检查这个城镇的前哨，因为该镇已沦为废墟。"
 msg_jail_bossbar_duration: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua>'
 msg_jail_bossbar_duration_bail: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua> <gray>|</gray> 保释金设定为 <green>%s</green> <gray>(使用 </gray>/res jail paybail 来支付<gray>)</gray>'
+msg_err_you_cannot_trust_more_residents: "你不能信任%s个以上的居民。"
