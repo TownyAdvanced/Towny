@@ -1032,6 +1032,10 @@ res_format_list_1: '<dark_green>'
 res_format_list_2: '<green>'
 #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
 res_format_list_3: '<white>'
+townboard_message_colour_1: '<gold>'
+townboard_message_colour_2: '<yellow>'
+nationboard_message_colour_1: '<gold>'
+nationboard_message_colour_2: '<yellow>'
 not_registered: '未注册.'
 msg_error_missing_comparator: '<aqua>必须指定排序依据.'
 msg_error_invalid_comparator: '<aqua>无效的比较器.'
@@ -1313,6 +1317,8 @@ towny_prices_nation_tax: '<red>    [Taxes] <dark_green>城镇：<green>%s <dark_
 msg_town_destroyed_by_nation_tax: '<aqua>被占领的城镇%s因无力上缴国税而倒闭。'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>以下被占领城镇因无力上缴国税而倒闭： '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>你的城镇被免除了国税。'
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: '废墟状态'
 msg_comptype_forsale: '出售状态'
 msg_comptype_bankrupt: '破产状态'
@@ -1500,6 +1506,18 @@ msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: '你不能监
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: '你不能监禁你的居民，因为其目前处于一个被宣布为敌人的地方。'
 msg_resident_prompt: '在聊天栏里输入玩家名，或输入q退出。30秒内不输入将自动取消。'
 msg_prompt_cancel: '请求已取消或超时。'
+status_title_primary_colour: '<gold>' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '<yellow>' #Used to colour the words in the title bar.
+status_format_list_1: '<dark_green>' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '<green>' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '<white>' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '<dark_green>' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '<green>' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '<aqua>' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '<green>' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '<gray>' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '<red>' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' <gray>| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' <gray>[中心区块：%s]'
 status_about: "关于:"
 status_registered: '注册于：'
@@ -2006,6 +2024,8 @@ msg_err_town_no_longer_owns_this_plot: "%s不再拥有此区块。"
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s不能割让他们的中心区块。"
 msg_town_cede_plot_confirmation_give_plot: "你确定你要把这个区块给%s吗？"
 msg_town_cede_plot_confirmation_give_plot_cost: "你确定要把这块地皮给予 %s 吗？这将花费%s。"
+msg_town_cede_plot_err_not_enough_money: "资金不足（%2$s），无法将地皮割让给 %1$s！"
+msg_town_cede_plot_offer_sent: "成功将地皮%2$s赠予 %1$s"
 msg_town_cede_plot_confirmation_accept_plot: "%s想要将在%s的区块割让给你的城镇。你接受吗？"
 msg_town_cede_plot_accepted: "%s已接受你所割让的区块。"
 msg_town_cede_plot_denied: "%s 拒绝了您的报价。"
