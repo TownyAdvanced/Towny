@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -1072,7 +1073,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_perm").forLocale(player) + " " + perm.getColourString((TownyObject) townBlockOwner));
 				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + " " +
 												   Colors.DARK_GREEN + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + " " +
 												   Colors.DARK_GREEN + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + " " +
@@ -1851,7 +1852,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				Translator translator = Translator.locale(player);
 				TownyPermission perm = plotGroup.getPermissions();
 				TownyMessaging.sendMessage(player, translator.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_perm") + " " + perm.getColourString((TownyObject) townBlockOwner));
 				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + " " +
 													Colors.DARK_GREEN + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + " " +
 													Colors.DARK_GREEN + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) + " " +

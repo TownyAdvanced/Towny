@@ -948,6 +948,11 @@ public enum ConfigNodes {
 			"",
 			"# When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.",
 			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
+	GTOWN_SETTINGS_MAX_TRUSTED_PLAYERS_PER_TOWN(
+			"global_town_settings.max_trusted_players_per_town",
+			"-1",
+			"",
+			"# When set to above -1, the maximum number of players that a town can trust at the same time. -1 for infinite."),
 	GTOWN_SETTINGS_MERGE_COOLDOWN_TIMER(
 		"global_town_settings.merge_request_cooldown_time",
 		"60",
