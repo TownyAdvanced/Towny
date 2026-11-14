@@ -27,7 +27,7 @@ website: 'https://townyadvanced.github.io/'
 #This language file also supports using MiniMessage for colours
 #and formatting. Learn about MiniMessage formatting here:
 #https://docs.adventure.kyori.net/minimessage/format.html
-default_towny_prefix: '&6[Towny] &b'
+default_towny_prefix: '<gold>[Towny] <aqua>'
 default_town_prefix: '<gold>[%s] <aqua>'
 default_nation_prefix: '<gold>[%s] <gold>'
 unclaimed_plot_name: '无主之地'
@@ -1028,6 +1028,10 @@ friend_list: '好友列表'
 #nationranks lists on the /nation screen; and probably more lists of residents.
 #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
 res_format_list_1: '<dark_green>'
+#Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
+res_format_list_2: '<green>'
+#Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+res_format_list_3: '<white>'
 not_registered: '未注册.'
 msg_error_missing_comparator: '<aqua>必须指定排序依据.'
 msg_error_invalid_comparator: '<aqua>无效的比较器.'
@@ -1779,6 +1783,8 @@ msg_plot_already_of_type: '此地皮已经是%s类型。'
 msg_town_board_reset: '<aqua>城镇公告栏已被重置。'
 msg_nation_board_reset: '<aqua>国家公告栏已被重置。'
 msg_town_has_no_jailslots: '城镇监狱已经满员。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x_for_x_bail: '%1$s被%6$s送进%2$s的%3$s号牢房，时长%4$s，保释额为%5$s。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x: '%1$s被%5$s送进%2$s的%3$s号牢房，时长%4$s。'
 msg_you_have_been_jailed_your_bail_is_x: '你已被监禁，你的保释金是%s。'
 msg_err_higher_than_max_allowed_bail_x: '您设定的保释金高于上限，上限为 %s。'
 msg_err_higher_than_max_allowed_hours_x: '您设定的小时数高于上限，上限为 %s。'
@@ -1999,6 +2005,7 @@ msg_err_town_cede_the_mayor_is_not_online: "%s的市长%s不在线，因此无�
 msg_err_town_no_longer_owns_this_plot: "%s不再拥有此区块。"
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s不能割让他们的中心区块。"
 msg_town_cede_plot_confirmation_give_plot: "你确定你要把这个区块给%s吗？"
+msg_town_cede_plot_confirmation_give_plot_cost: "你确定要把这块地皮给予 %s 吗？这将花费%s。"
 msg_town_cede_plot_confirmation_accept_plot: "%s想要将在%s的区块割让给你的城镇。你接受吗？"
 msg_town_cede_plot_accepted: "%s已接受你所割让的区块。"
 msg_town_cede_plot_denied: "%s 拒绝了您的报价。"
@@ -2087,6 +2094,7 @@ msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
 msg_err_no_ruined_town_here: "当你不是居民时，你必须站在城镇废墟里才能重新声明它。"
+msg_claim_resident_plot: '<aqua>%s声明了位于 %s 的地皮。'
 status_min_adjacency: '最小附加值: '
 msg_err_cannot_list_outposts_because_town_ruined: "你不能检查这个城镇的前哨，因为该镇已沦为废墟。"
 msg_jail_bossbar_duration: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua>'
