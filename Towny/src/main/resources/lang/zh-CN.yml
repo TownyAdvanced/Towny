@@ -27,7 +27,9 @@ website: 'https://townyadvanced.github.io/'
 #This language file also supports using MiniMessage for colours
 #and formatting. Learn about MiniMessage formatting here:
 #https://docs.adventure.kyori.net/minimessage/format.html
-default_towny_prefix: '&6[Towny] &b'
+default_towny_prefix: '<gold>[Towny] <aqua>'
+default_town_prefix: '<gold>[%s] <aqua>'
+default_nation_prefix: '<gold>[%s] <gold>'
 unclaimed_plot_name: '无主之地'
 unclaimed_zone_name: '荒郊野地'
 ############################################################
@@ -451,7 +453,7 @@ msg_nation_not_peaceful: '<aqua>国家的和平已被打破.'
 msg_nation_cant_peaceful: '<aqua>国家支付不起转变为和平国家的费用。你必须能够每天支付%s的费用。'
 msg_peaceful_disabled: '<aqua>全局国家和平已禁用。'
 msg_you_paid: '<aqua>你花费了%s来设置和平状态。'
-msg_nation_set_peace: '<aqua>成功改变国家状态.'
+msg_nation_set_peace: '<aqua>成功改变国家状态。'
 msg_nation_allow_peaceful: '<aqua>现在国家保持和平的权限为：%s'
 msg_mobremoval_world: '<aqua>阻止世界怪物生成: %s'
 msg_mobremoval_town: '<aqua>阻止城镇怪物生成: %s'
@@ -480,7 +482,7 @@ msg_nation_town_left: '<aqua>城镇 %s 离开了你的国家.'
 msg_nation_kicked: '<aqua>%s 把 %s 踢出了国家。'
 msg_nation_you_kicked: '<aqua>你把 %s 踢出了国家。'
 msg_raised_ass: '<aqua>%s 把 %s 提升为 %s 助手.'
-msg_lowered_to_res_by: '<aqua>你被 %s 降职了.'
+msg_lowered_to_res_by: '<aqua>你被 %s 降职为普通居民。'
 msg_lowered_to_res: '<aqua>%s 将 %s 降级为普通居民。'
 msg_invalid_name: '<aqua>以上名称无效。'
 msg_invited_join_town: '<aqua>%s 邀请 %s 加入城镇.'
@@ -1022,6 +1024,18 @@ msg_process_claim: '声明土地中...'
 msg_process_unclaim: '放弃声明土地中...'
 msg_total_townblocks: '共有城镇区块: '
 friend_list: '好友列表'
+#The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
+#nationranks lists on the /nation screen; and probably more lists of residents.
+#First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
+res_format_list_1: '<dark_green>'
+#Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
+res_format_list_2: '<green>'
+#Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+res_format_list_3: '<white>'
+townboard_message_colour_1: '<gold>'
+townboard_message_colour_2: '<yellow>'
+nationboard_message_colour_1: '<gold>'
+nationboard_message_colour_2: '<yellow>'
 not_registered: '未注册.'
 msg_error_missing_comparator: '<aqua>必须指定排序依据.'
 msg_error_invalid_comparator: '<aqua>无效的比较器.'
@@ -1303,6 +1317,8 @@ towny_prices_nation_tax: '<red>    [Taxes] <dark_green>城镇：<green>%s <dark_
 msg_town_destroyed_by_nation_tax: '<aqua>被占领的城镇%s因无力上缴国税而倒闭。'
 msg_town_destroyed_by_nation_tax_multiple: '<aqua>以下被占领城镇因无力上缴国税而倒闭： '
 msg_your_town_was_exempt_from_the_nation_tax: '<aqua>你的城镇被免除了国税。'
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '<green>%s=<gray>'
 msg_comptype_ruined: '废墟状态'
 msg_comptype_forsale: '出售状态'
 msg_comptype_bankrupt: '破产状态'
@@ -1490,6 +1506,18 @@ msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: '你不能监
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: '你不能监禁你的居民，因为其目前处于一个被宣布为敌人的地方。'
 msg_resident_prompt: '在聊天栏里输入玩家名，或输入q退出。30秒内不输入将自动取消。'
 msg_prompt_cancel: '请求已取消或超时。'
+status_title_primary_colour: '<gold>' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '<yellow>' #Used to colour the words in the title bar.
+status_format_list_1: '<dark_green>' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '<green>' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '<white>' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '<dark_green>' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '<green>' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '<aqua>' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '<green>' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '<gray>' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '<red>' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' <gray>| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' <gray>[中心区块：%s]'
 status_about: "关于:"
 status_registered: '注册于：'
@@ -1601,6 +1629,8 @@ msg_jailed_war: '作为战俘监禁。'
 msg_jailed_handbook_1: '看起来你因%s而被监禁。'
 #Jail handbook messages
 msg_jailed_handbook_2: '很遗憾，但你该当如何？这些小贴士或许有用，看一看吧。'
+#Jail handbook messages
+msg_jailed_handbook_3.1: '你已被监禁了%s，服刑后你将自由。'
 #Jail handbook messages
 msg_jailed_handbook_4_can: '你可使用“/town leave”离开城镇来逃离监狱。'
 #Jail handbook messages
@@ -1771,6 +1801,8 @@ msg_plot_already_of_type: '此地皮已经是%s类型。'
 msg_town_board_reset: '<aqua>城镇公告栏已被重置。'
 msg_nation_board_reset: '<aqua>国家公告栏已被重置。'
 msg_town_has_no_jailslots: '城镇监狱已经满员。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x_for_x_bail: '%1$s被%6$s送进%2$s的%3$s号牢房，时长%4$s，保释额为%5$s。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_duration_by_x: '%1$s被%5$s送进%2$s的%3$s号牢房，时长%4$s。'
 msg_you_have_been_jailed_your_bail_is_x: '你已被监禁，你的保释金是%s。'
 msg_err_higher_than_max_allowed_bail_x: '您设定的保释金高于上限，上限为 %s。'
 msg_err_higher_than_max_allowed_hours_x: '您设定的小时数高于上限，上限为 %s。'
@@ -1991,6 +2023,9 @@ msg_err_town_cede_the_mayor_is_not_online: "%s的市长%s不在线，因此无�
 msg_err_town_no_longer_owns_this_plot: "%s不再拥有此区块。"
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s不能割让他们的中心区块。"
 msg_town_cede_plot_confirmation_give_plot: "你确定你要把这个区块给%s吗？"
+msg_town_cede_plot_confirmation_give_plot_cost: "你确定要把这块地皮给予 %s 吗？这将花费%s。"
+msg_town_cede_plot_err_not_enough_money: "资金不足（%2$s），无法将地皮割让给 %1$s！"
+msg_town_cede_plot_offer_sent: "成功将地皮%2$s赠予 %1$s"
 msg_town_cede_plot_confirmation_accept_plot: "%s想要将在%s的区块割让给你的城镇。你接受吗？"
 msg_town_cede_plot_accepted: "%s已接受你所割让的区块。"
 msg_town_cede_plot_denied: "%s 拒绝了您的报价。"
@@ -2079,4 +2114,9 @@ msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
 msg_err_no_ruined_town_here: "当你不是居民时，你必须站在城镇废墟里才能重新声明它。"
+msg_claim_resident_plot: '<aqua>%s声明了位于 %s 的地皮。'
+status_min_adjacency: '最小附加值: '
 msg_err_cannot_list_outposts_because_town_ruined: "你不能检查这个城镇的前哨，因为该镇已沦为废墟。"
+msg_jail_bossbar_duration: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua>'
+msg_jail_bossbar_duration_bail: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua> <gray>|</gray> 保释金设定为 <green>%s</green> <gray>(使用 </gray>/res jail paybail 来支付<gray>)</gray>'
+msg_err_you_cannot_trust_more_residents: "你不能信任%s个以上的居民。"
