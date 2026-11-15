@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.103.2.15</version>
+    <version>0.103.2.16</version>
 
     <licenses>
         <license>
@@ -427,7 +427,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <version>3.6.1</version>
                     <configuration>
                         <skipTests>${skipTests}</skipTests>
                         <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>

@@ -374,7 +374,7 @@ public class JailUtil {
 			}
 			pages += translator.of("msg_jailed_handbook_bail_2", TownyEconomyHandler.getFormattedBalance(cost)) + "\n\n";
 		}
-		pages += translator.of("msg_jailed_handbook_5");
+		pages += translator.of("msg_jailed_handbook_5") + " ";
 		pages += translator.of("msg_jailed_handbook_6");
 		if (TownySettings.JailAllowsTeleportItems())
 			pages += translator.of("msg_jailed_teleport");
@@ -397,8 +397,12 @@ public class JailUtil {
 	}
 	
 	private static void unjailAndTeleportAwayFromJail(Resident resident) {
-		// Don't teleport a player who isn't online.
-		if (!resident.isOnline()) return;
+		// Make sure any offline players still get unjailed.
+		if (!resident.isOnline()) {
+			unJailResident(resident);
+			return;
+		}
+
 		// Don't teleport a player if the config is set to not allow it, but unjail them.
 		if (!TownySettings.doesUnjailingTeleportPlayer()) {
 			unJailResident(resident);

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.regen;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
@@ -9,16 +10,22 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -56,6 +63,8 @@ public class TownyRegenAPI {
 	
 	// https://jd.papermc.io/paper/1.20/org/bukkit/Chunk.html#getChunkSnapshot(boolean,boolean,boolean,boolean)
 	private static final MethodHandle GET_CHUNK_SNAPSHOT = JavaUtil.getMethodHandle(Chunk.class, "getChunkSnapshot", boolean.class, boolean.class, boolean.class, boolean.class);
+
+	private static final EntityType CUSHION = Registry.ENTITY_TYPE.get(NamespacedKey.minecraft("cushion"));
 
 	/**
 	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
@@ -470,5 +479,54 @@ public class TownyRegenAPI {
 			
 			return data;
 		});
+	}
+
+	/**
+	 * Is this an item_frame, painting or cushion that will break if it is attached
+	 * to something which will be regenerated?
+	 * 
+	 * @param hanging Entity that could lose its attachment block.
+	 * @return true when there is a regen task for the attachment block.
+	 */
+	public static boolean attachedToRegeneratingBlock(Entity hanging) {
+		if (!EntityLists.HANGING.contains(hanging))
+			return false;
+
+		// Cushions need supports underneath them.
+		if (hanging.getType() == CUSHION) {
+			// Cushions can be supported by blocks which aren't the full block height,
+			// meaning their support could be in the same location as the Cushion.
+			boolean isInMidBlock = hanging.getLocation().getY() != hanging.getLocation().getBlockY();
+			BlockLocation blockLoc = new BlockLocation(isInMidBlock ? hanging.getLocation() : hanging.getLocation().add(0, -1, 0));
+			return hasProtectionRegenTask(blockLoc);
+		}
+
+		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
+		return hasProtectionRegenTask(new BlockLocation(hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection())));
+	}
+
+	/**
+	 * Tests whether we are reverting the explosions of the given entity.
+	 * 
+	 * @param loc     The location where this explosion occured.
+	 * @param remover The entity that causes the explosion.
+	 * @return true if the locatoin is in the wilderness and the townyworld uses
+	 *         explosion reversion for this entity.
+	 */
+	public static boolean weAreRevertingThisRemoversExplosionsInWild(Location loc, Object remover) {
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld());
+		return remover != null && TownyAPI.getInstance().isWilderness(loc) 
+				&& townyWorld.isUsingPlotManagementWildEntityRevert() && townyWorld.isProtectingExplosionEntity((Entity)remover);
+	}
+
+	/**
+	 * Tests whether the given location allows for the block revert system.
+	 * 
+	 * @param loc The location where this block explosion occured.
+	 * @return true if the location is in the wilderness and the townyworld uses the
+	 *         block explosion revert system.
+	 */
+	public static boolean weAreRevertingBlockExplosionsInWild(Location loc) {
+		return TownyAPI.getInstance().isWilderness(loc) && TownyAPI.getInstance().getTownyWorld(loc.getWorld()).isUsingPlotManagementWildBlockRevert();
 	}
 }

@@ -1759,10 +1759,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (!admin) {
 			town = getTownFromPlayerOrThrow((Player) sender);
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL.getNode());
-			catchRuinedTown((Player) sender);
+			if (!(split.length >= 1 && split[0].equalsIgnoreCase("list"))) {
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL.getNode());
+				catchRuinedTown((Player) sender);
+			}
 		}
-			
+
 		if (!town.hasJails())
 			throw new TownyException(Translatable.of("msg_town_has_no_jails"));
 
@@ -3495,7 +3497,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translator translator = Translator.locale(sender);
 		TownyMessaging.sendMsg(sender, translator.of("msg_set_perms"));
-		TownyMessaging.sendMessage(sender, (Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+		TownyMessaging.sendMessage(sender, (Colors.DARK_GREEN + translator.of("status_perm") + " " + perm.getColourString((TownyObject) townBlockOwner)));
 		String on = translator.of("status_on");
 		String off = translator.of("status_off");
 		TownyMessaging.sendMessage(sender, Colors.DARK_GREEN + translator.of("status_pvp") + " " + (perm.pvp ? on : off) + " " +
@@ -4451,6 +4453,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (resident.hasNation() && town.hasNation() && town.getNationOrNull().hasEnemy(resident.getNationOrNull()))
 			throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_enemy"));
+
+		if (TownySettings.getMaxTrustedResidentsPerTown() > -1 && town.getTrustedResidents().size() >= TownySettings.getMaxTrustedResidentsPerTown())
+			throw new TownyException(Translatable.of("msg_err_you_cannot_trust_more_residents", TownySettings.getMaxTrustedResidentsPerTown()));
 
 		BukkitTools.ifCancelledThenThrow(new TownTrustAddEvent(sender, resident, town));
 

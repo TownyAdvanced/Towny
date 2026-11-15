@@ -388,6 +388,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.endsWith("_BANNER")
 			.endsWith("_BUTTON")
 			.endsWith("RAIL")
+			.endsWith("_CUSHION")
 			.endsWith("PUMPKIN_STEM").endsWith("MELON_STEM")
 			.endsWith("_AMETHYST_BUD").add("AMETHYST_CLUSTER")
 			.includeList(FLOWERS)
@@ -403,6 +404,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists CHESTS_WITHOUT_ENDERCHEST = newBuilder().endsWith("CHEST").notStartsWith("ENDER_").build();
 
 	public static final ItemLists SHELVES = newBuilder().endsWith("SHELF").build();
+
+	public static final ItemLists CUSHIONS= newBuilder().endsWith("CUSHION").build();
 
 	/**
 	 * Config-useable material groups.
