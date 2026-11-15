@@ -1,11 +1,15 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.NationRangeAllowTownEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.util.Colors;
@@ -78,4 +82,28 @@ public class NationUtil {
 		return maxTownsPerNation > 0 && nation.getTowns().size() >= maxTownsPerNation;
 	}
 
+	public static List<Nation> getOpenNationsInRange(Town town, boolean isTabComplete) {
+		boolean fireEvent = !isTabComplete && NationRangeAllowTownEvent.getHandlerList().getRegisteredListeners().length > 0;
+		List<Nation> nations = new ArrayList<>();
+
+		for (Nation nation : TownyUniverse.getInstance().getNations()) {
+			if (!nation.isOpen()) continue;
+			boolean tooFar = ProximityUtil.isTownTooFarFromNation(nation.getCapital(), town, nation.getTowns());
+			if (fireEvent) {
+				NationRangeAllowTownEvent nrate = new NationRangeAllowTownEvent(nation, town);
+				nrate.setCancelled(tooFar);
+				tooFar = nrate.callEvent();
+			}
+			if (!tooFar) {
+				nations.add(nation);
+			}
+		}
+
+		return isTabComplete ? nations : ProximityUtil.sortNationsByClosest(nations, town);
+	}
+	
+	public static List<String> getNationJoinTabComplete(Town town) {
+		return getOpenNationsInRange(town, true)
+			.stream().map(TownyObject::getName).toList();
+	}
 }

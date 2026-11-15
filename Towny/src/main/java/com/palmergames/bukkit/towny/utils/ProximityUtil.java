@@ -482,4 +482,19 @@ public class ProximityUtil {
 			return false;
 		return MathUtil.distance(town1Coord, town2Coord) <= maxAllowedDistance;
 	}
+	
+	public static List<Nation> sortNationsByClosest(List<Nation> nations, Town town) {
+		if (!town.hasHomeBlock()) {
+			return nations;
+		}
+		WorldCoord homeblock = town.getHomeBlockOrNull().getWorldCoord();
+		return nations.stream()
+			.sorted(Comparator.comparingDouble(nation -> {
+				Town capital = nation.getCapital();
+				if (capital == null || !capital.hasHomeBlock()) {
+					return Double.MAX_VALUE;
+				}
+				return MathUtil.distance(homeblock, capital.getHomeBlockOrNull().getWorldCoord());
+			})).toList();
+	}
 }
