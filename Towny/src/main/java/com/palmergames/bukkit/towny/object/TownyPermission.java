@@ -313,8 +313,8 @@ public class TownyPermission {
 
 	/**
 	 * @deprecated since 0.103.2.16, use
-	 *             {@link #getColoredPermLevel(ActionType, TownyObject) instead,
-	 * supplying the owner of the TownyPermission.
+	 *             {@link #getColoredPermLevel(ActionType, TownyObject)} instead,
+	 *             supplying the owner of the TownyPermission.
 	 * @return a String which can contain translation errors due to colour codes
 	 *         being corrupted by string replacement.
 	 */
@@ -325,8 +325,8 @@ public class TownyPermission {
 
 	/**
 	 * @deprecated since 0.103.2.16, use
-	 *             {@link #getColoredPermLevel(ActionType, String, TownyObject)
-	 * instead, supplying the owner of the TownyPermission.
+	 *             {@link #getColoredPermLevel(ActionType, String, TownyObject)}
+	 *             instead, supplying the owner of the TownyPermission.
 	 * @return a String which can contain translation errors due to colour codes
 	 *         being corrupted by string replacement.
 	 */
