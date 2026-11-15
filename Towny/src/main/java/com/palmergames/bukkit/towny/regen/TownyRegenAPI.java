@@ -18,12 +18,14 @@ import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
-import org.bukkit.entity.Cushion;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -61,6 +63,8 @@ public class TownyRegenAPI {
 	
 	// https://jd.papermc.io/paper/1.20/org/bukkit/Chunk.html#getChunkSnapshot(boolean,boolean,boolean,boolean)
 	private static final MethodHandle GET_CHUNK_SNAPSHOT = JavaUtil.getMethodHandle(Chunk.class, "getChunkSnapshot", boolean.class, boolean.class, boolean.class, boolean.class);
+
+	private static final EntityType CUSHION = Registry.ENTITY_TYPE.get(NamespacedKey.minecraft("cushion"));
 
 	/**
 	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
@@ -489,10 +493,10 @@ public class TownyRegenAPI {
 			return false;
 
 		// Cushions need supports underneath them.
-		if (hanging instanceof Cushion) {
+		if (hanging.getType() == CUSHION) {
 			// Cushions can be supported by blocks which aren't the full block height,
 			// meaning their support could be in the same location as the Cushion.
-			boolean isInMidBlock = !(hanging.getLocation().getY() == Double.valueOf(hanging.getLocation().getBlockY()));
+			boolean isInMidBlock = hanging.getLocation().getY() != hanging.getLocation().getBlockY();
 			BlockLocation blockLoc = new BlockLocation(isInMidBlock ? hanging.getLocation() : hanging.getLocation().add(0, -1, 0));
 			return hasProtectionRegenTask(blockLoc);
 		}
