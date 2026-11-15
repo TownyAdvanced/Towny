@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.db;
 
-import com.google.common.base.Preconditions;
 import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectLoadException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -86,6 +87,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
@@ -97,7 +99,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 /**
- * @author ElgarL
+ * @author ElgarL, LlmDl
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public static final SimpleDateFormat BACKUP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ssZ");
@@ -109,6 +111,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final ScheduledTask task;
 	protected List<Pair<String, String>> pendingDuplicateResidents = new ArrayList<>();
+	protected List<Pair<String, String>> pendingRenamedTowns = new ArrayList<>();
+	protected List<Pair<String, String>> pendingRenamedNations = new ArrayList<>();
 	
 	protected TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
@@ -131,7 +135,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		
 		/*
-		 * Start our async queue for pushing data to the database.
+		 * Start our async queue for pushing data to the flatfile database.
 		 */
 		task = plugin.getScheduler().runAsyncRepeating(() -> {
 			synchronized(queryQueue) {
@@ -200,6 +204,201 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void postLoad() {
 		deleteDuplicateResidents();
+		handleRenamedTownsAndNations();
+	}
+
+	/*
+	 * Load all Objects of each type.
+	 */
+
+	public boolean loadJails() {
+		try {
+			return loadJailUUIDs(universe.getJailUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadPlotGroups() {
+		try {
+			return loadPlotGroupUUIDs(universe.getPlotGroupUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadDistricts() {
+		try {
+			return loadDistrictUUIDs(universe.getDistrictUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadResidents() {
+		try {
+			return loadResidentUUIDs(universe.getResidentUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadTowns() {
+		try {
+			return loadTownUUIDs(universe.getTownUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadNations() {
+		try {
+			return loadNationUUIDs(universe.getNationUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadWorlds() {
+		try {
+			return loadWorldUUIDs(universe.getWorldUUIDs());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadTownBlocks() {
+		try {
+			return loadTownBlocks(universe.getTownBlocks().values());
+		} catch (ObjectLoadException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	/*
+	 * Object loading methods which pull Maps from FlatFile/SQLSources
+	 */
+
+	public boolean loadJailData(UUID uuid) {
+		Jail jail = universe.getJail(uuid);
+		if (jail == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a jail with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		Map<String, String> jailAsMap = getJailMap(uuid);
+		if (jailAsMap == null)
+			return false;
+		return jail.load(jailAsMap);
+	}
+
+	public boolean loadPlotGroupData(UUID uuid) {
+		PlotGroup plotGroup = universe.getGroup(uuid);
+		if (plotGroup == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a plotgroup with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		Map<String, String> groupAsMap = getPlotGroupMap(uuid);
+		if (groupAsMap == null)
+			return false;
+		return plotGroup.load(groupAsMap);
+	}
+
+	public boolean loadDistrictData(UUID uuid) {
+		District district = universe.getDistrict(uuid);
+		if (district == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a district with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		Map<String, String> districtAsMap = getDistrictMap(uuid);
+		if (districtAsMap == null)
+			return false;
+		return district.load(districtAsMap);
+	}
+
+	public boolean loadResidentData(UUID uuid) {
+		Resident resident = universe.getResident(uuid);
+		if (resident == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a resident with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		System.out.println("Resident " + resident.getName() + ":" + uuid.toString());
+		Map<String, String> residentAsMap = getResidentMap(uuid);
+		if (residentAsMap == null)
+			return false;
+		for (String key : residentAsMap.keySet()) {
+			System.out.println("key " + key + ":" + residentAsMap.get(key));
+			
+		}
+		return resident.load(residentAsMap);
+	}
+
+	public boolean loadTownData(UUID uuid) {
+		Town town = universe.getTown(uuid);
+		if (town == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a town with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		Map<String, String> townAsMap = getTownMap(uuid);
+		if (townAsMap == null)
+			return false;
+		return town.load(townAsMap);
+	}
+
+	public boolean loadNationData(UUID uuid) {
+		Nation nation = universe.getNation(uuid);
+		if (nation == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a nation with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		Map<String, String> nationAsMap = getNationMap(uuid);
+		if (nationAsMap == null)
+			return false;
+		return nation.load(nationAsMap);
+	}
+
+	public boolean loadWorldData(String name) {
+		TownyWorld world = universe.getWorld(name);
+		if (world == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a world with the name " + name + " in the TownyUniverse.");
+			return false;
+		}
+		Map<String, String> worldAsMap = getWorldMap(world.getName());
+		if (worldAsMap == null)
+			return false;
+		return world.load(worldAsMap);
+	}
+
+	public boolean loadTownBlock(TownBlock townBlock) {
+		Map<String, String> townBlockAsMap = getTownBlockMap(townBlock);
+		if (townBlockAsMap == null)
+			return false;
+		return townBlock.load(townBlockAsMap);
+	}
+
+	/*
+	 * Remove Object Methods
+	 */
+
+	protected void removeFromUniverse(TownyDBFileType type, UUID uuid) {
+		switch (type) {
+		case JAIL -> universe.unregisterJail(uuid);
+		case NATION -> universe.unregisterNation(uuid);
+		case PLOTGROUP -> universe.unregisterGroup(uuid);
+		case DISTRICT -> universe.unregisterDistrict(uuid);
+		case RESIDENT -> universe.unregisterResident(uuid);
+		case TOWN -> universe.unregisterTown(uuid);
+		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case WORLD -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		default -> throw new IllegalArgumentException("Unexpected value: " + type);
+		};
 	}
 
 	private void deleteDuplicateResidents() {
@@ -216,8 +415,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				// firstRes was online most recently, so delete secondRes
 				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", secondRes.getName(), firstRes.getName()));
 				try {
+					// We don't know which Resident is tied to the UUID stored in the TownyUniverse
+					// residentUUIDMap, so we remove both and re-register the last resident to log
+					// in.
 					universe.unregisterResident(secondRes);
-				} catch (NotRegisteredException ignored) {}
+					universe.unregisterResident(firstRes);
+					universe.registerResident(firstRes);
+				} catch (NotRegisteredException | AlreadyRegisteredException ignored) {}
 				// Check if the older resident is a part of a town
 				Town olderResTown = secondRes.getTownOrNull();
 				if (olderResTown != null) {
@@ -235,8 +439,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} else {
 				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", firstRes.getName(), secondRes.getName()));
 				try {
+					// We don't know which Resident is tied to the UUID stored in the TownyUniverse
+					// residentUUIDMap, so we remove both and re-register the last resident to log
+					// in.
 					universe.unregisterResident(firstRes);
-				} catch (NotRegisteredException ignored) {}
+					universe.unregisterResident(secondRes);
+					universe.registerResident(secondRes);
+				} catch (NotRegisteredException | AlreadyRegisteredException ignored) {}
 				deleteResident(firstRes);
 			}
 		}
@@ -244,70 +453,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		this.pendingDuplicateResidents.clear();
 	}
 
-	/*
-	 * Add new objects to the TownyUniverse maps.
-	 */
-	
-	@Override
-	public @NotNull Resident newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		final UUID uuid = this.parsePlayerUUID(null, name);
-		if (uuid == null) {
-			throw new NotRegisteredException("Could not find a uuid for player name '" + name + "'.");
+	private void handleRenamedTownsAndNations() {
+		for (final Pair<String, String> townPair : this.pendingRenamedTowns) {
+			Town town = universe.getTown(UUID.fromString(townPair.left()));
+			if (town != null && town.exists()) {
+				Towny.getPlugin().getLogger().warning(String.format("Towny loaded a town with an invalid name (%s). That town has been renamed to %s.", townPair.right(), town.getName()));
+				town.save();
+			}
 		}
-
-		return newResident(name, uuid);
-	}
-
-	@Override
-	public @NotNull Resident newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
-		Preconditions.checkArgument(name != null, "name may not be null");
-		Preconditions.checkArgument(uuid != null, "uuid may not be null");
-
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterPlayerName(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
+		for (final Pair<String, String> nationPair : this.pendingRenamedNations) {
+			Nation nation = universe.getNation(UUID.fromString(nationPair.left()));
+			if (nation != null && nation.exists()) {
+				Towny.getPlugin().getLogger().warning(String.format("Towny loaded a nation with an invalid name (%s). That town has been renamed to %s.", nationPair.right(), nation.getName()));
+				nation.save();
+			}
 		}
-		
-		if (universe.hasResident(name))
-			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
-		
-		Resident resident = new Resident(filteredName, uuid);
-		
-		universe.registerResident(resident);
-		return resident;
-	}
-
-	@Override
-	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		newNation(name, UUID.randomUUID());
-	}
-
-	@Override
-	public void newNation(String name, @NotNull UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-
-		if (universe.hasNation(filteredName))
-			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-		Nation nation = new Nation(filteredName, uuid);
-		
-		universe.registerNation(nation);
-	}
-
-	@Override
-	public void newWorld(String name) throws AlreadyRegisteredException {
-		
-		if (universe.getWorldMap().containsKey(name.toLowerCase(Locale.ROOT)))
-			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
-
-		universe.getWorldMap().put(name.toLowerCase(Locale.ROOT), new TownyWorld(name));
+		this.pendingRenamedTowns.clear();
+		this.pendingRenamedNations.clear();
 	}
 
 	/*
@@ -386,11 +548,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Delete the residents file.
 		deleteResident(resident);
 		// Remove the residents record from memory.
-		try {
-			universe.unregisterResident(resident);
-		} catch (NotRegisteredException e) {
-			plugin.getLogger().log(Level.WARNING, "An exception occurred while unregistering resident " + resident.getName(), e);
-		}
+		removeFromUniverse(TownyDBFileType.RESIDENT, resident.getUUID());
 
 		// Clear accounts
 		if (TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
@@ -514,11 +672,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveWorld(townyWorld);
 		}
 
-		try {
-			universe.unregisterTown(town);
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(e.getMessage());
-		}
+		removeFromUniverse(TownyDBFileType.TOWN, town.getUUID());
 		
 		plugin.resetCache();
 		deleteTown(town);
@@ -593,11 +747,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
 		nation.clear();
 
-		try {
-			universe.unregisterNation(nation);
-		} catch (NotRegisteredException ignored) {
-			// Just ignore the exception. Very unlikely to happen.
-		}
+		removeFromUniverse(TownyDBFileType.NATION, nation.getUUID());
 
 		for (Town town : toSave) {
 			if (!town.exists())
@@ -645,20 +795,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			jail.getTown().removeJail(jail);
 		
 		// Unregister the jail from the Universe.
-		universe.unregisterJail(jail);
+		removeFromUniverse(TownyDBFileType.JAIL, jail.getUUID());
 		
 		deleteJail(jail);
 	}
 
 	@Override
 	public void removePlotGroup(PlotGroup group) {
-		universe.unregisterGroup(group.getUUID());
+		removeFromUniverse(TownyDBFileType.PLOTGROUP, group.getUUID());
 		deletePlotGroup(group);
 	}
 
 	@Override
 	public void removeDistrict(District district) {
-		universe.unregisterDistrict(district.getUUID());
+		removeFromUniverse(TownyDBFileType.DISTRICT, district.getUUID());
 		deleteDistrict(district);
 	}
 

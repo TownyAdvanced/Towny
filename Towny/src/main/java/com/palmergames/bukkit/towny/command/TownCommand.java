@@ -2762,8 +2762,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			name = StringMgmt.capitalizeStrings(name);
 
 		name = NameValidation.checkAndFilterTownNameOrThrow(name);
-		if (TownyUniverse.getInstance().hasTown(name))
-			throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", name));
 
 		if (resident.hasTown())
 			throw new TownyException(Translatable.of("msg_err_already_res", resident.getName()));

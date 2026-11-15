@@ -1409,8 +1409,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split.length < 3)
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME rename NEWNAME"));
 			String name = NameValidation.checkAndFilterTownNameOrThrow(String.join("_", StringMgmt.remArgs(split, 2)));
-			if (TownyUniverse.getInstance().hasTown(name))
-				throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", name));
 			BukkitTools.ifCancelledThenThrow(new TownPreRenameEvent(town, name));
 			townyUniverse.getDataSource().renameTown(town, name);
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_name", getSenderFormatted(sender), town.getName()));
@@ -1876,8 +1874,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "rename":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME.getNode());
 			String name = NameValidation.checkAndFilterNationNameOrThrow(String.join("_", StringMgmt.remArgs(split, 2)));
-			if (TownyUniverse.getInstance().hasNation(name))
-				throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", name));
 			BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
 			townyUniverse.getDataSource().renameNation(nation, name);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
