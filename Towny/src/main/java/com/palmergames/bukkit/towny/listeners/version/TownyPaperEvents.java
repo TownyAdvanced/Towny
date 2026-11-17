@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.listeners.version;
 
 import com.destroystokyo.paper.event.block.BeaconEffectEvent;
+import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -39,6 +40,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -80,6 +82,7 @@ public class TownyPaperEvents implements VersionDependentListener {
 
 	public static final String ENTITY_BREAK_EVENT = "io.papermc.paper.event.entity.EntityBreakEvent";
 	public static final String ENTITY_KNOCKBACK_EVENT = "io.papermc.paper.event.entity.EntityKnockbackEvent";
+	public static final String ENTITY_KNOCKBACK_BY_ENTITY_EVENT = "io.papermc.paper.event.entity.EntityKnockbackByEntityEvent";
 
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -112,7 +115,9 @@ public class TownyPaperEvents implements VersionDependentListener {
 
 		registerEvent(ENTITY_BREAK_EVENT, this::entityBreakEvent, EventPriority.LOW, true);
 
-		registerEvent(ENTITY_KNOCKBACK_EVENT, this::entityKnockBackEvent, EventPriority.LOW, true);
+//		registerEvent(ENTITY_KNOCKBACK_EVENT, this::entityKnockBackEvent, EventPriority.LOW, true);
+
+		registerEvent(ENTITY_KNOCKBACK_BY_ENTITY_EVENT, this::entityKnockBackByEntityEvent, EventPriority.LOW, true);
 	}
 	
 	// https://jd.papermc.io/paper/1.15/index.html?com/destroystokyo/paper/event/player/PlayerElytraBoostEvent.html
@@ -374,6 +379,26 @@ public class TownyPaperEvents implements VersionDependentListener {
 
 			// Wind charges just return Explosion. Doesn't seem to have a sender from this event. 
 			// Have to look at whether earlier EntityExplosionEvents, when cancelled, prevent knockback from being dealt.
+		};
+	}
+
+	public Consumer<EntityEvent> entityKnockBackByEntityEvent() {
+		return e -> {
+			if (TownyEntityListener.ignoreEvent(e)) {
+				return;
+			}
+			final EntityKnockbackByEntityEvent event = (EntityKnockbackByEntityEvent) e;
+			final Cause cause = event.getCause();
+			System.out.println("Cause: " + cause.name());
+			if (!(event.getEntity() instanceof Player p) || !cause.equals(Cause.EXPLOSION))
+				return;
+
+			Entity causer = event.getHitBy();
+			System.out.println("Causer: " + causer.getType());
+			if (causer instanceof WindCharge charge && ((Projectile) charge).getShooter() != null && ((Projectile) charge).getShooter() instanceof Player shooter) {
+				event.setCancelled(CombatUtil.preventPvP(TownyAPI.getInstance().getTownyWorld(p.getWorld()), TownyAPI.getInstance().getTownBlock(p)));
+			}
+
 		};
 	}
 }
