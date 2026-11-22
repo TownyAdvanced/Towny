@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -128,22 +127,21 @@ public class BookFactory {
 	 */
 	private static List<Component> getPages(String rawText) {
 		// Adding an empty line to take the place of the lines[0] which we will be skipping later on.
-		rawText = "\n" + rawText; 
+		rawText = "\n" + rawText;
 		List<Component> pages = new ArrayList<>();
 		List<Component> lines = getLines(rawText);
-		TextComponent.Builder pageText = Component.text();
+		Component pageText = Component.empty();
 		for (int i = 1; i < lines.size(); i++) {
-			pageText.append(lines.get(i));
+			pageText = pageText.append(lines.get(i));
 			// Dump every 14 lines into the pages Array (a MC book page can hold 14 lines.)
 			if (i != 1 && i % 14 == 0) {
-				pages.add(pageText.build());
-				pageText = Component.text();
+				pages.add(pageText);
+				pageText = Component.empty();
 			}
 		}
 
-		final Component finalPage = pageText.build();
-		if (!finalPage.equals(Component.empty()))
-			pages.add(finalPage);
+		if (!pageText.equals(Component.empty()))
+			pages.add(pageText);
 
 		return pages;
 	}
