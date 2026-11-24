@@ -754,6 +754,7 @@ msg_you_have_undeclared_an_outlaw: '%s 不再被 %s 放逐.'
 msg_err_player_not_an_outlaw: '那个玩家不再被视为被放逐者.'
 msg_err_outlaw_in_open_town: '你无法加入一个已经将你放逐的公开城镇.'
 msg_you_are_an_outlaw_in_this_town: '<dark_red>小心, %s 放逐了你,死在这你将会被监禁.'
+msg_you_are_an_outlaw_in_this_town_jail_duration: '<dark_red>被放逐者被监禁%s。'
 msg_you_are_an_outlaw_in_this_town_bail_amount: '你的保释金需要%s'
 msg_err_town_not_close_enough_to_nation: '%s的中心区块距你首都的中心区块过远，所以它无法加入你的国家。'
 msg_nation_town_moved_their_homeblock_too_far: '%s的中心区块距你首都的中心区块过远，所以它不再属于你的国家。'
@@ -1303,6 +1304,7 @@ towny_prices_outposts_upkeept: '<gray>前哨每天都有一个额外的站岗位
 towny_prices_upkeep_based_on: '<gray>城镇的日常开支基于<green>%s'
 towny_prices_upkeep_num_plots: '地皮数量。'
 towny_prices_upkeep_town_level: '城镇等级（居民人数）。'
+towny_prices_overclaimed_based_on: '<gray>过度圈地的维护开支基于<green>%s %s'
 towny_prices_overclaimed_num_plots: '超出的圈地数量*'
 towny_prices_overclaimed_flat_cost: '固定费用'
 towny_prices_townname: '<red>城镇：<aqua>%s'
@@ -2114,9 +2116,12 @@ msg_err_resident_has_no_trusted_plots: "%s 在城镇 %s 的所有地皮上均未
 msg_err_town_has_no_trusted_plots: "你的城镇中，没有地皮有已信任的居民。"
 msg_list_trusted_hover: "已信任：%s"
 msg_err_no_ruined_town_here: "当你不是居民时，你必须站在城镇废墟里才能重新声明它。"
+msg_err_cannot_claim_outpost_in_claimed_world: "你不能在这个世界上创建一个前哨，因为你的城镇已经在这里创建了一个。"
 msg_claim_resident_plot: '<aqua>%s声明了位于 %s 的地皮。'
+msg_set_min_adj_chunks: '<aqua>成功将%s的最少相邻区块设置为%s。'
 status_min_adjacency: '最小附加值: '
 msg_err_cannot_list_outposts_because_town_ruined: "你不能检查这个城镇的前哨，因为该镇已沦为废墟。"
 msg_jail_bossbar_duration: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua>'
 msg_jail_bossbar_duration_bail: '%s你被监禁在 <red>%s</red> <gray>|</gray> 剩余时间： <aqua>%s</aqua> <gray>|</gray> 保释金设定为 <green>%s</green> <gray>(使用 </gray>/res jail paybail 来支付<gray>)</gray>'
 msg_err_you_cannot_trust_more_residents: "你不能信任%s个以上的居民。"
+msg_new_town_can_join_nations_line: "%s (加成: %d)"
