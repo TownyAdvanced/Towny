@@ -3961,6 +3961,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY);
 	}
 
+	public static boolean doRuinsPlotPermissionsInstantlyAllowAll() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_INSTANTLY);
+	}
+
 	public static boolean isHideTownRuinedStatusEnabled() {
 		return getBoolean(ConfigNodes.TOWN_RUINING_HIDE_TOWN_RUINED_STATUS);
 	}
