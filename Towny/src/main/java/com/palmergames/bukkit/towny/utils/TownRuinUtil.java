@@ -284,10 +284,18 @@ public class TownRuinUtil {
 				continue;
 			}
 
-			if (TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
+			if (TownySettings.doRuinsPlotPermissionsInstantlyAllowAll()) {
+				final Town finalTown = town;
+				// We are configured to instantly open up plots' permissions while a town is ruined.
+				Towny.getPlugin().getScheduler().runAsync(() ->
+					allowPermissionsOnRuinedTownBlocks(finalTown, finalTown.getNumTownBlocks())
+				);
+			} else if (TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
 				final Town finalTown = town;
 				// We are configured to slowly open up plots' permissions while a town is ruined.
-				Towny.getPlugin().getScheduler().runAsync(() -> allowPermissionsOnRuinedTownBlocks(finalTown));
+				Towny.getPlugin().getScheduler().runAsync(() ->
+					allowPermissionsOnRuinedTownBlocks(finalTown, getNumTownblocksWithNoProtection(finalTown))
+				);
 			}
 		}
 	}
@@ -310,8 +318,7 @@ public class TownRuinUtil {
 		}
 	}
 
-	private static void allowPermissionsOnRuinedTownBlocks(Town town) {
-		long unprotectedBlockCount = getNumTownblocksWithNoProtection(town);
+	private static void allowPermissionsOnRuinedTownBlocks(Town town, long unprotectedBlockCount) {
 		if (unprotectedBlockCount <= 0L)
 			return;
 
