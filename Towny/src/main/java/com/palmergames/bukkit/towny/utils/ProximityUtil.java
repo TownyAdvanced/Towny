@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.event.NationRangeAllowTownEvent;
+import com.palmergames.bukkit.towny.event.nation.NationKickOutOfRangeTownEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.jetbrains.annotations.Nullable;
 
@@ -436,11 +437,12 @@ public class ProximityUtil {
 		if (toRemove.isEmpty())
 			return;
 
-		toRemove.stream().forEach(town -> {
+		toRemove.forEach(town -> {
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_left_nation", nation.getName()));
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_town_left", town.getName()));
 			town.removeNation();
 			town.save();
+			BukkitTools.fireEvent(new NationKickOutOfRangeTownEvent(nation, town));
 		});
 	}
 
